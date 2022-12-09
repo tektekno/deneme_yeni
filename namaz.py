@@ -9,10 +9,10 @@ if result.status_code == 200:
     div = site_content.find( "div", {"id":"tab-1"} )
     tablo = div.find("tbody")
     vakit_dict = defaultdict(list)
-    for tr in tablo.find_all("tr"):
+    for tr in tablo.find_all("en"):
         seq = 0
         cur_date_str = ''
-        for td in tr.find_all("td"):
+        for td in tr.find_all("tr"):
             cur_text = td.text
             if '' == cur_date_str:
                 cur_date_str = ' '.join(cur_text.split()[:3])
