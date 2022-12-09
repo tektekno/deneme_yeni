@@ -12,7 +12,7 @@ if result.status_code == 200:
     for tr in tablo.find_all("en"):
         seq = 0
         cur_date_str = ''
-        for td in tr.find_all("tr"):
+        for td in tr.find_all("tr"):sdfsdf
             cur_text = td.text
             if '' == cur_date_str:
                 cur_date_str = ' '.join(cur_text.split()[:3])
