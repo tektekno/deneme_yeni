@@ -2,11 +2,14 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8" />
-    <title>Lokal Dosyadan Cihaz Veri Grafiği</title>
+    <title>Firebase Veri Destekli Cihaz Grafiği</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
     <style>
         /* Global Box-Sizing Kuralı */
         *, *::before, *::after {
@@ -60,27 +63,13 @@
             border: 1px solid #e0e0e0;
         }
 
-        /* Dosya Seçimi Bölümü */
+        /* Dosya Seçimi Bölümü (Firebase için kaldırıldı, sadece bilgilendirme metni) */
         .file-input-container {
             margin-bottom: 20px;
             text-align: center;
-        }
-
-        .file-input-container label {
-            display: block;
-            margin-bottom: 10px;
             font-weight: 600;
             color: #555;
             font-size: 1.1em;
-        }
-
-        input[type="file"] {
-            border: 1px solid #d0d0d0;
-            border-radius: 5px;
-            padding: 10px;
-            background-color: #fcfcfc;
-            cursor: pointer;
-            width: 100%; /* Tam genişlik kaplasın */
         }
 
         /* Dropdown Konteyneri */
@@ -97,7 +86,7 @@
             font-size: 1.1em;
         }
 
-        /* Select'ler için özel stil (eğer hala kullanılıyorsa) */
+        /* Select'ler için özel stil */
         select {
             width: 100%;
             padding: 12px 15px;
@@ -132,19 +121,15 @@
         /* Yeni eklenen Buton Grupları İçin Stiller */
         #columnButtons {
             justify-content: flex-start; /* Butonları sola hizala */
-            /* justify-content: center; /* Alternatif: Butonları ortaya hizala */
-            /* justify-content: space-around; /* Alternatif: Butonlar arasına eşit boşluk bırak */
         }
 
         #columnButtons .btn {
             font-size: 0.9em; /* Buton etiketlerinin font boyutunu küçült */
             padding: 0.5em 0.8em; /* Butonların iç boşluklarını ayarla */
-            /* Text overflow özelliklerini kaldırdık, metin doğal olarak sığacak */
         }
 
         #columnButtons .btn i {
             font-size: 0.9em; /* İkon boyutunu biraz küçült (isteğe bağlı) */
-            /* vertical-align: middle; /* İkonun metinle hizalanmasını sağlar (isteğe bağlı) */
         }
 
         /* Grafik Konteyneri */
@@ -160,7 +145,7 @@
             overflow: hidden; /* İçeriğin div dışına taşmasını engeller */
         }
 
-        /* Yükleme Göstergesi (Basitleştirilmiş) */
+        /* Yükleme Göstergesi */
         #loadingOverlay {
             position: fixed;
             top: 0;
@@ -201,32 +186,31 @@
 <body>
     <div id="loadingOverlay">
         <div class="spinner"></div>
-        <div id="loadingMessage">Dosya Okunuyor...</div>
+        <div id="loadingMessage">Veriler Yükleniyor...</div>
     </div>
 
     <div class="container">
         <header>
-            <h1>Lokal Cihaz Veri Analiz Paneli</h1>
+            <h1>Firebase Destekli Cihaz Veri Analiz Paneli</h1>
         </header>
 
         <div class="card controls-panel">
             <h2>Veri Yükle ve Seç</h2>
             <div class="file-input-container">
-                <label for="fileInput">Veri Dosyası Seç (.txt veya .json):</label>
-                <input type="file" id="fileInput" accept=".txt,.json" />
+                <p>Veriler otomatik olarak Firebase'den yükleniyor.</p>
             </div>
 
             <div class="dropdown-container">
                 <label for="selectDeviceId">Cihaz Kimliği:</label>
                 <select id="selectDeviceId" disabled>
-                    <option value="">Önce Dosya Yükleyin</option>
+                    <option value="">Veriler Yükleniyor...</option>
                 </select>
             </div>
 
             <div class="dropdown-container">
                 <label>Grafik Seçimi:</label>
                 <div id="columnButtons" class="btn-group flex-wrap" role="group" aria-label="Grafik Seçimi Butonları">
-                    <span class="text-muted">Önce Cihaz Seçin</span>
+                    <span class="text-muted">Veriler Yükleniyor...</span>
                 </div>
             </div>
         </div>
@@ -234,18 +218,35 @@
         <div class="card chart-container">
             <h2>Zaman Serisi Grafiği</h2>
             <div id="chart">
-                <p>Lütfen yukarıdan bir veri dosyası seçin.</p>
+                <p>Veriler Firebase'den yükleniyor...</p>
             </div>
         </div>
     </div>
 
 <script>
-    const fileInput = document.getElementById("fileInput");
+    // Firebase Yapılandırması (Kendi Firebase projenizin bilgilerini buraya yapıştırın)
+    const firebaseConfig = {
+        apiKey: "YOUR_API_KEY", // Firebase projenizin API anahtarı
+        authDomain: "YOUR_PROJECT_ID.firebaseapp.com", // Proje ID'niz
+        projectId: "YOUR_PROJECT_ID", // Proje ID'niz
+        storageBucket: "YOUR_PROJECT_ID.appspot.com", // Proje ID'niz
+        messagingSenderId: "YOUR_MESSAGING_SENDER_ID", // Mesajlaşma Gönderen Kimliği
+        appId: "YOUR_APP_ID" // Uygulama ID'niz
+    };
+
+    // Firebase'i başlat
+    firebase.initializeApp(firebaseConfig);
+
+    // Firestore veritabanını al
+    const db = firebase.firestore();
+    const collectionName = "device_data"; // Firestore koleksiyonunuzun adı
+
+    // DOM elemanları
     const selectDeviceId = document.getElementById("selectDeviceId");
     const loadingOverlay = document.getElementById("loadingOverlay");
     const loadingMessage = document.getElementById("loadingMessage");
     const chartDiv = document.getElementById("chart");
-    const columnButtonsContainer = document.getElementById("columnButtons"); // Yeni değişken
+    const columnButtonsContainer = document.getElementById("columnButtons");
 
     let allDataObjects = [];
     let currentFilteredByDeviceId = [];
@@ -265,17 +266,17 @@
     };
 
     const iconMap = {
-        "akim": "fa-solid fa-bolt", // Akım için şimşek
-        "voltaj": "fa-solid fa-plug", // Voltaj için fiş
-        "guc": "fa-solid fa-power-off", // Güç için güç sembolü
-        "islem_no": "fa-solid fa-hashtag", // İşlem No için hashtag
-        "klemensAcik": "fa-solid fa-door-open", // Klemens Açık için açık kapı
-        "komut": "fa-solid fa-code", // Komut için kod
-        "pilDolu": "fa-solid fa-battery-full", // Pil Dolu için tam pil
-        "roleAcik": "fa-solid fa-toggle-on", // Röle Açık için açık toggle
-        "roleHatasi": "fa-solid fa-circle-exclamation", // Röle Hatası için uyarı
-        "toplam_tuketim": "fa-solid fa-calculator", // Toplam Tüketim için hesap makinesi
-        "ustKapakAcik": "fa-solid fa-box-open" // Üst Kapak Açık için açık kutu
+        "akim": "fa-solid fa-bolt",
+        "voltaj": "fa-solid fa-plug",
+        "guc": "fa-solid fa-power-off",
+        "islem_no": "fa-solid fa-hashtag",
+        "klemensAcik": "fa-solid fa-door-open",
+        "komut": "fa-solid fa-code",
+        "pilDolu": "fa-solid fa-battery-full",
+        "roleAcik": "fa-solid fa-toggle-on",
+        "roleHatasi": "fa-solid fa-circle-exclamation",
+        "toplam_tuketim": "fa-solid fa-calculator",
+        "ustKapakAcik": "fa-solid fa-box-open"
     };
 
     const desiredNumericKeys = [
@@ -287,11 +288,17 @@
     ];
 
     const getDecodedPayload = (d) => {
+        // Firestore'dan gelen verilerde 'uplink_message' katmanı olmayabilir.
+        // Doğrudan 'decoded_payload' veya 'payload' gibi alanları kontrol edin.
         if (d && typeof d === 'object') {
-            if (d.uplink_message && d.uplink_message.decoded_payload && typeof d.uplink_message.decoded_payload === 'object') {
-                return d.uplink_message.decoded_payload;
+            if (d.uplink_message && d.upllink_message.decoded_payload && typeof d.uplink_message.decoded_payload === 'object') {
+                return d.upllink_message.decoded_payload;
             } else if (d.decoded_payload && typeof d.decoded_payload === 'object') {
                 return d.decoded_payload;
+            }
+            // Firebase'de doğrudan payload olabilir
+            else if (d.payload && typeof d.payload === 'object') {
+                return d.payload;
             }
         }
         return null;
@@ -399,122 +406,77 @@
             },
             plot_bgcolor: '#fcfcfc',
             paper_bgcolor: '#ffffff',
-            margin: { t: 100, b: 50, l: 60, r: 40 } // Başlık için üst boşluk artırıldı
+            margin: { t: 100, b: 50, l: 60, r: 40 }
         };
 
         if (column === 'voltaj') {
             layout.yaxis.range = [0, 300];
         }
 
-        Plotly.newPlot('chart', [trace], layout, { responsive: true, displayModeBar: true }); // Butonlar tekrar aktif
+        Plotly.newPlot('chart', [trace], layout, { responsive: true, displayModeBar: true });
     }
 
-    // Dosya seçimi dinleyicisi
-    fileInput.addEventListener("change", (event) => {
-        const file = event.target.files[0];
-        if (!file) {
-            return;
-        }
-
+    // Firebase'den veriyi çeken fonksiyon
+    async function fetchDataFromFirebase() {
         loadingOverlay.style.display = 'flex';
-        loadingMessage.textContent = 'Dosya okunuyor... Lütfen Bekleyiniz.';
+        loadingMessage.textContent = 'Firebase\'den veriler yükleniyor...';
+        selectDeviceId.disabled = true;
+        columnButtonsContainer.innerHTML = '<span class="text-muted">Veriler Yükleniyor...</span>';
+        chartDiv.innerHTML = "<p>Veriler Firebase'den yükleniyor...</p>";
 
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            try {
-                let fileContent = e.target.result;
-                let parsedData;
+        try {
+            const snapshot = await db.collection(collectionName).get();
+            allDataObjects = snapshot.docs.map(doc => doc.data());
 
-                if (file.name.endsWith('.txt')) {
-                    const lines = fileContent.split('\n').filter(line => line.trim().length > 0);
-                    let tempParsedData = [];
-                    let isLineByLineSuccess = true; 
-
-                    for (const line of lines) {
-                        try {
-                            tempParsedData.push(JSON.parse(line.trim()));
-                        } catch (lineParseError) {
-                            console.warn("Tek bir satır JSON olarak ayrıştırılamadı, tüm dosya tek JSON olarak deneniyor.");
-                            isLineByLineSuccess = false; 
-                            break; 
-                        }
-                    }
-
-                    if (isLineByLineSuccess && tempParsedData.length > 0) {
-                        parsedData = tempParsedData;
-                    } else {
-                        parsedData = JSON.parse(fileContent);
-                        if (!Array.isArray(parsedData)) {
-                            parsedData = Object.values(parsedData); 
-                        }
-                    }
-
-                } else { 
-                    parsedData = JSON.parse(fileContent);
-                    if (!Array.isArray(parsedData)) {
-                        parsedData = Object.values(parsedData);
-                    }
+            const uniqueDeviceIds = new Set();
+            allDataObjects.forEach(d => {
+                if (d.end_device_ids && d.end_device_ids.device_id) {
+                    uniqueDeviceIds.add(d.end_device_ids.device_id);
                 }
-                
-                allDataObjects = parsedData;
+            });
 
-                const uniqueDeviceIds = new Set();
-                allDataObjects.forEach(d => {
-                    if (d.end_device_ids && d.end_device_ids.device_id) {
-                        uniqueDeviceIds.add(d.end_device_ids.device_id);
-                    }
-                });
-
-                if (uniqueDeviceIds.size === 0) {
-                    alert("Seçilen dosyadan geçerli 'device_id' içeren veri alınamadı.");
-                    selectDeviceId.innerHTML = '<option value="">Cihaz Kimliği Yok</option>';
-                    selectDeviceId.disabled = true;
-                    columnButtonsContainer.innerHTML = '<span class="text-muted">Uygun Değişken Yok</span>'; // Butonları temizle
-                    chartDiv.innerHTML = "<p>Cihaz verisi bulunamadı.</p>";
-                } else {
-                    selectDeviceId.innerHTML = '<option value="">-- Cihaz Seçin --</option>';
-                    uniqueDeviceIds.forEach(id => {
-                        const option = document.createElement("option");
-                        option.value = id;
-                        option.textContent = id;
-                        selectDeviceId.appendChild(option);
-                    });
-                    selectDeviceId.disabled = false;
-                    
-                    columnButtonsContainer.innerHTML = '<span class="text-muted">Önce Cihaz Seçin</span>'; // Butonları temizle ve başlangıç mesajı göster
-                    
-                    if (selectDeviceId.options.length > 1) {
-                        selectDeviceId.value = selectDeviceId.options[1].value;
-                        selectDeviceId.dispatchEvent(new Event('change')); 
-                    } else {
-                        chartDiv.innerHTML = "<p>Lütfen bir cihaz seçin.</p>";
-                    }
-                }
-            } catch (error) {
-                console.error("Dosya okunurken veya ayrıştırılırken hata oluştu: ", error);
-                alert("Seçilen dosya okunurken veya ayrıştırılırken bir hata oluştu: " + error.message);
-                selectDeviceId.innerHTML = '<option value="">Hata</option>';
+            if (uniqueDeviceIds.size === 0) {
+                alert("Firebase'den geçerli 'device_id' içeren veri alınamadı veya koleksiyon boş.");
+                selectDeviceId.innerHTML = '<option value="">Cihaz Kimliği Yok</option>';
                 selectDeviceId.disabled = true;
-                columnButtonsContainer.innerHTML = '<span class="text-muted">Hata Oluştu</span>';
-                chartDiv.innerHTML = "<p>Dosya yüklenirken hata oluştu.</p>";
-            } finally {
-                loadingOverlay.style.display = 'none';
+                columnButtonsContainer.innerHTML = '<span class="text-muted">Uygun Değişken Yok</span>';
+                chartDiv.innerHTML = "<p>Cihaz verisi bulunamadı.</p>";
+            } else {
+                selectDeviceId.innerHTML = '<option value="">-- Cihaz Seçin --</option>';
+                uniqueDeviceIds.forEach(id => {
+                    const option = document.createElement("option");
+                    option.value = id;
+                    option.textContent = id;
+                    selectDeviceId.appendChild(option);
+                });
+                selectDeviceId.disabled = false;
+                
+                // İlk cihazı otomatik olarak seç ve ilgili butonları oluştur
+                if (selectDeviceId.options.length > 1) {
+                    selectDeviceId.value = selectDeviceId.options[1].value;
+                    selectDeviceId.dispatchEvent(new Event('change')); 
+                } else {
+                    chartDiv.innerHTML = "<p>Lütfen bir cihaz seçin.</p>";
+                }
             }
-        };
 
-        reader.onerror = (error) => {
-            console.error("Dosya okuma hatası: ", error);
-            alert("Dosya okuma hatası: " + error.message);
+        } catch (error) {
+            console.error("Firebase'den veri çekilirken hata oluştu: ", error);
+            alert("Firebase'den veri çekilirken bir hata oluştu: " + error.message + "\nLütfen Firebase yapılandırmanızı ve güvenlik kurallarınızı kontrol edin.");
+            selectDeviceId.innerHTML = '<option value="">Hata</option>';
+            selectDeviceId.disabled = true;
+            columnButtonsContainer.innerHTML = '<span class="text-muted">Hata Oluştu</span>';
+            chartDiv.innerHTML = "<p>Veriler yüklenirken hata oluştu.</p>";
+        } finally {
             loadingOverlay.style.display = 'none';
-        };
+        }
+    }
 
-        reader.readAsText(file);
-    });
-
+    // Cihaz seçimi dinleyicisi
     selectDeviceId.addEventListener("change", () => {
         const selectedDeviceId = selectDeviceId.value;
         if (!selectedDeviceId) {
-            columnButtonsContainer.innerHTML = '<span class="text-muted">Önce Cihaz Seçin</span>'; // Butonları temizle
+            columnButtonsContainer.innerHTML = '<span class="text-muted">Önce Cihaz Seçin</span>';
             Plotly.newPlot('chart', [], {}, {responsive: true, displayModeBar: true});
             chartDiv.innerHTML = "<p>Lütfen bir cihaz seçin.</p>";
             return;
@@ -535,35 +497,30 @@
             }
         });
 
-        columnButtonsContainer.innerHTML = ''; // Önceki butonları temizle
+        columnButtonsContainer.innerHTML = '';
         let hasValidColumnsForDevice = false;
 
-        // Butonları oluştur
         Object.keys(keyLabels).forEach(key => {
-            // Sadece cihazda bulunan ve grafiği çizilebilecek anahtarlar için buton oluştur
             if (foundPayloadKeysForDevice.has(key) && (desiredNumericKeys.includes(key) || desiredBooleanKeys.includes(key))) {
                 const button = document.createElement("button");
                 button.type = "button";
-                button.className = "btn btn-secondary m-1"; // Bootstrap buton stilleri ve küçük margin
-                button.value = key; // Sütun adını value olarak sakla
+                button.className = "btn btn-secondary m-1";
+                button.value = key;
                 
-                // İkonu ekle
                 const iconClass = iconMap[key];
                 if (iconClass) {
                     const iconElement = document.createElement("i");
                     iconElement.className = iconClass;
-                    iconElement.style.marginRight = "5px"; // İkon ile metin arasına boşluk
+                    iconElement.style.marginRight = "5px";
                     button.appendChild(iconElement);
                 }
 
-                button.appendChild(document.createTextNode(keyLabels[key])); // Metni ekle
+                button.appendChild(document.createTextNode(keyLabels[key]));
                 
                 button.addEventListener("click", () => {
-                    // Tüm butonlardan 'active' sınıfını kaldır
                     document.querySelectorAll('#columnButtons .btn').forEach(btn => {
                         btn.classList.remove('active');
                     });
-                    // Tıklanan butona 'active' sınıfını ekle
                     button.classList.add('active');
                     plotGraph(selectedDeviceId, button.value);
                 });
@@ -580,10 +537,9 @@
             return;
         }
 
-        // İlk butonu otomatik olarak seç ve grafiği çiz
         if (columnButtonsContainer.children.length > 0) {
             const firstButton = columnButtonsContainer.children[0];
-            firstButton.classList.add('active'); // İlk butonu aktif yap
+            firstButton.classList.add('active');
             plotGraph(selectedDeviceId, firstButton.value);
         } else {
             chartDiv.innerHTML = "<p>Lütfen grafiklenecek bir değişken seçin.</p>";
@@ -591,9 +547,14 @@
         }
     });
 
-    // Sayfa yüklendiğinde Plotly'yi başlat ve başlangıç mesajını göster
+    // Sayfa yüklendiğinde Firebase'den veriyi çek
+    window.addEventListener('load', () => {
+        fetchDataFromFirebase();
+    });
+
+    // Başlangıçta boş bir grafik çiz ve yükleme mesajı göster
     Plotly.newPlot('chart', [], {}, {responsive: true, displayModeBar: true});
-    chartDiv.innerHTML = "<p>Lütfen yukarıdan bir veri dosyası seçin.</p>";
+    chartDiv.innerHTML = "<p>Veriler Firebase'den yükleniyor...</p>";
 </script>
 </body>
 </html>
