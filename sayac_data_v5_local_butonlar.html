@@ -142,6 +142,21 @@
             font-size: 0.9em; /* İkon boyutunu biraz küçült (isteğe bağlı) */
         }
 
+        /* Grafik başlık ve tam ekran butonu için yeni düzen */
+        #chartHeader {
+            display: flex;
+            justify-content: flex-end; /* Butonu sağa hizala */
+            align-items: center; /* Dikeyde ortala */
+            margin-bottom: 15px; /* Alt boşluk */
+            min-height: 38px; /* Buton yüksekliğine göre bir min-height verilebilir */
+        }
+        /* H2 kaldırıldığı için bu stil artık gerekli değil */
+        /* #chartHeader h2 {
+            margin: 0;
+            font-size: 1.5em;
+            color: #333;
+        } */
+
         /* Grafik Konteyneri */
         #chart {
             min-height: 400px;
@@ -205,8 +220,9 @@
         </header>
 
         <div class="card controls-panel">
+            <h2>Veri Seç</h2>
             <div class="file-input-container">
-
+                Veriler Firebase Realtime Database'den otomatik olarak yüklenir.
             </div>
 
             <div class="dropdown-container">
@@ -225,7 +241,9 @@
         </div>
         
         <div class="card chart-container">
-            <h2>Zaman Serisi Grafiği</h2>
+            <div id="chartHeader">
+                </div>
+            
             <div id="chart">
                 <p>Veriler Firebase Realtime Database'den yükleniyor...</p>
             </div>
@@ -250,12 +268,13 @@
     const dataRef = database.ref('/'); // Tüm veritabanının kök referansı veya belirli bir yol
 
     // DOM elemanları
-    // fileInput kaldırıldığı için burada tanımlanmıyor
     const selectDeviceId = document.getElementById("selectDeviceId");
     const loadingOverlay = document.getElementById("loadingOverlay");
     const loadingMessage = document.getElementById("loadingMessage");
     const chartDiv = document.getElementById("chart");
     const columnButtonsContainer = document.getElementById("columnButtons");
+    const chartHeader = document.getElementById("chartHeader"); 
+    let fullscreenButton; // Tam ekran butonu referansını tutmak için
 
     let allDataObjects = [];
     let currentFilteredByDeviceId = [];
@@ -285,7 +304,8 @@
         "roleAcik": "fa-solid fa-toggle-on",
         "roleHatasi": "fa-solid fa-circle-exclamation",
         "toplam_tuketim": "fa-solid fa-calculator",
-        "ustKapakAcik": "fa-solid fa-box-open"
+        "ustKapakAcik": "fa-solid fa-box-open",
+        "fullscreen": "fa-solid fa-expand" // Tam ekran ikonu
     };
 
     const desiredNumericKeys = [
@@ -297,19 +317,12 @@
     ];
 
     const getDecodedPayload = (d) => {
-        // RTDB'den gelen veri yapısı farklılık gösterebilir.
-        // `data.txt` dosyanızdaki örnekte `decoded_payload` bazen `uplink_message` içinde, bazen doğrudan objenin içinde.
-        // RTDB'de muhtemelen doğrudan bir obje olarak gelecek.
         if (d && typeof d === 'object') {
             if (d.uplink_message && d.uplink_message.decoded_payload && typeof d.uplink_message.decoded_payload === 'object') {
                 return d.uplink_message.decoded_payload;
             } else if (d.decoded_payload && typeof d.decoded_payload === 'object') {
                 return d.decoded_payload;
             }
-            // RTDB'de veri doğrudan payload olarak da gelebilir, örneğin: { "deviceId": "...", "received_at": "...", "akim": 10, ... }
-            // Bu durumda, payload'ı doğrudan d olarak kabul etmeliyiz. Ancak mevcut kod `decoded_payload` beklediği için buna dikkat etmek gerekir.
-            // Eğer verinizde `decoded_payload` yoksa ve anahtarlar direkt kök seviyedeyse, bu fonksiyonu ayarlamanız gerekebilir.
-            // Örneğin: return d; (eğer tüm anahtarlar d objesinin doğrudan altındaysa)
         }
         return null;
     };
@@ -376,6 +389,7 @@
         };
 
         const layout = {
+            // Başlık artık doğrudan Plotly grafiğinin bir parçası olarak kalacak.
             title: {
                 text: `'${deviceId}' Cihazı - ${keyLabels[column] || column} Zaman Grafiği`,
                 font: {
@@ -426,6 +440,60 @@
         Plotly.newPlot('chart', [trace], layout, { responsive: true, displayModeBar: true });
     }
 
+    // Tam ekran butonunu oluşturan ve olay dinleyicilerini ekleyen fonksiyon
+    function createFullscreenButton() {
+        if (fullscreenButton && fullscreenButton.parentNode) {
+            fullscreenButton.parentNode.removeChild(fullscreenButton);
+        }
+
+        fullscreenButton = document.createElement("button");
+        fullscreenButton.type = "button";
+        fullscreenButton.className = "btn btn-secondary m-1"; // Aynı stil
+        fullscreenButton.id = "fullscreenButton"; // ID'yi verelim
+
+        const fullscreenIconElement = document.createElement("i");
+        fullscreenIconElement.className = iconMap.fullscreen; // fa-expand
+        fullscreenIconElement.style.marginRight = "5px";
+        fullscreenButton.appendChild(fullscreenIconElement);
+        fullscreenButton.appendChild(document.createTextNode("Tam Ekran"));
+
+        // Butonu chartHeader içine ekle
+        chartHeader.appendChild(fullscreenButton);
+
+        fullscreenButton.addEventListener("click", () => {
+            if (document.fullscreenElement) {
+                document.exitFullscreen();
+            } else {
+                if (chartDiv.requestFullscreen) {
+                    chartDiv.requestFullscreen();
+                } else if (chartDiv.mozRequestFullScreen) { // Firefox
+                    chartDiv.mozRequestFullScreen();
+                } else if (chartDiv.webkitRequestFullscreen) { // Chrome, Safari, Opera
+                    chartDiv.webkitRequestFullscreen();
+                } else if (chartDiv.msRequestFullscreen) { // IE/Edge
+                    chartDiv.msRequestFullscreen();
+                }
+            }
+        });
+    }
+
+    // Tam ekran durumu değiştiğinde buton ikonunu ve metnini güncelle
+    document.addEventListener('fullscreenchange', updateFullscreenButtonState);
+    document.addEventListener('mozfullscreenchange', updateFullscreenButtonState);
+    document.addEventListener('webkitfullscreenchange', updateFullscreenButtonState);
+    document.addEventListener('msfullscreenchange', updateFullscreenButtonState);
+
+    function updateFullscreenButtonState() {
+        if (!fullscreenButton) return; 
+
+        if (document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
+            fullscreenButton.innerHTML = '<i class="fas fa-compress"></i> Ekrandan Çık';
+        } else {
+            fullscreenButton.innerHTML = '<i class="fas fa-expand"></i> Tam Ekran';
+        }
+    }
+
+
     // Firebase'den veriyi çeken fonksiyon
     async function fetchDataFromFirebaseRTDB() {
         loadingOverlay.style.display = 'flex';
@@ -433,32 +501,16 @@
         selectDeviceId.disabled = true;
         columnButtonsContainer.innerHTML = '<span class="text-muted">Veriler Yükleniyor...</span>';
         chartDiv.innerHTML = "<p>Veriler Firebase Realtime Database'den yükleniyor...</p>";
-
+        
         try {
-            // Realtime Database'den tek seferlik veri çekme
             const snapshot = await dataRef.once('value');
-            const firebaseData = snapshot.val(); // Tüm veritabanı içeriğini JSON objesi olarak al
+            const firebaseData = snapshot.val(); 
 
-            // data.txt dosyasındaki yapıyı (array of objects) taklit etmek için gelen objeyi bir diziye dönüştürüyoruz.
-            // Eğer RTDB yapınız farklıysa (örn: doğrudan bir dizi olarak kaydedilmişse), bu kısmı ayarlamanız gerekebilir.
-            // data.txt dosyanızdaki örnekte üst seviyede bir dizi var gibi görünüyor.
-            // RTDB'ye bu diziyi direkt yüklediyseniz (örneğin [ {}, {}, ... ]), firebaseData zaten bir dizi olacaktır.
-            // Ama eğer her JSON objesi kendi anahtarı altında bir child ise (örn: {key1: {}, key2: {}}), o zaman Object.values kullanmalıyız.
             if (firebaseData) {
-                // Eğer data.txt'deki gibi direkt bir dizi olarak yüklendiğini varsayarsak:
-                // allDataObjects = firebaseData;
-                
-                // Eğer RTDB'de her bir kaydın benzersiz bir anahtarı varsa ve veriler bir obje içinde objeler olarak duruyorsa:
-                allDataObjects = Object.values(firebaseData); 
-                
-                // data.txt'deki örneğinizde birden fazla JSON objesi art arda eklenmiş, bu da RTDB'ye bir obje içinde objeler
-                // veya bir dizi içinde objeler olarak yüklenebilir.
-                // Eğer data.txt içeriğini olduğu gibi tek bir string olarak RTDB'ye yüklediyseniz, bu doğru parse edilmeyecektir.
-                // RTDB'ye yüklenecek verinin her bir objenin ayrı bir child olması önerilir.
+                allDataObjects = Object.values(firebaseData);  
             } else {
                 allDataObjects = [];
             }
-
 
             const uniqueDeviceIds = new Set();
             allDataObjects.forEach(d => {
@@ -473,6 +525,10 @@
                 selectDeviceId.disabled = true;
                 columnButtonsContainer.innerHTML = '<span class="text-muted">Uygun Değişken Yok</span>';
                 chartDiv.innerHTML = "<p>Cihaz verisi bulunamadı.</p>";
+                // Tam ekran butonu da kaldırılmalı eğer hiç veri yoksa
+                if (fullscreenButton && fullscreenButton.parentNode) {
+                    fullscreenButton.parentNode.removeChild(fullscreenButton); 
+                }
             } else {
                 selectDeviceId.innerHTML = '<option value="">-- Cihaz Seçin --</option>';
                 uniqueDeviceIds.forEach(id => {
@@ -490,6 +546,8 @@
                 } else {
                     chartDiv.innerHTML = "<p>Lütfen bir cihaz seçin.</p>";
                 }
+                createFullscreenButton(); // Tam ekran butonunu oluştur
+                updateFullscreenButtonState(); // Durumunu güncelle
             }
 
         } catch (error) {
@@ -499,13 +557,14 @@
             selectDeviceId.disabled = true;
             columnButtonsContainer.innerHTML = '<span class="text-muted">Hata Oluştu</span>';
             chartDiv.innerHTML = "<p>Veriler yüklenirken hata oluştu.</p>";
+            // Tam ekran butonu da kaldırılmalı
+            if (fullscreenButton && fullscreenButton.parentNode) {
+                fullscreenButton.parentNode.removeChild(fullscreenButton); 
+            }
         } finally {
             loadingOverlay.style.display = 'none';
         }
     }
-
-    // Dosya seçimi ile ilgili tüm listener ve kodlar kaldırıldı
-    // fileInput.addEventListener("change", (...) kaldırıldı
 
     selectDeviceId.addEventListener("change", () => {
         const selectedDeviceId = selectDeviceId.value;
@@ -531,9 +590,10 @@
             }
         });
 
-        columnButtonsContainer.innerHTML = '';
+        columnButtonsContainer.innerHTML = ''; // Önceki butonları temizle
         let hasValidColumnsForDevice = false;
 
+        // Değişken butonlarını oluştur
         Object.keys(keyLabels).forEach(key => {
             if (foundPayloadKeysForDevice.has(key) && (desiredNumericKeys.includes(key) || desiredBooleanKeys.includes(key))) {
                 const button = document.createElement("button");
@@ -571,13 +631,14 @@
             return;
         }
 
-        if (columnButtonsContainer.children.length > 0) {
-            const firstButton = columnButtonsContainer.children[0];
-            firstButton.classList.add('active');
-            plotGraph(selectedDeviceId, firstButton.value);
+        // İlk değişken butonunu aktif yap ve grafiği çiz
+        const firstDataButton = Array.from(columnButtonsContainer.children).find(btn => btn.id !== 'fullscreenButton');
+        if(firstDataButton) {
+            firstDataButton.classList.add('active');
+            plotGraph(selectedDeviceId, firstDataButton.value);
         } else {
-            chartDiv.innerHTML = "<p>Lütfen grafiklenecek bir değişken seçin.</p>";
-            Plotly.newPlot('chart', [], {}, {responsive: true, displayModeBar: true});
+             chartDiv.innerHTML = "<p>Lütfen grafiklenecek bir değişken seçin.</p>";
+             Plotly.newPlot('chart', [], {}, {responsive: true, displayModeBar: true});
         }
     });
 
