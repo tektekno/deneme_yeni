@@ -2,13 +2,13 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8" />
-    <title>Firebase Veri Destekli Cihaz Grafiği</title>
+    <title>Firebase Realtime Database Cihaz Veri Grafiği</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 
     <style>
         /* Global Box-Sizing Kuralı */
@@ -70,6 +70,16 @@
             font-weight: 600;
             color: #555;
             font-size: 1.1em;
+        }
+
+        /* input[type="file"] kaldırıldığı için bu stil artık geçerli değil, ama bırakılabilir. */
+        input[type="file"] {
+            border: 1px solid #d0d0d0;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #fcfcfc;
+            cursor: pointer;
+            width: 100%; /* Tam genişlik kaplasın */
         }
 
         /* Dropdown Konteyneri */
@@ -191,13 +201,13 @@
 
     <div class="container">
         <header>
-            <h1>Firebase Destekli Cihaz Veri Analiz Paneli</h1>
+            <h1>Firebase Realtime Database Cihaz Veri Analiz Paneli</h1>
         </header>
 
         <div class="card controls-panel">
             <h2>Veri Yükle ve Seç</h2>
             <div class="file-input-container">
-                <p>Veriler otomatik olarak Firebase'den yükleniyor.</p>
+                <p>Veriler otomatik olarak Firebase Realtime Database'den yükleniyor.</p>
             </div>
 
             <div class="dropdown-container">
@@ -218,14 +228,14 @@
         <div class="card chart-container">
             <h2>Zaman Serisi Grafiği</h2>
             <div id="chart">
-                <p>Veriler Firebase'den yükleniyor...</p>
+                <p>Veriler Firebase Realtime Database'den yükleniyor...</p>
             </div>
         </div>
     </div>
 
 <script>
-    // Firebase Yapılandırması (Kendi Firebase projenizin bilgilerini buraya yapıştırın)
-        const firebaseConfig = {
+    // Firebase Yapılandırması
+    const firebaseConfig = {
       apiKey: "AIzaSyD0asqWxp-I2AvyntCxhl3vhQkxLxBf2jc",
       authDomain: "deneme-6775a.firebaseapp.com",
       databaseURL: "https://deneme-6775a-default-rtdb.europe-west1.firebasedatabase.app",
@@ -237,12 +247,11 @@
 
     // Firebase'i başlat
     firebase.initializeApp(firebaseConfig);
-
-    // Firestore veritabanını al
-    const db = firebase.firestore();
-    const collectionName = "device_data"; // Firestore koleksiyonunuzun adı
+    const database = firebase.database();
+    const dataRef = database.ref('/'); // Tüm veritabanının kök referansı veya belirli bir yol
 
     // DOM elemanları
+    // fileInput kaldırıldığı için burada tanımlanmıyor
     const selectDeviceId = document.getElementById("selectDeviceId");
     const loadingOverlay = document.getElementById("loadingOverlay");
     const loadingMessage = document.getElementById("loadingMessage");
@@ -289,18 +298,19 @@
     ];
 
     const getDecodedPayload = (d) => {
-        // Firestore'dan gelen verilerde 'uplink_message' katmanı olmayabilir.
-        // Doğrudan 'decoded_payload' veya 'payload' gibi alanları kontrol edin.
+        // RTDB'den gelen veri yapısı farklılık gösterebilir.
+        // `data.txt` dosyanızdaki örnekte `decoded_payload` bazen `uplink_message` içinde, bazen doğrudan objenin içinde.
+        // RTDB'de muhtemelen doğrudan bir obje olarak gelecek.
         if (d && typeof d === 'object') {
-            if (d.uplink_message && d.upllink_message.decoded_payload && typeof d.uplink_message.decoded_payload === 'object') {
-                return d.upllink_message.decoded_payload;
+            if (d.uplink_message && d.uplink_message.decoded_payload && typeof d.uplink_message.decoded_payload === 'object') {
+                return d.uplink_message.decoded_payload;
             } else if (d.decoded_payload && typeof d.decoded_payload === 'object') {
                 return d.decoded_payload;
             }
-            // Firebase'de doğrudan payload olabilir
-            else if (d.payload && typeof d.payload === 'object') {
-                return d.payload;
-            }
+            // RTDB'de veri doğrudan payload olarak da gelebilir, örneğin: { "deviceId": "...", "received_at": "...", "akim": 10, ... }
+            // Bu durumda, payload'ı doğrudan d olarak kabul etmeliyiz. Ancak mevcut kod `decoded_payload` beklediği için buna dikkat etmek gerekir.
+            // Eğer verinizde `decoded_payload` yoksa ve anahtarlar direkt kök seviyedeyse, bu fonksiyonu ayarlamanız gerekebilir.
+            // Örneğin: return d; (eğer tüm anahtarlar d objesinin doğrudan altındaysa)
         }
         return null;
     };
@@ -418,16 +428,38 @@
     }
 
     // Firebase'den veriyi çeken fonksiyon
-    async function fetchDataFromFirebase() {
+    async function fetchDataFromFirebaseRTDB() {
         loadingOverlay.style.display = 'flex';
-        loadingMessage.textContent = 'Firebase\'den veriler yükleniyor...';
+        loadingMessage.textContent = 'Firebase Realtime Database\'den veriler yükleniyor...';
         selectDeviceId.disabled = true;
         columnButtonsContainer.innerHTML = '<span class="text-muted">Veriler Yükleniyor...</span>';
-        chartDiv.innerHTML = "<p>Veriler Firebase'den yükleniyor...</p>";
+        chartDiv.innerHTML = "<p>Veriler Firebase Realtime Database'den yükleniyor...</p>";
 
         try {
-            const snapshot = await db.collection(collectionName).get();
-            allDataObjects = snapshot.docs.map(doc => doc.data());
+            // Realtime Database'den tek seferlik veri çekme
+            const snapshot = await dataRef.once('value');
+            const firebaseData = snapshot.val(); // Tüm veritabanı içeriğini JSON objesi olarak al
+
+            // data.txt dosyasındaki yapıyı (array of objects) taklit etmek için gelen objeyi bir diziye dönüştürüyoruz.
+            // Eğer RTDB yapınız farklıysa (örn: doğrudan bir dizi olarak kaydedilmişse), bu kısmı ayarlamanız gerekebilir.
+            // data.txt dosyanızdaki örnekte üst seviyede bir dizi var gibi görünüyor.
+            // RTDB'ye bu diziyi direkt yüklediyseniz (örneğin [ {}, {}, ... ]), firebaseData zaten bir dizi olacaktır.
+            // Ama eğer her JSON objesi kendi anahtarı altında bir child ise (örn: {key1: {}, key2: {}}), o zaman Object.values kullanmalıyız.
+            if (firebaseData) {
+                // Eğer data.txt'deki gibi direkt bir dizi olarak yüklendiğini varsayarsak:
+                // allDataObjects = firebaseData;
+                
+                // Eğer RTDB'de her bir kaydın benzersiz bir anahtarı varsa ve veriler bir obje içinde objeler olarak duruyorsa:
+                allDataObjects = Object.values(firebaseData); 
+                
+                // data.txt'deki örneğinizde birden fazla JSON objesi art arda eklenmiş, bu da RTDB'ye bir obje içinde objeler
+                // veya bir dizi içinde objeler olarak yüklenebilir.
+                // Eğer data.txt içeriğini olduğu gibi tek bir string olarak RTDB'ye yüklediyseniz, bu doğru parse edilmeyecektir.
+                // RTDB'ye yüklenecek verinin her bir objenin ayrı bir child olması önerilir.
+            } else {
+                allDataObjects = [];
+            }
+
 
             const uniqueDeviceIds = new Set();
             allDataObjects.forEach(d => {
@@ -437,7 +469,7 @@
             });
 
             if (uniqueDeviceIds.size === 0) {
-                alert("Firebase'den geçerli 'device_id' içeren veri alınamadı veya koleksiyon boş.");
+                alert("Firebase Realtime Database'den geçerli 'device_id' içeren veri alınamadı veya veritabanı boş.");
                 selectDeviceId.innerHTML = '<option value="">Cihaz Kimliği Yok</option>';
                 selectDeviceId.disabled = true;
                 columnButtonsContainer.innerHTML = '<span class="text-muted">Uygun Değişken Yok</span>';
@@ -462,8 +494,8 @@
             }
 
         } catch (error) {
-            console.error("Firebase'den veri çekilirken hata oluştu: ", error);
-            alert("Firebase'den veri çekilirken bir hata oluştu: " + error.message + "\nLütfen Firebase yapılandırmanızı ve güvenlik kurallarınızı kontrol edin.");
+            console.error("Firebase Realtime Database'den veri çekilirken hata oluştu: ", error);
+            alert("Firebase Realtime Database'den veri çekilirken bir hata oluştu: " + error.message + "\nLütfen Firebase yapılandırmanızı ve güvenlik kurallarınızı kontrol edin.");
             selectDeviceId.innerHTML = '<option value="">Hata</option>';
             selectDeviceId.disabled = true;
             columnButtonsContainer.innerHTML = '<span class="text-muted">Hata Oluştu</span>';
@@ -473,7 +505,9 @@
         }
     }
 
-    // Cihaz seçimi dinleyicisi
+    // Dosya seçimi ile ilgili tüm listener ve kodlar kaldırıldı
+    // fileInput.addEventListener("change", (...) kaldırıldı
+
     selectDeviceId.addEventListener("change", () => {
         const selectedDeviceId = selectDeviceId.value;
         if (!selectedDeviceId) {
@@ -548,14 +582,14 @@
         }
     });
 
-    // Sayfa yüklendiğinde Firebase'den veriyi çek
+    // Sayfa yüklendiğinde Firebase Realtime Database'den veriyi çek
     window.addEventListener('load', () => {
-        fetchDataFromFirebase();
+        fetchDataFromFirebaseRTDB();
     });
 
     // Başlangıçta boş bir grafik çiz ve yükleme mesajı göster
     Plotly.newPlot('chart', [], {}, {responsive: true, displayModeBar: true});
-    chartDiv.innerHTML = "<p>Veriler Firebase'den yükleniyor...</p>";
+    chartDiv.innerHTML = "<p>Veriler Firebase Realtime Database'den yükleniyor...</p>";
 </script>
 </body>
 </html>
