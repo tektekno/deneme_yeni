@@ -1,597 +1,595 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8" />
-    <title>Firebase Realtime Database Cihaz Veri Grafiği</title>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+    <meta charset="UTF-8" />
+    <title>Firebase Realtime Database Cihaz Veri Grafiği</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 
-    <style>
-        /* Global Box-Sizing Kuralı */
-        *, *::before, *::after {
-            box-sizing: border-box;
-        }
+    <style>
+        /* Global Box-Sizing Kuralı */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
 
-        /* Genel Stil Sıfırlamaları ve Temel Ayarlar */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f7f6; /* Açık gri arka plan */
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
+        /* Genel Stil Sıfırlamaları ve Temel Ayarlar */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f6; /* Açık gri arka plan */
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
 
-        /* Ana Konteyner */
-        .container {
-            width: 100%;
-            max-width: 1200px; /* Maksimum genişlik sınırlaması */
-            padding: 20px;
-        }
+        /* Ana Konteyner */
+        .container {
+            width: 100%;
+            max-width: 1200px; /* Maksimum genişlik sınırlaması */
+            padding: 20px;
+        }
 
-        /* Başlık Bölümü */
-        header {
-            background-color: #2c3e50; /* Koyu mavi */
-            color: #ffffff;
-            padding: 25px 20px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-            text-align: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
+        /* Başlık Bölümü */
+        header {
+            background-color: #2c3e50; /* Koyu mavi */
+            color: #ffffff;
+            padding: 25px 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
 
-        header h1 {
-            margin: 0;
-            font-size: 2.2em;
-            letter-spacing: 1px;
-        }
+        header h1 {
+            margin: 0;
+            font-size: 2.2em;
+            letter-spacing: 1px;
+        }
 
-        /* Kart Stili */
-        .card {
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 25px;
-            margin-bottom: 25px;
-            border: 1px solid #e0e0e0;
-        }
+        /* Kart Stili */
+        .card {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid #e0e0e0;
+        }
 
-        /* Dosya Seçimi Bölümü (Firebase için kaldırıldı, sadece bilgilendirme metni) */
-        .file-input-container {
-            margin-bottom: 20px;
-            text-align: center;
-            font-weight: 600;
-            color: #555;
-            font-size: 1.1em;
-        }
+        /* Dosya Seçimi Bölümü (Firebase için kaldırıldı, sadece bilgilendirme metni) */
+        .file-input-container {
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+            color: #555;
+            font-size: 1.1em;
+        }
 
-        /* input[type="file"] kaldırıldığı için bu stil artık geçerli değil, ama bırakılabilir. */
-        input[type="file"] {
-            border: 1px solid #d0d0d0;
-            border-radius: 5px;
-            padding: 10px;
-            background-color: #fcfcfc;
-            cursor: pointer;
-            width: 100%; /* Tam genişlik kaplasın */
-        }
+        /* input[type="file"] kaldırıldığı için bu stil artık geçerli değil, ama bırakılabilir. */
+        input[type="file"] {
+            border: 1px solid #d0d0d0;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #fcfcfc;
+            cursor: pointer;
+            width: 100%; /* Tam genişlik kaplasın */
+        }
 
-        /* Dropdown Konteyneri */
-        .dropdown-container {
-            display: flex;
-            flex-direction: column; 
-            margin-bottom: 15px;
-        }
+        /* Dropdown Konteyneri */
+        .dropdown-container {
+            display: flex;
+            flex-direction: column; 
+            margin-bottom: 15px;
+        }
 
-        .dropdown-container label {
-            font-weight: 600;
-            color: #555;
-            margin-bottom: 8px;
-            font-size: 1.1em;
-        }
+        .dropdown-container label {
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
 
-        /* Select'ler için özel stil */
-        select {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #d0d0d0;
-            border-radius: 5px;
-            background-color: #fcfcfc;
-            font-size: 1em;
-            color: #333;
-            appearance: none; /* Varsayılan stilini kaldır */
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23666%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-6.5%200-12.2%203.2-15.5%208.1-3.3%204.9-3.3%2011.6%200%2016.5l128%20128c3.3%204.9%209%208.1%2015.5%208.1s12.2-3.2%2015.5-8.1l128-128c3.2-4.9%203.2-11.6-.1-16.5z%22%2F%3E%3C%2Fsvg%3E'); /* Özel ok ikonu */
-            background-repeat: no-repeat;
-            background-position: right 15px center;
-            background-size: 12px;
-            cursor: pointer;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
+        /* Select'ler için özel stil */
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #d0d0d0;
+            border-radius: 5px;
+            background-color: #fcfcfc;
+            font-size: 1em;
+            color: #333;
+            appearance: none; /* Varsayılan stilini kaldır */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23666%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-6.5%200-12.2%203.2-15.5%208.1-3.3%204.9-3.3%2011.6%200%2016.5l128%20128c3.3%204.9%209%208.1%2015.5%208.1s12.2-3.2%2015.5-8.1l128-128c3.2-4.9%203.2-11.6-.1-16.5z%22%2F%3E%3C%2Fsvg%3E'); /* Özel ok ikonu */
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 12px;
+            cursor: pointer;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
 
-        select:focus {
-            border-color: #3498db; /* Mavi vurgu */
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-        }
+        select:focus {
+            border-color: #3498db; /* Mavi vurgu */
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
 
-        select:disabled {
-            background-color: #e9ecef;
-            cursor: not-allowed;
-            color: #888;
-        }
+        select:disabled {
+            background-color: #e9ecef;
+            cursor: not-allowed;
+            color: #888;
+        }
 
-        /* Yeni eklenen Buton Grupları İçin Stiller */
-        #columnButtons {
-            justify-content: flex-start; /* Butonları sola hizala */
-        }
+        /* Yeni eklenen Buton Grupları İçin Stiller */
+        #columnButtons {
+            justify-content: flex-start; /* Butonları sola hizala */
+        }
 
-        #columnButtons .btn {
-            font-size: 0.9em; /* Buton etiketlerinin font boyutunu küçült */
-            padding: 0.5em 0.8em; /* Butonların iç boşluklarını ayarla */
-        }
+        #columnButtons .btn {
+            font-size: 0.9em; /* Buton etiketlerinin font boyutunu küçült */
+            padding: 0.5em 0.8em; /* Butonların iç boşluklarını ayarla */
+        }
 
-        #columnButtons .btn i {
-            font-size: 0.9em; /* İkon boyutunu biraz küçült (isteğe bağlı) */
-        }
+        #columnButtons .btn i {
+            font-size: 0.9em; /* İkon boyutunu biraz küçült (isteğe bağlı) */
+        }
 
-        /* Grafik Konteyneri */
-        #chart {
-            min-height: 400px;
-            /* Önceki satır: height: 500px; - Bu satırı kaldırıyoruz veya yorum satırı yapıyoruz */
-            height: 70vh; /* Ekran yüksekliğinin %70'ini kaplasın, mobil cihazlar için daha iyi */
-            max-height: 600px; /* Çok büyük ekranlarda grafiğin aşırı büyümesini engelle */
-            width: 100%; /* Tam genişlik */
-            
-            color: #888;
-            font-style: italic;
-            text-align: center; 
-            line-height: 1.5;
-            overflow: hidden; /* İçeriğin div dışına taşmasını engeller */
-        }
+        /* Grafik Konteyneri */
+        #chart {
+            min-height: 400px;
+            height: 500px; /* Sabit yükseklik */
+            width: 100%; /* Tam genişlik */
+            
+            color: #888;
+            font-style: italic;
+            text-align: center; 
+            line-height: 1.5;
+            overflow: hidden; /* İçeriğin div dışına taşmasını engeller */
+        }
 
-        /* Yükleme Göstergesi */
-        #loadingOverlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(255, 255, 255, 0.9);
-            display: none; /* Varsayılan olarak gizli */
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            z-index: 1000;
-        }
+        /* Yükleme Göstergesi */
+        #loadingOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            display: none; /* Varsayılan olarak gizli */
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 1000;
+        }
 
-        .spinner {
-            border: 8px solid #e0f2f7;
-            border-top: 8px solid #007bff;
-            border-radius: 50%;
-            width: 70px;
-            height: 70px;
-            animation: spin 1.5s linear infinite;
-            margin-bottom: 25px;
-        }
+        .spinner {
+            border: 8px solid #e0f2f7;
+            border-top: 8px solid #007bff;
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            animation: spin 1.5s linear infinite;
+            margin-bottom: 25px;
+        }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
 
-        #loadingMessage {
-            font-size: 1.3em;
-            color: #333;
-            text-align: center;
-            line-height: 1.4;
-        }
-    </style>
+        #loadingMessage {
+            font-size: 1.3em;
+            color: #333;
+            text-align: center;
+            line-height: 1.4;
+        }
+    </style>
 </head>
 <body>
-    <div id="loadingOverlay">
-        <div class="spinner"></div>
-        <div id="loadingMessage">Veriler Yükleniyor...</div>
-    </div>
+    <div id="loadingOverlay">
+        <div class="spinner"></div>
+        <div id="loadingMessage">Veriler Yükleniyor...</div>
+    </div>
 
-    <div class="container">
-        <header>
-            <h1>Firebase Realtime Database Cihaz Veri Analiz Paneli</h1>
-        </header>
+    <div class="container">
+        <header>
+            <h1>Firebase Realtime Database Cihaz Veri Analiz Paneli</h1>
+        </header>
 
-        <div class="card controls-panel">
-            <h2>Veri Yükle ve Seç</h2>
-            <div class="file-input-container">
-                <p>Veriler otomatik olarak Firebase Realtime Database'den yükleniyor.</p>
-            </div>
+        <div class="card controls-panel">
+            <h2>Veri Yükle ve Seç</h2>
+            <div class="file-input-container">
+                <p>Veriler otomatik olarak Firebase Realtime Database'den yükleniyor.</p>
+            </div>
 
-            <div class="dropdown-container">
-                <label for="selectDeviceId">Cihaz Kimliği:</label>
-                <select id="selectDeviceId" disabled>
-                    <option value="">Veriler Yükleniyor...</option>
-                </select>
-            </div>
+            <div class="dropdown-container">
+                <label for="selectDeviceId">Cihaz Kimliği:</label>
+                <select id="selectDeviceId" disabled>
+                    <option value="">Veriler Yükleniyor...</option>
+                </select>
+            </div>
 
-            <div class="dropdown-container">
-                <label>Grafik Seçimi:</label>
-                <div id="columnButtons" class="btn-group flex-wrap" role="group" aria-label="Grafik Seçimi Butonları">
-                    <span class="text-muted">Veriler Yükleniyor...</span>
-                </div>
-            </div>
-        </div>
-        
-        <div class="card chart-container">
-            <h2>Zaman Serisi Grafiği</h2>
-            <div id="chart">
-                <p>Veriler Firebase Realtime Database'den yükleniyor...</p>
-            </div>
-        </div>
-    </div>
+            <div class="dropdown-container">
+                <label>Grafik Seçimi:</label>
+                <div id="columnButtons" class="btn-group flex-wrap" role="group" aria-label="Grafik Seçimi Butonları">
+                    <span class="text-muted">Veriler Yükleniyor...</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card chart-container">
+            <h2>Zaman Serisi Grafiği</h2>
+            <div id="chart">
+                <p>Veriler Firebase Realtime Database'den yükleniyor...</p>
+            </div>
+        </div>
+    </div>
 
 <script>
-    // Firebase Yapılandırması
-    const firebaseConfig = {
-      apiKey: "AIzaSyD0asqWxp-I2AvyntCxhl3vhQkxLxBf2jc",
-      authDomain: "deneme-6775a.firebaseapp.com",
-      databaseURL: "https://deneme-6775a-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "deneme-6775a",
-      storageBucket: "deneme-6775a.firebasestorage.app",
-      messagingSenderId: "625156451387",
-      appId: "1:625156451387:web:a8169782d84bbbbe9b401e"
-    };
+    // Firebase Yapılandırması
+    const firebaseConfig = {
+      apiKey: "AIzaSyD0asqWxp-I2AvyntCxhl3vhQkxLxBf2jc",
+      authDomain: "deneme-6775a.firebaseapp.com",
+      databaseURL: "https://deneme-6775a-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "deneme-6775a",
+      storageBucket: "deneme-6775a.firebasestorage.app",
+      messagingSenderId: "625156451387",
+      appId: "1:625156451387:web:a8169782d84bbbbe9b401e"
+    };
 
-    // Firebase'i başlat
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
-    const dataRef = database.ref('/'); // Tüm veritabanının kök referansı veya belirli bir yol
+    // Firebase'i başlat
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+    const dataRef = database.ref('/'); // Tüm veritabanının kök referansı veya belirli bir yol
 
-    // DOM elemanları
-    // fileInput kaldırıldığı için burada tanımlanmıyor
-    const selectDeviceId = document.getElementById("selectDeviceId");
-    const loadingOverlay = document.getElementById("loadingOverlay");
-    const loadingMessage = document.getElementById("loadingMessage");
-    const chartDiv = document.getElementById("chart");
-    const columnButtonsContainer = document.getElementById("columnButtons");
+    // DOM elemanları
+    // fileInput kaldırıldığı için burada tanımlanmıyor
+    const selectDeviceId = document.getElementById("selectDeviceId");
+    const loadingOverlay = document.getElementById("loadingOverlay");
+    const loadingMessage = document.getElementById("loadingMessage");
+    const chartDiv = document.getElementById("chart");
+    const columnButtonsContainer = document.getElementById("columnButtons");
 
-    let allDataObjects = [];
-    let currentFilteredByDeviceId = [];
+    let allDataObjects = [];
+    let currentFilteredByDeviceId = [];
 
-    const keyLabels = {
-        "akim": "Akım",
-        "voltaj": "Voltaj",
-        "guc": "Güç",
-        "islem_no": "İşlem No",
-        "klemensAcik": "Klemens Açık Mı?",
-        "komut": "Komut No",
-        "pilDolu": "Pil Dolu Mu?",
-        "roleAcik": "Röle Açık Mı?",
-        "roleHatasi": "Röle Hatası Oluştu Mu?",
-        "toplam_tuketim": "Toplam Tüketim",
-        "ustKapakAcik": "Üst Kapak Açık mı?"
-    };
+    const keyLabels = {
+        "akim": "Akım",
+        "voltaj": "Voltaj",
+        "guc": "Güç",
+        "islem_no": "İşlem No",
+        "klemensAcik": "Klemens Açık Mı?",
+        "komut": "Komut No",
+        "pilDolu": "Pil Dolu Mu?",
+        "roleAcik": "Röle Açık Mı?",
+        "roleHatasi": "Röle Hatası Oluştu Mu?",
+        "toplam_tuketim": "Toplam Tüketim",
+        "ustKapakAcik": "Üst Kapak Açık mı?"
+    };
 
-    const iconMap = {
-        "akim": "fa-solid fa-bolt",
-        "voltaj": "fa-solid fa-plug",
-        "guc": "fa-solid fa-power-off",
-        "islem_no": "fa-solid fa-hashtag",
-        "klemensAcik": "fa-solid fa-door-open",
-        "komut": "fa-solid fa-code",
-        "pilDolu": "fa-solid fa-battery-full",
-        "roleAcik": "fa-solid fa-toggle-on",
-        "roleHatasi": "fa-solid fa-circle-exclamation",
-        "toplam_tuketim": "fa-solid fa-calculator",
-        "ustKapakAcik": "fa-solid fa-box-open"
-    };
+    const iconMap = {
+        "akim": "fa-solid fa-bolt",
+        "voltaj": "fa-solid fa-plug",
+        "guc": "fa-solid fa-power-off",
+        "islem_no": "fa-solid fa-hashtag",
+        "klemensAcik": "fa-solid fa-door-open",
+        "komut": "fa-solid fa-code",
+        "pilDolu": "fa-solid fa-battery-full",
+        "roleAcik": "fa-solid fa-toggle-on",
+        "roleHatasi": "fa-solid fa-circle-exclamation",
+        "toplam_tuketim": "fa-solid fa-calculator",
+        "ustKapakAcik": "fa-solid fa-box-open"
+    };
 
-    const desiredNumericKeys = [
-        "akim", "guc", "islem_no", "komut", "toplam_tuketim", "voltaj"
-    ];
+    const desiredNumericKeys = [
+        "akim", "guc", "islem_no", "komut", "toplam_tuketim", "voltaj"
+    ];
 
-    const desiredBooleanKeys = [
-        "klemensAcik", "pilDolu", "roleAcik", "roleHatasi", "ustKapakAcik"
-    ];
+    const desiredBooleanKeys = [
+        "klemensAcik", "pilDolu", "roleAcik", "roleHatasi", "ustKapakAcik"
+    ];
 
-    const getDecodedPayload = (d) => {
-        // RTDB'den gelen veri yapısı farklılık gösterebilir.
-        // `data.txt` dosyanızdaki örnekte `decoded_payload` bazen `uplink_message` içinde, bazen doğrudan objenin içinde.
-        // RTDB'de muhtemelen doğrudan bir obje olarak gelecek.
-        if (d && typeof d === 'object') {
-            if (d.uplink_message && d.uplink_message.decoded_payload && typeof d.uplink_message.decoded_payload === 'object') {
-                return d.uplink_message.decoded_payload;
-            } else if (d.decoded_payload && typeof d.decoded_payload === 'object') {
-                return d.decoded_payload;
-            }
-            // RTDB'de veri doğrudan payload olarak da gelebilir, örneğin: { "deviceId": "...", "received_at": "...", "akim": 10, ... }
-            // Bu durumda, payload'ı doğrudan d olarak kabul etmeliyiz. Ancak mevcut kod `decoded_payload` beklediği için buna dikkat etmek gerekir.
-            // Eğer verinizde `decoded_payload` yoksa ve anahtarlar direkt kök seviyedeyse, bu fonksiyonu ayarlamanız gerekebilir.
-            // Örneğin: return d; (eğer tüm anahtarlar d objesinin doğrudan altındaysa)
-        }
-        return null;
-    };
+    const getDecodedPayload = (d) => {
+        // RTDB'den gelen veri yapısı farklılık gösterebilir.
+        // `data.txt` dosyanızdaki örnekte `decoded_payload` bazen `uplink_message` içinde, bazen doğrudan objenin içinde.
+        // RTDB'de muhtemelen doğrudan bir obje olarak gelecek.
+        if (d && typeof d === 'object') {
+            if (d.uplink_message && d.uplink_message.decoded_payload && typeof d.uplink_message.decoded_payload === 'object') {
+                return d.uplink_message.decoded_payload;
+            } else if (d.decoded_payload && typeof d.decoded_payload === 'object') {
+                return d.decoded_payload;
+            }
+            // RTDB'de veri doğrudan payload olarak da gelebilir, örneğin: { "deviceId": "...", "received_at": "...", "akim": 10, ... }
+            // Bu durumda, payload'ı doğrudan d olarak kabul etmeliyiz. Ancak mevcut kod `decoded_payload` beklediği için buna dikkat etmek gerekir.
+            // Eğer verinizde `decoded_payload` yoksa ve anahtarlar direkt kök seviyedeyse, bu fonksiyonu ayarlamanız gerekebilir.
+            // Örneğin: return d; (eğer tüm anahtarlar d objesinin doğrudan altındaysa)
+        }
+        return null;
+    };
 
-    function plotGraph(deviceId, column) {
-        if (!deviceId || !column) {
-            Plotly.newPlot('chart', [], {}, {responsive: true, displayModeBar: true});
-            chartDiv.innerHTML = "<p>Lütfen bir cihaz ve grafik seçimi yapın.</p>";
-            return;
-        }
+    function plotGraph(deviceId, column) {
+        if (!deviceId || !column) {
+            Plotly.newPlot('chart', [], {}, {responsive: true, displayModeBar: true});
+            chartDiv.innerHTML = "<p>Lütfen bir cihaz ve grafik seçimi yapın.</p>";
+            return;
+        }
 
-        currentFilteredByDeviceId = allDataObjects.filter(d => {
-            const deviceIdInObject = d.end_device_ids && d.end_device_ids.device_id;
-            return deviceIdInObject === deviceId && getDecodedPayload(d) !== null && d.received_at;
-        });
+        currentFilteredByDeviceId = allDataObjects.filter(d => {
+            const deviceIdInObject = d.end_device_ids && d.end_device_ids.device_id;
+            return deviceIdInObject === deviceId && getDecodedPayload(d) !== null && d.received_at;
+        });
 
-        if (currentFilteredByDeviceId.length === 0) {
-            alert(`'${deviceId}' cihaz kimliği için grafiklenebilecek veri bulunamadı.`);
-            Plotly.newPlot('chart', [], {}, {responsive: true, displayModeBar: true});
-            chartDiv.innerHTML = `<p>'${deviceId}' cihazı için grafiklenecek veri bulunamadı.</p>`;
-            return;
-        }
+        if (currentFilteredByDeviceId.length === 0) {
+            alert(`'${deviceId}' cihaz kimliği için grafiklenebilecek veri bulunamadı.`);
+            Plotly.newPlot('chart', [], {}, {responsive: true, displayModeBar: true});
+            chartDiv.innerHTML = `<p>'${deviceId}' cihazı için grafiklenecek veri bulunamadı.</p>`;
+            return;
+        }
 
-        const x = [];
-        const y = [];
-        const isBooleanColumn = desiredBooleanKeys.includes(column);
+        const x = [];
+        const y = [];
+        const isBooleanColumn = desiredBooleanKeys.includes(column);
 
-        currentFilteredByDeviceId.forEach(d => {
-            const payload = getDecodedPayload(d);
-            if (payload) {
-                let value = payload[column];
-                if (isBooleanColumn) {
-                    if (value === "EVET") {
-                        value = 1;
-                    } else if (value === "HAYIR") {
-                        value = 0;
-                    } else {
-                        value = null;
-                    }
-                }
+        currentFilteredByDeviceId.forEach(d => {
+            const payload = getDecodedPayload(d);
+            if (payload) {
+                let value = payload[column];
+                if (isBooleanColumn) {
+                    if (value === "EVET") {
+                        value = 1;
+                    } else if (value === "HAYIR") {
+                        value = 0;
+                    } else {
+                        value = null;
+                    }
+                }
 
-                if (typeof value === 'number' && value !== null) {
-                    x.push(new Date(d.received_at));
-                    y.push(value);
-                }
-            }
-        });
+                if (typeof value === 'number' && value !== null) {
+                    x.push(new Date(d.received_at));
+                    y.push(value);
+                }
+            }
+        });
 
-        if (x.length === 0) {
-            alert(`Seçilen sütun (${keyLabels[column] || column}) için '${deviceId}' cihazında grafiklenecek geçerli veri bulunamadı. Tüm veri noktaları için bu değer eksik veya uygun değil.`);
-            Plotly.newPlot('chart', [], {}, {responsive: true, displayModeBar: true});
-            chartDiv.innerHTML = `<p>Seçilen sütun (${keyLabels[column] || column}) için geçerli veri bulunamadı.</p>`;
-            return;
-        }
+        if (x.length === 0) {
+            alert(`Seçilen sütun (${keyLabels[column] || column}) için '${deviceId}' cihazında grafiklenecek geçerli veri bulunamadı. Tüm veri noktaları için bu değer eksik veya uygun değil.`);
+            Plotly.newPlot('chart', [], {}, {responsive: true, displayModeBar: true});
+            chartDiv.innerHTML = `<p>Seçilen sütun (${keyLabels[column] || column}) için geçerli veri bulunamadı.</p>`;
+            return;
+        }
 
-        const trace = {
-            x: x,
-            y: y,
-            mode: isBooleanColumn ? 'markers' : 'lines+markers',
-            type: 'scatter',
-            name: keyLabels[column] || column,
-            line: {color: '#007bff'},
-            marker: {color: '#007bff', size: isBooleanColumn ? 8 : 6}
-        };
+        const trace = {
+            x: x,
+            y: y,
+            mode: isBooleanColumn ? 'markers' : 'lines+markers',
+            type: 'scatter',
+            name: keyLabels[column] || column,
+            line: {color: '#007bff'},
+            marker: {color: '#007bff', size: isBooleanColumn ? 8 : 6}
+        };
 
-        const layout = {
-            title: {
-                text: `'${deviceId}' Cihazı - ${keyLabels[column] || column} Zaman Grafiği`,
-                font: {
-                    family: 'Arial, sans-serif',
-                    size: 20,
-                    color: '#333'
-                }
-            },
-            xaxis: {
-                title: {
-                    text: "Timestamp",
-                    font: {
-                        family: 'Arial, sans-serif',
-                        size: 16,
-                        color: '#555'
-                    }
-                },
-                type: "date",
-                gridcolor: '#e0e0e0',
-                linecolor: '#d0d0d0',
-                tickfont: { color: '#666' }
-            },
-            yaxis: {
-                title: {
-                    text: isBooleanColumn ? `${keyLabels[column] || column} (HAYIR=0, EVET=1)` : (keyLabels[column] || column),
-                    font: {
-                        family: 'Arial, sans-serif',
-                        size: 16,
-                        color: '#555'
-                    }
-                },
-                tickvals: isBooleanColumn ? [0, 1] : undefined,
-                ticktext: isBooleanColumn ? ['HAYIR', 'EVET'] : undefined,
-                range: isBooleanColumn ? [-0.1, 1.1] : undefined,
-                gridcolor: '#e0e0e0',
-                linecolor: '#d0d0d0',
-                tickfont: { color: '#666' }
-            },
-            plot_bgcolor: '#fcfcfc',
-            paper_bgcolor: '#ffffff',
-            margin: { t: 100, b: 50, l: 60, r: 40 }
-        };
+        const layout = {
+            title: {
+                text: `'${deviceId}' Cihazı - ${keyLabels[column] || column} Zaman Grafiği`,
+                font: {
+                    family: 'Arial, sans-serif',
+                    size: 20,
+                    color: '#333'
+                }
+            },
+            xaxis: {
+                title: {
+                    text: "Timestamp",
+                    font: {
+                        family: 'Arial, sans-serif',
+                        size: 16,
+                        color: '#555'
+                    }
+                },
+                type: "date",
+                gridcolor: '#e0e0e0',
+                linecolor: '#d0d0d0',
+                tickfont: { color: '#666' }
+            },
+            yaxis: {
+                title: {
+                    text: isBooleanColumn ? `${keyLabels[column] || column} (HAYIR=0, EVET=1)` : (keyLabels[column] || column),
+                    font: {
+                        family: 'Arial, sans-serif',
+                        size: 16,
+                        color: '#555'
+                    }
+                },
+                tickvals: isBooleanColumn ? [0, 1] : undefined,
+                ticktext: isBooleanColumn ? ['HAYIR', 'EVET'] : undefined,
+                range: isBooleanColumn ? [-0.1, 1.1] : undefined,
+                gridcolor: '#e0e0e0',
+                linecolor: '#d0d0d0',
+                tickfont: { color: '#666' }
+            },
+            plot_bgcolor: '#fcfcfc',
+            paper_bgcolor: '#ffffff',
+            margin: { t: 100, b: 50, l: 60, r: 40 }
+        };
 
-        if (column === 'voltaj') {
-            layout.yaxis.range = [0, 300];
-        }
+        if (column === 'voltaj') {
+            layout.yaxis.range = [0, 300];
+        }
 
-        Plotly.newPlot('chart', [trace], layout, { responsive: true, displayModeBar: true });
-    }
+        Plotly.newPlot('chart', [trace], layout, { responsive: true, displayModeBar: true });
+    }
 
-    // Firebase'den veriyi çeken fonksiyon
-    async function fetchDataFromFirebaseRTDB() {
-        loadingOverlay.style.display = 'flex';
-        loadingMessage.textContent = 'Firebase Realtime Database\'den veriler yükleniyor...';
-        selectDeviceId.disabled = true;
-        columnButtonsContainer.innerHTML = '<span class="text-muted">Veriler Yükleniyor...</span>';
-        chartDiv.innerHTML = "<p>Veriler Firebase Realtime Database'den yükleniyor...</p>";
+    // Firebase'den veriyi çeken fonksiyon
+    async function fetchDataFromFirebaseRTDB() {
+        loadingOverlay.style.display = 'flex';
+        loadingMessage.textContent = 'Firebase Realtime Database\'den veriler yükleniyor...';
+        selectDeviceId.disabled = true;
+        columnButtonsContainer.innerHTML = '<span class="text-muted">Veriler Yükleniyor...</span>';
+        chartDiv.innerHTML = "<p>Veriler Firebase Realtime Database'den yükleniyor...</p>";
 
-        try {
-            // Realtime Database'den tek seferlik veri çekme
-            const snapshot = await dataRef.once('value');
-            const firebaseData = snapshot.val(); // Tüm veritabanı içeriğini JSON objesi olarak al
+        try {
+            // Realtime Database'den tek seferlik veri çekme
+            const snapshot = await dataRef.once('value');
+            const firebaseData = snapshot.val(); // Tüm veritabanı içeriğini JSON objesi olarak al
 
-            // data.txt dosyasındaki yapıyı (array of objects) taklit etmek için gelen objeyi bir diziye dönüştürüyoruz.
-            // Eğer RTDB yapınız farklıysa (örn: doğrudan bir dizi olarak kaydedilmişse), bu kısmı ayarlamanız gerekebilir.
-            // data.txt dosyanızdaki örnekte üst seviyede bir dizi var gibi görünüyor.
-            // RTDB'ye bu diziyi direkt yüklediyseniz (örneğin [ {}, {}, ... ]), firebaseData zaten bir dizi olacaktır.
-            // Ama eğer her JSON objesi kendi anahtarı altında bir child ise (örn: {key1: {}, key2: {}}), o zaman Object.values kullanmalıyız.
-            if (firebaseData) {
-                // Eğer data.txt'deki gibi direkt bir dizi olarak yüklendiğini varsayarsak:
-                // allDataObjects = firebaseData;
-                
-                // Eğer RTDB'de her bir kaydın benzersiz bir anahtarı varsa ve veriler bir obje içinde objeler olarak duruyorsa:
-                allDataObjects = Object.values(firebaseData); 
-                
-                // data.txt'deki örneğinizde birden fazla JSON objesi art arda eklenmiş, bu da RTDB'ye bir obje içinde objeler
-                // veya bir dizi içinde objeler olarak yüklenebilir.
-                // Eğer data.txt içeriğini olduğu gibi tek bir string olarak RTDB'ye yüklediyseniz, bu doğru parse edilmeyecektir.
-                // RTDB'ye yüklenecek verinin her bir objenin ayrı bir child olması önerilir.
-            } else {
-                allDataObjects = [];
-            }
+            // data.txt dosyasındaki yapıyı (array of objects) taklit etmek için gelen objeyi bir diziye dönüştürüyoruz.
+            // Eğer RTDB yapınız farklıysa (örn: doğrudan bir dizi olarak kaydedilmişse), bu kısmı ayarlamanız gerekebilir.
+            // data.txt dosyanızdaki örnekte üst seviyede bir dizi var gibi görünüyor.
+            // RTDB'ye bu diziyi direkt yüklediyseniz (örneğin [ {}, {}, ... ]), firebaseData zaten bir dizi olacaktır.
+            // Ama eğer her JSON objesi kendi anahtarı altında bir child ise (örn: {key1: {}, key2: {}}), o zaman Object.values kullanmalıyız.
+            if (firebaseData) {
+                // Eğer data.txt'deki gibi direkt bir dizi olarak yüklendiğini varsayarsak:
+                // allDataObjects = firebaseData;
+                
+                // Eğer RTDB'de her bir kaydın benzersiz bir anahtarı varsa ve veriler bir obje içinde objeler olarak duruyorsa:
+                allDataObjects = Object.values(firebaseData); 
+                
+                // data.txt'deki örneğinizde birden fazla JSON objesi art arda eklenmiş, bu da RTDB'ye bir obje içinde objeler
+                // veya bir dizi içinde objeler olarak yüklenebilir.
+                // Eğer data.txt içeriğini olduğu gibi tek bir string olarak RTDB'ye yüklediyseniz, bu doğru parse edilmeyecektir.
+                // RTDB'ye yüklenecek verinin her bir objenin ayrı bir child olması önerilir.
+            } else {
+                allDataObjects = [];
+            }
 
 
-            const uniqueDeviceIds = new Set();
-            allDataObjects.forEach(d => {
-                if (d.end_device_ids && d.end_device_ids.device_id) {
-                    uniqueDeviceIds.add(d.end_device_ids.device_id);
-                }
-            });
+            const uniqueDeviceIds = new Set();
+            allDataObjects.forEach(d => {
+                if (d.end_device_ids && d.end_device_ids.device_id) {
+                    uniqueDeviceIds.add(d.end_device_ids.device_id);
+                }
+            });
 
-            if (uniqueDeviceIds.size === 0) {
-                alert("Firebase Realtime Database'den geçerli 'device_id' içeren veri alınamadı veya veritabanı boş.");
-                selectDeviceId.innerHTML = '<option value="">Cihaz Kimliği Yok</option>';
-                selectDeviceId.disabled = true;
-                columnButtonsContainer.innerHTML = '<span class="text-muted">Uygun Değişken Yok</span>';
-                chartDiv.innerHTML = "<p>Cihaz verisi bulunamadı.</p>";
-            } else {
-                selectDeviceId.innerHTML = '<option value="">-- Cihaz Seçin --</option>';
-                uniqueDeviceIds.forEach(id => {
-                    const option = document.createElement("option");
-                    option.value = id;
-                    option.textContent = id;
-                    selectDeviceId.appendChild(option);
-                });
-                selectDeviceId.disabled = false;
-                
-                // İlk cihazı otomatik olarak seç ve ilgili butonları oluştur
-                if (selectDeviceId.options.length > 1) {
-                    selectDeviceId.value = selectDeviceId.options[1].value;
-                    selectDeviceId.dispatchEvent(new Event('change')); 
-                } else {
-                    chartDiv.innerHTML = "<p>Lütfen bir cihaz seçin.</p>";
-                }
-            }
+            if (uniqueDeviceIds.size === 0) {
+                alert("Firebase Realtime Database'den geçerli 'device_id' içeren veri alınamadı veya veritabanı boş.");
+                selectDeviceId.innerHTML = '<option value="">Cihaz Kimliği Yok</option>';
+                selectDeviceId.disabled = true;
+                columnButtonsContainer.innerHTML = '<span class="text-muted">Uygun Değişken Yok</span>';
+                chartDiv.innerHTML = "<p>Cihaz verisi bulunamadı.</p>";
+            } else {
+                selectDeviceId.innerHTML = '<option value="">-- Cihaz Seçin --</option>';
+                uniqueDeviceIds.forEach(id => {
+                    const option = document.createElement("option");
+                    option.value = id;
+                    option.textContent = id;
+                    selectDeviceId.appendChild(option);
+                });
+                selectDeviceId.disabled = false;
+                
+                // İlk cihazı otomatik olarak seç ve ilgili butonları oluştur
+                if (selectDeviceId.options.length > 1) {
+                    selectDeviceId.value = selectDeviceId.options[1].value;
+                    selectDeviceId.dispatchEvent(new Event('change')); 
+                } else {
+                    chartDiv.innerHTML = "<p>Lütfen bir cihaz seçin.</p>";
+                }
+            }
 
-        } catch (error) {
-            console.error("Firebase Realtime Database'den veri çekilirken hata oluştu: ", error);
-            alert("Firebase Realtime Database'den veri çekilirken bir hata oluştu: " + error.message + "\nLütfen Firebase yapılandırmanızı ve güvenlik kurallarınızı kontrol edin.");
-            selectDeviceId.innerHTML = '<option value="">Hata</option>';
-            selectDeviceId.disabled = true;
-            columnButtonsContainer.innerHTML = '<span class="text-muted">Hata Oluştu</span>';
-            chartDiv.innerHTML = "<p>Veriler yüklenirken hata oluştu.</p>";
-        } finally {
-            loadingOverlay.style.display = 'none';
-        }
-    }
+        } catch (error) {
+            console.error("Firebase Realtime Database'den veri çekilirken hata oluştu: ", error);
+            alert("Firebase Realtime Database'den veri çekilirken bir hata oluştu: " + error.message + "\nLütfen Firebase yapılandırmanızı ve güvenlik kurallarınızı kontrol edin.");
+            selectDeviceId.innerHTML = '<option value="">Hata</option>';
+            selectDeviceId.disabled = true;
+            columnButtonsContainer.innerHTML = '<span class="text-muted">Hata Oluştu</span>';
+            chartDiv.innerHTML = "<p>Veriler yüklenirken hata oluştu.</p>";
+        } finally {
+            loadingOverlay.style.display = 'none';
+        }
+    }
 
-    // Dosya seçimi ile ilgili tüm listener ve kodlar kaldırıldı
-    // fileInput.addEventListener("change", (...) kaldırıldı
+    // Dosya seçimi ile ilgili tüm listener ve kodlar kaldırıldı
+    // fileInput.addEventListener("change", (...) kaldırıldı
 
-    selectDeviceId.addEventListener("change", () => {
-        const selectedDeviceId = selectDeviceId.value;
-        if (!selectedDeviceId) {
-            columnButtonsContainer.innerHTML = '<span class="text-muted">Önce Cihaz Seçin</span>';
-            Plotly.newPlot('chart', [], {}, {responsive: true, displayModeBar: true});
-            chartDiv.innerHTML = "<p>Lütfen bir cihaz seçin.</p>";
-            return;
-        }
+    selectDeviceId.addEventListener("change", () => {
+        const selectedDeviceId = selectDeviceId.value;
+        if (!selectedDeviceId) {
+            columnButtonsContainer.innerHTML = '<span class="text-muted">Önce Cihaz Seçin</span>';
+            Plotly.newPlot('chart', [], {}, {responsive: true, displayModeBar: true});
+            chartDiv.innerHTML = "<p>Lütfen bir cihaz seçin.</p>";
+            return;
+        }
 
-        currentFilteredByDeviceId = allDataObjects.filter(d => {
-            const deviceIdInObject = d.end_device_ids && d.end_device_ids.device_id;
-            return deviceIdInObject === selectedDeviceId && getDecodedPayload(d) !== null && d.received_at;
-        });
+        currentFilteredByDeviceId = allDataObjects.filter(d => {
+            const deviceIdInObject = d.end_device_ids && d.end_device_ids.device_id;
+            return deviceIdInObject === selectedDeviceId && getDecodedPayload(d) !== null && d.received_at;
+        });
 
-        const foundPayloadKeysForDevice = new Set();
-        currentFilteredByDeviceId.forEach(d => {
-            const payload = getDecodedPayload(d);
-            if (payload) {
-                Object.keys(payload).forEach(key => {
-                    foundPayloadKeysForDevice.add(key);
-                });
-            }
-        });
+        const foundPayloadKeysForDevice = new Set();
+        currentFilteredByDeviceId.forEach(d => {
+            const payload = getDecodedPayload(d);
+            if (payload) {
+                Object.keys(payload).forEach(key => {
+                    foundPayloadKeysForDevice.add(key);
+                });
+            }
+        });
 
-        columnButtonsContainer.innerHTML = '';
-        let hasValidColumnsForDevice = false;
+        columnButtonsContainer.innerHTML = '';
+        let hasValidColumnsForDevice = false;
 
-        Object.keys(keyLabels).forEach(key => {
-            if (foundPayloadKeysForDevice.has(key) && (desiredNumericKeys.includes(key) || desiredBooleanKeys.includes(key))) {
-                const button = document.createElement("button");
-                button.type = "button";
-                button.className = "btn btn-secondary m-1";
-                button.value = key;
-                
-                const iconClass = iconMap[key];
-                if (iconClass) {
-                    const iconElement = document.createElement("i");
-                    iconElement.className = iconClass;
-                    iconElement.style.marginRight = "5px";
-                    button.appendChild(iconElement);
-                }
+        Object.keys(keyLabels).forEach(key => {
+            if (foundPayloadKeysForDevice.has(key) && (desiredNumericKeys.includes(key) || desiredBooleanKeys.includes(key))) {
+                const button = document.createElement("button");
+                button.type = "button";
+                button.className = "btn btn-secondary m-1";
+                button.value = key;
+                
+                const iconClass = iconMap[key];
+                if (iconClass) {
+                    const iconElement = document.createElement("i");
+                    iconElement.className = iconClass;
+                    iconElement.style.marginRight = "5px";
+                    button.appendChild(iconElement);
+                }
 
-                button.appendChild(document.createTextNode(keyLabels[key]));
-                
-                button.addEventListener("click", () => {
-                    document.querySelectorAll('#columnButtons .btn').forEach(btn => {
-                        btn.classList.remove('active');
-                    });
-                    button.classList.add('active');
-                    plotGraph(selectedDeviceId, button.value);
-                });
-                columnButtonsContainer.appendChild(button);
-                hasValidColumnsForDevice = true;
-            }
-        });
+                button.appendChild(document.createTextNode(keyLabels[key]));
+                
+                button.addEventListener("click", () => {
+                    document.querySelectorAll('#columnButtons .btn').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    button.classList.add('active');
+                    plotGraph(selectedDeviceId, button.value);
+                });
+                columnButtonsContainer.appendChild(button);
+                hasValidColumnsForDevice = true;
+            }
+        });
 
-        if (!hasValidColumnsForDevice) {
-            alert(`'${selectedDeviceId}' cihazı için grafiklenecek uygun değişken bulunamadı.`);
-            columnButtonsContainer.innerHTML = '<span class="text-muted">Uygun Değişken Yok</span>';
-            Plotly.newPlot('chart', [], {}, {responsive: true, displayModeBar: true});
-            chartDiv.innerHTML = `<p>'${selectedDeviceId}' cihazı için uygun değişken bulunamadı.</p>`;
-            return;
-        }
+        if (!hasValidColumnsForDevice) {
+            alert(`'${selectedDeviceId}' cihazı için grafiklenecek uygun değişken bulunamadı.`);
+            columnButtonsContainer.innerHTML = '<span class="text-muted">Uygun Değişken Yok</span>';
+            Plotly.newPlot('chart', [], {}, {responsive: true, displayModeBar: true});
+            chartDiv.innerHTML = `<p>'${selectedDeviceId}' cihazı için uygun değişken bulunamadı.</p>`;
+            return;
+        }
 
-        if (columnButtonsContainer.children.length > 0) {
-            const firstButton = columnButtonsContainer.children[0];
-            firstButton.classList.add('active');
-            plotGraph(selectedDeviceId, firstButton.value);
-        } else {
-            chartDiv.innerHTML = "<p>Lütfen grafiklenecek bir değişken seçin.</p>";
-            Plotly.newPlot('chart', [], {}, {responsive: true, displayModeBar: true});
-        }
-    });
+        if (columnButtonsContainer.children.length > 0) {
+            const firstButton = columnButtonsContainer.children[0];
+            firstButton.classList.add('active');
+            plotGraph(selectedDeviceId, firstButton.value);
+        } else {
+            chartDiv.innerHTML = "<p>Lütfen grafiklenecek bir değişken seçin.</p>";
+            Plotly.newPlot('chart', [], {}, {responsive: true, displayModeBar: true});
+        }
+    });
 
-    // Sayfa yüklendiğinde Firebase Realtime Database'den veriyi çek
-    window.addEventListener('load', () => {
-        fetchDataFromFirebaseRTDB();
-    });
+    // Sayfa yüklendiğinde Firebase Realtime Database'den veriyi çek
+    window.addEventListener('load', () => {
+        fetchDataFromFirebaseRTDB();
+    });
 
-    // Başlangıçta boş bir grafik çiz ve yükleme mesajı göster
-    Plotly.newPlot('chart', [], {}, {responsive: true, displayModeBar: true});
-    chartDiv.innerHTML = "<p>Veriler Firebase Realtime Database'den yükleniyor...</p>";
+    // Başlangıçta boş bir grafik çiz ve yükleme mesajı göster
+    Plotly.newPlot('chart', [], {}, {responsive: true, displayModeBar: true});
+    chartDiv.innerHTML = "<p>Veriler Firebase Realtime Database'den yükleniyor...</p>";
 </script>
 </body>
 </html>
