@@ -481,6 +481,21 @@
         showEntryScreen();
       }
     });
+	
+	 loadUrlBtn.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      loadUrlBtn.click();
+    }
+  });
+
+  // URL giriş alanında Enter tuşuna basıldığında yükleme yap
+  urlInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      loadUrlBtn.click();
+    }
+  });
   </script>
 </body>
 </html>
