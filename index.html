@@ -7,7 +7,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400..700&family=Madimi+One&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- CSS dosyasını buraya ekliyoruz -->
     <style>
       /* Genel ayarlar */
       body {
@@ -15,48 +14,53 @@
         padding: 0;
         box-sizing: border-box;
         height: 100vh;
-        /* Tüm ekran yüksekliğini kapla */
         width: 100vw;
-        /* Tüm ekran genişliğini kapla */
         background-color: black;
-        /* Arka plan siyah */
         color: white;
-        /* Yazılar beyaz */
         font-family: 'Kode Mono', monospace;
         overflow: hidden;
       }
 
-      /* Content ayarları */
+      /* Tüm içeriği kapsayan container */
       .content {
         display: flex;
         flex-direction: column;
-        /* İçeriği dikeyde hizala */
         align-items: center;
-        /* İçeriği yatayda ortala */
         justify-content: center;
-        /* İçeriği dikeyde ortala */
         width: 100%;
         height: 100%;
       }
 
-      /* Güncelleme yazısı */
-      .updatetime {
+      /* Güncelleme yazısı ve yükleme simgesi için container */
+      .updatetime-container {
         text-align: center;
         font-size: 1.2rem;
-        /* Yazı boyutu */
+        min-height: 1.2rem; /* Metin/yükleyici için yer ayırır */
       }
 
-      /* Container ayarları */
+      /* Yükleme Simgesi */
+      .loader {
+        border: 4px solid #f3f3f3; /* Açık gri */
+        border-top: 4px solid #3498db; /* Mavi */
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        animation: spin 2s linear infinite;
+        margin: 0 auto;
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+
+      /* Durakları içeren container */
       .container {
         display: flex;
         flex-wrap: nowrap;
-        /* İçerikler her zaman aynı satırda kalacak */
         width: 100%;
-        /* Tam genişlik */
         height: auto;
-        /* Yükseklik içerik ile orantılı olsun */
         justify-content: center;
-        /* Yatayda ortala */
       }
 
       /* Durak kutuları */
@@ -66,13 +70,71 @@
         border-radius: 2vw;
         text-align: center;
         background-color: #333 !important;
-        /* Kutuların arka plan rengi koyu gri */
         box-shadow: 0 1vw 1vw rgba(255, 255, 255, 0);
         color: white;
-        /* Yazı rengi beyaz */
         overflow: hidden;
-        /* Taşan yazıyı gizle */
         line-height: 1.2;
+        /* Varsayılan çerçeve kalınlığı */
+        border: 0.2vw solid #ccc;
+        transition: border-color 0.5s ease;
+      }
+
+      /* Dinamik renk sınıfları */
+      .durak.hizli {
+        border-color: #00ff00; /* Yeşil */
+        border-width: 0.5vw;
+      }
+
+      .durak.orta {
+        border-color: #ffff00; /* Sarı */
+        border-width: 0.5vw;
+      }
+
+      .durak.yavas {
+        border-color: #ff0000; /* Kırmızı */
+        border-width: 0.5vw;
+      }
+
+      /* Araç listesi için tablo stili */
+      .vehicle-table {
+        width: 100%;
+        table-layout: fixed; /* Tablo sütunlarının genişliğini sabitle */
+        border-collapse: collapse; /* Kenarlıkları birleştir */
+        margin-top: 0.5rem;
+      }
+
+      .vehicle-table td {
+        white-space: nowrap; /* Metnin satır atlamasını engelle */
+        overflow: hidden; /* Taşmayı gizle */
+        text-overflow: ellipsis; /* Taşma durumunda üç nokta göster */
+        padding: 0 0.2vw;
+      }
+
+      .vehicle-table .right-align {
+        text-align: right;
+      }
+
+      /* Viewport Bilgi Kutusu */
+      #viewport-info {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        padding: 5px 10px;
+        background-color: transparent; /* Arka planı şeffaf yapıldı */
+        color: rgba(0, 0, 0, 0); /* Yazı rengi tamamen şeffaf yapıldı */
+        font-family: 'Kode Mono', monospace;
+        font-size: 0.8rem;
+        border-radius: 5px;
+        cursor: pointer;
+        z-index: 1000;
+        user-select: none;
+        transition: color 0.3s ease, background-color 0.3s ease;
+      }
+      
+      /* Tıklanabilir olduğunda rengi biraz görünür yapma */
+      #viewport-info:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.5);
       }
 
       /* Dikey düzen (width < height) */
@@ -80,29 +142,20 @@
         .content {
           padding-top: 2vw;
         }
-
-        .updatetime {
+        .updatetime-container {
           font-size: 4vw;
         }
-
         .container {
           padding-top: 5%;
           flex-direction: column;
-          /* Dikey hizalama */
           gap: 2.3vw;
           align-items: center;
-          /* İçeriği yatayda ortala */
           margin-bottom: 2%;
         }
-
         .durak {
-          background-color: red;
-          width: 50vw;
-          /* Dinamik genişlik (viewport genişliğine göre) */
-          height: 49vw;
-          /* Dinamik yükseklik (viewport yüksekliğine göre) */
-          font-size: 3.7vw;
-          /* Dinamik yazı boyutu */
+          width: 60vw;
+          height: 40vw;
+          font-size: 2.5vw;
         }
       }
 
@@ -111,60 +164,42 @@
         .content {
           padding-top: 1vw;
         }
-
-        .updatetime {
+        .updatetime-container {
           font-size: 4vw;
         }
-
         .container {
           padding-top: 5%;
           flex-direction: column;
-          /* Dikey hizalama */
           gap: 2.3vw;
           align-items: center;
-          /* İçeriği yatayda ortala */
           margin-bottom: 2%;
         }
-
         .durak {
-          background-color: green;
           width: 50vw;
-          /* Dinamik genişlik (viewport genişliğine göre) */
-          height: 49vw;
-          /* Dinamik yükseklik (viewport yüksekliğine göre) */
-          font-size: 2.2vw;
-          /* Dinamik yazı boyutu */
+          height: 40vw;
+          font-size: 2.5vw;
         }
       }
 
       /* Dikey düzen (width < height) */
-      @media (min-aspect-ratio: 0.8) and (max-aspect-ratio: 0.99) {
+      @media (min-aspect-ratio: 0.799) and (max-aspect-ratio: 0.99) {
         .content {
           padding-top: 1vw;
         }
-
-        .updatetime {
+        .updatetime-container {
           font-size: 3vw;
         }
-
         .container {
           padding-top: 5%;
           flex-direction: column;
-          /* Dikey hizalama */
           gap: 2vw;
           align-items: center;
-          /* İçeriği yatayda ortala */
           margin-bottom: 2%;
         }
-
         .durak {
-          background-color: cyan;
-          width: 30vw;
-          /* Dinamik genişlik (viewport genişliğine göre) */
-          height: 26vw;
-          /* Dinamik yükseklik (viewport yüksekliğine göre) */
-          font-size: 1.6vw;
-          /* Dinamik yazı boyutu */
+          width: 40vw;
+          height: 35vw;
+          font-size: 1.8vw;
         }
       }
 
@@ -173,29 +208,20 @@
         .content {
           padding-top: 2%;
         }
-
-        .updatetime {
+        .updatetime-container {
           font-size: 2.5vw;
         }
-
         .container {
           flex-direction: row;
-          /* Yatay hizalama */
           justify-content: center;
           gap: 5vh;
-          /* Öğeler arasında boşluk */
           margin-top: 2%;
           margin-bottom: 5%;
         }
-
         .durak {
-          background-color: brown;
           width: 20vw;
-          /* Dinamik genişlik (viewport genişliğine göre) */
           height: 23vw;
-          /* Dinamik yükseklik (viewport yüksekliğine göre) */
-          font-size: 1.1vw;
-          /* Dinamik yazı boyutu */
+          font-size: 0.9vw;
         }
       }
 
@@ -203,74 +229,58 @@
         .content {
           padding-top: 2%;
         }
-
-        .updatetime {
+        .updatetime-container {
           font-size: 2.5vw;
         }
-
         .container {
           flex-direction: row;
-          /* Yatay hizalama */
           justify-content: center;
           gap: 2vw;
-          /* Öğeler arasında boşluk */
           margin-top: 2%;
           margin-bottom: 5%;
         }
-
         .durak {
-          background-color: coral;
-          width: 23vw;
-          /* Dinamik genişlik (viewport genişliğine göre) */
-          height: 20vw;
-          /* Dinamik yükseklik (viewport yüksekliğine göre) */
-          font-size: 1.3vw;
-          /* Dinamik yazı boyutu */
+          width: 25vw;
+          height: 23vw;
+          font-size: 1.2vw;
         }
       }
 
+      /* Bu kısım özellikle 1600x765 gibi geniş ekranlar için güncellendi */
       @media (min-aspect-ratio: 1.9) {
         .content {
           padding-top: 2%;
         }
-
-        .updatetime {
+        .updatetime-container {
           font-size: 2.7vw;
         }
-
         .container {
           flex-direction: row;
-          /* Yatay hizalama */
           justify-content: center;
           gap: 2vw;
-          /* Öğeler arasında boşluk */
           margin-top: 2%;
           margin-bottom: 5%;
         }
-
         .durak {
-          background-color: rgb(188, 23, 230);
-          width: 26vw;
-          /* Dinamik genişlik (viewport genişliğine göre) */
-          height: 27vw;
-          /* Dinamik yükseklik (viewport yüksekliğine göre) */
-          font-size: 1.7vw;
-          /* Dinamik yazı boyutu */
+          width: 25vw;
+          height: 20vw;
+          font-size: 1.1vw;
         }
       }
     </style>
-    <!-- Firebase SDK'larını ekleyin -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
   </head>
   <body>
+    <div id="viewport-info"></div>
     <div class="content">
-      <!-- Ana İçerik -->
       <div id="main-container">
-        <div id="updatetime" class="updatetime"></div>
-        <div id="duraklar-container" class="container">
-          <!-- Durak bilgileri buraya JavaScript ile eklenecek -->
+        <div class="updatetime-container">
+          <div id="loader" class="loader"></div>
+          <div id="updatetime" style="display: none;"></div>
         </div>
+        <div id="duraklar-container" class="container">
+          </div>
       </div>
     </div>
     <script>
@@ -292,10 +302,62 @@
       const mainContainer = document.getElementById('main-container');
       const duraklarContainer = document.getElementById('duraklar-container');
       const updateTimeElement = document.getElementById('updatetime');
+      const loaderElement = document.getElementById('loader');
+      const viewportInfo = document.getElementById('viewport-info');
+
+      /**
+       * Saniye cinsinden verilen süreyi "Xgn Ysa Zdk Psn" formatına dönüştürür.
+       * @param {number} totalSeconds - Toplam saniye süresi.
+       * @returns {string} Formatlanmış süre metni.
+       */
+      function formatDuration(totalSeconds) {
+        if (totalSeconds < 0) {
+          totalSeconds = 0;
+        }
+
+        const days = Math.floor(totalSeconds / (24 * 60 * 60));
+        const hours = Math.floor((totalSeconds % (24 * 60 * 60)) / (60 * 60));
+        const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
+        const seconds = totalSeconds % 60;
+
+        const parts = [];
+        if (days > 0) {
+          parts.push(`${days}gn`);
+        }
+        if (hours > 0) {
+          parts.push(`${hours}sa`);
+        }
+        if (minutes > 0) {
+          parts.push(`${minutes}dk`);
+        }
+        parts.push(`${seconds}sn`);
+        
+
+        return parts.join(' ');
+      }
+
+      /**
+       * Zaman ifadesini belirtilen uzunluğa göre boşluklarla doldurur ve sağa yaslar.
+       * @param {string} timeString - Formatlanmış zaman metni.
+       * @param {number} totalLength - Hedeflenen toplam karakter uzunluğu.
+       * @returns {string} Doldurulmuş ve hizalanmış metin.
+       */
+      function padTimeDisplay(value, unit, padChar = '&nbsp;') {
+        // Tek haneli değerler için bir boşluk ekle
+        if (value < 10 && value >= 0) {
+          return `${padChar}${value}${unit}`;
+        }
+        return `${value}${unit}`;
+      }
 
       function renderData(data) {
+        // Yükleme simgesini gizle ve güncelleme metnini göster
+        loaderElement.style.display = 'none';
+        updateTimeElement.style.display = 'block';
+
         // Güncelleme zamanını ayarla
         updateTimeElement.textContent = `Son Güncelleme: ${data.son_guncelleme}`;
+        
         // Durak bilgilerini işle
         duraklarContainer.innerHTML = '';
         const duraklar = data.duraklar;
@@ -304,42 +366,153 @@
           merkez: "Merkez",
           metro: "Metro"
         };
-        for (const key in duraklar) {
-          if (duraklar.hasOwnProperty(key)) {
-            const durak = duraklar[key];
-            const durakDiv = document.createElement('div');
-            durakDiv.className = 'durak';
-            const aracListesi = durak.liste || [];
-            const aracSayisi = aracListesi.length;
-            let araclarList = '';
-            if (aracSayisi > 0) {
-              // Araçları istediğiniz formatta listele
-              araclarList = aracListesi.map((arac, index) => `
-								<br>${index + 1}) ${arac.code} | ${arac.plate} | &nbsp;&nbsp;${arac.entry_duration} dk`).join('');
-            } else {
-              araclarList = 'Boş';
+        
+        // Durakları belirli bir sırada oluştur
+        const orderedDuraks = ['merkez', 'metro', 'suvari'];
+        
+        // Ortalama kalkış sürelerini topla ve sırala
+        const averageTimes = orderedDuraks.map(key => ({
+            key,
+            time: duraklar[key].ortalama_kalkis
+        })).sort((a, b) => a.time - b.time);
+
+        // En hızlı, orta ve en yavaş durakları belirle
+        const fastest = averageTimes[0].key;
+        const middle = averageTimes[1].key;
+        const slowest = averageTimes[2].key;
+
+        // Her bir durak için ayrı ayrı hizalama uzunluğunu belirle
+        orderedDuraks.forEach(key => {
+            if (duraklar.hasOwnProperty(key)) {
+                const durak = duraklar[key];
+                const durakDiv = document.createElement('div');
+                durakDiv.className = 'durak';
+                
+                // Hız durumuna göre sınıf ekle
+                if (key === fastest) {
+                    durakDiv.classList.add('hizli');
+                } else if (key === middle) {
+                    durakDiv.classList.add('orta');
+                } else if (key === slowest) {
+                    durakDiv.classList.add('yavas');
+                }
+                
+                let htmlContent = '';
+                
+                // Başlık satırı
+                htmlContent += `${durak_names[key]} (${durak.liste ? durak.liste.length : 0})<br>`;
+                
+                // Ortalama kalkış satırı
+                const formattedAverageDeparture = formatDuration(durak.ortalama_kalkis);
+                htmlContent += `Ortalama Kalkış: ${formattedAverageDeparture}<br>`;
+
+                // Ayırıcı çizgi
+                htmlContent += `—————————————————————————<br>`;
+                
+                const aracListesi = durak.liste || [];
+                const aracSayisi = aracListesi.length;
+                
+                // Araç listesi
+                if (aracSayisi > 0) {
+                    // Gün ve saat sütunlarının varlığını kontrol et
+                    const hasDays = aracListesi.some(arac => Math.floor(arac.entry_duration / (24 * 60 * 60)) > 0);
+                    const hasHours = aracListesi.some(arac => Math.floor((arac.entry_duration % (24 * 60 * 60)) / (60 * 60)) > 0);
+
+                    htmlContent += '<table class="vehicle-table"><tbody>';
+                    aracListesi.forEach((arac, index) => {
+                        const totalSeconds = arac.entry_duration;
+                        const days = Math.floor(totalSeconds / (24 * 60 * 60));
+                        const hours = Math.floor((totalSeconds % (24 * 60 * 60)) / (60 * 60));
+                        const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
+                        const seconds = totalSeconds % 60;
+
+                        htmlContent += `<tr>`;
+                        htmlContent += `<td>${index + 1})</td>`;
+                        htmlContent += `<td>${arac.code}</td>`;
+                        htmlContent += `<td>${arac.plate}</td>`;
+                        
+                        if (hasDays) {
+                            htmlContent += `<td class="right-align">${padTimeDisplay(days, 'gn')}</td>`;
+                        }
+                        if (hasHours) {
+                            htmlContent += `<td class="right-align">${padTimeDisplay(hours, 'sa')}</td>`;
+                        }
+                        htmlContent += `<td class="right-align">${padTimeDisplay(minutes, 'dk')}</td>`;
+                        htmlContent += `<td class="right-align">${padTimeDisplay(seconds, 'sn')}</td>`;
+                        
+                        htmlContent += `</tr>`;
+                    });
+                    htmlContent += '</tbody></table>';
+                } else {
+                    htmlContent += 'Boş';
+                }
+                
+                durakDiv.innerHTML = htmlContent;
+                duraklarContainer.appendChild(durakDiv);
             }
-            // Şablonu tek bir satırda birleştirerek boşlukları giderdik
-            durakDiv.innerHTML = `${durak_names[key]} (${aracSayisi})
-									<br>Ortalama Kalkış: ${durak.ortalama_kalkis} dk 
-										<br>—————————————————————————${araclarList}`;
-            duraklarContainer.appendChild(durakDiv);
-          }
-        }
+        });
       }
+
       // Veritabanı referansındaki veriyi dinle
       ref.on('value', (snapshot) => {
         const data = snapshot.val();
-        if (data) {
+        if (data && data.duraklar) {
           renderData(data);
         } else {
-          console.error("Veri alınamadı. Lütfen Python betiğinin çalıştığından emin olun.");
-          duraklarContainer.innerHTML = ' < p style = "color:red; text-align:center;" > Veri alınamadı.Lütfen Python betiğinin çalıştığından emin olun. < /p>';
+          console.error("Veri alınamadı veya 'duraklar' anahtarı bulunamadı.");
+          // Hata durumunda yükleyiciyi gizle ve hata mesajını göster
+          loaderElement.style.display = 'none';
+          updateTimeElement.style.display = 'block';
+          duraklarContainer.innerHTML = '<p style="color:red; text-align:center;">Veri alınamadı. Lütfen Python betiğinin çalıştığından emin olun.</p>';
         }
       }, (error) => {
         console.error("Veri okuma hatası: ", error);
-        duraklarContainer.innerHTML = ' < p style = "color:red; text-align:center;" > Veri okuma hatası oluştu.Konsolu kontrol edin. < /p>';
+        // Hata durumunda yükleyiciyi gizle ve hata mesajını göster
+        loaderElement.style.display = 'none';
+        updateTimeElement.style.display = 'block';
+        duraklarContainer.innerHTML = '<p style="color:red; text-align:center;">Veri okuma hatası oluştu. Konsolu kontrol edin.</p>';
       });
+
+      // Viewport bilgisi fonksiyonları
+      function updateViewportInfo() {
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        // En/Boy oranını hesapla ve 2 ondalık basamağa yuvarla
+        const aspectRatio = (width / height).toFixed(2);
+        viewportInfo.textContent = `Viewport: ${width}x${height} | En/Boy Oranı: ${aspectRatio} w/h`;
+      }
+      
+      // Viewport bilgisi div'ine tıklama olayı ekle
+      viewportInfo.onclick = function() {
+        const textToCopy = this.textContent;
+        const tempTextArea = document.createElement('textarea');
+        tempTextArea.value = textToCopy;
+        document.body.appendChild(tempTextArea);
+        tempTextArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempTextArea);
+        
+        this.textContent = 'Kopyalandı!';
+        // Kopyalama mesajı görünür hale getirildi
+        this.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+        this.style.color = 'white';
+
+        setTimeout(() => {
+            // Mesajı eski haline döndür
+            updateViewportInfo();
+            this.style.backgroundColor = 'transparent';
+            this.style.color = 'rgba(0, 0, 0, 0)';
+        }, 1000);
+      };
+
+      // Sayfa yüklendiğinde ve pencere yeniden boyutlandırıldığında tüm ayarları yap
+      window.addEventListener('load', () => {
+          // İlk yüklemede viewport bilgisini güncelle
+          updateViewportInfo();
+      });
+
+      // Pencere boyutu değiştiğinde viewport bilgisini güncelle
+      window.addEventListener('resize', updateViewportInfo);
     </script>
   </body>
 </html>
