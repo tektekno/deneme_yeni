@@ -2,7 +2,6 @@
 <html lang="tr">
   <head>
     <meta charset="UTF-8">
-    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>Duraklara Göre Sıralama</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -277,8 +276,12 @@
     <div class="content">
       <div id="main-container">
         <div class="updatetime-container">
+          <!-- Yükleniyor simgesi -->
           <div id="loader" class="loader"></div>
+          <!-- Son güncelleme zamanı metni -->
           <div id="updatetime" style="display: none;"></div>
+          <!-- GPS bilgi metni -->
+          <div id="gps-info" style="display: none; margin-top: 0.5rem; color: #ccc;"></div>
         </div>
         <div id="duraklar-container" class="container">
           </div>
@@ -304,6 +307,7 @@
       const duraklarContainer = document.getElementById('duraklar-container');
       const updateTimeElement = document.getElementById('updatetime');
       const loaderElement = document.getElementById('loader');
+      const gpsInfoElement = document.getElementById('gps-info'); // GPS bilgi elementini seç
       const viewportInfo = document.getElementById('viewport-info');
 
       /**
@@ -352,12 +356,14 @@
       }
 
       function renderData(data) {
-        // Yükleme simgesini gizle ve güncelleme metnini göster
+        // Yükleme simgesini gizle ve güncelleme metinlerini göster
         loaderElement.style.display = 'none';
         updateTimeElement.style.display = 'block';
+        gpsInfoElement.style.display = 'block';
 
-        // Güncelleme zamanını ayarla
+        // Güncelleme zamanını ve GPS bilgi metnini ayarla
         updateTimeElement.textContent = `Son Güncelleme: ${data.son_guncelleme}`;
+        gpsInfoElement.textContent = "29-30-32 kodlu araçlarda GPS sorunu olduğu burada görünmemektedir.";
         
         // Durak bilgilerini işle
         duraklarContainer.innerHTML = '';
