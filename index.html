@@ -281,7 +281,7 @@
           <!-- Son güncelleme zamanı metni -->
           <div id="updatetime" style="display: none;"></div>
           <!-- GPS bilgi metni -->
-          <div id="gps-info" style="display: none; margin-top: 0.5rem; color: #ccc;"></div>
+          <div id="gps-info" style="display: none; margin-top: 0.5rem; color: #90EE90;"></div>
         </div>
         <div id="duraklar-container" class="container">
           </div>
@@ -363,7 +363,7 @@
 
         // Güncelleme zamanını ve GPS bilgi metnini ayarla
         updateTimeElement.textContent = `Son Güncelleme: ${data.son_guncelleme}`;
-        gpsInfoElement.textContent = "29-30-32 kodlu araçlarda GPS sorunu olduğu burada görünmemektedir.";
+        gpsInfoElement.textContent = "29 (5023) - 30 (7274) - 32 (6383) kodlu araçlarda GPS sorunu olduğu için burada görünmemektedir.";
         
         // Durak bilgilerini işle
         duraklarContainer.innerHTML = '';
