@@ -1,15 +1,6 @@
 <!DOCTYPE html>
 <html lang="tr">
   <head>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-4Y5K6S0S87"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-4Y5K6S0S87');
-</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>Duraklara Göre Sıralama</title>
@@ -351,12 +342,18 @@
       }
 
       /**
-       * Zaman ifadesini belirtilen uzunluğa göre boşluklarla doldurur ve sağa yaslar.
-       * @param {string} timeString - Formatlanmış zaman metni.
-       * @param {number} totalLength - Hedeflenen toplam karakter uzunluğu.
-       * @returns {string} Doldurulmuş ve hizalanmış metin.
+       * Zaman birimini formatlar. Eğer değer 0 ise ve forceDisplayZero true değilse boş string döndürür.
+       * Tek haneli değerler için bir boşluk ekler ve sağa yaslar.
+       * @param {number} value - Zaman biriminin değeri (gün, saat, dakika, saniye).
+       * @param {string} unit - Zaman biriminin kısaltması (örn: 'gn', 'sa', 'dk', 'sn').
+       * @param {boolean} [forceDisplayZero=false] - Değer 0 olsa bile gösterilmesini zorlar.
+       * @param {string} [padChar='&nbsp;'] - Tek haneli değerler için kullanılacak dolgu karakteri.
+       * @returns {string} Doldurulmuş ve hizalanmış metin veya boş string.
        */
-      function padTimeDisplay(value, unit, padChar = '&nbsp;') {
+      function padTimeDisplay(value, unit, forceDisplayZero = false, padChar = '&nbsp;') {
+        if (value === 0 && !forceDisplayZero) {
+          return '';
+        }
         // Tek haneli değerler için bir boşluk ekle
         if (value < 10 && value >= 0) {
           return `${padChar}${value}${unit}`;
@@ -430,9 +427,11 @@
                 
                 // Araç listesi
                 if (aracSayisi > 0) {
-                    // Gün ve saat sütunlarının varlığını kontrol et
-                    const hasDays = aracListesi.some(arac => Math.floor(arac.entry_duration / (24 * 60 * 60)) > 0);
-                    const hasHours = aracListesi.some(arac => Math.floor((arac.entry_duration % (24 * 60 * 60)) / (60 * 60)) > 0);
+                    // Sütunların gösterilip gösterilmeyeceğini belirlemek için kontroller
+                    const showDays = aracListesi.some(arac => arac.entry_duration >= 86400);
+                    const showHours = aracListesi.some(arac => arac.entry_duration >= 3600);
+                    const showMinutes = aracListesi.some(arac => arac.entry_duration >= 60);
+
 
                     htmlContent += '<table class="vehicle-table"><tbody>';
                     aracListesi.forEach((arac, index) => {
@@ -447,14 +446,19 @@
                         htmlContent += `<td>${arac.code}</td>`;
                         htmlContent += `<td>${arac.plate}</td>`;
                         
-                        if (hasDays) {
+                        if (showDays && days > 0) { // Gün 0 ise gösterme
                             htmlContent += `<td class="right-align">${padTimeDisplay(days, 'gn')}</td>`;
                         }
-                        if (hasHours) {
-                            htmlContent += `<td class="right-align">${padTimeDisplay(hours, 'sa')}</td>`;
+                        if (showHours) {
+                            htmlContent += `<td class="right-align">${padTimeDisplay(hours, 'sa')}</td>`; // Saat 0 ise gösterme
+                            htmlContent += `<td class="right-align">${padTimeDisplay(minutes, 'dk')}</td>`; // Dakika 0 ise gösterme
+                            htmlContent += `<td class="right-align">${padTimeDisplay(seconds, 'sn', true)}</td>`; // Saniye her zaman göster
+                        } else if (showMinutes) {
+                            htmlContent += `<td class="right-align">${padTimeDisplay(minutes, 'dk')}</td>`; // Dakika 0 ise gösterme
+                            htmlContent += `<td class="right-align">${padTimeDisplay(seconds, 'sn', true)}</td>`; // Saniye her zaman göster
+                        } else {
+                            htmlContent += `<td class="right-align">${padTimeDisplay(seconds, 'sn', true)}</td>`; // Saniye her zaman göster
                         }
-                        htmlContent += `<td class="right-align">${padTimeDisplay(minutes, 'dk')}</td>`;
-                        htmlContent += `<td class="right-align">${padTimeDisplay(seconds, 'sn')}</td>`;
                         
                         htmlContent += `</tr>`;
                     });
