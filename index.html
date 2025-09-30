@@ -65,7 +65,7 @@
 
       /* Durak kutuları */
       .durak {
-        padding: 1vw 1vh;
+        padding: 1vw 1vh 2vw 1vh;
         border: 0.2vw solid #ccc;
         border-radius: 2vw;
         text-align: center;
@@ -98,9 +98,9 @@
       /* Araç listesi için tablo stili */
       .vehicle-table {
         width: 100%;
-        table-layout: fixed; /* Tablo sütunlarının genişliğini sabitle */
         border-collapse: collapse; /* Kenarlıkları birleştir */
         margin-top: 0.5rem;
+        font-size: inherit; /* Yazı tipi boyutunu parent elementten (durak) al */
       }
 
       .vehicle-table td {
@@ -119,9 +119,9 @@
         position: fixed;
         top: 10px;
         left: 10px;
-        padding: 5px 10px;
-        background-color: transparent; /* Arka planı şeffaf yapıldı */
-        color: rgba(0, 0, 0, 0); /* Yazı rengi tamamen şeffaf yapıldı */
+        padding: 8px 12px;
+        background-color: transparent; /* Başlangıçta şeffaf */
+        color: transparent; /* Başlangıçta şeffaf */
         font-family: 'Kode Mono', monospace;
         font-size: 0.8rem;
         border-radius: 5px;
@@ -133,145 +133,58 @@
       
       /* Tıklanabilir olduğunda rengi biraz görünür yapma */
       #viewport-info:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-        color: rgba(255, 255, 255, 0.5);
+        background-color: rgba(0, 0, 0, 0.6);
+        color: white;
       }
 
-      /* Dikey düzen (width < height) */
-      @media (min-aspect-ratio: 0) and (max-aspect-ratio: 0.499) {
-        .content {
-          padding-top: 2vw;
-        }
-        .updatetime-container {
-          font-size: 4vw;
-        }
-        .container {
-          padding-top: 5%;
-          flex-direction: column;
-          gap: 2.3vw;
-          align-items: center;
-          margin-bottom: 2%;
-        }
-        .durak {
-          width: 60vw;
-          height: 40vw;
-          font-size: 2.5vw;
-        }
+      /* Debug Butonları için Stiller */
+      #debug-controls {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        background-color: rgba(0, 0, 0, 0.7);
+        padding: 10px;
+        border-radius: 8px;
+        z-index: 1001;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        font-size: 0.9rem;
+      }
+      #debug-controls div {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      #debug-controls button {
+        width: 25px;
+        height: 25px;
+        font-weight: bold;
+        cursor: pointer;
       }
 
-      /* Dikey düzen (width < height) */
-      @media (min-aspect-ratio: 0.5) and (max-aspect-ratio: 0.799) {
-        .content {
-          padding-top: 1vw;
-        }
-        .updatetime-container {
-          font-size: 4vw;
-        }
-        .container {
-          padding-top: 5%;
-          flex-direction: column;
-          gap: 2.3vw;
-          align-items: center;
-          margin-bottom: 2%;
-        }
-        .durak {
-          width: 50vw;
-          height: 40vw;
-          font-size: 2.5vw;
-        }
-      }
-
-      /* Dikey düzen (width < height) */
-      @media (min-aspect-ratio: 0.799) and (max-aspect-ratio: 0.99) {
-        .content {
-          padding-top: 1vw;
-        }
-        .updatetime-container {
-          font-size: 3vw;
-        }
-        .container {
-          padding-top: 5%;
-          flex-direction: column;
-          gap: 2vw;
-          align-items: center;
-          margin-bottom: 2%;
-        }
-        .durak {
-          width: 40vw;
-          height: 35vw;
-          font-size: 1.8vw;
-        }
-      }
-
-      /* Yatay düzen (width > height) */
-      @media (min-aspect-ratio: 1) and (max-aspect-ratio: 1.499) {
-        .content {
-          padding-top: 2%;
-        }
-        .updatetime-container {
-          font-size: 2.5vw;
-        }
-        .container {
-          flex-direction: row;
-          justify-content: center;
-          gap: 5vh;
-          margin-top: 2%;
-          margin-bottom: 5%;
-        }
-        .durak {
-          width: 20vw;
-          height: 23vw;
-          font-size: 0.9vw;
-        }
-      }
-
-      @media (min-aspect-ratio: 1.5) and (max-aspect-ratio: 1.899) {
-        .content {
-          padding-top: 2%;
-        }
-        .updatetime-container {
-          font-size: 2.5vw;
-        }
-        .container {
-          flex-direction: row;
-          justify-content: center;
-          gap: 2vw;
-          margin-top: 2%;
-          margin-bottom: 5%;
-        }
-        .durak {
-          width: 25vw;
-          height: 23vw;
-          font-size: 1.2vw;
-        }
-      }
-
-      /* Bu kısım özellikle 1600x765 gibi geniş ekranlar için güncellendi */
-      @media (min-aspect-ratio: 1.9) {
-        .content {
-          padding-top: 2%;
-        }
-        .updatetime-container {
-          font-size: 2.7vw;
-        }
-        .container {
-          flex-direction: row;
-          justify-content: center;
-          gap: 2vw;
-          margin-top: 2%;
-          margin-bottom: 5%;
-        }
-        .durak {
-          width: 25vw;
-          height: 20vw;
-          font-size: 1.1vw;
-        }
-      }
     </style>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
   </head>
   <body>
+    <div id="debug-controls" style="display: none;">
+      <div>
+        <span>Merkez:</span>
+        <button id="add-merkez">+</button>
+        <button id="remove-merkez">-</button>
+      </div>
+      <div>
+        <span>Metro:</span>
+        <button id="add-metro">+</button>
+        <button id="remove-metro">-</button>
+      </div>
+      <div>
+        <span>Süvari:</span>
+        <button id="add-suvari">+</button>
+        <button id="remove-suvari">-</button>
+      </div>
+    </div>
     <div id="viewport-info"></div>
     <div class="content">
       <div id="main-container">
@@ -370,6 +283,31 @@
         // Güncelleme zamanını ve GPS bilgi metnini ayarla
         updateTimeElement.textContent = `Son Güncelleme: ${data.son_guncelleme}`;
         gpsInfoElement.textContent = "29 (5023) - 30 (7274) - 32 (6383) kodlu araçlarda GPS sorunu olduğu için burada görünmemektedir.";
+
+        // Stilleri sıfırlamak için bir fonksiyon (pencere yeniden boyutlandırıldığında kullanışlı)
+        function resetDurakStyles(durakDiv) {
+            durakDiv.style.width = '';
+            durakDiv.style.height = '';
+            durakDiv.style.fontSize = '';
+            durakDiv.style.lineHeight = '';
+            durakDiv.style.padding = '';
+            // Font büyüklüğü sınıflarını temizle
+            durakDiv.classList.remove('font-size-large', 'font-size-xlarge');
+        }
+
+        // Dinamik font büyüklüğü sınıfları için stilleri dinamik olarak ekle
+        // Bu, media query'lerdeki .font-size-large gibi sınıfların yerini alır
+        const contentDiv = document.querySelector('.content');
+        const aspectRatio = window.innerWidth / window.innerHeight;
+
+        const styleSheet = document.createElement("style");
+        if (aspectRatio < 0.5) {
+          styleSheet.innerText = `.durak.font-size-large { font-size: 3.2vw; } .durak.font-size-xlarge { font-size: 3.5vw; }`;
+        } else if (aspectRatio < 0.85) {
+          styleSheet.innerText = `.durak.font-size-large { font-size: 2.8vw; } .durak.font-size-xlarge { font-size: 3.1vw; }`;
+        }
+        document.head.appendChild(styleSheet);
+
         
         // Durak bilgilerini işle
         duraklarContainer.innerHTML = '';
@@ -424,7 +362,132 @@
                 
                 const aracListesi = durak.liste || [];
                 const aracSayisi = aracListesi.length;
+
+                // Önceki stilleri temizle
+                resetDurakStyles(durakDiv);
+
+                // --- En-boy oranına göre DURAK stilleri ve dinamik yükseklik ---
+                // Genel container stilleri de artık burada, her bir durak için değil, sadece bir kez ayarlanacak.
+                if (!duraklarContainer.style.flexDirection) { // Stillerin tekrar tekrar atanmasını önle
+                  if (aspectRatio < 1.1) { // Dikey ve kareye yakın düzenler
+                    duraklarContainer.style.flexDirection = 'column';
+                    duraklarContainer.style.alignItems = 'center';
+                    duraklarContainer.style.paddingTop = '5%';
+                    duraklarContainer.style.marginBottom = '2%';
+                  } else { // Yatay düzenler
+                    duraklarContainer.style.flexDirection = 'row';
+                    duraklarContainer.style.justifyContent = 'center';
+                    duraklarContainer.style.marginTop = '2%';
+                    duraklarContainer.style.marginBottom = '5%';
+                  }
+                }
+
+                if (aspectRatio < 0.5) {
+                  durakDiv.style.width = '67vw';
+                  durakDiv.style.padding = '2.5vw 1vh';
+                  durakDiv.style.fontSize = '4vw';
+                  const baseHeight = 12.5;
+                  const heightPerVehicle = 5.8; // Oranlandı
+                  const totalHeight = baseHeight + (aracSayisi * heightPerVehicle);
+                  durakDiv.style.height = `${totalHeight.toFixed(2)}vw`;
+                  durakDiv.style.minHeight = '20vw';
+                  // Genel stiller
+                  contentDiv.style.paddingTop = '2vw';
+                  updateTimeElement.style.fontSize = '4vw'; // durak başlıkları ile aynı boyutta
+                  gpsInfoElement.style.fontSize = '4vw'; // durak başlıkları ile aynı boyutta
+                  duraklarContainer.style.gap = '9vw';
+
+                }else if (aspectRatio < 0.75) {
+                  durakDiv.style.width = '60vw';
+                  durakDiv.style.padding = '2.5vw 1vh';
+                  durakDiv.style.fontSize = '3.2vw';
+                  durakDiv.style.lineHeight = '1.15';
+                  const baseHeight = 9.5;
+                  const heightPerVehicle = 4; // Oranlandı
+                  const totalHeight = baseHeight + (aracSayisi * heightPerVehicle);
+                  durakDiv.style.height = `${totalHeight.toFixed(2)}vw`;
+                  durakDiv.style.minHeight = '14vw';
+                  // Genel stiller
+                  contentDiv.style.paddingTop = '1vw';
+                  updateTimeElement.style.fontSize = '3.2vw'; // durak başlıkları ile aynı boyutta
+                  gpsInfoElement.style.fontSize = '3.2vw'; // durak başlıkları ile aynı boyutta
+                  duraklarContainer.style.gap = '2vw';
                 
+                
+                }else if (aspectRatio < 0.85) {
+                  durakDiv.style.width = '60vw';
+                  durakDiv.style.padding = '2.5vw 1vh';
+                  durakDiv.style.fontSize = '2.3vw';
+                  durakDiv.style.lineHeight = '1.15';
+                  const baseHeight = 9.5;
+                  const heightPerVehicle = 2.5; // Oranlandı
+                  const totalHeight = baseHeight + (aracSayisi * heightPerVehicle);
+                  durakDiv.style.height = `${totalHeight.toFixed(2)}vw`;
+                  durakDiv.style.minHeight = '18vw';
+                  // Genel stiller
+                  contentDiv.style.paddingTop = '1vw';
+                  updateTimeElement.style.fontSize = '2.3vw'; // durak başlıkları ile aynı boyutta
+                  gpsInfoElement.style.fontSize = '2.3vw'; // durak başlıkları ile aynı boyutta
+                  duraklarContainer.style.gap = '2vw';
+
+                } else if (aspectRatio < 0.9) {
+                  durakDiv.style.width = '50vw';
+                  durakDiv.style.fontSize = '2.6vw';
+                  const baseHeight = 8.5;
+                  const heightPerVehicle = 3.6; // Oranlandı
+                  const totalHeight = baseHeight + (aracSayisi * heightPerVehicle);
+                  durakDiv.style.height = `${totalHeight.toFixed(2)}vw`;
+                  durakDiv.style.minHeight = '15vw';
+                  // Genel stiller
+                  contentDiv.style.paddingTop = '1vw';
+                  updateTimeElement.style.fontSize = '2.6vw'; // durak başlıkları ile aynı boyutta
+                  gpsInfoElement.style.fontSize = '2.6vw'; // durak başlıkları ile aynı boyutta
+                  duraklarContainer.style.gap = '2vw';
+                } else if (aspectRatio < 1.2) {
+                  durakDiv.style.width = '27vw';
+                  durakDiv.style.height = '23vw';
+                  durakDiv.style.fontSize = '1.4vw';
+                  durakDiv.style.minHeight = '23vw';
+                  // Genel stiller
+                  contentDiv.style.paddingTop = '2%';
+                  updateTimeElement.style.fontSize = '1.4vw'; // durak başlıkları ile aynı boyutta
+                  gpsInfoElement.style.fontSize = '1.4vw'; // durak başlıkları ile aynı boyutta
+                  duraklarContainer.style.gap = '2vh';
+
+                } else if (aspectRatio < 1.5) {
+                  durakDiv.style.width = '28vw';
+                  durakDiv.style.height = '23vw';
+                  durakDiv.style.fontSize = '1.4vw';
+                  durakDiv.style.minHeight = '23vw';
+                  // Genel stiller
+                  contentDiv.style.paddingTop = '2%';
+                  updateTimeElement.style.fontSize = '1.4vw'; // durak başlıkları ile aynı boyutta
+                  gpsInfoElement.style.fontSize = '1.4vw'; // durak başlıkları ile aynı boyutta
+                  duraklarContainer.style.gap = '2vh';
+
+                } else if (aspectRatio < 1.9) {
+                  durakDiv.style.width = '25vw';
+                  durakDiv.style.height = '23vw';
+                  durakDiv.style.fontSize = '1.4vw';
+                  durakDiv.style.minHeight = '23vw';
+                  // Genel stiller
+                  contentDiv.style.paddingTop = '2%';
+                  updateTimeElement.style.fontSize = '1.4vw'; // durak başlıkları ile aynı boyutta
+                  gpsInfoElement.style.fontSize = '1.4vw'; // durak başlıkları ile aynı boyutta
+                  duraklarContainer.style.gap = '2vw';
+
+                } else {
+                  durakDiv.style.width = '25vw';
+                  durakDiv.style.height = '20vw';
+                  durakDiv.style.fontSize = '1.3vw';
+                  durakDiv.style.minHeight = '20vw';
+                  // Genel stiller
+                  contentDiv.style.paddingTop = '2%';
+                  updateTimeElement.style.fontSize = '1.3vw'; // durak başlıkları ile aynı boyutta
+                  gpsInfoElement.style.fontSize = '1.3vw'; // durak başlıkları ile aynı boyutta
+                  duraklarContainer.style.gap = '2vw';
+                }
+
                 // Araç listesi
                 if (aracSayisi > 0) {
                     // Sütunların gösterilip gösterilmeyeceğini belirlemek için kontroller
@@ -432,6 +495,12 @@
                     const showHours = aracListesi.some(arac => arac.entry_duration >= 3600);
                     const showMinutes = aracListesi.some(arac => arac.entry_duration >= 60);
 
+                    // Sütun durumuna göre font boyutu için sınıf ekle
+                    if (!showHours && !showMinutes) {
+                      durakDiv.classList.add('font-size-xlarge'); // Sadece saniye varsa
+                    } else if (!showHours) {
+                      durakDiv.classList.add('font-size-large'); // Sadece dakika/saniye varsa
+                    }
 
                     htmlContent += '<table class="vehicle-table"><tbody>';
                     aracListesi.forEach((arac, index) => {
@@ -473,25 +542,118 @@
         });
       }
 
-      // Veritabanı referansındaki veriyi dinle
-      ref.on('value', (snapshot) => {
-        const data = snapshot.val();
-        if (data && data.duraklar) {
-          renderData(data);
-        } else {
-          console.error("Veri alınamadı veya 'duraklar' anahtarı bulunamadı.");
-          // Hata durumunda yükleyiciyi gizle ve hata mesajını göster
-          loaderElement.style.display = 'none';
-          updateTimeElement.style.display = 'block';
-          duraklarContainer.innerHTML = '<p style="color:red; text-align:center;">Veri alınamadı. Lütfen Python betiğinin çalıştığından emin olun.</p>';
+      // --- DEBUG MODU ---
+      // Test verilerini kullanmak için `true`, gerçek zamanlı Firebase verilerini kullanmak için `false` yapın.
+      const DEBUG_MODE = false; 
+
+      if (DEBUG_MODE) {
+        // --- DEBUG MODU İÇİN KONTROL VE VERİ YAPISI ---
+
+        // 1. Butonları ve kontrol panelini görünür yap
+        const debugControls = document.getElementById('debug-controls');
+        const STORAGE_KEY = 'debugVehicleState';
+        debugControls.style.display = 'flex';
+
+        // Viewport bilgisini görünür yap
+        const viewportInfoDiv = document.getElementById('viewport-info');
+        viewportInfoDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
+        viewportInfoDiv.style.color = 'white';
+
+        // 2. Tüm olası araçları içeren bir havuz oluştur
+        const allVehicles = [
+            { code: "21", plate: "35T7575" }, { code: "22", plate: "35T5702" },
+            { code: "23", plate: "35T6619" }, { code: "24", plate: "35T7734" },
+            { code: "25", plate: "35T5595" }, { code: "26", plate: "35T6913" },
+            { code: "27", plate: "35T6581" }, { code: "28", plate: "35T6272" },
+            { code: "29", plate: "35T5023" }, { code: "30", plate: "35T7274" },
+            { code: "32", plate: "35T6383" }, { code: "33", plate: "35T7623" },
+            { code: "34", plate: "35T6975" }, { code: "35", plate: "35T5601" },
+            { code: "36", plate: "35T7812" }, { code: "37", plate: "35T5071" }
+        ];
+
+        // 3. localStorage'dan kayıtlı durumu yükle veya başlangıç verisini oluştur
+        const savedState = localStorage.getItem(STORAGE_KEY);
+        const initialDuraklarState = savedState ? JSON.parse(savedState) : {
+            merkez: { liste: [], ortalama_kalkis: 6200 },
+            metro: { liste: [], ortalama_kalkis: 950 },
+            suvari: { liste: [], ortalama_kalkis: 40 }
+        };
+
+        const mockData = {
+          son_guncelleme: "18.09.2023 | 10:00:00 (Test Verisi)",
+          duraklar: initialDuraklarState
+        };
+
+        // 4. Butonlara olay dinleyicileri ekle
+        document.getElementById('add-merkez').addEventListener('click', () => addVehicle('merkez'));
+        document.getElementById('remove-merkez').addEventListener('click', () => removeVehicle('merkez'));
+        document.getElementById('add-metro').addEventListener('click', () => addVehicle('metro'));
+        document.getElementById('remove-metro').addEventListener('click', () => removeVehicle('metro'));
+        document.getElementById('add-suvari').addEventListener('click', () => addVehicle('suvari'));
+        document.getElementById('remove-suvari').addEventListener('click', () => removeVehicle('suvari'));
+
+        function saveState() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(mockData.duraklar));
         }
-      }, (error) => {
-        console.error("Veri okuma hatası: ", error);
-        // Hata durumunda yükleyiciyi gizle ve hata mesajını göster
-        loaderElement.style.display = 'none';
-        updateTimeElement.style.display = 'block';
-        duraklarContainer.innerHTML = '<p style="color:red; text-align:center;">Veri okuma hatası oluştu. Konsolu kontrol edin.</p>';
-      });
+
+        function getTotalVehicleCount() {
+            return mockData.duraklar.merkez.liste.length + 
+                   mockData.duraklar.metro.liste.length + 
+                   mockData.duraklar.suvari.liste.length;
+        }
+
+        function addVehicle(durakKey) {
+            if (mockData.duraklar[durakKey].liste.length >= 10) {
+                alert("Bu durağa daha fazla araç eklenemez (maksimum 10)!");
+                return;
+            }
+
+            if (getTotalVehicleCount() >= 16) {
+                alert("Toplam araç sayısı 16'yı geçemez!");
+                return;
+            }
+            
+            // Henüz duraklarda olmayan bir araç bul
+            const assignedPlates = [...mockData.duraklar.merkez.liste, ...mockData.duraklar.metro.liste, ...mockData.duraklar.suvari.liste].map(v => v.plate);
+            const availableVehicle = allVehicles.find(v => !assignedPlates.includes(v.plate));
+
+            if (availableVehicle) {
+                // Rastgele bir bekleme süresi ekle
+                const newVehicle = { ...availableVehicle, entry_duration: Math.floor(Math.random() * 10000) };
+                mockData.duraklar[durakKey].liste.push(newVehicle);
+                saveState(); // Durumu localStorage'a kaydet
+                renderData(mockData); // Arayüzü güncelle
+            }
+        }
+
+        function removeVehicle(durakKey) {
+            if (mockData.duraklar[durakKey].liste.length > 0) {
+                saveState(); // Durumu localStorage'a kaydet
+                mockData.duraklar[durakKey].liste.pop(); // Son aracı sil
+                renderData(mockData); // Arayüzü güncelle
+            } else {
+                alert(`${durakKey} durağında silinecek araç yok.`);
+            }
+        }
+
+        // 5. Sayfa ilk yüklendiğinde boş veri ile render et
+        renderData(mockData); 
+
+      } else {
+        // Veritabanı referansındaki veriyi dinle (DEBUG_MODE = false ise çalışır)
+        ref.on('value', (snapshot) => {
+          const data = snapshot.val();
+          if (data && data.duraklar) {
+            renderData(data);
+          } else {
+            console.error("Veri alınamadı veya 'duraklar' anahtarı bulunamadı.");
+            duraklarContainer.innerHTML = '<p style="color:red; text-align:center;">Veri alınamadı. Lütfen Python betiğinin çalıştığından emin olun.</p>';
+          }
+        }, (error) => {
+          console.error("Veri okuma hatası: ", error);
+          duraklarContainer.innerHTML = '<p style="color:red; text-align:center;">Veri okuma hatası oluştu. Konsolu kontrol edin.</p>';
+        });
+      }
 
       // Viewport bilgisi fonksiyonları
       function updateViewportInfo() {
@@ -532,7 +694,12 @@
       });
 
       // Pencere boyutu değiştiğinde viewport bilgisini güncelle
-      window.addEventListener('resize', updateViewportInfo);
+      window.addEventListener('resize', () => {
+        updateViewportInfo();
+        // Veriyi yeniden render etmek için, mevcut veriyi bir değişkende saklayıp onu kullanabiliriz
+        // veya basitçe sayfayı yeniden yükleyebiliriz. Şimdilik yeniden yükleme daha basit.
+        location.reload();
+      });
     </script>
   </body>
 </html>
