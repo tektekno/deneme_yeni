@@ -26,16 +26,22 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
+        justify-content: center; /* Tüm içeriği dikeyde ortala */
         width: 100%;
         height: 100%;
+      }
+
+      #main-container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
       }
 
       /* Güncelleme yazısı ve yükleme simgesi için container */
       .updatetime-container {
         text-align: center;
         font-size: 1.2rem;
-        min-height: 1.2rem; /* Metin/yükleyici için yer ayırır */
+        padding-top: 1vh; /* Üstten küçük bir boşluk */
       }
 
       /* Yükleme Simgesi */
@@ -59,13 +65,12 @@
         display: flex;
         flex-wrap: nowrap;
         width: 100%;
-        height: auto;
         justify-content: center;
       }
 
       /* Durak kutuları */
       .durak {
-        padding: 1vw 1vh 2vw 1vh;
+        padding: 1vh 2vw; /* Üst/Alt: 1vh (sabit), Sağ/Sol: 2vw. İsteğe göre güncellendi. */
         border: 0.2vw solid #ccc;
         border-radius: 2vw;
         text-align: center;
@@ -77,6 +82,11 @@
         /* Varsayılan çerçeve kalınlığı */
         border: 0.2vw solid #ccc;
         transition: border-color 0.5s ease;
+      }
+
+      .durak {
+        width: var(--durak-width, 80vw); /* JS'den gelen veya varsayılan değer */
+        font-size: var(--durak-font-size, 4vw); /* JS'den gelen veya varsayılan değer */
       }
 
       /* Dinamik renk sınıfları */
@@ -284,29 +294,10 @@
         updateTimeElement.textContent = `Son Güncelleme: ${data.son_guncelleme}`;
         gpsInfoElement.textContent = "29 (5023) - 30 (7274) - 32 (6383) kodlu araçlarda GPS sorunu olduğu için burada görünmemektedir.";
 
-        // Stilleri sıfırlamak için bir fonksiyon (pencere yeniden boyutlandırıldığında kullanışlı)
-        function resetDurakStyles(durakDiv) {
-            durakDiv.style.width = '';
-            durakDiv.style.height = '';
-            durakDiv.style.fontSize = '';
-            durakDiv.style.lineHeight = '';
-            durakDiv.style.padding = '';
-            // Font büyüklüğü sınıflarını temizle
-            durakDiv.classList.remove('font-size-large', 'font-size-xlarge');
-        }
-
         // Dinamik font büyüklüğü sınıfları için stilleri dinamik olarak ekle
         // Bu, media query'lerdeki .font-size-large gibi sınıfların yerini alır
         const contentDiv = document.querySelector('.content');
         const aspectRatio = window.innerWidth / window.innerHeight;
-
-        const styleSheet = document.createElement("style");
-        if (aspectRatio < 0.5) {
-          styleSheet.innerText = `.durak.font-size-large { font-size: 3.2vw; } .durak.font-size-xlarge { font-size: 3.5vw; }`;
-        } else if (aspectRatio < 0.85) {
-          styleSheet.innerText = `.durak.font-size-large { font-size: 2.8vw; } .durak.font-size-xlarge { font-size: 3.1vw; }`;
-        }
-        document.head.appendChild(styleSheet);
 
         
         // Durak bilgilerini işle
@@ -331,6 +322,20 @@
         const fastest = averageTimes[0].key;
         const middle = averageTimes[1].key;
         const slowest = averageTimes[2].key;
+
+        // --- YENİ ORANTISAL YÜKSEKLİK HESAPLAMA MANTIĞI ---
+        // 1. Tüm duraklardaki araç sayılarını al
+        const vehicleCounts = {
+            merkez: duraklar.merkez.liste ? duraklar.merkez.liste.length : 0,
+            metro: duraklar.metro.liste ? duraklar.metro.liste.length : 0,
+            suvari: duraklar.suvari.liste ? duraklar.suvari.liste.length : 0,
+        };
+        const totalVehicles = vehicleCounts.merkez + vehicleCounts.metro + vehicleCounts.suvari;
+
+        // 2. Dikey düzen için genel ayarları yap
+        // Bu değerler artık JS'de değil, CSS'de yönetiliyor veya akışkan olarak hesaplanıyor.
+        // Sadece dikey düzende taşmayı önlemek için min-height veriyoruz.
+        gpsInfoElement.style.minHeight = '6.4vh'; // 58/908
 
         // Her bir durak için ayrı ayrı hizalama uzunluğunu belirle
         orderedDuraks.forEach(key => {
@@ -363,145 +368,64 @@
                 const aracListesi = durak.liste || [];
                 const aracSayisi = aracListesi.length;
 
-                // Önceki stilleri temizle
-                resetDurakStyles(durakDiv);
-
-                // --- En-boy oranına göre DURAK stilleri ve dinamik yükseklik ---
-                // Genel container stilleri de artık burada, her bir durak için değil, sadece bir kez ayarlanacak.
+                // --- YENİ STİL MANTIĞI ---
+                // Genel container stilleri sadece bir kez ayarlanır
                 if (!duraklarContainer.style.flexDirection) { // Stillerin tekrar tekrar atanmasını önle
                   if (aspectRatio < 1.1) { // Dikey ve kareye yakın düzenler
                     duraklarContainer.style.flexDirection = 'column';
                     duraklarContainer.style.alignItems = 'center';
-                    duraklarContainer.style.paddingTop = '5%';
-                    duraklarContainer.style.marginBottom = '2%';
+                    duraklarContainer.style.paddingTop = '2vh';
+                    duraklarContainer.style.gap = '2.4vh'; // 18px / 754px
                   } else { // Yatay düzenler
                     duraklarContainer.style.flexDirection = 'row';
                     duraklarContainer.style.justifyContent = 'center';
                     duraklarContainer.style.marginTop = '2%';
-                    duraklarContainer.style.marginBottom = '5%';
+                    duraklarContainer.style.alignItems = 'flex-start'; // Elemanların uzamasını engelle, yukarı hizala.
+                    duraklarContainer.style.gap = '2vw';
                   }
                 }
 
-                if (aspectRatio < 0.5) {
-                  durakDiv.style.width = '67vw';
-                  durakDiv.style.padding = '2.5vw 1vh';
-                  durakDiv.style.fontSize = '4vw';
-                  const baseHeight = 12.5;
-                  const heightPerVehicle = 5.8; // Oranlandı
-                  const totalHeight = baseHeight + (aracSayisi * heightPerVehicle);
-                  durakDiv.style.height = `${totalHeight.toFixed(2)}vw`;
-                  durakDiv.style.minHeight = '20vw';
-                  // Genel stiller
-                  contentDiv.style.paddingTop = '2vw';
-                  updateTimeElement.style.fontSize = '4vw'; // durak başlıkları ile aynı boyutta
-                  gpsInfoElement.style.fontSize = '4vw'; // durak başlıkları ile aynı boyutta
-                  duraklarContainer.style.gap = '9vw';
-
-                }else if (aspectRatio < 0.75) {
-                  durakDiv.style.width = '60vw';
-                  durakDiv.style.padding = '2.5vw 1vh';
-                  durakDiv.style.fontSize = '3.2vw';
-                  durakDiv.style.lineHeight = '1.15';
-                  const baseHeight = 9.5;
-                  const heightPerVehicle = 4; // Oranlandı
-                  const totalHeight = baseHeight + (aracSayisi * heightPerVehicle);
-                  durakDiv.style.height = `${totalHeight.toFixed(2)}vw`;
-                  durakDiv.style.minHeight = '14vw';
-                  // Genel stiller
-                  contentDiv.style.paddingTop = '1vw';
-                  updateTimeElement.style.fontSize = '3.2vw'; // durak başlıkları ile aynı boyutta
-                  gpsInfoElement.style.fontSize = '3.2vw'; // durak başlıkları ile aynı boyutta
-                  duraklarContainer.style.gap = '2vw';
+                // --- AKIŞKAN FORMÜL İLE STİL HESAPLAMA ---
+                // Bu formül, tüm en-boy oranları için tek başına çalışır.
                 
+                // 1. Akışkan Font Boyutu: Ekran daraldıkça (aspectRatio küçüldükçe) font büyür.
+                // clamp(min, preferred, max)
+                const fluidFontSize = `clamp(1.4vw, ${2 / aspectRatio}vw, 4.5vw)`;
                 
-                }else if (aspectRatio < 0.85) {
-                  durakDiv.style.width = '60vw';
-                  durakDiv.style.padding = '2.5vw 1vh';
-                  durakDiv.style.fontSize = '2.3vw';
-                  durakDiv.style.lineHeight = '1.15';
-                  const baseHeight = 9.5;
-                  const heightPerVehicle = 2.5; // Oranlandı
-                  const totalHeight = baseHeight + (aracSayisi * heightPerVehicle);
-                  durakDiv.style.height = `${totalHeight.toFixed(2)}vw`;
-                  durakDiv.style.minHeight = '18vw';
-                  // Genel stiller
-                  contentDiv.style.paddingTop = '1vw';
-                  updateTimeElement.style.fontSize = '2.3vw'; // durak başlıkları ile aynı boyutta
-                  gpsInfoElement.style.fontSize = '2.3vw'; // durak başlıkları ile aynı boyutta
-                  duraklarContainer.style.gap = '2vw';
+                // 2. Akışkan Genişlik: Ekran daraldıkça genişlik artar.
+                const fluidWidth = `clamp(30vw, ${50 / aspectRatio}vw, 85vw)`;
 
-                } else if (aspectRatio < 0.9) {
-                  durakDiv.style.width = '50vw';
-                  durakDiv.style.fontSize = '2.6vw';
-                  const baseHeight = 8.5;
-                  const heightPerVehicle = 3.6; // Oranlandı
-                  const totalHeight = baseHeight + (aracSayisi * heightPerVehicle);
-                  durakDiv.style.height = `${totalHeight.toFixed(2)}vw`;
-                  durakDiv.style.minHeight = '15vw';
-                  // Genel stiller
-                  contentDiv.style.paddingTop = '1vw';
-                  updateTimeElement.style.fontSize = '2.6vw'; // durak başlıkları ile aynı boyutta
-                  gpsInfoElement.style.fontSize = '2.6vw'; // durak başlıkları ile aynı boyutta
-                  duraklarContainer.style.gap = '2vw';
-                } else if (aspectRatio < 1.2) {
-                  durakDiv.style.width = '27vw';
-                  durakDiv.style.height = '23vw';
-                  durakDiv.style.fontSize = '1.4vw';
-                  durakDiv.style.minHeight = '23vw';
-                  // Genel stiller
-                  contentDiv.style.paddingTop = '2%';
-                  updateTimeElement.style.fontSize = '1.4vw'; // durak başlıkları ile aynı boyutta
-                  gpsInfoElement.style.fontSize = '1.4vw'; // durak başlıkları ile aynı boyutta
-                  duraklarContainer.style.gap = '2vh';
+                // 3. Hesaplanan değerleri CSS değişkenleri olarak ata
+                durakDiv.style.setProperty('--durak-font-size', fluidFontSize);
+                durakDiv.style.setProperty('--durak-width', fluidWidth);
 
-                } else if (aspectRatio < 1.5) {
-                  durakDiv.style.width = '28vw';
-                  durakDiv.style.height = '23vw';
-                  durakDiv.style.fontSize = '1.4vw';
-                  durakDiv.style.minHeight = '23vw';
-                  // Genel stiller
-                  contentDiv.style.paddingTop = '2%';
-                  updateTimeElement.style.fontSize = '1.4vw'; // durak başlıkları ile aynı boyutta
-                  gpsInfoElement.style.fontSize = '1.4vw'; // durak başlıkları ile aynı boyutta
-                  duraklarContainer.style.gap = '2vh';
+                // 4. Dikey/Yatay düzene göre flex-grow ve height ayarla
+                if (aspectRatio < 1.1) { // Dikey Düzen
+                  durakDiv.style.height = 'auto';
+                  let flexGrowValue = 1;
+                  if (totalVehicles > 0) {
+                    flexGrowValue = 1 + (vehicleCounts[key] / totalVehicles) * 10;
+                  }
+                  durakDiv.style.flexGrow = flexGrowValue.toFixed(2);
+                } else { // Yatay Düzen
+                  // Yatayda yükseklik araç sayısıyla orantılı olsun.
+                  // Padding sabit olduğu için, en çok araca sahip olan div en uzun olacak.
+                  const baseHeightVh = 15; // Başlık vb. için temel yükseklik.
+                  const heightPerVehicleVh = 3; // Her araç satırı için ek yükseklik.
+                  const totalHeight = baseHeightVh + (aracSayisi * heightPerVehicleVh);
 
-                } else if (aspectRatio < 1.9) {
-                  durakDiv.style.width = '25vw';
-                  durakDiv.style.height = '23vw';
-                  durakDiv.style.fontSize = '1.4vw';
-                  durakDiv.style.minHeight = '23vw';
-                  // Genel stiller
-                  contentDiv.style.paddingTop = '2%';
-                  updateTimeElement.style.fontSize = '1.4vw'; // durak başlıkları ile aynı boyutta
-                  gpsInfoElement.style.fontSize = '1.4vw'; // durak başlıkları ile aynı boyutta
-                  duraklarContainer.style.gap = '2vw';
-
-                } else {
-                  durakDiv.style.width = '25vw';
-                  durakDiv.style.height = '20vw';
-                  durakDiv.style.fontSize = '1.3vw';
-                  durakDiv.style.minHeight = '20vw';
-                  // Genel stiller
-                  contentDiv.style.paddingTop = '2%';
-                  updateTimeElement.style.fontSize = '1.3vw'; // durak başlıkları ile aynı boyutta
-                  gpsInfoElement.style.fontSize = '1.3vw'; // durak başlıkları ile aynı boyutta
-                  duraklarContainer.style.gap = '2vw';
+                  durakDiv.style.height = 'auto'; // Yüksekliğin içeriğe göre doğal olarak büyümesine izin ver.
+                  durakDiv.style.minHeight = `${totalHeight}vh`; // Ancak en azından hesaplanan kadar yer kaplamasını sağla.
+                  durakDiv.style.maxHeight = '80vh'; // Ekranı taşmasını önlemek için maksimum yükseklik.
+                  durakDiv.style.flexGrow = '0'; // Yatayda esnemesin
                 }
+
+                // Font boyutlarını eşitle: updatetime ve gpsinfo, durakDiv ile aynı boyutta olsun.
+                updateTimeElement.style.fontSize = fluidFontSize;
+                gpsInfoElement.style.fontSize = fluidFontSize;
 
                 // Araç listesi
                 if (aracSayisi > 0) {
-                    // Sütunların gösterilip gösterilmeyeceğini belirlemek için kontroller
-                    const showDays = aracListesi.some(arac => arac.entry_duration >= 86400);
-                    const showHours = aracListesi.some(arac => arac.entry_duration >= 3600);
-                    const showMinutes = aracListesi.some(arac => arac.entry_duration >= 60);
-
-                    // Sütun durumuna göre font boyutu için sınıf ekle
-                    if (!showHours && !showMinutes) {
-                      durakDiv.classList.add('font-size-xlarge'); // Sadece saniye varsa
-                    } else if (!showHours) {
-                      durakDiv.classList.add('font-size-large'); // Sadece dakika/saniye varsa
-                    }
-
                     htmlContent += '<table class="vehicle-table"><tbody>';
                     aracListesi.forEach((arac, index) => {
                         const totalSeconds = arac.entry_duration;
@@ -509,6 +433,10 @@
                         const hours = Math.floor((totalSeconds % (24 * 60 * 60)) / (60 * 60));
                         const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
                         const seconds = totalSeconds % 60;
+
+                        const showDays = aracListesi.some(a => a.entry_duration >= 86400);
+                        const showHours = aracListesi.some(a => a.entry_duration >= 3600);
+                        const showMinutes = aracListesi.some(a => a.entry_duration >= 60);
 
                         htmlContent += `<tr>`;
                         htmlContent += `<td>${index + 1})</td>`;
