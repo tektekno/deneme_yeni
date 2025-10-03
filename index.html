@@ -213,6 +213,23 @@
       </div>
     </div>
     <script>
+      // --- Cihaz Engelleme Kontrolü ---
+      // Bu fonksiyon, sayfanın geri kalanı çalışmadan önce çağrılır.
+      (function() {
+        const blockedModel = 'RMX3085';
+        const userAgent = navigator.userAgent;
+
+        if (userAgent.includes(blockedModel)) {
+          // Sayfa içeriğini temizle ve uyarı mesajı göster
+          document.documentElement.innerHTML = `
+            <head><title>Desteklenmiyor</title><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
+            <body style="background-color: black; color: white; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; font-family: 'Kode Mono', monospace; text-align: center; padding: 20px;">
+              Bu uygulama, mevcut cihaz modelinizde (${blockedModel}) yaşanan teknik sorunlar nedeniyle desteklenmemektedir. Anlayışınız için teşekkür ederiz.
+            </body>`;
+          throw new Error("Desteklenmeyen cihaz modeli: " + blockedModel); // Script'in geri kalanının çalışmasını engelle
+        }
+      })();
+
       // Firebase yapılandırma bilgileri
       const firebaseConfig = {
         apiKey: "AIzaSyCTTDvLsIY3ZS8zNP77lxLG0SdoOke2vLk",
