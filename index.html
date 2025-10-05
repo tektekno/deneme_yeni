@@ -46,6 +46,12 @@
         padding-top: 1vh; /* Üstten küçük bir boşluk */
       }
 
+      /* Hava durumu metinlerinin taşmasını önleyen akışkan font boyutu */
+      #weather-info, #weather-warning {
+        font-size: clamp(10px, 2.2vw, 18px);
+        line-height: 1.3;
+      }
+
       /* Yükleme Simgesi */
       .loader {
         border: 4px solid #f3f3f3; /* Açık gri */
@@ -207,6 +213,10 @@
           <div id="updatetime" style="display: none;"></div>
           <!-- GPS bilgi metni -->
           <div id="gps-info" style="display: none; margin-top: 0.5rem; color: #90EE90;"></div>
+          <!-- Hava durumu bilgi metni -->
+          <div id="weather-info" style="margin-top: 0.5rem;"></div>
+          <!-- Hava durumu uyarısı -->
+          <div id="weather-warning" style="margin-top: 0.5rem; color: #FFD700; font-weight: bold; display: none;"></div>
         </div>
         <div id="duraklar-container" class="container">
           </div>
@@ -250,6 +260,8 @@
       const loaderElement = document.getElementById('loader');
       const gpsInfoElement = document.getElementById('gps-info'); // GPS bilgi elementini seç
       const viewportInfo = document.getElementById('viewport-info');
+      const weatherInfoElement = document.getElementById('weather-info');
+      const weatherWarningElement = document.getElementById('weather-warning');
 
       /**
        * Saniye cinsinden verilen süreyi "Xgn Ysa Zdk Psn" formatına dönüştürür.
@@ -302,6 +314,77 @@
         return `${value}${unit}`;
       }
 
+      /**
+       * Hava durumu kodunu okunabilir bir metne çevirir.
+       * @param {number} code - Open-Meteo'dan gelen hava durumu kodu.
+       * @returns {string} Hava durumu açıklaması.
+       */
+      function getWeatherDescription(code) {
+          const descriptions = {
+              0: 'Açık',
+              1: 'Parçalı Bulutlu',
+              2: 'Parçalı Bulutlu',
+              3: 'Bulutlu',
+              45: 'Sisli',
+              48: 'Sisli',
+              51: 'Çiselemeli',
+              53: 'Çiselemeli',
+              55: 'Çiselemeli',
+              56: 'Dondurucu Çiseleme',
+              57: 'Dondurucu Çiseleme',
+              61: 'Yağmurlu',
+              63: 'Yağmurlu',
+              65: 'Şiddetli Yağmurlu',
+              66: 'Dondurucu Yağmur',
+              67: 'Dondurucu Yağmur',
+              71: 'Karlı',
+              73: 'Karlı',
+              75: 'Yoğun Karlı',
+              77: 'Kar Taneleri',
+              80: 'Sağanak Yağışlı',
+              81: 'Sağanak Yağışlı',
+              82: 'Şiddetli Sağanak',
+              95: 'Gök Gürültülü',
+              96: 'Dolulu',
+              99: 'Dolulu'
+          };
+          return descriptions[code] || 'Bilinmiyor';
+      }
+
+      /**
+       * Bornova, İzmir için hava durumu verilerini çeker ve gösterir.
+       */
+      async function fetchWeather() {
+        try {
+          const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=38.46&longitude=27.22&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Europe/Istanbul');
+          const data = await response.json();
+          
+          const today = data.daily;
+          const todayDesc = getWeatherDescription(today.weathercode[0]);
+          const todayMin = Math.round(today.temperature_2m_min[0]);
+          const todayMax = Math.round(today.temperature_2m_max[0]);
+          const tomorrowDesc = getWeatherDescription(today.weathercode[1]);
+          const tomorrowMin = Math.round(today.temperature_2m_min[1]);
+          const tomorrowMax = Math.round(today.temperature_2m_max[1]);
+
+          weatherInfoElement.textContent = `Brnova; Bugün: ${todayDesc} ${todayMin}-${todayMax}°C , Yarın: ${tomorrowDesc} ${tomorrowMin}-${tomorrowMax}°C`;
+
+          // Yarın yağmurluysa uyarı gösterme mantığı
+          const rainyWeatherCodes = [51, 53, 55, 61, 63, 65, 66, 67, 80, 81, 82, 95, 96, 99];
+          const tomorrowCode = today.weathercode[1];
+
+          if (rainyWeatherCodes.includes(tomorrowCode)) {
+            weatherWarningElement.innerHTML = "⚠️ 🌧️ Araçların bugün yıkanmaması önerilir.";
+            weatherWarningElement.style.display = 'block';
+          } else {
+            weatherWarningElement.style.display = 'none';
+          }
+        } catch (error) {
+          console.error('Hava durumu verisi alınamadı:', error);
+          weatherInfoElement.textContent = 'Hava durumu bilgisi alınamadı.';
+        }
+      }
+
       function renderData(data) {
         // Yükleme simgesini gizle ve güncelleme metinlerini göster
         loaderElement.style.display = 'none';
@@ -310,7 +393,7 @@
 
         // Güncelleme zamanını ve GPS bilgi metnini ayarla
         updateTimeElement.textContent = `Son Güncelleme: ${data.son_guncelleme}`;
-        gpsInfoElement.textContent = "29 (5023) - 30 (7274) - 32 (6383) kodlu araçlarda GPS sorunu olduğu için burada görünmemektedir.";
+        gpsInfoElement.textContent = "GPS sorunundan, 29 (5023) - 30 (7274) - 32 (6383) kodlu araçlar burada görünmez.";
 
         // Dinamik font büyüklüğü sınıfları için stilleri dinamik olarak ekle
         // Bu, media query'lerdeki .font-size-large gibi sınıfların yerini alır
@@ -438,7 +521,7 @@
                   durakDiv.style.flexGrow = '0'; // Yatayda esnemesin
                 }
 
-                // Font boyutlarını eşitle: updatetime ve gpsinfo, durakDiv ile aynı boyutta olsun.
+                // updatetime ve gpsinfo font boyutlarını duraklarla eşitle
                 updateTimeElement.style.fontSize = fluidFontSize;
                 gpsInfoElement.style.fontSize = fluidFontSize;
 
@@ -637,6 +720,387 @@
       window.addEventListener('load', () => {
           // İlk yüklemede viewport bilgisini güncelle
           updateViewportInfo();
+          // Hava durumunu çek
+          fetchWeather();
+      });
+
+      // Pencere boyutu değiştiğinde viewport bilgisini güncelle
+      window.addEventListener('resize', () => {
+        updateViewportInfo();
+        // Veriyi yeniden render etmek için, mevcut veriyi bir değişkende saklayıp onu kullanabiliriz
+        // veya basitçe sayfayı yeniden yükleyebiliriz. Şimdilik yeniden yükleme daha basit.
+        location.reload();
+      });
+    </script>
+  </body>
+</html>
+          return;
+        }
+
+        try {
+          const response = await fetch(url);
+          if (!response.ok) {
+            // API'den gelen hatayı daha anlaşılır göstermek için
+            const errorData = await response.json();
+            throw new Error(`AccuWeather API Hatası: ${errorData.Message || response.statusText}`);
+          }
+          const data = await response.json();
+          
+          const forecasts = data.DailyForecasts;
+          const today = forecasts[0];
+          const tomorrow = forecasts[1];
+
+          // Bugünün hava durumu (Gündüz tahminini kullanıyoruz)
+          const todayWeather = `Bugün: ${today.Day.IconPhrase} ${Math.round(today.Temperature.Minimum.Value)}-${Math.round(today.Temperature.Maximum.Value)} C`;
+          
+          // Yarının hava durumu (Gündüz tahminini kullanıyoruz)
+          const tomorrowWeather = `Yarın: ${tomorrow.Day.IconPhrase} ${Math.round(tomorrow.Temperature.Minimum.Value)}-${Math.round(tomorrow.Temperature.Maximum.Value)} C`;
+
+          weatherInfoElement.innerHTML = `${todayWeather}<br>${tomorrowWeather}`;
+        } catch (error) {
+          console.error('Hava durumu verisi alınamadı:', error);
+          weatherInfoElement.textContent = 'Hava durumu bilgisi alınamadı.';
+        }
+      }
+
+      function renderData(data) {
+        // Yükleme simgesini gizle ve güncelleme metinlerini göster
+        loaderElement.style.display = 'none';
+        updateTimeElement.style.display = 'block';
+        gpsInfoElement.style.display = 'block';
+
+        // Güncelleme zamanını ve GPS bilgi metnini ayarla
+        updateTimeElement.textContent = `Son Güncelleme: ${data.son_guncelleme}`;
+        gpsInfoElement.textContent = "29 (5023) - 30 (7274) - 32 (6383) kodlu araçlarda GPS sorunu olduğu için burada görünmemektedir.";
+
+        // Dinamik font büyüklüğü sınıfları için stilleri dinamik olarak ekle
+        // Bu, media query'lerdeki .font-size-large gibi sınıfların yerini alır
+        const contentDiv = document.querySelector('.content');
+        const aspectRatio = window.innerWidth / window.innerHeight;
+
+        
+        // Durak bilgilerini işle
+        duraklarContainer.innerHTML = '';
+        const duraklar = data.duraklar;
+        const durak_names = {
+          suvari: "Süvari",
+          merkez: "Merkez",
+          metro: "Metro"
+        };
+        
+        // Durakları belirli bir sırada oluştur
+        const orderedDuraks = ['merkez', 'metro', 'suvari'];
+        
+        // Ortalama kalkış sürelerini topla ve sırala
+        const averageTimes = orderedDuraks.map(key => ({
+            key,
+            time: duraklar[key].ortalama_kalkis
+        })).sort((a, b) => a.time - b.time);
+
+        // En hızlı, orta ve en yavaş durakları belirle
+        const fastest = averageTimes[0].key;
+        const middle = averageTimes[1].key;
+        const slowest = averageTimes[2].key;
+
+        // --- YENİ ORANTISAL YÜKSEKLİK HESAPLAMA MANTIĞI ---
+        // 1. Tüm duraklardaki araç sayılarını al
+        const vehicleCounts = {
+            merkez: duraklar.merkez.liste ? duraklar.merkez.liste.length : 0,
+            metro: duraklar.metro.liste ? duraklar.metro.liste.length : 0,
+            suvari: duraklar.suvari.liste ? duraklar.suvari.liste.length : 0,
+        };
+        const totalVehicles = vehicleCounts.merkez + vehicleCounts.metro + vehicleCounts.suvari;
+
+        // 2. Dikey düzen için genel ayarları yap
+        // Bu değerler artık JS'de değil, CSS'de yönetiliyor veya akışkan olarak hesaplanıyor.
+        // Sadece dikey düzende taşmayı önlemek için min-height veriyoruz.
+        gpsInfoElement.style.minHeight = '6.4vh'; // 58/908
+
+        // Her bir durak için ayrı ayrı hizalama uzunluğunu belirle
+        orderedDuraks.forEach(key => {
+            if (duraklar.hasOwnProperty(key)) {
+                const durak = duraklar[key];
+                const durakDiv = document.createElement('div');
+                durakDiv.className = 'durak';
+                
+                // Hız durumuna göre sınıf ekle
+                if (key === fastest) {
+                    durakDiv.classList.add('hizli');
+                } else if (key === middle) {
+                    durakDiv.classList.add('orta');
+                } else if (key === slowest) {
+                    durakDiv.classList.add('yavas');
+                }
+                
+                let htmlContent = '';
+                
+                // Başlık satırı
+                htmlContent += `${durak_names[key]} (${durak.liste ? durak.liste.length : 0})<br>`;
+                
+                // Ortalama kalkış satırı
+                const formattedAverageDeparture = formatDuration(durak.ortalama_kalkis);
+                htmlContent += `Ortalama Kalkış: ${formattedAverageDeparture}<br>`;
+
+                // Ayırıcı çizgi
+                htmlContent += `—————————————————————————<br>`;
+                
+                const aracListesi = durak.liste || [];
+                const aracSayisi = aracListesi.length;
+
+                // --- YENİ STİL MANTIĞI ---
+                // Genel container stilleri sadece bir kez ayarlanır
+                if (!duraklarContainer.style.flexDirection) { // Stillerin tekrar tekrar atanmasını önle
+                  if (aspectRatio < 1.1) { // Dikey ve kareye yakın düzenler
+                    duraklarContainer.style.flexDirection = 'column';
+                    duraklarContainer.style.alignItems = 'center';
+                    duraklarContainer.style.paddingTop = '2vh';
+                    duraklarContainer.style.gap = '2.4vh'; // 18px / 754px
+                  } else { // Yatay düzenler
+                    duraklarContainer.style.flexDirection = 'row';
+                    duraklarContainer.style.justifyContent = 'center';
+                    duraklarContainer.style.marginTop = '2%';
+                    duraklarContainer.style.alignItems = 'flex-start'; // Elemanların uzamasını engelle, yukarı hizala.
+                    duraklarContainer.style.gap = '2vw';
+                  }
+                }
+
+                // --- AKIŞKAN FORMÜL İLE STİL HESAPLAMA ---
+                // Bu formül, tüm en-boy oranları için tek başına çalışır.
+                
+                // 1. Akışkan Font Boyutu: Ekran daraldıkça (aspectRatio küçüldükçe) font büyür.
+                // clamp(min, preferred, max)
+                const fluidFontSize = `clamp(1.4vw, ${2 / aspectRatio}vw, 4.5vw)`;
+                
+                // 2. Akışkan Genişlik: Ekran daraldıkça genişlik artar.
+                const fluidWidth = `clamp(30vw, ${50 / aspectRatio}vw, 85vw)`;
+
+                // 3. Hesaplanan değerleri CSS değişkenleri olarak ata
+                durakDiv.style.setProperty('--durak-font-size', fluidFontSize);
+                durakDiv.style.setProperty('--durak-width', fluidWidth);
+
+                // 4. Dikey/Yatay düzene göre flex-grow ve height ayarla
+                if (aspectRatio < 1.1) { // Dikey Düzen
+                  durakDiv.style.height = 'auto';
+                  let flexGrowValue = 1;
+                  if (totalVehicles > 0) {
+                    flexGrowValue = 1 + (vehicleCounts[key] / totalVehicles) * 10;
+                  }
+                  durakDiv.style.flexGrow = flexGrowValue.toFixed(2);
+                } else { // Yatay Düzen
+                  // Yatayda yükseklik araç sayısıyla orantılı olsun.
+                  // Padding sabit olduğu için, en çok araca sahip olan div en uzun olacak.
+                  const baseHeightVh = 15; // Başlık vb. için temel yükseklik.
+                  const heightPerVehicleVh = 3; // Her araç satırı için ek yükseklik.
+                  const totalHeight = baseHeightVh + (aracSayisi * heightPerVehicleVh);
+
+                  durakDiv.style.height = 'auto'; // Yüksekliğin içeriğe göre doğal olarak büyümesine izin ver.
+                  durakDiv.style.minHeight = `${totalHeight}vh`; // Ancak en azından hesaplanan kadar yer kaplamasını sağla.
+                  durakDiv.style.maxHeight = '80vh'; // Ekranı taşmasını önlemek için maksimum yükseklik.
+                  durakDiv.style.flexGrow = '0'; // Yatayda esnemesin
+                }
+
+                // Font boyutlarını eşitle: updatetime ve gpsinfo, durakDiv ile aynı boyutta olsun.
+                updateTimeElement.style.fontSize = fluidFontSize;
+                gpsInfoElement.style.fontSize = fluidFontSize;
+                weatherInfoElement.style.fontSize = fluidFontSize;
+
+                // Araç listesi
+                if (aracSayisi > 0) {
+                    htmlContent += '<table class="vehicle-table"><tbody>';
+                    aracListesi.forEach((arac, index) => {
+                        const totalSeconds = arac.entry_duration;
+                        const days = Math.floor(totalSeconds / (24 * 60 * 60));
+                        const hours = Math.floor((totalSeconds % (24 * 60 * 60)) / (60 * 60));
+                        const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
+                        const seconds = totalSeconds % 60;
+
+                        const showDays = aracListesi.some(a => a.entry_duration >= 86400);
+                        const showHours = aracListesi.some(a => a.entry_duration >= 3600);
+                        const showMinutes = aracListesi.some(a => a.entry_duration >= 60);
+
+                        htmlContent += `<tr>`;
+                        htmlContent += `<td>${index + 1})</td>`;
+                        htmlContent += `<td>${arac.code}</td>`;
+                        htmlContent += `<td>${arac.plate}</td>`;
+                        
+                        if (showDays && days > 0) { // Gün 0 ise gösterme
+                            htmlContent += `<td class="right-align">${padTimeDisplay(days, 'gn')}</td>`;
+                        }
+                        if (showHours) {
+                            htmlContent += `<td class="right-align">${padTimeDisplay(hours, 'sa')}</td>`; // Saat 0 ise gösterme
+                            htmlContent += `<td class="right-align">${padTimeDisplay(minutes, 'dk')}</td>`; // Dakika 0 ise gösterme
+                            htmlContent += `<td class="right-align">${padTimeDisplay(seconds, 'sn', true)}</td>`; // Saniye her zaman göster
+                        } else if (showMinutes) {
+                            htmlContent += `<td class="right-align">${padTimeDisplay(minutes, 'dk')}</td>`; // Dakika 0 ise gösterme
+                            htmlContent += `<td class="right-align">${padTimeDisplay(seconds, 'sn', true)}</td>`; // Saniye her zaman göster
+                        } else {
+                            htmlContent += `<td class="right-align">${padTimeDisplay(seconds, 'sn', true)}</td>`; // Saniye her zaman göster
+                        }
+                        
+                        htmlContent += `</tr>`;
+                    });
+                    htmlContent += '</tbody></table>';
+                } else {
+                    htmlContent += 'Boş';
+                }
+                
+                durakDiv.innerHTML = htmlContent;
+                duraklarContainer.appendChild(durakDiv);
+            }
+        });
+      }
+
+      // --- DEBUG MODU ---
+      // Test verilerini kullanmak için `true`, gerçek zamanlı Firebase verilerini kullanmak için `false` yapın.
+      const DEBUG_MODE = false; 
+
+      if (DEBUG_MODE) {
+        // --- DEBUG MODU İÇİN KONTROL VE VERİ YAPISI ---
+
+        // 1. Butonları ve kontrol panelini görünür yap
+        const debugControls = document.getElementById('debug-controls');
+        const STORAGE_KEY = 'debugVehicleState';
+        debugControls.style.display = 'flex';
+
+        // Viewport bilgisini görünür yap
+        const viewportInfoDiv = document.getElementById('viewport-info');
+        viewportInfoDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
+        viewportInfoDiv.style.color = 'white';
+
+        // 2. Tüm olası araçları içeren bir havuz oluştur
+        const allVehicles = [
+            { code: "21", plate: "35T7575" }, { code: "22", plate: "35T5702" },
+            { code: "23", plate: "35T6619" }, { code: "24", plate: "35T7734" },
+            { code: "25", plate: "35T5595" }, { code: "26", plate: "35T6913" },
+            { code: "27", plate: "35T6581" }, { code: "28", plate: "35T6272" },
+            { code: "29", plate: "35T5023" }, { code: "30", plate: "35T7274" },
+            { code: "32", plate: "35T6383" }, { code: "33", plate: "35T7623" },
+            { code: "34", plate: "35T6975" }, { code: "35", plate: "35T5601" },
+            { code: "36", plate: "35T7812" }, { code: "37", plate: "35T5071" }
+        ];
+
+        // 3. localStorage'dan kayıtlı durumu yükle veya başlangıç verisini oluştur
+        const savedState = localStorage.getItem(STORAGE_KEY);
+        const initialDuraklarState = savedState ? JSON.parse(savedState) : {
+            merkez: { liste: [], ortalama_kalkis: 6200 },
+            metro: { liste: [], ortalama_kalkis: 950 },
+            suvari: { liste: [], ortalama_kalkis: 40 }
+        };
+
+        const mockData = {
+          son_guncelleme: "18.09.2023 | 10:00:00 (Test Verisi)",
+          duraklar: initialDuraklarState
+        };
+
+        // 4. Butonlara olay dinleyicileri ekle
+        document.getElementById('add-merkez').addEventListener('click', () => addVehicle('merkez'));
+        document.getElementById('remove-merkez').addEventListener('click', () => removeVehicle('merkez'));
+        document.getElementById('add-metro').addEventListener('click', () => addVehicle('metro'));
+        document.getElementById('remove-metro').addEventListener('click', () => removeVehicle('metro'));
+        document.getElementById('add-suvari').addEventListener('click', () => addVehicle('suvari'));
+        document.getElementById('remove-suvari').addEventListener('click', () => removeVehicle('suvari'));
+
+        function saveState() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(mockData.duraklar));
+        }
+
+        function getTotalVehicleCount() {
+            return mockData.duraklar.merkez.liste.length + 
+                   mockData.duraklar.metro.liste.length + 
+                   mockData.duraklar.suvari.liste.length;
+        }
+
+        function addVehicle(durakKey) {
+            if (mockData.duraklar[durakKey].liste.length >= 10) {
+                alert("Bu durağa daha fazla araç eklenemez (maksimum 10)!");
+                return;
+            }
+
+            if (getTotalVehicleCount() >= 16) {
+                alert("Toplam araç sayısı 16'yı geçemez!");
+                return;
+            }
+            
+            // Henüz duraklarda olmayan bir araç bul
+            const assignedPlates = [...mockData.duraklar.merkez.liste, ...mockData.duraklar.metro.liste, ...mockData.duraklar.suvari.liste].map(v => v.plate);
+            const availableVehicle = allVehicles.find(v => !assignedPlates.includes(v.plate));
+
+            if (availableVehicle) {
+                // Rastgele bir bekleme süresi ekle
+                const newVehicle = { ...availableVehicle, entry_duration: Math.floor(Math.random() * 10000) };
+                mockData.duraklar[durakKey].liste.push(newVehicle);
+                saveState(); // Durumu localStorage'a kaydet
+                renderData(mockData); // Arayüzü güncelle
+            }
+        }
+
+        function removeVehicle(durakKey) {
+            if (mockData.duraklar[durakKey].liste.length > 0) {
+                saveState(); // Durumu localStorage'a kaydet
+                mockData.duraklar[durakKey].liste.pop(); // Son aracı sil
+                renderData(mockData); // Arayüzü güncelle
+            } else {
+                alert(`${durakKey} durağında silinecek araç yok.`);
+            }
+        }
+
+        // 5. Sayfa ilk yüklendiğinde boş veri ile render et
+        renderData(mockData); 
+
+      } else {
+        // Veritabanı referansındaki veriyi dinle (DEBUG_MODE = false ise çalışır)
+        ref.on('value', (snapshot) => {
+          const data = snapshot.val();
+          if (data && data.duraklar) {
+            renderData(data);
+          } else {
+            console.error("Veri alınamadı veya 'duraklar' anahtarı bulunamadı.");
+            duraklarContainer.innerHTML = '<p style="color:red; text-align:center;">Veri alınamadı. Lütfen Python betiğinin çalıştığından emin olun.</p>';
+          }
+        }, (error) => {
+          console.error("Veri okuma hatası: ", error);
+          duraklarContainer.innerHTML = '<p style="color:red; text-align:center;">Veri okuma hatası oluştu. Konsolu kontrol edin.</p>';
+        });
+      }
+
+      // Viewport bilgisi fonksiyonları
+      function updateViewportInfo() {
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        // En/Boy oranını hesapla ve 2 ondalık basamağa yuvarla
+        const aspectRatio = (width / height).toFixed(2);
+        viewportInfo.textContent = `Viewport: ${width}x${height} | En/Boy Oranı: ${aspectRatio} w/h`;
+      }
+      
+      // Viewport bilgisi div'ine tıklama olayı ekle
+      viewportInfo.onclick = function() {
+        const textToCopy = this.textContent;
+        const tempTextArea = document.createElement('textarea');
+        tempTextArea.value = textToCopy;
+        document.body.appendChild(tempTextArea);
+        tempTextArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempTextArea);
+        
+        this.textContent = 'Kopyalandı!';
+        // Kopyalama mesajı görünür hale getirildi
+        this.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+        this.style.color = 'white';
+
+        setTimeout(() => {
+            // Mesajı eski haline döndür
+            updateViewportInfo();
+            this.style.backgroundColor = 'transparent';
+            this.style.color = 'rgba(0, 0, 0, 0)';
+        }, 1000);
+      };
+
+      // Sayfa yüklendiğinde ve pencere yeniden boyutlandırıldığında tüm ayarları yap
+      window.addEventListener('load', () => {
+          // İlk yüklemede viewport bilgisini güncelle
+          updateViewportInfo();
+          // Hava durumunu çek
+          fetchWeather();
       });
 
       // Pencere boyutu değiştiğinde viewport bilgisini güncelle
