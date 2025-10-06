@@ -85,11 +85,12 @@
         background-color: #333 !important;
         box-shadow: 0 1vw 1vw rgba(255, 255, 255, 0);
         color: white;
-        overflow: hidden;
+        overflow: hidden; /* Şeritin köşelerden taşan kısımlarını gizle */
         line-height: 1.2;
         /* Varsayılan çerçeve kalınlığı */
         border: 0.2vw solid #ccc;
         transition: border-color 0.5s ease;
+        position: relative; /* Şerit için zorunlu */
       }
 
       .durak {
@@ -112,6 +113,67 @@
         border-color: #ff0000; /* Kırmızı */
         border-width: 0.5vw;
       }
+
+      /* ------------------------------------------- */
+      /* --- DİYAGONAL ŞERİT STİLLERİ BAŞLANGIÇ --- */
+      /* --- YENİ: SOL ÜST KÖŞEDEN HAFİF AŞAĞI KAYMIŞ ŞERİT --- */
+      /* ------------------------------------------- */
+      
+      .durak::after {
+          position: absolute;
+          font-family: 'Madimi One', sans-serif; /* Şeridi daha çarpıcı göstermek için font */
+          color: white;
+          text-align: center;
+          
+          /* Diyagonal şerit ayarları */
+          width: 150%; 
+          /* Burası güncellendi: Şeridi 2vw kadar aşağı kaydır */
+          top: 2vw;      
+          /* Burası güncellendi: Sol kenardan dışarı taşma miktarını ayarladık */
+          left: -65%;  
+          padding: 0.5vw 0;
+          /* Şerit font boyutu: Min 10px, Tercih edilen 1.8vw, Max 18px */
+          font-size: clamp(10px, 1.8vw, 18px);
+          font-weight: 700;
+          line-height: 1.2;
+          transform: rotate(-45deg); /* Diyagonal eğim (SOL ÜSTTEN SAĞ ALTA) */
+          z-index: 10;
+          box-shadow: 0 0 1vw rgba(0, 0, 0, 0.5);
+          text-shadow: 1px 1px 2px black;
+          pointer-events: none; 
+      }
+
+      /* En Hızlı Şeridi */
+      .durak.hizli::after {
+          content: 'EN HIZLI';
+          background-color: #00cc00; /* Parlak yeşil şerit */
+      }
+
+      /* Orta Hızlı Şeridi */
+      .durak.orta::after {
+          content: 'ORTA HIZLI';
+          background-color: #ffcc00; /* Parlak sarı şerit */
+      }
+
+      /* En Yavaş Şeridi */
+      .durak.yavas::after {
+          content: 'YAVAŞ';
+          background-color: #ff3333; /* Parlak kırmızı şerit */
+      }
+
+      /* Küçük ekranlar (Dikey mobil) için şerit ayarı optimizasyonu */
+      @media (max-width: 600px) {
+          .durak::after {
+              /* Burası güncellendi: Mobil cihazlarda 15 piksel aşağı kaydır */
+              top: 15px; 
+              /* Burası güncellendi: Mobile özgü dışarı taşırma miktarı */
+              left: -55%; 
+              font-size: 14px;
+          }
+      }
+      /* ------------------------------------------- */
+      /* --- DİYAGONAL ŞERİT STİLLERİ BİTİŞ --- */
+      /* ------------------------------------------- */
 
       /* Araç listesi için tablo stili */
       .vehicle-table {
@@ -444,8 +506,6 @@
         const totalVehicles = vehicleCounts.merkez + vehicleCounts.metro + vehicleCounts.suvari;
 
         // 2. Dikey düzen için genel ayarları yap
-        // Bu değerler artık JS'de değil, CSS'de yönetiliyor veya akışkan olarak hesaplanıyor.
-        // Sadece dikey düzende taşmayı önlemek için min-height veriyoruz.
         gpsInfoElement.style.minHeight = '6.4vh'; // 58/908
 
         // Her bir durak için ayrı ayrı hizalama uzunluğunu belirle
@@ -481,8 +541,9 @@
 
                 // --- YENİ STİL MANTIĞI ---
                 // Genel container stilleri sadece bir kez ayarlanır
-                if (!duraklarContainer.style.flexDirection) { // Stillerin tekrar tekrar atanmasını önle
-                  if (aspectRatio < 1.1) { // Dikey ve kareye yakın düzenler
+                if (!duraklarContainer.style.flexDirection || !duraklarContainer.style.flexDirection.includes('column') && aspectRatio < 1.1) {
+                  // Dikey ve kareye yakın düzenler
+                  if (aspectRatio < 1.1) { 
                     duraklarContainer.style.flexDirection = 'column';
                     duraklarContainer.style.alignItems = 'center';
                     duraklarContainer.style.paddingTop = '2vh';
@@ -497,10 +558,8 @@
                 }
 
                 // --- AKIŞKAN FORMÜL İLE STİL HESAPLAMA ---
-                // Bu formül, tüm en-boy oranları için tek başına çalışır.
                 
                 // 1. Akışkan Font Boyutu: Ekran daraldıkça (aspectRatio küçüldükçe) font büyür.
-                // clamp(min, preferred, max)
                 const fluidFontSize = `clamp(1.4vw, ${2 / aspectRatio}vw, 4.5vw)`;
                 
                 // 2. Akışkan Genişlik: Ekran daraldıkça genişlik artar.
@@ -520,7 +579,6 @@
                   durakDiv.style.flexGrow = flexGrowValue.toFixed(2);
                 } else { // Yatay Düzen
                   // Yatayda yükseklik araç sayısıyla orantılı olsun.
-                  // Padding sabit olduğu için, en çok araca sahip olan div en uzun olacak.
                   const baseHeightVh = 15; // Başlık vb. için temel yükseklik.
                   const heightPerVehicleVh = 3; // Her araç satırı için ek yükseklik.
                   const totalHeight = baseHeightVh + (aracSayisi * heightPerVehicleVh);
@@ -615,7 +673,7 @@
         const initialDuraklarState = savedState ? JSON.parse(savedState) : {
             merkez: { liste: [], ortalama_kalkis: 6200 },
             metro: { liste: [], ortalama_kalkis: 950 },
-            suvari: { liste: [], ortalama_kalkis: 40 }
+            suvari: { liste: [{ code: "27", plate: "35T6581", entry_duration: 40 }], ortalama_kalkis: 40 }
         };
 
         const mockData = {
@@ -637,18 +695,19 @@
 
         function getTotalVehicleCount() {
             return mockData.duraklar.merkez.liste.length + 
-                   mockData.duraklar.metro.liste.length + 
-                   mockData.duraklar.suvari.liste.length;
+                    mockData.duraklar.metro.liste.length + 
+                    mockData.duraklar.suvari.liste.length;
         }
 
         function addVehicle(durakKey) {
             if (mockData.duraklar[durakKey].liste.length >= 10) {
-                alert("Bu durağa daha fazla araç eklenemez (maksimum 10)!");
+                // Not: alert() yerine daha iyi bir yöntem kullanılmalıdır, ancak debug için kabul edilebilir.
+                console.error("Bu durağa daha fazla araç eklenemez (maksimum 10)!");
                 return;
             }
 
             if (getTotalVehicleCount() >= 16) {
-                alert("Toplam araç sayısı 16'yı geçemez!");
+                console.error("Toplam araç sayısı 16'yı geçemez!");
                 return;
             }
             
@@ -667,11 +726,11 @@
 
         function removeVehicle(durakKey) {
             if (mockData.duraklar[durakKey].liste.length > 0) {
-                saveState(); // Durumu localStorage'a kaydet
                 mockData.duraklar[durakKey].liste.pop(); // Son aracı sil
+                saveState(); // Durumu localStorage'a kaydet
                 renderData(mockData); // Arayüzü güncelle
             } else {
-                alert(`${durakKey} durağında silinecek araç yok.`);
+                console.error(`${durakKey} durağında silinecek araç yok.`);
             }
         }
 
