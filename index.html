@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <title>Duraklara Göre Sıralama</title>
+    <title>Duraklara Göralama</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400..700&family=Madimi+One&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -78,7 +78,7 @@
 
       /* Durak kutuları */
       .durak {
-        padding: 1vh 2vw; /* Üst/Alt: 1vh (sabit), Sağ/Sol: 2vw. İsteğe göre güncellendi. */
+        padding: 1vh 2vw; 
         border: 0.2vw solid #ccc;
         border-radius: 2vw;
         text-align: center;
@@ -116,24 +116,25 @@
 
       /* ------------------------------------------- */
       /* --- DİYAGONAL ŞERİT STİLLERİ BAŞLANGIÇ --- */
-      /* --- YENİ: SOL ÜST KÖŞEDEN HAFİF AŞAĞI KAYMIŞ ŞERİT --- */
+      /* --- YENİ GÜNCELLEME: DAHA AŞAĞI KONUMLANDIRMA VE KÜÇÜK YAZI BOYUTU --- */
       /* ------------------------------------------- */
       
       .durak::after {
           position: absolute;
           font-family: 'Madimi One', sans-serif; /* Şeridi daha çarpıcı göstermek için font */
           color: white;
-          text-align: center;
+          
+          /* YAZI ORTALAMASI */
+          display: flex; 
+          justify-content: center; /* Yatayda ortala */
+          align-items: center; /* Dikeyde ortala */
           
           /* Diyagonal şerit ayarları */
-          width: 150%; 
-          /* Burası güncellendi: Şeridi 2vw kadar aşağı kaydır */
-          top: 2vw;      
-          /* Burası güncellendi: Sol kenardan dışarı taşma miktarını ayarladık */
-          left: -65%;  
+          width: 160%;
+          top: 3vw;  /* <--- YENİ GÜNCELLEME: Şeridin başlangıç noktasını daha da aşağı kaydırdık. */
+          left: -70%;  
           padding: 0.5vw 0;
-          /* Şerit font boyutu: Min 10px, Tercih edilen 1.8vw, Max 18px */
-          font-size: clamp(10px, 1.8vw, 18px);
+          font-size: clamp(9px, 1.6vw, 16px); /* <--- YENİ GÜNCELLEME: Genel font boyutu küçültüldü. */
           font-weight: 700;
           line-height: 1.2;
           transform: rotate(-45deg); /* Diyagonal eğim (SOL ÜSTTEN SAĞ ALTA) */
@@ -164,11 +165,9 @@
       /* Küçük ekranlar (Dikey mobil) için şerit ayarı optimizasyonu */
       @media (max-width: 600px) {
           .durak::after {
-              /* Burası güncellendi: Mobil cihazlarda 15 piksel aşağı kaydır */
-              top: 15px; 
-              /* Burası güncellendi: Mobile özgü dışarı taşırma miktarı */
-              left: -55%; 
-              font-size: 14px;
+              top: 20px; /* <--- YENİ GÜNCELLEME: Mobilde daha da aşağı (içeri) indirildi. */
+              left: -70%; 
+              font-size: 13px; /* <--- YENİ GÜNCELLEME: Mobildeki font boyutu küçültüldü. */
           }
       }
       /* ------------------------------------------- */
