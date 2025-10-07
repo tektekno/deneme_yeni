@@ -411,8 +411,10 @@
               81: 'Sağanak Yağışlı',
               82: 'Şiddetli Sağanak',
               95: 'Gök Gürültülü',
-              96: 'Dolulu',
-              99: 'Dolulu'
+              96: 'Hafif Dolu',
+              85: 'Kar Sağanağı',
+              86: 'Yoğun Kar Sağanağı',
+              99: 'Şiddetli Dolu'
           };
           return descriptions[code] || 'Bilinmiyor';
       }
@@ -437,10 +439,11 @@
           weatherInfoElement.style.display = 'block';
 
           // Yarın yağmurluysa uyarı gösterme mantığı
-          const rainyWeatherCodes = [51, 53, 55, 61, 63, 65, 66, 67, 80, 81, 82]; // 95 (Gök Gürültülü), 96/99 (Dolu) çıkarıldı
+          // Yağmur, kar, dolu ve fırtına gibi araç yıkamaya uygun olmayan tüm hava kodları
+          const badWeatherCodes = [51, 53, 55, 61, 63, 65, 66, 67, 71, 73, 75, 77, 80, 81, 82, 85, 86, 95, 96, 99];
           const tomorrowCode = today.weathercode[1];
 
-          if (rainyWeatherCodes.includes(tomorrowCode)) {
+          if (badWeatherCodes.includes(tomorrowCode)) {
             weatherWarningElement.innerHTML = "⚠️ 🌧️ Araçların bugün yıkanmaması önerilir.";
             weatherWarningElement.style.display = 'block';
           } else {
