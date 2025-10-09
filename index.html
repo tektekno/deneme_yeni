@@ -193,6 +193,21 @@
         text-align: right;
       }
 
+      /* Ayırıcı Çizgi Stilleri */
+      .separator-line {
+        border: none;
+        border-top: 1px solid #ccc; /* Ana ayırıcı çizgi rengi */
+        width: 100%;
+        margin: 0.5rem 0;
+      }
+
+      .sub-separator-line {
+        border: none;
+        border-top: 1px solid #ccc; /* Alt ayırıcı çizgi rengi (ana çizgiyle aynı) */
+        width: 100%;
+        margin: 0.3rem 0;
+      }
+
       /* Viewport Bilgi Kutusu */
       #viewport-info {
         position: fixed;
@@ -251,21 +266,27 @@
       <div>
         <span>Merkez:</span>
         <button id="add-merkez">+</button>
+        <button id="add-closed-merkez">K+</button>
         <button id="remove-merkez">-</button>
       </div>
       <div>
         <span>Metro:</span>
         <button id="add-metro">+</button>
+        <button id="add-closed-metro">K+</button>
         <button id="remove-metro">-</button>
       </div>
       <div>
         <span>Süvari:</span>
         <button id="add-suvari">+</button>
+        <button id="add-closed-suvari">K+</button>
         <button id="remove-suvari">-</button>
       </div>
     </div>
     <div id="viewport-info"></div>
     <div class="content">
+      <div id="debug-warning" style="color: yellow; font-weight: bold; display: none; margin-bottom: 1rem;">
+        DİKKAT: DEBUG MODU AKTİF
+      </div>
       <div id="main-container">
         <div class="updatetime-container">
           <!-- Yükleniyor simgesi -->
@@ -533,18 +554,18 @@
                 
                 let htmlContent = '';
                 
+                const aracListesi = durak.liste || [];
+                const activeVehicles = aracListesi.filter(arac => !arac.is_closed);
+                const closedVehicles = aracListesi.filter(arac => arac.is_closed);
+                const aracSayisi = activeVehicles.length; // Sadece aktif araçları say
+
                 // Başlık satırı
-                htmlContent += `${durak_names[key]} (${durak.liste ? durak.liste.length : 0})<br>`;
+                htmlContent += `${durak_names[key]} (${aracSayisi})<br>`;
                 
                 // Ortalama kalkış satırı
                 const formattedAverageDeparture = formatDuration(durak.ortalama_kalkis);
                 htmlContent += `Ortalama Kalkış: ${formattedAverageDeparture}<br>`;
 
-                // Ayırıcı çizgi
-                htmlContent += `—————————————————————————<br>`;
-                
-                const aracListesi = durak.liste || [];
-                const aracSayisi = aracListesi.length;
 
                 // --- YENİ STİL MANTIĞI ---
                 // Genel container stilleri sadece bir kez ayarlanır
@@ -600,45 +621,86 @@
                 updateTimeElement.style.fontSize = fluidFontSize;
                 gpsInfoElement.style.fontSize = fluidFontSize;
                 closedVehicleInfoElement.style.fontSize = fluidFontSize;
+                
+                // Ayırıcı çizgi
+                htmlContent += `<hr class="separator-line">`;
 
                 // Araç listesi
-                if (aracSayisi > 0) {
+                if (aracListesi.length > 0) {
                     htmlContent += '<table class="vehicle-table"><tbody>';
-                    aracListesi.forEach((arac, index) => {
-                        const isClosed = arac.is_closed || false; // Araç kapalı mı?
-                        const rowStyle = isClosed ? 'style="color: #FF4C4C;"' : ''; // Açık Kırmızı yazı rengi
 
+                    // Tüm araçlar için (aktif ve kapalı) hangi zaman birimlerinin gösterileceğini belirle
+                    const showDays = aracListesi.some(a => a.entry_duration >= 86400);
+                    const showHours = aracListesi.some(a => a.entry_duration >= 3600);
+                    const showMinutes = aracListesi.some(a => a.entry_duration >= 60);
+
+                    // 1. Kapalı araçları render et
+                    closedVehicles.forEach(arac => {
+                        const rowStyle = 'style="color: #FF4C4C;"'; // Her zaman kırmızı
+                        const totalSeconds = arac.entry_duration;
+                        const days = Math.floor(totalSeconds / (24 * 60 * 60));
+                        const hours = Math.floor((totalSeconds % (24 * 60 * 60)) / (60 * 60));
+                        const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
+                        const seconds = totalSeconds % 60;
+ 
+                        htmlContent += `<tr ${rowStyle}>`;
+                        htmlContent += `<td>K)</td>`; // Ön ek "K)"
+                        htmlContent += `<td>${arac.code}</td>`;
+                        htmlContent += `<td>${arac.plate}</td>`;
+                        
+                        // Süre gösterimi (aktif araçlarla aynı formatta)
+                        if (showDays && days > 0) {
+                            htmlContent += `<td class="right-align">${padTimeDisplay(days, 'gn')}</td>`;
+                        }
+                        if (showHours) {
+                            htmlContent += `<td class="right-align">${padTimeDisplay(hours, 'sa')}</td>`;
+                            htmlContent += `<td class="right-align">${padTimeDisplay(minutes, 'dk')}</td>`;
+                            htmlContent += `<td class="right-align">${padTimeDisplay(seconds, 'sn', true)}</td>`;
+                        } else if (showMinutes) {
+                            htmlContent += `<td class="right-align">${padTimeDisplay(minutes, 'dk')}</td>`;
+                            htmlContent += `<td class="right-align">${padTimeDisplay(seconds, 'sn', true)}</td>`;
+                        } else {
+                            htmlContent += `<td class="right-align">${padTimeDisplay(seconds, 'sn', true)}</td>`;
+                        }
+                        
+                        htmlContent += `</tr>`;
+                    });
+
+                    // Kapalı ve aktif araçlar arasında ayırıcı
+                    if (closedVehicles.length > 0 && activeVehicles.length > 0) {
+                        htmlContent += `<tr><td colspan="7"><hr class="sub-separator-line"></td></tr>`;
+                    }
+
+                    // 2. Aktif araçları render et
+                    activeVehicles.forEach((arac, index) => {
                         const totalSeconds = arac.entry_duration;
                         const days = Math.floor(totalSeconds / (24 * 60 * 60));
                         const hours = Math.floor((totalSeconds % (24 * 60 * 60)) / (60 * 60));
                         const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
                         const seconds = totalSeconds % 60;
 
-                        const showDays = aracListesi.some(a => a.entry_duration >= 86400); // 24 saat
-                        const showHours = aracListesi.some(a => a.entry_duration >= 3600);
-                        const showMinutes = aracListesi.some(a => a.entry_duration >= 60);
-
-                        htmlContent += `<tr ${rowStyle}>`;
-                        htmlContent += `<td>${index + 1})</td>`;
+                        htmlContent += `<tr>`;
+                        htmlContent += `<td>${index + 1})</td>`; // Numaralı ön ek
                         htmlContent += `<td>${arac.code}</td>`;
                         htmlContent += `<td>${arac.plate}</td>`;
                         
-                        if (showDays && days > 0) { // Gün 0 ise gösterme
+                        if (showDays && days > 0) {
                             htmlContent += `<td class="right-align">${padTimeDisplay(days, 'gn')}</td>`;
                         }
                         if (showHours) {
-                            htmlContent += `<td class="right-align">${padTimeDisplay(hours, 'sa')}</td>`; // Saat 0 ise gösterme
-                            htmlContent += `<td class="right-align">${padTimeDisplay(minutes, 'dk')}</td>`; // Dakika 0 ise gösterme
-                            htmlContent += `<td class="right-align">${padTimeDisplay(seconds, 'sn', true)}</td>`; // Saniye her zaman göster
+                            htmlContent += `<td class="right-align">${padTimeDisplay(hours, 'sa')}</td>`;
+                            htmlContent += `<td class="right-align">${padTimeDisplay(minutes, 'dk')}</td>`;
+                            htmlContent += `<td class="right-align">${padTimeDisplay(seconds, 'sn', true)}</td>`;
                         } else if (showMinutes) {
-                            htmlContent += `<td class="right-align">${padTimeDisplay(minutes, 'dk')}</td>`; // Dakika 0 ise gösterme
-                            htmlContent += `<td class="right-align">${padTimeDisplay(seconds, 'sn', true)}</td>`; // Saniye her zaman göster
+                            htmlContent += `<td class="right-align">${padTimeDisplay(minutes, 'dk')}</td>`;
+                            htmlContent += `<td class="right-align">${padTimeDisplay(seconds, 'sn', true)}</td>`;
                         } else {
-                            htmlContent += `<td class="right-align">${padTimeDisplay(seconds, 'sn', true)}</td>`; // Saniye her zaman göster
+                            htmlContent += `<td class="right-align">${padTimeDisplay(seconds, 'sn', true)}</td>`;
                         }
                         
                         htmlContent += `</tr>`;
                     });
+
                     htmlContent += '</tbody></table>';
                 } else {
                     htmlContent += 'Boş';
@@ -661,6 +723,7 @@
         const debugControls = document.getElementById('debug-controls');
         const STORAGE_KEY = 'debugVehicleState';
         debugControls.style.display = 'flex';
+        document.getElementById('debug-warning').style.display = 'block';
 
         // Viewport bilgisini görünür yap
         const viewportInfoDiv = document.getElementById('viewport-info');
@@ -694,11 +757,17 @@
 
         // 4. Butonlara olay dinleyicileri ekle
         document.getElementById('add-merkez').addEventListener('click', () => addVehicle('merkez'));
+        document.getElementById('add-closed-merkez').addEventListener('click', () => addVehicle('merkez', true));
         document.getElementById('remove-merkez').addEventListener('click', () => removeVehicle('merkez'));
+
         document.getElementById('add-metro').addEventListener('click', () => addVehicle('metro'));
+        document.getElementById('add-closed-metro').addEventListener('click', () => addVehicle('metro', true));
         document.getElementById('remove-metro').addEventListener('click', () => removeVehicle('metro'));
+
         document.getElementById('add-suvari').addEventListener('click', () => addVehicle('suvari'));
+        document.getElementById('add-closed-suvari').addEventListener('click', () => addVehicle('suvari', true));
         document.getElementById('remove-suvari').addEventListener('click', () => removeVehicle('suvari'));
+
 
         function saveState() {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(mockData.duraklar));
@@ -710,7 +779,7 @@
                     mockData.duraklar.suvari.liste.length;
         }
 
-        function addVehicle(durakKey) {
+        function addVehicle(durakKey, isClosed = false) {
             if (mockData.duraklar[durakKey].liste.length >= 10) {
                 // Not: alert() yerine daha iyi bir yöntem kullanılmalıdır, ancak debug için kabul edilebilir.
                 console.error("Bu durağa daha fazla araç eklenemez (maksimum 10)!");
@@ -727,8 +796,11 @@
             const availableVehicle = allVehicles.find(v => !assignedPlates.includes(v.plate));
 
             if (availableVehicle) {
-                // Rastgele bir bekleme süresi ekle
-                const newVehicle = { ...availableVehicle, entry_duration: Math.floor(Math.random() * 10000) };
+                const newVehicle = { 
+                    ...availableVehicle, 
+                    entry_duration: Math.floor(Math.random() * 10000),
+                    is_closed: isClosed // Kapalı olup olmadığını ayarla
+                };
                 mockData.duraklar[durakKey].liste.push(newVehicle);
                 saveState(); // Durumu localStorage'a kaydet
                 renderData(mockData); // Arayüzü güncelle
