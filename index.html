@@ -703,8 +703,15 @@
 
                     htmlContent += '</tbody></table>';
                 } else {
+                    htmlContent += 'Boş'; // Hiç araç yoksa
+                }
+
+                // YENİ: Sadece kapalı araç varsa, altına çizgi ve "Boş" yazısı ekle
+                if (closedVehicles.length > 0 && activeVehicles.length === 0) {
+                    htmlContent += `<hr class="sub-separator-line">`;
                     htmlContent += 'Boş';
                 }
+
                 
                 durakDiv.innerHTML = htmlContent;
                 duraklarContainer.appendChild(durakDiv);
