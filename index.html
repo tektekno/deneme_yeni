@@ -46,12 +46,6 @@
         padding-top: 1vh; /* Üstten küçük bir boşluk */
       }
 
-      /* Hava durumu metinlerinin taşmasını önleyen akışkan font boyutu */
-      #weather-info, #weather-warning {
-        font-size: clamp(9px, 2.5vw, 20px);
-        line-height: 1;
-      }
-
       /* Yükleme Simgesi */
       .loader {
         border: 4px solid #f3f3f3; /* Açık gri */
@@ -174,6 +168,42 @@
       /* --- DİYAGONAL ŞERİT STİLLERİ BİTİŞ --- */
       /* ------------------------------------------- */
 
+      /* Bilgi Tablosu Stilleri */
+      #info-table {
+        width: var(--durak-width, 85vw); /* Genişliği duraklarla aynı yapar */
+        max-width: 96%; /* Ekranın kenarlarına yapışmasını önle */
+        margin: 0 auto;
+        border-collapse: collapse;
+        font-size: clamp(10px, 2.5vw, 18px); /* Akışkan font boyutu */
+        line-height: 1.4;
+      }
+
+      /* Satır Renkleri */
+      #info-table tr:nth-child(1) { color: #C8A2C8; } /* Açık Mor */
+      #info-table tr:nth-child(2) { color: #FFC085; } /* Açık Turuncu */
+      #info-table tr:nth-child(3) { color: #FF8C8C; } /* Açık Kırmızı */
+      #info-table tr:nth-child(4) { color: #87CEEB; } /* Açık Mavi */
+
+      /* Yatay düzende tablo genişliğini ayarla */
+      @media (min-aspect-ratio: 1.1) {
+        #info-table {
+          width: 100%;
+          max-width: 800px;
+        }
+      }
+
+      #info-table .info-key {
+        text-align: left;
+        padding-right: 1em;
+        white-space: nowrap;
+        font-weight: bold;
+      }
+
+      #info-table .info-value {
+        text-align: left;
+        font-weight: bold;
+      }
+
       /* Araç listesi için tablo stili */
       .vehicle-table {
         width: 100%;
@@ -291,16 +321,27 @@
         <div class="updatetime-container">
           <!-- Yükleniyor simgesi -->
           <div id="loader" class="loader"></div>
-          <!-- Son güncelleme zamanı metni -->
-          <div id="updatetime" style="display: none;"></div>
-          <!-- GPS bilgi metni -->
-          <div id="gps-info" style="display: none; margin-top: 0.5rem; color: #90EE90;"></div>
-          <!-- Kapalı araç bilgi metni -->
-          <div id="closed-vehicle-info" style="display: none; margin-top: 0.5rem; color: #FF4C4C;"></div>
-          <!-- Hava durumu bilgi metni -->
-          <div id="weather-info" style="margin-top: 0.5rem; display: none;"></div>
-          <!-- Hava durumu uyarısı -->
-          <div id="weather-warning" style="margin-top: 0.5rem; color: #FFD700; font-weight: bold; display: none;"></div>
+          <!-- Yeni Bilgi Tablosu -->
+          <table id="info-table" style="display: none;">
+            <tbody>
+              <tr>
+                <td class="info-key">Son Güncelleme:</td>
+                <td id="info-updatetime" class="info-value"></td>
+              </tr>
+              <tr>
+                <td class="info-key">Sorunlu Araçlar:</td>
+                <td id="info-gps" class="info-value"></td>
+              </tr>
+              <tr>
+                <td class="info-key">Duyuru:</td>
+                <td id="info-closed-vehicle" class="info-value"></td>
+              </tr>
+              <tr>
+                <td class="info-key">Hava Durumu:</td>
+                <td id="info-weather" class="info-value"></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
         <div id="duraklar-container" class="container">
           </div>
@@ -345,13 +386,13 @@
       // Elemanları seç
       const mainContainer = document.getElementById('main-container');
       const duraklarContainer = document.getElementById('duraklar-container');
-      const updateTimeElement = document.getElementById('updatetime');
       const loaderElement = document.getElementById('loader');
-      const gpsInfoElement = document.getElementById('gps-info'); // GPS bilgi elementini seç
-      const closedVehicleInfoElement = document.getElementById('closed-vehicle-info'); // Kapalı araç bilgi elementini seç
       const viewportInfo = document.getElementById('viewport-info');
-      const weatherInfoElement = document.getElementById('weather-info');
-      const weatherWarningElement = document.getElementById('weather-warning');
+      const infoTable = document.getElementById('info-table');
+      const infoUpdateTime = document.getElementById('info-updatetime');
+      const infoGps = document.getElementById('info-gps');
+      const infoClosedVehicle = document.getElementById('info-closed-vehicle');
+      const infoWeather = document.getElementById('info-weather');
 
       /**
        * Saniye cinsinden verilen süreyi "Xgn Ysa Zdk Psn" formatına dönüştürür.
@@ -448,49 +489,35 @@
        */
       async function fetchWeather() {
         try {
-          const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=38.46&longitude=27.22&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Europe/Istanbul');
+          const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=38.46&longitude=27.22&daily=weathercode&timezone=Europe/Istanbul');
           const data = await response.json();
           
           const today = data.daily;
-          const todayDesc = getWeatherDescription(today.weathercode[0]);
-          const todayMin = Math.round(today.temperature_2m_min[0]);
-          const todayMax = Math.round(today.temperature_2m_max[0]);
-          const tomorrowDesc = getWeatherDescription(today.weathercode[1]);
-          const tomorrowMin = Math.round(today.temperature_2m_min[1]);
-          const tomorrowMax = Math.round(today.temperature_2m_max[1]);
-
-          weatherInfoElement.textContent = `Bornova; Bugün: ${todayDesc} ${todayMin}-${todayMax}°C , Yarın: ${tomorrowDesc} ${tomorrowMin}-${tomorrowMax}°C`;
-          weatherInfoElement.style.display = 'block';
-
-          // Yarın yağmurluysa uyarı gösterme mantığı
-          // Yağmur, kar, dolu ve fırtına gibi araç yıkamaya uygun olmayan tüm hava kodları
+          
+          // Yağmur, kar, dolu ve fırtına gibi araç yıkamaya uygun olmayan tüm kötü hava kodları
           const badWeatherCodes = [51, 53, 55, 61, 63, 65, 66, 67, 71, 73, 75, 77, 80, 81, 82, 85, 86, 95, 96, 99];
           const tomorrowCode = today.weathercode[1];
 
           if (badWeatherCodes.includes(tomorrowCode)) {
-            weatherWarningElement.innerHTML = "⚠️ 🌧️ Araçların bugün yıkanmaması önerilir.";
-            weatherWarningElement.style.display = 'block';
+            infoWeather.textContent = "Yakında yağış var, araç yıkanmaz."; // Renk CSS'den gelecek
           } else {
-            weatherWarningElement.style.display = 'none';
+            infoWeather.textContent = "Yakında yağış yok, araç yıkanır."; // Renk CSS'den gelecek
           }
         } catch (error) {
           console.error('Hava durumu verisi alınamadı:', error);
-          weatherInfoElement.textContent = 'Hava durumu bilgisi alınamadı.';
-          weatherInfoElement.style.display = 'block';
+          infoWeather.textContent = 'Bilgi alınamadı.'; // Renk CSS'den gelecek
         }
       }
 
       function renderData(data) {
         // Yükleme simgesini gizle ve güncelleme metinlerini göster
         loaderElement.style.display = 'none';
-        updateTimeElement.style.display = 'block';
-        gpsInfoElement.style.display = 'block';
-        closedVehicleInfoElement.style.display = 'block';
+        infoTable.style.display = 'table';
 
         // Güncelleme zamanını ve GPS bilgi metnini ayarla
-        updateTimeElement.textContent = `Son Güncelleme: ${data.son_guncelleme}`;
-        gpsInfoElement.textContent = "GPS sorunundan, 29 (5023) - 30 (7274) - 32 (6383) kodlu araçlar burada görünmez.";
-        closedVehicleInfoElement.textContent = "Kırmızı renkteki araçlar kapalıdır, sıraya dahil değildir.";
+        infoUpdateTime.textContent = data.son_guncelleme;
+        infoGps.textContent = "29 (5023) - 30 (7274) - 32 (6383)";
+        infoClosedVehicle.textContent = "Kırmızı renkteki araçlar kapalıdır, sıraya dahil değildir.";
 
         // Hava durumu verisini sadece ana veri yüklendikten sonra çek ve göster
         fetchWeather();
@@ -498,9 +525,7 @@
         // Dinamik font büyüklüğü sınıfları için stilleri dinamik olarak ekle
         // Bu, media query'lerdeki .font-size-large gibi sınıfların yerini alır
         const contentDiv = document.querySelector('.content');
-        const aspectRatio = window.innerWidth / window.innerHeight;
-
-        
+        const aspectRatio = window.innerWidth / window.innerHeight;        
         // Durak bilgilerini işle
         duraklarContainer.innerHTML = '';
         const duraklar = data.duraklar;
@@ -532,9 +557,6 @@
             suvari: duraklar.suvari.liste ? duraklar.suvari.liste.length : 0,
         };
         const totalVehicles = vehicleCounts.merkez + vehicleCounts.metro + vehicleCounts.suvari;
-
-        // 2. Dikey düzen için genel ayarları yap
-        gpsInfoElement.style.minHeight = '6.4vh'; // 58/908
 
         // Her bir durak için ayrı ayrı hizalama uzunluğunu belirle
         orderedDuraks.forEach(key => {
@@ -596,6 +618,9 @@
                 // 3. Hesaplanan değerleri CSS değişkenleri olarak ata
                 durakDiv.style.setProperty('--durak-font-size', fluidFontSize);
                 durakDiv.style.setProperty('--durak-width', fluidWidth);
+                
+                // Bilgi tablosunun genişliğini de duraklarla aynı yapmak için
+                document.documentElement.style.setProperty('--durak-width', fluidWidth);
 
                 // 4. Dikey/Yatay düzene göre flex-grow ve height ayarla
                 if (aspectRatio < 1.1) { // Dikey Düzen
@@ -616,11 +641,6 @@
                   durakDiv.style.maxHeight = '80vh'; // Ekranı taşmasını önlemek için maksimum yükseklik.
                   durakDiv.style.flexGrow = '0'; // Yatayda esnemesin
                 }
-
-                // updatetime ve gpsinfo font boyutlarını duraklarla eşitle
-                updateTimeElement.style.fontSize = fluidFontSize;
-                gpsInfoElement.style.fontSize = fluidFontSize;
-                closedVehicleInfoElement.style.fontSize = fluidFontSize;
                 
                 // Ayırıcı çizgi
                 htmlContent += `<hr class="separator-line">`;
