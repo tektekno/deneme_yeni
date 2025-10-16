@@ -4,14 +4,14 @@
     "description": "Bu kategori, popüler teknolojilerin ve araçların arkasındaki \"neden\" ve \"nasıl\"ı açıklayan evrensel ve zamanla değişmeyen prensipleri içerir. İyi bir mühendis, sadece bir aracı kullanmayı değil, o aracın hangi temel prensipler üzerine kurulu olduğunu da bilir. Bu bilgi, daha verimli, performanslı ve doğru çözümler üretmeyi sağlar ve kariyer boyunca en değerli yatırım haline gelir.",
     "children": [
       {
-        "title": "Veri Yapıları ve Algoritmalar",
+        "title": "Veri Yapıları (Data Structures) ve Algoritmalar (Algorithms)",
         "subtitle": "Big O, Array, Linked List, Tree, Graph",
-        "description": "<strong>Veri Yapıları</strong>, veriyi bilgisayarın belleğinde verimli bir şekilde organize etme, saklama ve yönetme yöntemleridir (örn: Array, Linked List, Stack, Queue, Hash Table, Tree, Graph). <strong>Algoritmalar</strong> ise belirli bir problemi çözmek için izlenen adım adım talimatlardır (örn: Sıralama, Arama). <strong>Big O Notasyonu</strong>, bir algoritmanın veri boyutu büyüdükçe ne kadar yavaşlayacağını (zaman ve bellek karmaşıklığı) ölçmemizi sağlar. Bu bilgi, milyonlarca kullanıcıya hizmet verirken sistemin çökmemesi için doğru çözümü seçmemizi sağlar."
+        "description": "<strong>Veri Yapıları (Data Structures)</strong>, veriyi bilgisayarın belleğinde verimli bir şekilde organize etme, saklama ve yönetme yöntemleridir (örn: Array, Linked List, Stack, Queue, Hash Table, Tree, Graph). <strong>Algoritmalar (Algorithms)</strong> ise belirli bir problemi çözmek için izlenen adım adım talimatlardır (örn: Sıralama, Arama). <strong>Big O Notasyonu (Big O Notation)</strong>, bir algoritmanın veri boyutu büyüdükçe ne kadar yavaşlayacağını (zaman ve bellek karmaşıklığı - time and space complexity) ölçmemizi sağlar. Bu bilgi, milyonlarca kullanıcıya hizmet verirken sistemin çökmemesi için doğru çözümü seçmemizi sağlar."
       },
       {
         "title": "Ağ (Networking) Temelleri",
         "subtitle": "OSI, TCP/IP, HTTP, DNS",
-        "description": "Modern uygulamaların neredeyse tamamı ağ üzerinde iletişim kurar. Bu iletişimin nasıl gerçekleştiğini bilmek, bir backend veya DevOps mühendisi için zorunluluktur. <strong>OSI ve TCP/IP Modelleri</strong>, ağ iletişimini katmanlara ayırır. <strong>IP</strong> adreslemeyi, <strong>TCP</strong> güvenilir veri transferini, <strong>UDP</strong> hızlı ama güvensiz veri transferini sağlar. <strong>DNS</strong>, \"google.com\" gibi alan adlarını IP adreslerine çevirir. <strong>HTTP/HTTPS</strong>, web'in temel iletişim protokolüdür. Bu bilgi, \"API neden yavaş?\" veya \"Sunucuya neden bağlanamıyorum?\" gibi sorunları çözmek için gereklidir."
+        "description": "Modern uygulamaların neredeyse tamamı ağ üzerinde iletişim kurar. Bu iletişimin nasıl gerçekleştiğini bilmek, bir backend veya DevOps mühendisi için zorunluluktur. <strong>OSI ve TCP/IP Modelleri</strong>, ağ iletişimini katmanlara ayırır. <strong>IP</strong> adreslemeyi, <strong>TCP</strong> güvenilir veri transferini (reliable data transfer), <strong>UDP</strong> hızlı ama güvensiz veri transferini sağlar. <strong>DNS</strong>, \"google.com\" gibi alan adlarını IP adreslerine çevirir. <strong>HTTP/HTTPS</strong>, web'in temel iletişim protokolüdür. Bu bilgi, \"API neden yavaş?\" veya \"Sunucuya neden bağlanamıyorum?\" gibi sorunları çözmek için gereklidir."
       }
     ]
   },
@@ -20,7 +20,7 @@
     "description": "Yazılım geliştirme, bilgisayar programları ve uygulamaları oluşturma sürecidir. Modern dünyanın temel taşıdır; bankacılıktan eğlenceye, sağlıktan iletişime kadar her alanda hayatımızı kolaylaştıran ve otomatize eden araçları sağlar. Bu alan, problemleri mantıksal adımlara bölerek çözme ve bu çözümleri bilgisayarın anlayacağı bir dile çevirme sanatıdır.",
     "children": [
       {
-        "title": "🌐 Web Geliştirme",
+        "title": "🌐 Web Geliştirme (Web Development)",
         "description": "İnternet tarayıcıları veya sunucular üzerinde çalışan web siteleri ve uygulamaları oluşturma disiplinidir. Frontend (kullanıcının gördüğü arayüz) ve Backend (sunucu, veritabanı ve uygulama mantığı) olmak üzere iki ana bölümden oluşur.",
         "children": [
           {
@@ -28,57 +28,172 @@
             "children": [
               {
                 "title": "Temel Teknolojiler",
+                "description": "Bunlar, web'in temelini oluşturan ve her web geliştiricinin bilmesi gereken üç sac ayağıdır. Bir web sayfasının iskeletini, görünümünü ve interaktif davranışlarını bu teknolojiler belirler.",
                 "children": [
-                  { "title": "HTML", "subtitle": "Yapı" },
-                  { "title": "CSS", "subtitle": "Görsel tasarım" },
-                  { "title": "JavaScript", "subtitle": "Dinamik davranış" },
-                  { "title": "TypeScript", "subtitle": "JavaScript'in tipli versiyonu" }
+                  {
+                    "title": "HTML",
+                    "subtitle": "Yapı (Structure)",
+                    "description": "<strong>HyperText Markup Language</strong>, bir web sayfasının içeriğini ve yapısını (başlıklar, paragraflar, resimler, linkler vb.) tanımlamak için kullanılan standart işaretleme dilidir. Web'in iskeletidir."
+                  },
+                  {
+                    "title": "CSS",
+                    "subtitle": "Görsel tasarım (Styling)",
+                    "description": "<strong>Cascading Style Sheets</strong>, HTML elemanlarının nasıl görüneceğini (renkler, fontlar, yerleşim, animasyonlar) belirleyen stil dilidir. Web sayfasının makyajı ve giysisidir."
+                  },
+                  {
+                    "title": "JavaScript",
+                    "subtitle": "Dinamik davranış",
+                    "description": "Web sayfalarına interaktiflik ve dinamik özellikler (form doğrulama, buton tıklama olayları, sunucudan veri çekme) katan betik dilidir. Web sayfasının beyni ve kaslarıdır."
+                  },
+                  {
+                    "title": "TypeScript",
+                    "subtitle": "JavaScript'in tipli versiyonu",
+                    "description": "Microsoft tarafından geliştirilen ve JavaScript'in üzerine inşa edilen bir dildir. JavaScript'e <strong>statik tipler</strong> ekleyerek büyük ve karmaşık projelerde hataları daha kod yazılırken yakalamayı sağlar, kodun okunabilirliğini ve bakımını kolaylaştırır."
+                  }
                 ]
               },
               {
                 "title": "Framework / Kütüphaneler",
+                "description": "Modern ve karmaşık kullanıcı arayüzlerini daha hızlı ve organize bir şekilde geliştirmek için kullanılan araç setleridir. Tekerleği yeniden icat etmek (reinventing the wheel) yerine, hazır bileşenler ve yapılar sunarak geliştirme sürecini hızlandırırlar.",
                 "children": [
-                  { "title": "React.js", "subtitle": "UI bileşenleri (Meta)" },
-                  { "title": "Next.js", "subtitle": "React üzerine kurulu SSR/SSG framework" },
-                  { "title": "Angular", "subtitle": "Google destekli tam kapsamlı framework" },
-                  { "title": "Vue.js", "subtitle": "Hafif, reaktif framework" },
-                  { "title": "Nuxt.js", "subtitle": "Vue için SSR framework" },
-                  { "title": "Svelte", "subtitle": "Yeni nesil derleyici tabanlı framework" },
-                  { "title": "SvelteKit", "subtitle": "Svelte için full-stack çözüm" },
-                  { "title": "Solid.js", "subtitle": "Performans odaklı reaktif kütüphane" },
-                  { "title": "Qwik", "subtitle": "Anında yüklenen “resumable” framework" },
-                  { "title": "Alpine.js", "subtitle": "Minimalist mikroframework" },
-                  { "title": "jQuery", "subtitle": "(Tarihî ama hâlâ bazı yerlerde aktif)" }
+                  {
+                    "title": "React.js",
+                    "subtitle": "UI bileşenleri (Meta)",
+                    "description": "Meta (Facebook) tarafından geliştirilen, kullanıcı arayüzlerini <strong>bileşen (component)</strong> bazlı oluşturmayı sağlayan popüler bir kütüphanedir. Sanal DOM (Virtual DOM) kullanarak yüksek performans sunar ve geniş bir ekosisteme sahiptir."
+                  },
+                  {
+                    "title": "Next.js",
+                    "subtitle": "React üzerine kurulu SSR/SSG framework'ü",
+                    "description": "React için geliştirilmiş, üretim ortamına hazır bir framework'tür. <strong>Sunucu Tarafında Oluşturma (SSR)</strong> ve <strong>Statik Site Üretimi (SSG)</strong> gibi özellikleri sayesinde SEO dostu ve performanslı web uygulamaları oluşturmayı kolaylaştırır."
+                  },
+                  {
+                    "title": "Angular",
+                    "subtitle": "Google destekli tam kapsamlı framework",
+                    "description": "Google tarafından geliştirilen, büyük ve kurumsal ölçekli uygulamalar için tasarlanmış tam kapsamlı bir framework'tür. Bağımlılık enjeksiyonu (dependency injection), yönlendirme (routing) ve form yönetimi gibi birçok özelliği içinde barındırır."
+                  },
+                  {
+                    "title": "Vue.js",
+                    "subtitle": "Hafif, reaktif framework",
+                    "description": "Öğrenmesi kolay, esnek ve performanslı bir framework'tür. Reaktif veri bağlama (reactive data binding) ve bileşen tabanlı yapısıyla modern arayüzler geliştirmeyi basitleştirir."
+                  },
+                  {
+                    "title": "Nuxt.js",
+                    "subtitle": "Vue için SSR framework'ü",
+                    "description": "Next.js'in Vue dünyasındaki karşılığıdır. Vue.js ile sunucu tarafında oluşturma (SSR), statik site üretimi (SSG) ve daha fazlasını kolayca yapmayı sağlayan bir framework'tür."
+                  },
+                  {
+                    "title": "Svelte",
+                    "subtitle": "Yeni nesil derleyici tabanlı framework",
+                    "description": "Diğer framework'ler gibi tarayıcıda çalışan bir kütüphane (runtime) yerine, kodu derleme aşamasında optimize edilmiş saf JavaScript'e dönüştüren bir derleyicidir. Bu sayede sanal DOM olmadan çok daha hızlı ve hafif uygulamalar oluşturur."
+                  },
+                  {
+                    "title": "SvelteKit",
+                    "subtitle": "Svelte için full-stack çözüm",
+                    "description": "Svelte için geliştirilmiş, Next.js ve Nuxt.js benzeri bir uygulama framework'üdür. Dosya tabanlı yönlendirme, sunucu tarafı oluşturma ve sunucu uç noktaları (endpoints) gibi özellikler sunar."
+                  },
+                  {
+                    "title": "Solid.js",
+                    "subtitle": "Performans odaklı reaktif kütüphane",
+                    "description": "React benzeri bir sözdizimi sunar ancak sanal DOM kullanmaz. Bunun yerine, Svelte gibi, reaktifliği derleme zamanında optimize ederek çok yüksek performans elde eder."
+                  },
+                  {
+                    "title": "Qwik",
+                    "subtitle": "Anında yüklenen “resumable” framework",
+                    "description": "Web sitelerinin anında interaktif olmasını hedefleyen yenilikçi bir framework'tür. 'Resumability' adı verilen bir teknikle, sayfanın yüklenmesi için gereken JavaScript miktarını minimuma indirir."
+                  },
+                  {
+                    "title": "Alpine.js",
+                    "subtitle": "Minimalist mikroframework",
+                    "description": "Mevcut HTML'inize doğrudan küçük JavaScript davranışları eklemek için tasarlanmış, çok hafif bir framework'tür. jQuery'nin modern ve deklaratif bir alternatifi olarak düşünülebilir."
+                  },
+                  {
+                    "title": "jQuery",
+                    "subtitle": "(Tarihî ama hâlâ bazı yerlerde aktif)",
+                    "description": "Bir zamanlar web geliştirmenin standardı olan, tarayıcılar arası uyumluluk sorunlarını çözen ve DOM manipülasyonunu kolaylaştıran bir kütüphanedir. Modern framework'ler popülerliğini azaltmış olsa da, eski projelerde ve WordPress gibi sistemlerde hala yaygın olarak kullanılır."
+                  },
+                  {
+                    "title": "ReactFlow",
+                    "subtitle": "Düğüm tabanlı editörler için kütüphane",
+                    "description": "React kullanarak sürükle-bırak özellikli, düğüm tabanlı diyagramlar ve editörler (örneğin, akış şemaları, organizasyon şemaları) oluşturmayı kolaylaştıran özel bir kütüphanedir."
+                  }
                 ]
               },
               {
                 "title": "Stil ve UI Araçları",
+                "description": "Tutarlı, estetik ve erişilebilir kullanıcı arayüzlerini hızlı bir şekilde oluşturmak için kullanılan hazır bileşen kütüphaneleri ve CSS ön işlemcileridir.",
                 "children": [
-                  { "title": "Bootstrap" },
-                  { "title": "Tailwind CSS" },
-                  { "title": "Material UI" },
-                  { "title": "Ant Design" },
-                  { "title": "Bulma / Foundation / Chakra UI" },
-                  { "title": "SCSS / SASS / LESS" }
+                  {
+                    "title": "Bootstrap",
+                    "description": "En popüler ve en eski CSS framework'lerinden biridir. Butonlar, formlar, navigasyon çubukları gibi hazır UI bileşenleri sunarak hızlı prototipleme ve geliştirme imkanı sağlar."
+                  },
+                  {
+                    "title": "Tailwind CSS",
+                    "description": "<strong>Utility-first</strong> (yardımcı sınıf öncelikli) bir CSS framework'üdür. Hazır bileşenler yerine, `p-4`, `flex`, `text-center` gibi küçük ve birleştirilebilir yardımcı sınıflar sunar. Bu, özel tasarımlar oluşturmada büyük esneklik sağlar."
+                  },
+                  {
+                    "title": "Material UI",
+                    "description": "Google'ın Material Design tasarım dilini temel alan, React için geliştirilmiş popüler bir UI bileşen kütüphanesidir."
+                  },
+                  {
+                    "title": "Ant Design",
+                    "description": "Özellikle kurumsal ve veri yoğun uygulamalar için tasarlanmış, zengin özelliklere sahip bir React UI bileşen kütüphanesidir."
+                  },
+                  {
+                    "title": "Bulma / Foundation / Chakra UI",
+                    "description": "Bootstrap ve Tailwind'e alternatif olan, farklı felsefelere sahip diğer popüler CSS ve UI kütüphaneleridir."
+                  },
+                  {
+                    "title": "SCSS / SASS / LESS",
+                    "description": "Bunlar <strong>CSS ön işlemcileridir (preprocessors)</strong>. Normal CSS'e değişkenler, döngüler, fonksiyonlar ve iç içe yazım gibi programlama yetenekleri kazandırarak daha modüler ve yönetilebilir stil dosyaları oluşturmayı sağlarlar."
+                  }
                 ]
               },
               {
                 "title": "Derleme ve Paketleme",
+                "description": "Modern JavaScript projelerinde kullanılan çok sayıda dosyayı (JS, CSS, resimler) ve modülü, tarayıcıların anlayabileceği optimize edilmiş tek veya birkaç dosyaya dönüştüren araçlardır (Bundlers).",
                 "children": [
-                  { "title": "Webpack" },
-                  { "title": "Vite" },
-                  { "title": "Rollup" },
-                  { "title": "Parcel" },
-                  { "title": "Babel" }
+                  {
+                    "title": "Webpack",
+                    "description": "En köklü ve en güçlü paketleyicilerden biridir. Geniş eklenti desteği sayesinde çok karmaşık derleme süreçlerini yönetebilir, ancak yapılandırması karmaşık olabilir."
+                  },
+                  {
+                    "title": "Vite",
+                    "description": "Vue.js'in yaratıcısı tarafından geliştirilen yeni nesil bir derleme aracıdır. Geliştirme ortamında yerel ES modüllerini kullanarak çok hızlı bir geliştirme sunucusu (dev server) deneyimi sunar."
+                  },
+                  {
+                    "title": "Rollup",
+                    "description": "Özellikle JavaScript kütüphaneleri oluşturmak için optimize edilmiş bir paketleyicidir. 'Tree shaking' özelliği sayesinde kullanılmayan kodları temizleyerek daha küçük paketler oluşturur."
+                  },
+                  {
+                    "title": "Parcel",
+                    "description": "Sıfır yapılandırma (zero-configuration) felsefesiyle öne çıkan, kullanımı çok kolay bir paketleyicidir. Hızlı başlangıç için idealdir."
+                  },
+                  {
+                    "title": "Babel",
+                    "description": "Bir JavaScript derleyicisidir (compiler). Yeni nesil JavaScript (ES6+) kodunu, eski tarayıcıların da anlayabileceği daha eski bir JavaScript sürümüne (ES5) dönüştürür. Genellikle Webpack gibi paketleyicilerle birlikte kullanılır."
+                  }
                 ]
               },
               {
                 "title": "Test / UI Test",
+                "description": "Frontend kodunun ve kullanıcı arayüzünün beklendiği gibi çalıştığından emin olmak için kullanılan test araçlarıdır. Hataları erken yakalamayı ve kod kalitesini artırmayı hedefler.",
                 "children": [
-                  { "title": "Jest" },
-                  { "title": "Cypress" },
-                  { "title": "Playwright" },
-                  { "title": "Vitest" }
+                  {
+                    "title": "Jest",
+                    "description": "Meta (Facebook) tarafından geliştirilen, özellikle React uygulamaları için popüler olan, sıfır yapılandırma felsefesine sahip bir JavaScript test framework'üdür."
+                  },
+                  {
+                    "title": "Cypress",
+                    "description": "Modern web uygulamaları için tasarlanmış, uçtan uca (end-to-end) bir test aracıdır. Gerçek bir tarayıcıda çalışarak kullanıcı etkileşimlerini (tıklama, form doldurma vb.) simüle eder."
+                  },
+                  {
+                    "title": "Playwright",
+                    "description": "Microsoft tarafından geliştirilen, Cypress'e modern bir alternatiftir. Tek bir API ile Chromium (Chrome, Edge), Firefox ve WebKit (Safari) gibi tüm modern tarayıcıları otomatize etme yeteneğiyle öne çıkar."
+                  },
+                  {
+                    "title": "Vitest",
+                    "description": "Vite ile entegre çalışan, Jest uyumlu API'ye sahip modern bir birim test (unit test) framework'üdür. Hızlı ve basittir."
+                  }
                 ]
               }
             ]
@@ -89,62 +204,142 @@
               {
                 "title": "JavaScript / TypeScript Ekosistemi",
                 "children": [
-                  { "title": "Node.js", "subtitle": "Sunucu tarafı çalışma zamanı" },
-                  { "title": "Express.js", "subtitle": "Minimal REST API framework" },
-                  { "title": "Nest.js", "subtitle": "Kurumsal, modüler backend framework" },
-                  { "title": "Fastify", "subtitle": "Hızlı ve hafif alternatif" },
-                  { "title": "Koa.js", "subtitle": "Modern middleware yapısı" },
-                  { "title": "AdonisJS", "subtitle": "Laravel benzeri Node framework" },
-                  { "title": "Hapi.js / Feathers.js", "subtitle": "API odaklı yapılar" }
+                  {
+                    "title": "Node.js",
+                    "subtitle": "Sunucu tarafı çalışma zamanı (runtime)",
+                    "description": "Google Chrome'un V8 JavaScript motoru üzerine inşa edilmiş, JavaScript kodunu tarayıcı dışında (sunucuda) çalıştırmayı sağlayan bir ortamdır. Asenkron ve olay güdümlü yapısı sayesinde yüksek performanslı ağ uygulamaları için idealdir."
+                  },
+                  {
+                    "title": "Express.js",
+                    "subtitle": "Minimal REST API framework",
+                    "description": "Node.js için en popüler, minimalist ve esnek web uygulama framework'üdür. Hızlı bir şekilde REST API'ler ve web uygulamaları oluşturmak için temel bir yapı sunar."
+                  },
+                  {
+                    "title": "Nest.js",
+                    "subtitle": "Kurumsal, modüler backend framework",
+                    "description": "TypeScript ile yazılmış, ölçeklenebilir ve bakımı kolay sunucu tarafı uygulamalar oluşturmak için tasarlanmış bir framework'tür. Angular'dan ilham alan modüler bir mimariye ve bağımlılık enjeksiyonu gibi özelliklere sahiptir."
+                  },
+                  {
+                    "title": "Fastify",
+                    "subtitle": "Hızlı ve hafif alternatif",
+                    "description": "Performansı ön planda tutan, çok düşük ek yüke (overhead) sahip bir Node.js web framework'üdür. Hız odaklı API'ler için Express.js'e popüler bir alternatiftir."
+                  },
+                  {
+                    "title": "Koa.js",
+                    "subtitle": "Modern middleware yapısı",
+                    "description": "Express.js'in orijinal ekibi tarafından geliştirilen, daha modern ve hafif bir web framework'üdür. Geriye dönük uyumluluk için callback'ler yerine async/await yapısını kullanarak daha temiz bir middleware (ara katman) akışı sunar."
+                  },
+                  {
+                    "title": "AdonisJS",
+                    "subtitle": "Laravel benzeri Node framework",
+                    "description": "PHP dünyasındaki Laravel'den ilham alan, tam kapsamlı bir Node.js MVC framework'üdür. ORM, kimlik doğrulama ve test gibi birçok özelliği içinde barındırır."
+                  },
+                  {
+                    "title": "Hapi.js / Feathers.js",
+                    "subtitle": "API odaklı yapılar",
+                    "description": "Hapi.js, özellikle büyük ekipler için yapılandırma odaklı ve güvenli API'ler oluşturmayı hedefler. Feathers.js ise gerçek zamanlı uygulamalar ve REST API'ler oluşturmayı basitleştiren bir mikroservis framework'üdür."
+                  }
                 ]
               },
               {
                 "title": "Python Ekosistemi",
-                "description": "Python, okunabilirliği yüksek ve öğrenmesi kolay bir dildir. Web geliştirmede Django (tam kapsamlı), Flask (hafif) ve FastAPI (modern, asenkron) gibi framework'lerle hızlıca API'ler oluşturulabilir.",
                 "children": [
-                  { "title": "Django", "subtitle": "MVC + ORM + Admin panel dahil framework" },
-                  { "title": "Flask", "subtitle": "Minimal, mikroframework" },
-                  { "title": "FastAPI", "subtitle": "Asenkron REST API framework" },
-                  { "title": "Tornado / Falcon", "subtitle": "Yüksek performanslı alternatifler" }
-                ]
+                  {
+                    "title": "Django",
+                    "subtitle": "MVC + ORM + Admin panel dahil framework",
+                    "description": "'Pilleri dahil' (batteries-included) felsefesiyle gelen, tam kapsamlı bir web framework'üdür. ORM, admin paneli, kimlik doğrulama gibi birçok özelliği hazır sunarak hızlı geliştirme imkanı sağlar."
+                  },
+                  {
+                    "title": "Flask",
+                    "subtitle": "Minimal, mikroframework",
+                    "description": "Sadece temel özellikleri sunan, hafif ve esnek bir mikroframework'tür. Geliştiriciye hangi kütüphaneleri ve araçları kullanacağı konusunda tam özgürlük tanır. Küçük ve orta ölçekli projeler için idealdir."
+                  },
+                  {
+                    "title": "FastAPI",
+                    "subtitle": "Asenkron REST API framework",
+                    "description": "Modern, yüksek performanslı bir Python web framework'üdür. Asenkron programlamayı (async/await) tam destekler ve otomatik olarak interaktif API dokümantasyonu (Swagger UI) oluşturmasıyla ünlüdür."
+                  },
+                  {
+                    "title": "Tornado / Falcon",
+                    "subtitle": "Yüksek performanslı alternatifler",
+                    "description": "Tornado, asenkron yapısıyla uzun süren bağlantıları (örn: WebSockets) yönetmek için idealdir. Falcon ise minimalist ve çok hızlı bir API framework'üdür."
+                  }
+                ],
+                "description": "Python, okunabilirliği yüksek ve öğrenmesi kolay bir dildir. Web geliştirmede Django (tam kapsamlı), Flask (hafif) ve FastAPI (modern, asenkron) gibi framework'lerle hızlıca API'ler oluşturulabilir."
               },
               {
                 "title": "Java Ekosistemi",
-                "description": "Java, \"bir kere yaz, her yerde çalıştır\" felsefesiyle bilinen, platform bağımsız, güvenli ve çok güçlü bir dildir. Özellikle büyük kurumsal uygulamalar (bankacılık, sigortacılık) için tercih edilir. Spring Boot, REST API tabanlı mikroservisler oluşturmak için endüstri standardı haline gelmiştir.",
                 "children": [
-                  { "title": "Spring Boot", "subtitle": "Java tabanlı kurumsal framework" },
-                  { "title": "Micronaut / Quarkus", "subtitle": "Hafif modern çözümler" }
-                ]
+                  {
+                    "title": "Spring Boot",
+                    "subtitle": "Java tabanlı kurumsal framework",
+                    "description": "Spring Framework üzerine inşa edilmiş, çok az yapılandırma ile kendi kendine yeten, üretime hazır Java uygulamaları oluşturmayı kolaylaştıran bir projedir. Mikroservisler ve web uygulamaları için de-facto standart haline gelmiştir."
+                  },
+                  {
+                    "title": "Micronaut / Quarkus",
+                    "subtitle": "Hafif modern çözümler",
+                    "description": "Bulut ve sunucusuz (serverless) ortamlar için tasarlanmış modern Java framework'leridir. Derleme zamanında bağımlılık enjeksiyonu yaparak çok hızlı başlangıç süreleri ve düşük bellek tüketimi sunarlar."
+                  }
+                ],
+                "description": "Java, \"bir kere yaz, her yerde çalıştır\" felsefesiyle bilinen, platform bağımsız, güvenli ve çok güçlü bir dildir. Özellikle büyük kurumsal uygulamalar (bankacılık, sigortacılık) için tercih edilir. Spring Boot, REST API tabanlı mikroservisler oluşturmak için endüstri standardı haline gelmiştir. WebLogic ve WebSphere gibi uygulama sunucuları üzerinde çalışabilir."
               },
               {
                 "title": "C# Ekosistemi",
                 "description": "C# (C Sharp), Microsoft tarafından geliştirilen, Java'ya benzeyen modern ve güçlü bir dildir. .NET Core, C#'ın Windows, Linux ve macOS üzerinde çalışabilen modern versiyonudur. ASP.NET Web API ile yüksek performanslı web servisleri ve API'ler oluşturulur.",
                 "children": [
-                  { "title": ".NET / ASP.NET Core", "subtitle": "Web API + MVC" }
+                  {
+                    "title": ".NET / ASP.NET Core",
+                    "subtitle": "Web API + MVC",
+                    "description": ".NET (eski adıyla .NET Core), Microsoft'un açık kaynaklı, platformlar arası (Windows, Linux, macOS) çalışan modern geliştirme platformudur. ASP.NET Core, bu platform üzerinde yüksek performanslı web uygulamaları, API'ler ve mikroservisler oluşturmak için kullanılan framework'tür."
+                  }
                 ]
               },
               {
                 "title": "PHP Ekosistemi",
                 "description": "PHP, özellikle web geliştirme için tasarlanmış, sunucu taraflı bir betik dilidir. İnternet'teki web sitelerinin çok büyük bir kısmına güç verir. Laravel ve Symfony gibi modern framework'ler, PHP ile büyük ve ölçeklenebilir uygulamalar geliştirmeyi kolaylaştırır.",
                 "children": [
-                  { "title": "Laravel", "subtitle": "Modern MVC framework" },
-                  { "title": "Symfony", "subtitle": "Büyük kurumsal projeler" },
-                  { "title": "CodeIgniter / Yii / CakePHP", "subtitle": "Hafif frameworkler" },
-                  { "title": "WordPress", "subtitle": "CMS tabanlı sistem" }
+                  {
+                    "title": "Laravel",
+                    "subtitle": "Modern MVC framework",
+                    "description": "Zarif sözdizimi, geliştirici dostu yapısı ve zengin özellik setiyle PHP dünyasının en popüler framework'üdür. Hızlı uygulama geliştirmeyi (RAD) hedefler."
+                  },
+                  {
+                    "title": "Symfony",
+                    "subtitle": "Büyük kurumsal projeler",
+                    "description": "Büyük ve karmaşık kurumsal projeler için tasarlanmış, yeniden kullanılabilir bileşenlerden oluşan bir framework ve felsefedir. Laravel dahil birçok PHP projesi, Symfony bileşenlerini kullanır."
+                  },
+                  {
+                    "title": "CodeIgniter / Yii / CakePHP",
+                    "subtitle": "Hafif frameworkler",
+                    "description": "Laravel ve Symfony'ye göre daha hafif ve basit olan, farklı felsefelere sahip diğer popüler PHP framework'leridir."
+                  },
+                  {
+                    "title": "WordPress",
+                    "subtitle": "CMS tabanlı sistem",
+                    "description": "PHP ile yazılmış, dünyanın en popüler İçerik Yönetim Sistemi'dir (CMS). Başlangıçta blog platformu olarak ortaya çıkmış olsa da, eklentiler sayesinde e-ticaret sitelerinden kurumsal sitelere kadar her türlü web sitesine dönüştürülebilir."
+                  }
                 ]
               },
               {
                 "title": "Go Ekosistemi",
                 "description": "Go, Google tarafından geliştirilen, basitliği ve yüksek eşzamanlılık (concurrency) performansıyla öne çıkan bir dildir. Binlerce isteği aynı anda çok az kaynak kullanarak yönetebilir. Bu özelliği, onu mikroservis mimarileri ve bulut tabanlı uygulamalar için ideal kılar.",
                 "children": [
-                  { "title": "Gin / Fiber / Echo", "subtitle": "Go backend frameworkleri" }
+                  {
+                    "title": "Gin / Fiber / Echo",
+                    "subtitle": "Go backend frameworkleri",
+                    "description": "Go'nun standart kütüphanesi güçlü olsa da, bu framework'ler yönlendirme (routing), ara katman (middleware) yönetimi ve istek işleme gibi görevleri kolaylaştırarak daha hızlı API geliştirmeyi sağlar."
+                  }
                 ]
               },
               {
                 "title": "Ruby Ekosistemi",
                 "description": "Ruby, okunabilir ve zarif sözdizimi ile bilinen dinamik bir dildir. En ünlü framework'ü olan Ruby on Rails (RoR), 'Convention over Configuration' felsefesiyle hızlı uygulama geliştirmeyi (RAD) teşvik eder.",
                 "children": [
-                  { "title": "Ruby on Rails", "subtitle": "MVC yapısı, CRUD hızında" }
+                  {
+                    "title": "Ruby on Rails",
+                    "subtitle": "MVC yapısı, CRUD hızında",
+                    "description": "Model-View-Controller (MVC) mimarisini temel alan, 'Convention over Configuration' (Yapılandırma yerine Kurallar) felsefesini benimseyen bir web framework'üdür. Bu felsefe, geliştiricinin standart kurallara uyması durumunda çok az yapılandırma ile çok hızlı bir şekilde uygulama geliştirmesine olanak tanır."
+                  }
                 ]
               }
             ]
@@ -157,6 +352,7 @@
         "children": [
           {
             "title": "Native Geliştirme",
+            "description": "Belirli bir platforma (iOS veya Android) özel olarak, o platformun kendi dilini ve araçlarını kullanarak uygulama geliştirmektir. En yüksek performansı ve donanıma en iyi erişimi sunar.",
             "children": [
               {
                 "title": "Kotlin (Android)",
@@ -170,12 +366,28 @@
           },
           {
             "title": "Cross-platform (Çapraz Platform)",
+            "description": "Tek bir kod tabanı yazarak hem iOS hem de Android platformlarında çalışabilen uygulamalar oluşturma yaklaşımıdır. Geliştirme sürecini hızlandırır ve maliyetleri düşürür.",
             "children": [
-              { "title": "React Native (JavaScript/TypeScript)" },
-              { "title": "Flutter (Dart)" },
-              { "title": "Ionic (Web tabanlı)" },
-              { "title": "Xamarin (.NET / C#)" },
-              { "title": "NativeScript (Angular / Vue tabanlı)" }
+              {
+                "title": "React Native (JavaScript/TypeScript)",
+                "description": "Meta (Facebook) tarafından geliştirilen, React ve JavaScript kullanarak native mobil uygulamalar oluşturmayı sağlayan bir framework'tür."
+              },
+              {
+                "title": "Flutter (Dart)",
+                "description": "Google tarafından geliştirilen, Dart dilini kullanan bir UI araç setidir. Tek bir kod tabanından mobil, web ve masaüstü için güzel, native olarak derlenmiş uygulamalar oluşturur."
+              },
+              {
+                "title": "Ionic (Web tabanlı)",
+                "description": "HTML, CSS ve JavaScript gibi web teknolojilerini kullanarak cross-platform mobil uygulamalar oluşturmayı sağlayan bir framework'tür. Uygulamalar bir 'WebView' içinde çalışır."
+              },
+              {
+                "title": "Xamarin (.NET / C#)",
+                "description": "Microsoft'un .NET platformunu ve C# dilini kullanarak iOS, Android ve Windows için native uygulamalar oluşturmayı sağlayan bir framework'tür. .NET MAUI, Xamarin'in modern evrimidir."
+              },
+              {
+                "title": "NativeScript (Angular / Vue tabanlı)",
+                "description": "JavaScript veya TypeScript (ve Angular/Vue gibi framework'ler) kullanarak native mobil uygulamalar oluşturmayı sağlayan açık kaynaklı bir framework'tür."
+              }
             ]
           },
           {
@@ -189,27 +401,299 @@
         "title": "🖥️ Masaüstü Geliştirme",
         "description": "Windows, macOS ve Linux gibi işletim sistemleri üzerinde çalışan masaüstü uygulamaları oluşturma alanıdır.",
         "children": [
-          { "title": "Electron.js (JS + HTML + CSS)" },
-          { "title": "Tauri", "subtitle": "Rust tabanlı, hafif Electron alternatifi" },
-          { "title": "PyQt / PySide (Python)" },
-          { "title": "GTK / WxPython / Tkinter" },
-          { "title": ".NET WPF / WinUI / MAUI" },
-          { "title": "JavaFX / Swing (Java)" }
+          {
+            "title": "Electron.js (JS + HTML + CSS)",
+            "description": "Web teknolojilerini (JavaScript, HTML, CSS) kullanarak cross-platform masaüstü uygulamaları oluşturmayı sağlayan bir framework'tür. VS Code, Slack, Discord gibi birçok popüler uygulama Electron ile yapılmıştır."
+          },
+          {
+            "title": "Tauri",
+            "subtitle": "Rust tabanlı, hafif Electron alternatifi",
+            "description": "Güvenlik ve performansı ön planda tutan, Electron'a göre çok daha hafif ve hızlı bir alternatiftir. Arka planda Rust, ön yüzde ise web teknolojilerini kullanır."
+          },
+          {
+            "title": "PyQt / PySide (Python)",
+            "description": "Python dilini kullanarak güçlü ve zengin özellikli cross-platform masaüstü uygulamaları oluşturmak için kullanılan, Qt kütüphanesinin Python bağlamalarıdır."
+          },
+          {
+            "title": "GTK / WxPython / Tkinter",
+            "description": "Python, C++ gibi dillerle cross-platform GUI uygulamaları geliştirmek için kullanılan diğer popüler arayüz kütüphaneleridir."
+          },
+          {
+            "title": ".NET WPF / WinUI / MAUI",
+            "description": "Microsoft'un .NET platformu ve C# dili ile özellikle Windows için zengin masaüstü uygulamaları (WPF, WinUI) ve cross-platform uygulamalar (MAUI) geliştirmek için kullanılan teknolojilerdir."
+          },
+          {
+            "title": "JavaFX / Swing (Java)",
+            "description": "Java dili ile cross-platform masaüstü uygulamaları geliştirmek için kullanılan arayüz kütüphaneleridir. Swing daha eski, JavaFX ise daha modern bir alternatiftir."
+          }
         ]
       },
       {
         "title": "🎮 Oyun Geliştirme",
         "description": "Bilgisayarlar, konsollar ve mobil cihazlar için 2D veya 3D interaktif oyunlar oluşturma sürecidir. Genellikle C++ veya C# gibi performans odaklı diller ve Unity, Unreal Engine gibi oyun motorları kullanılır.",
         "children": [
-          { "title": "Unity (C#)" },
-          { "title": "Unreal Engine (C++)" },
-          { "title": "Godot (GDScript / C# / C++)" },
-          { "title": "Phaser.js (JS 2D oyun motoru)" },
-          { "title": "Cocos2d / Love2D / Pygame" }
+          {
+            "title": "Unity (C#)",
+            "description": "C# dilini kullanan, özellikle bağımsız geliştiriciler ve mobil oyunlar arasında çok popüler olan, cross-platform bir oyun motorudur."
+          },
+          {
+            "title": "Unreal Engine (C++)",
+            "description": "C++ dilini kullanan, özellikle yüksek kaliteli (AAA) grafiklere sahip oyunlar için tercih edilen, çok güçlü bir oyun motorudur."
+          },
+          {
+            "title": "Godot",
+            "subtitle": "GDScript / C# / C++",
+            "description": "Açık kaynaklı ve ücretsiz, hızla popülerlik kazanan bir oyun motorudur. Python benzeri GDScript dili ile kolay bir başlangıç sunar."
+          },
+          {
+            "title": "Grafik API'leri",
+            "description": "Oyun motorlarının, donanımın grafik işlemcisi (GPU) ile doğrudan iletişim kurarak ekrana 2D/3D grafikler çizmesini sağlayan alt seviye arayüzlerdir.",
+            "children": [
+              {
+                "title": "OpenGL / OpenGL ES",
+                "description": "Platformdan bağımsız, yaygın olarak kullanılan bir grafik API'sidir. OpenGL ES ise mobil ve gömülü sistemler için tasarlanmış versiyonudur."
+              },
+              {
+                "title": "Metal (Apple)",
+                "description": "Apple'ın kendi cihazları (iOS, macOS) için geliştirdiği, donanıma düşük seviyeli ve yüksek performanslı erişim sağlayan modern grafik API'sidir."
+              },
+              {
+                "title": "Vulkan / DirectX",
+                "description": "Vulkan, OpenGL'in modern halefi olan, platformlar arası, yüksek performanslı bir API'dir. DirectX ise Microsoft'un Windows ve Xbox platformları için geliştirdiği, oyun endüstrisinde çok yaygın olarak kullanılan bir multimedya ve grafik API setidir."
+              }
+            ]
+          },
+          {
+            "title": "Diğer Motorlar",
+            "description": "Belirli ihtiyaçlara yönelik daha niş veya daha basit oyun motorlarıdır.",
+            "children": [
+              {
+                "title": "Phaser.js (JS 2D)",
+                "subtitle": "Web tabanlı 2D oyun motoru",
+                "description": "JavaScript ve HTML5 kullanarak tarayıcıda çalışan 2D oyunlar yapmak için popüler bir framework'tür."
+              },
+              {
+                "title": "Cocos2d / Defold / Love2D / Pygame",
+                "description": "Farklı diller (C++, Lua, Python) ve platformlar için geliştirilmiş diğer 2D ve 3D oyun motoru ve kütüphaneleridir."
+              }
+            ]
+          }
         ]
       },
       {
-        "title": "Yazılım Mimari ve Mühendislik",
+        "title": "💡 Gömülü Sistemler (Embedded Systems)",
+        "description": "Belirli bir görevi yerine getirmek üzere tasarlanmış, genellikle bir donanım parçasının içine yerleştirilmiş özel amaçlı bilgisayar sistemleridir. <strong>Firmware</strong>, bu donanımı kontrol eden yazılımdır. <strong>RTOS (Real-time Operating System)</strong>, zaman kritik uygulamalar için deterministik ve öngörülebilir işlem süreleri sağlayan işletim sistemleridir.",
+        "children": [
+          {
+            "title": "Mikrodenetleyici Mimarileri ve Aileleri",
+            "description": "Gömülü sistemlerin beyni olan mikrodenetleyiciler (MCU), farklı üreticiler tarafından farklı mimariler temel alınarak üretilir. Seçim; projenin gereksinimlerine, performans ihtiyacına ve maliyete göre yapılır.",
+            "children": [
+              {
+                "title": "ARM Mimarisi ve Tabanlı MCU'lar",
+                "subtitle": "STM32, NXP, TI",
+                "description": "<strong>ARM</strong>, bir işlemci mimarisidir ve düşük güç tüketimiyle gömülü sistem pazarını domine eder. <strong>STMicroelectronics (STM32)</strong>, <strong>NXP (LPC, Kinetis)</strong> ve <strong>Texas Instruments (Tiva)</strong> gibi üreticiler, ARM'ın Cortex-M serisi çekirdeklerini lisanslayarak kendi popüler mikrodenetleyici ailelerini üretirler."
+              },
+              {
+                "title": "Microchip Ailesi (PIC & AVR)",
+                "description": "<strong>PIC</strong>, Microchip'in kendi mimarisine sahip, özellikle 8-bit segmentinde sağlamlığı ve basitliği ile bilinen köklü bir MCU ailesidir. <strong>AVR</strong> ise (eski Atmel), Arduino platformu sayesinde hobi ve maker dünyasında çok popüler olan bir diğer 8-bit mimaridir."
+              },
+              {
+                "title": "Espressif Systems (ESP32 / ESP8266)",
+                "description": "Entegre Wi-Fi ve Bluetooth özelliklerini çok uygun fiyata sunarak IoT (Nesnelerin İnterneti) pazarında devrim yaratan popüler yongalardır. Kablosuz iletişim gerektiren projeler için standart haline gelmiştir."
+              },
+              {
+                "title": "RISC-V Mimarisi",
+                "description": "ARM'a rakip olan, açık kaynaklı ve lisans ücreti olmayan modern bir işlemci mimarisidir. Herkesin kendi işlemcisini tasarlamasına olanak tanımasıyla gelecekte önemli bir yer edinmesi beklenmektedir."
+              }
+            ]
+          },
+          {
+            "title": "Gömülü Sistem IDE'leri ve Araç Zincirleri (Toolchains)",
+            "description": "Gömülü sistemler için kod yazma, derleme, programlama ve hata ayıklama (debugging) süreçlerini yöneten özel yazılımlardır. Doğru IDE ve araç zinciri (toolchain), geliştirme verimliliğini ve kod kalitesini doğrudan etkiler.",
+            "children": [
+              {
+                "title": "Üreticiye Özel IDE'ler",
+                "description": "Mikrodenetleyici üreticilerinin kendi donanımları için optimize ettiği, genellikle ücretsiz olan resmi geliştirme ortamlarıdır.",
+                "children": [
+                  {
+                    "title": "STM32CubeIDE",
+                    "subtitle": "STMicroelectronics (STM32) için Eclipse tabanlı resmi IDE"
+                  },
+                  {
+                    "title": "Microchip Studio (Atmel Studio)",
+                    "subtitle": "Microchip (AVR, SAM) için Visual Studio tabanlı resmi IDE"
+                  },
+                  {
+                    "title": "MPLAB X IDE",
+                    "subtitle": "Microchip (PIC) için NetBeans tabanlı resmi IDE"
+                  },
+                  {
+                    "title": "Code Composer Studio (CCS)",
+                    "subtitle": "Texas Instruments (MSP, C2000) için resmi IDE"
+                  },
+                  {
+                    "title": "MCUXpresso IDE",
+                    "subtitle": "NXP (LPC, Kinetis) için resmi IDE"
+                  }
+                ]
+              },
+              {
+                "title": "Ticari ve Profesyonel IDE'ler",
+                "description": "Yüksek optimizasyon, gelişmiş hata ayıklama özellikleri ve profesyonel destek sunan, genellikle lisans ücreti gerektiren endüstri standardı araçlardır.",
+                "children": [
+                  {
+                    "title": "Keil MDK (ARM)",
+                    "subtitle": "ARM Cortex-M tabanlı MCU'lar için endüstri standardı"
+                  },
+                  {
+                    "title": "IAR Embedded Workbench",
+                    "subtitle": "Geniş MCU desteği ve yüksek kod optimizasyonu sunan popüler bir alternatif"
+                  }
+                ]
+              },
+              {
+                "title": "VS Code + PlatformIO",
+                "subtitle": "Yüzlerce kartı destekleyen, esnek ve modern, evrensel bir alternatif"
+              },
+              {
+                "title": "Arduino IDE",
+                "subtitle": "Başlangıç seviyesi ve hızlı prototipleme için ideal, basit arayüz"
+              },
+              {
+                "title": "Çapraz Derleme Araç Zincirleri (Cross-Compilation Toolchains)",
+                "description": "Bir yazılımı, üzerinde çalıştırıldığı sistemden (host) farklı bir mimariye veya işletim sistemine sahip bir hedef (target) sistem için derleme işlemidir. Bu, IDE'lerin arka planında çalışan temel araçlardır.",
+                "children": [
+                  {
+                    "title": "Gömülü Sistemler için (ARM, RISC-V)",
+                    "subtitle": "arm-none-eabi-gcc, crosstool-NG",
+                    "description": "Gömülü cihazlar için yazılım geliştirmek amacıyla, güçlü bir ana bilgisayarda (x86 Linux gibi) kod derleme sürecidir. `arm-none-eabi-gcc` gibi hazır araç zincirleri veya `crosstool-NG` gibi araçlarla özel araç zincirleri oluşturulur. Bu, kaynakları kısıtlı hedef cihazda derleme yapma zorunluluğunu ortadan kaldırır."
+                  },
+                  {
+                    "title": "Farklı İşletim Sistemleri için (Windows)",
+                    "subtitle": "MinGW-w64",
+                    "description": "Linux veya macOS gibi bir işletim sistemi üzerinde, Windows'ta çalışacak `.exe` dosyaları oluşturmayı sağlayan bir derleyici araç setidir. Bu, tek bir geliştirme ortamından birden fazla platform için çıktı almayı kolaylaştırır."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "📡 Gömülü Sistem Haberleşme Protokolleri",
+            "description": "Gömülü cihazların kendi içindeki bileşenlerle (sensör, ekran vb.) veya diğer cihazlarla ve internetle haberleşmesini sağlayan kurallar bütünüdür. Doğru protokol seçimi, projenin güç tüketimini, hızını ve güvenilirliğini doğrudan etkiler.",
+            "children": [
+              {
+                "title": "Seri Protokoller (Kablolu)",
+                "subtitle": "I2C, SPI, UART",
+                "description": "<strong>UART</strong>, iki cihaz arasında basit seri iletişim için kullanılır. <strong>I2C</strong>, tek bir veri hattı üzerinden birden fazla cihazı (sensörler, bellekler) bağlamak için idealdir. <strong>SPI</strong> ise daha yüksek hızlı, tam çift yönlü (full-duplex) bir iletişim sunar."
+              },
+              {
+                "title": "Endüstriyel ve Otomotiv Protokolleri",
+                "subtitle": "CAN Bus, LIN, Modbus",
+                "description": "<strong>CAN Bus</strong>, otomotiv ve endüstriyel otomasyonda cihazların gürültülü ortamlarda bile güvenilir bir şekilde haberleşmesini sağlayan standart bir protokoldür. <strong>LIN Bus</strong> daha düşük maliyetli bir alternatiftir. <strong>Modbus</strong> ise endüstriyel otomasyonda yaygın olarak kullanılan basit bir master-slave protokolüdür."
+              },
+              {
+                "title": "Kablosuz Protokoller (IoT)",
+                "children": [
+                  {
+                    "title": "Wi-Fi / Bluetooth (BLE)",
+                    "description": "<strong>Wi-Fi</strong>, yüksek bant genişliği gerektiren uygulamalar için kullanılırken, <strong>Bluetooth Low Energy (BLE)</strong> düşük güç tüketimiyle çalışan, pilli cihazlar için idealdir."
+                  },
+                  {
+                    "title": "LoRaWAN",
+                    "description": "<strong>Long Range Wide Area Network</strong>, çok düşük güç tüketimiyle kilometrelerce mesafeye veri gönderebilen bir kablosuz iletişim protokolüdür. Akıllı şehirler, tarım ve endüstriyel IoT uygulamaları için tasarlanmıştır."
+                  },
+                  {
+                    "title": "Zigbee / Z-Wave / Thread",
+                    "description": "Akıllı ev otomasyonu gibi uygulamalarda, düşük güç tüketimiyle çalışan cihazların birbiriyle bir 'mesh' (örgü) ağ kurarak haberleşmesini sağlayan protokollerdir."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "🐧 Gömülü Linux (Embedded Linux)",
+            "description": "Genel amaçlı Linux dağıtımlarının (Ubuntu, Fedora vb.) aksine, belirli bir donanım için optimize edilmiş, sadece gerekli bileşenleri içeren özel Linux sistemleri oluşturma alanıdır. Bu, kaynakları kısıtlı olan gömülü cihazlarda (akıllı ev aletleri, endüstriyel kontrolcüler, otomotiv sistemleri) Linux'un gücünü ve esnekliğini kullanmayı sağlar.",
+            "children": [
+              {
+                "title": "Temel Bileşenler",
+                "description": "Bir gömülü Linux sistemi üç ana bileşenden oluşur:",
+                "children": [
+                  {
+                    "title": "Bootloader (Önyükleyici)",
+                    "subtitle": "U-Boot",
+                    "description": "Cihaz açıldığında çalışan ilk yazılımdır. Donanımı başlatır ve Linux çekirdeğini belleğe yükleyip çalıştırır. <strong>U-Boot (Universal Boot Loader)</strong>, bu alandaki endüstri standardıdır."
+                  },
+                  {
+                    "title": "Linux Kernel (Çekirdek)",
+                    "description": "İşletim sisteminin kalbidir. Donanım kaynaklarını yönetir ve uygulamalar için temel servisleri sağlar. Gömülü sistemler için genellikle belirli donanım sürücüleri (drivers) ve yamalar (patches) ile özelleştirilir."
+                  },
+                  {
+                    "title": "Root Filesystem (Kök Dosya Sistemi)",
+                    "description": "Çekirdek çalıştıktan sonra sisteme bağlanan, uygulamaları, kütüphaneleri ve konfigürasyon dosyalarını içeren dosya hiyerarşisidir. Gömülü sistemlerde boyutu minimize etmek için özenle oluşturulur."
+                  }
+                ]
+              },
+              {
+                "title": "Derleme Sistemleri (Build Systems)",
+                "description": "Yukarıdaki tüm bileşenleri (bootloader, kernel, rootfs) kaynak kodundan otomatik olarak derleyip, cihaza yüklenebilecek son bir imaj dosyası oluşturan karmaşık araç setleridir.",
+                "children": [
+                  {
+                    "title": "Yocto Project",
+                    "description": "Özelleştirilmiş gömülü Linux dağıtımları oluşturmak için bir iş birliği projesi ve endüstri standardıdır. Bir dağıtım değil, kendi dağıtımınızı yapmanız için bir 'tarifler' ve araçlar bütünüdür. <strong>Poky</strong>, Yocto Project için bir referans derleme sistemidir. <strong>BitBake</strong>, bu tarifleri (recipes) işleyen ve derleme sürecini yürüten motordur. <strong>OpenEmbedded</strong> ise bu tariflerin bulunduğu geniş bir katman koleksiyonudur."
+                  },
+                  {
+                    "title": "Buildroot",
+                    "description": "Yocto'ya göre daha basit ve kullanımı daha kolay bir alternatiftir. Özellikle küçük ve basit sistemler için hızlı bir şekilde kök dosya sistemi oluşturmayı hedefler."
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "🔩 Otomotiv Yazılımı ve Standartları",
+        "description": "Modern araçlardaki yüzlerce Elektronik Kontrol Ünitesinin (ECU) birbiriyle uyumlu ve güvenli bir şekilde çalışmasını sağlayan standartlar ve metodolojiler bütünüdür. Bu alan, yazılımın donanımdan soyutlanmasını, yeniden kullanılabilirliğini ve güvenilirliğini hedefler.",
+        "children": [
+          {
+            "title": "AUTOSAR (Automotive Open System Architecture)",
+            "description": "Otomotiv yazılım mimarisi için küresel bir standarttır. Yazılımı katmanlara ayırır: Uygulama Katmanı (Application Layer), Çalışma Zamanı Ortamı (RTE) ve Temel Yazılım (BSW). Bu sayede, farklı tedarikçiler tarafından geliştirilen yazılım bileşenlerinin farklı ECU'larda sorunsuzca çalışması sağlanır."
+          },
+          {
+            "title": "Fonksiyonel Güvenlik (Functional Safety) - ISO 26262",
+            "description": "Otomotiv sistemlerindeki elektrik ve elektronik sistemlerin arızalanması durumunda ortaya çıkabilecek tehlikeleri yönetmek için uluslararası bir standarttır. Hava yastığı, fren sistemi gibi kritik bileşenlerin yazılımları, bu standarda göre geliştirilir ve test edilir. ASIL (Automotive Safety Integrity Level) derecelendirmesi, bir sistemin ne kadar kritik olduğunu belirtir."
+          },
+          {
+            "title": "MISRA C/C++",
+            "description": "Otomotiv gibi güvenlik kritik sistemlerde C ve C++ dillerinin daha güvenli ve güvenilir bir şekilde kullanılması için geliştirilmiş bir dizi kodlama kuralıdır. Tehlikeli olabilecek dil özelliklerinin (örn: dinamik bellek yönetimi, belirsiz davranışlar) kullanımını kısıtlar veya yasaklar."
+          },
+          {
+            "title": "Statik Kod Analizi Araçları",
+            "subtitle": "Polyspace, Klocwork, QAC",
+            "description": "Yazılan kodu çalıştırmadan, otomatik olarak analiz ederek MISRA kurallarına uyumluluğu, potansiyel hataları (örn: buffer overflow, null pointer) ve güvenlik zafiyetlerini bulan araçlardır. ISO 26262 uyumluluğu için zorunludurlar."
+          }
+        ]
+      },
+      {
+        "title": "🚗 Otomotiv ve Gömülü Sistem Test/Simülasyon Araçları",
+        "description": "Özellikle otomotiv sektöründeki Elektronik Kontrol Ünitelerinin (ECU) ve ağlarının (CAN, LIN, Ethernet) geliştirilmesi, simülasyonu ve testi için kullanılan özel yazılım ve donanım araçlarıdır.",
+        "children": [
+          {
+            "title": "Vector CANoe / CANalyzer",
+            "description": "Otomotiv endüstrisinde ECU'ların ve ağların analizi, simülasyonu ve testi için de-facto standart haline gelmiş bir araçtır. CAN, LIN, FlexRay ve Automotive Ethernet gibi tüm yaygın protokolleri destekler."
+          },
+          {
+            "title": "dSPACE / ETAS",
+            "description": "<strong>dSPACE</strong> ve <strong>ETAS (Bosch)</strong>, HIL (Hardware-in-the-Loop) simülasyon sistemleri konusunda lider firmalardır. Bu sistemler, gerçek bir ECU'yu, sanki bir araç içindeymiş gibi sanal bir ortamda (motoru, sensörleri, diğer ECU'ları simüle ederek) test etmeyi sağlar. Bu, fiziksel prototipler olmadan test yapmayı mümkün kılar."
+          },
+          {
+            "title": "National Instruments (NI)",
+            "description": "<strong>LabVIEW</strong> (grafiksel programlama ortamı) ve <strong>VeriStand</strong> (gerçek zamanlı test yazılımı) gibi araçlarıyla, HIL ve test otomasyonu alanında dSPACE ve ETAS'a rakip olan bir diğer büyük oyuncudur. Modüler donanım platformları (PXI) ile esnek test sistemleri kurmayı sağlar."
+          }
+        ]
+      },
+      {
+        "title": "Yazılım Mimarisi ve Mühendisliği (Software Architecture & Engineering)",
         "description": "Bir bina yaparken mimari plana ihtiyaç duyulması gibi, büyük bir yazılım projesi yaparken de bir plana ihtiyaç duyulur. Yazılım mimarisi, projenin temel yapısını, bileşenlerin nasıl organize edileceğini ve birbiriyle nasıl iletişim kuracağını belirler. İyi bir mimari, projenin performanslı, güvenli, ölçeklenebilir ve gelecekte kolayca değiştirilebilir olmasını sağlar. Kötü bir mimari ise projenin çökmesine veya bakımının imkansız hale gelmesine neden olur.",
         "children": [
           {
@@ -218,14 +702,14 @@
             "description": "Bunlar, iyi, sürdürülebilir ve anlaşılır yazılımlar oluşturmak için evrensel olarak kabul görmüş kurallardır. <strong>SOLID</strong>, nesne yönelimli tasarımın 5 temel prensibini içerir. <strong>KISS (Keep It Simple, Stupid)</strong>, gereksiz karmaşıklıktan kaçınmayı ve en basit çözümün genellikle en iyisi olduğunu savunur. <strong>DRY (Don't Repeat Yourself)</strong>, kod tekrarını önlemeyi hedefler; bir mantık sadece tek bir yerde tanımlanmalıdır. <strong>YAGNI (You Ain't Gonna Need It)</strong>, \"ileride belki lazım olur\" diyerek henüz ihtiyaç duyulmayan özellikleri eklememek gerektiğini söyler. Bu prensipler, kodun bakım maliyetini düşürür ve takım çalışmasını kolaylaştırır."
           },
           {
-            "title": "CI/CD Sistemleri",
-            "subtitle": "Jenkins, GitHub Actions, ArgoCD",
-            "description": "<strong>CI/CD (Continuous Integration / Continuous Deployment - Sürekli Entegrasyon / Sürekli Dağıtım)</strong>, yazılım geliştirme sürecini otomatize etme pratiğidir. Geliştiriciler kodu her güncellediğinde, <strong>Jenkins</strong> veya <strong>GitHub Actions</strong> gibi araçlar bu kodu otomatik olarak test eder, derler ve başarılı olursa canlı ortama (veya test ortamına) dağıtır. Bu, hataların erken fark edilmesini, geliştirme hızının artmasını ve manuel işlemlerden kaynaklanan risklerin azalmasını sağlar. <strong>ArgoCD</strong>, özellikle Kubernetes ortamları için tasarlanmış modern bir CD aracıdır."
+            "title": "Süreç Yönetim Çerçeveleri",
+            "subtitle": "ITIL",
+            "description": "<strong>ITIL (Information Technology Infrastructure Library)</strong>, BT hizmet yönetimini (ITSM) standartlaştırmak için kullanılan bir dizi en iyi uygulama ve süreç çerçevesidir. Olay Yönetimi (Incident Management), Değişiklik Yönetimi (Change Management) ve Problem Yönetimi gibi süreçleri tanımlayarak BT operasyonlarının daha verimli ve kontrollü yürütülmesini sağlar."
           },
           {
             "title": "Containerization",
             "subtitle": "Docker, Kubernetes, Helm",
-            "description": "<strong>Docker</strong>, bir uygulamayı tüm bağımlılıklarıyla (kütüphaneler, ayarlar vb.) birlikte \"konteyner\" adı verilen paketlere koyar. Bu sayede uygulama, \"benim bilgisayarımda çalışıyordu\" sorununu ortadan kaldırarak her ortamda (geliştirici bilgisayarı, test sunucusu, canlı sunucu) aynı şekilde çalışır. <strong>Kubernetes (K8s)</strong>, bu konteynerleri binlerce sunucu üzerinde yönetmek, otomatik olarak ölçeklendirmek ve bir sunucu çöktüğünde uygulamayı başka bir sunucuda yeniden başlatmak gibi karmaşık işleri yapan bir \"orkestrasyon\" aracıdır. <strong>Helm</strong>, Kubernetes uygulamalarını paketlemeyi ve yönetmeyi kolaylaştıran bir paket yöneticisidir."
+            "description": "<strong>Docker</strong>, bir uygulamayı tüm bağımlılıklarıyla (kütüphaneler, ayarlar vb.) birlikte \"konteyner\" adı verilen paketlere koyar. Bu sayede uygulama, \"benim bilgisayarımda çalışıyordu\" sorununu ortadan kaldırarak her ortamda (geliştirici bilgisayarı, test sunucusu, canlı sunucu) aynı şekilde çalışır. <strong>Kubernetes (K8s)</strong>, bu konteynerleri binlerce sunucu üzerinde yönetmek, otomatik olarak ölçeklendirmek ve bir sunucu çöktüğünde uygulamayı başka bir sunucuda yeniden başlatmak gibi karmaşık işleri yapan bir \"orkestrasyon\" (orchestration) aracıdır. <strong>Helm</strong>, Kubernetes uygulamalarını paketlemeyi ve yönetmeyi kolaylaştıran bir paket yöneticisidir."
           },
           {
             "title": "Event-driven, CQRS, Event Sourcing",
@@ -245,9 +729,9 @@
             "description": "Bu üç kavram, modern sistemlerin temel gereksinimleridir. <strong>High Availability (Yüksek Erişilebilirlik)</strong>, sistemin kesintisiz çalışmasını sağlamaktır (örn: %99.99 uptime). <strong>Scalability (Ölçeklenebilirlik)</strong>, artan kullanıcı yükünü karşılamak için sistemin kapasitesini (yatayda yeni sunucular ekleyerek veya dikeyde mevcut sunucuyu güçlendirerek) artırabilme yeteneğidir. <strong>Fault Tolerance (Hata Toleransı)</strong>, sistemin bir veya daha fazla bileşeni arızalandığında bile çalışmaya devam edebilmesidir. Bu kavramlar, kullanıcıların uygulamaya her zaman güvenilir bir şekilde erişebilmesini garanti altına almak için kritiktir."
           },
           {
-            "title": "Secure Coding ve OWASP",
-            "subtitle": "Güvenli Kodlama",
-            "description": "Yazılımı sadece işlevsel değil, aynı zamanda siber saldırılara karşı dayanıklı bir şekilde geliştirme pratiğidir. <strong>OWASP (Open Web Application Security Project)</strong>, web uygulamalarında en sık karşılaşılan güvenlik risklerini (örn: SQL Injection, XSS) ve bunlara karşı nasıl kod yazılması gerektiğini anlatan küresel bir standarttır. Güvenli kodlama, güvenlik zafiyetlerini daha en başından, kod yazılırken engellemeyi hedefler. Bu, sonradan yapılacak pahalı ve zorlu güvenlik düzeltmelerini önler."
+            "title": "Güvenli Kodlama (Secure Coding) ve OWASP",
+            "subtitle": "S-SDLC, Güvenli Kodlama",
+            "description": "Yazılımı sadece işlevsel değil, aynı zamanda siber saldırılara karşı dayanıklı bir şekilde geliştirme pratiğidir. <strong>S-SDLC (Secure Software Development Lifecycle)</strong>, yazılım geliştirme yaşam döngüsünün her aşamasına (tasarım, kodlama, test, dağıtım) güvenlik kontrollerini entegre etme pratiğidir. <strong>OWASP (Open Web Application Security Project)</strong>, web uygulamalarında en sık karşılaşılan güvenlik risklerini (örn: SQL Injection, XSS) ve bunlara karşı nasıl kod yazılması gerektiğini anlatan küresel bir standarttır. Güvenli kodlama, güvenlik zafiyetlerini daha en başından, kod yazılırken engellemeyi hedefler. Bu, sonradan yapılacak pahalı ve zorlu güvenlik düzeltmelerini önler."
           }
         ]
       },
@@ -299,18 +783,103 @@
         ]
       },
       {
-        "title": "Platforma Özgü Mimariler",
-        "description": "Temel kavramlar evrensel olsa da, Windows ve Unix/Linux gibi işletim sistemi aileleri bu kavramları farklı şekillerde uygular ve kendilerine özgü ek yapılar sunarlar.",
+        "title": "İşletim Sistemi Aileleri ve Mimarileri",
+        "description": "Temel kavramlar evrensel olsa da, farklı işletim sistemi aileleri bu kavramları kendilerine özgü mimarilerle uygular ve geliştiricilere farklı API setleri ve araçlar sunar.",
         "children": [
           {
             "title": "Windows Mimarisi",
-            "subtitle": "WinAPI, DLL, Kayıt Defteri (Registry)",
-            "description": "Windows, uygulamaların işletim sistemi servislerine erişmek için kullandığı <strong>WinAPI (Windows API)</strong> adlı geniş bir fonksiyon seti sunar. <strong>DLL (Dynamic-Link Library)</strong> dosyaları, birden fazla program tarafından paylaşılabilen kod ve veri içeren kütüphanelerdir. Bu, kod tekrarını önler ve bellek kullanımını azaltır. <strong>Kayıt Defteri (Registry)</strong>, sistem ve uygulama ayarlarının saklandığı hiyerarşik bir veritabanıdır."
+            "subtitle": "WinAPI, DLL, Kayıt Defteri (Registry), NT Çekirdeği",
+            "description": "Windows, uygulamaların işletim sistemi servislerine erişmek için kullandığı <strong>WinAPI (Windows API)</strong> adlı geniş bir fonksiyon seti sunar. <strong>DLL (Dynamic-Link Library)</strong> dosyaları, birden fazla program tarafından paylaşılabilen kod ve veri içeren kütüphanelerdir. <strong>Kayıt Defteri (Registry)</strong>, sistem ve uygulama ayarlarının saklandığı hiyerarşik bir veritabanıdır. Hibrit bir yapıya sahip olan <strong>NT Çekirdeği</strong> üzerine kuruludur ve özellikle kurumsal ortamlar ve masaüstü bilgisayarlarda yaygındır."
           },
           {
-            "title": "Linux/Unix Mimarisi",
-            "subtitle": "Kabuk (Shell), Sistem Çağrıları (Syscalls), 'Her Şey Bir Dosyadır'",
-            "description": "Unix felsefesinin temelinde \"her şey bir dosyadır\" prensibi yatar. Donanım aygıtları, ağ bağlantıları ve süreçler bile dosya sistemi üzerinden erişilebilen özel dosyalar olarak temsil edilir. Kullanıcılar, <strong>Kabuk (Shell)</strong> (örn: Bash) adı verilen bir komut satırı yorumlayıcısı aracılığıyla işletim sistemiyle etkileşime girer. Uygulamalar ise çekirdek servislerini kullanmak için <strong>Sistem Çağrıları (System Calls)</strong> (örn: `fork()`, `exec()`, `open()`) adı verilen standart bir arayüzü kullanır. Kabuk, aslında bu sistem çağrılarını kullanan bir kullanıcı programıdır."
+            "title": "Linux Mimarisi",
+            "subtitle": "Monolitik Çekirdek, 'Her Şey Bir Dosyadır', POSIX, System Calls",
+            "description": "Linux, açık kaynaklı, Unix-benzeri bir işletim sistemi çekirdeğidir. Felsefesinin temelinde \"her şey bir dosyadır\" prensibi yatar; donanım aygıtları, ağ bağlantıları ve süreçler bile dosya olarak temsil edilir. <strong>Monolitik</strong> bir çekirdek yapısına sahiptir ama modüler tasarımı sayesinde esnektir. <strong>POSIX</strong> standardına büyük ölçüde uyumludur, bu da Unix sistemleri için yazılan birçok yazılımın Linux'ta da çalışmasını sağlar. Uygulamalar, çekirdek servislerini kullanmak için <strong>Sistem Çağrıları (System Calls)</strong> (örn: `fork()`, `exec()`, `open()`) kullanır. Sunucu, gömülü sistemler ve bulut altyapılarında dominant bir konuma sahiptir.",
+            "children": [
+              {
+                "title": "Red Hat Tabanlı Dağıtımlar (RPM)",
+                "description": "Bu aile, özellikle kurumsal ortamlarda kararlılık, güvenlik ve uzun süreli destek (LTS) odaklıdır. <strong>RPM</strong> paket yönetim sistemini kullanırlar. <strong>Red Hat Enterprise Linux (RHEL)</strong>, bankacılık, telekomünikasyon ve finans gibi kritik sektörlerde yaygın olarak tercih edilir çünkü ticari destek, sertifikasyonlar (örn: Oracle, SAP) ve öngörülebilir sürüm döngüleri sunar. Bu, büyük şirketler için sistemlerin yıllarca güvenli ve stabil çalışacağı anlamına gelir. <strong>RHCSA</strong> ve <strong>RHCE</strong> gibi sertifikasyonlar bu alandaki yetkinliği kanıtlar.",
+                "children": [
+                  {
+                    "title": "Red Hat Enterprise Linux (RHEL)",
+                    "subtitle": "Kurumsal standart, ticari destek"
+                  },
+                  {
+                    "title": "Rocky Linux / AlmaLinux",
+                    "subtitle": "RHEL uyumlu, topluluk destekli alternatifler"
+                  },
+                  {
+                    "title": "CentOS",
+                    "subtitle": "Geçmişte popüler RHEL alternatifi, şimdi upstream"
+                  },
+                  {
+                    "title": "Fedora",
+                    "subtitle": "Yenilikçi, RHEL'in topluluk sürümü"
+                  }
+                ]
+              },
+              {
+                "title": "Debian Tabanlı Dağıtımlar (DEB)",
+                "description": "Bu aile, geniş paket arşivi, güçlü topluluk desteği ve kararlılığı ile bilinir. <strong>DEB</strong> paket yönetim sistemini (apt) kullanırlar. <strong>Debian</strong>, en eski ve en kararlı dağıtımlardan biridir. <strong>Ubuntu</strong>, Debian temel alınarak geliştirilmiş olup, kullanım kolaylığı ve masaüstü/sunucu pazarındaki popülerliği ile öne çıkar. Türkiye'nin yerli dağıtımı olan <strong>Pardus</strong> da Debian tabanlıdır.",
+                "children": [
+                  {
+                    "title": "Debian",
+                    "subtitle": "Kararlılık ve geniş paket arşivi"
+                  },
+                  {
+                    "title": "Ubuntu",
+                    "subtitle": "Popüler, kullanıcı dostu sunucu ve masaüstü"
+                  },
+                  {
+                    "title": "Pardus",
+                    "subtitle": "Türkiye'nin yerli dağıtımı"
+                  }
+                ]
+              },
+              {
+                "title": "Diğer Popüler Dağıtımlar",
+                "description": "Red Hat ve Debian aileleri dışında, farklı felsefelere sahip çok sayıda popüler ve etkili dağıtım bulunmaktadır.",
+                "children": [
+                  {
+                    "title": "Arch Linux",
+                    "subtitle": "Minimalist, 'rolling-release', KISS felsefesi",
+                    "description": "<strong>KISS (Keep It Simple, Stupid)</strong> felsefesini benimseyen, minimalist bir dağıtımdır. Kullanıcıya sistemi en baştan kendi isteğine göre kurma özgürlüğü tanır. <strong>Rolling-release</strong> modeli sayesinde sürekli güncellenir ve her zaman en yeni paketleri sunar. Kapsamlı dokümantasyonu (Arch Wiki) ile ünlüdür."
+                  }
+                ]
+              },
+              {
+                "title": "Masaüstü Ortamları (Desktop Environments)",
+                "description": "Linux aslında sadece bir çekirdektir. Gördüğümüz pencereler, menüler ve ikonlar gibi grafiksel kullanıcı arayüzü (GUI), Masaüstü Ortamı tarafından sağlanır. Farklı masaüstü ortamları, farklı kullanıcı deneyimleri, kaynak tüketimleri ve özelleştirme seviyeleri sunar. Birçok dağıtım, bu ortamlardan birini seçerek veya birkaçını seçenek olarak sunarak gelir.",
+                "children": [
+                  {
+                    "title": "GNOME",
+                    "subtitle": "Modern, sade ve kullanıcı dostu arayüz"
+                  },
+                  {
+                    "title": "KDE Plasma",
+                    "subtitle": "Yüksek derecede özelleştirilebilir ve zengin özellikli"
+                  },
+                  {
+                    "title": "XFCE",
+                    "subtitle": "Hafif, hızlı ve kaynak dostu"
+                  },
+                  {
+                    "title": "Cinnamon / MATE / Budgie",
+                    "subtitle": "Diğer popüler alternatifler"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "macOS Mimarisi",
+            "subtitle": "XNU (Hibrit Çekirdek), Cocoa/SwiftUI, Metal, UNIX Sertifikalı",
+            "description": "macOS, Apple'ın geliştirdiği, <strong>UNIX sertifikalı</strong> bir işletim sistemidir. Kalbinde, Mach mikroçekirdek bileşenleri ile BSD (Unix) servislerini birleştiren <strong>XNU</strong> adlı hibrit bir çekirdek bulunur. Bu yapı, hem mikroçekirdeğin esnekliğini hem de monolitik çekirdeğin performansını sunar. Geliştiriciler, <strong>Cocoa</strong> (Objective-C/Swift için) ve <strong>SwiftUI</strong> gibi modern, yüksek seviyeli API'ler aracılığıyla zengin kullanıcı arayüzleri oluşturur. Grafik işlemleri için <strong>Metal</strong> API'si, donanıma doğrudan ve yüksek performanslı erişim sağlar. Güçlü Unix temeli ve kullanıcı dostu arayüzü sayesinde özellikle yazılım geliştirme ve yaratıcı profesyoneller arasında popülerdir."
+          },
+          {
+            "title": "Diğer Önemli Aileler ve Türler",
+            "subtitle": "Android, BSD, RTOS",
+            "description": "Windows, Linux ve macOS'in yanı sıra, belirli alanlarda uzmanlaşmış başka önemli işletim sistemi aileleri de mevcuttur. <strong>Android</strong>, Linux çekirdeği üzerine inşa edilmiş ancak kendi çalışma zamanı (ART) ve kütüphaneleriyle mobil dünyaya hakimdir. <strong>BSD Ailesi (FreeBSD, OpenBSD)</strong>, farklı lisanslama modeli ve kararlılığı ile bilinen bir diğer Unix koludur. <strong>RTOS (Real-Time Operating Systems)</strong> ise zaman-kritik görevlerin (otomotiv, havacılık) belirli bir süre içinde garantiyle tamamlanmasını sağlayan özel amaçlı sistemlerdir."
           }
         ]
       },
@@ -322,6 +891,11 @@
             "title": "Linux/Unix Yönetimi",
             "subtitle": "Bash, Systemd, Cron, SSH, Dosya İzinleri",
             "description": "Sunucu dünyasının büyük çoğunluğuna hakim olan Linux (Debian, CentOS, Ubuntu vb.) ve Unix benzeri sistemlerin yönetimi. <strong>Bash/Shell scripting</strong> ile otomasyon, <strong>Systemd</strong> ile servis yönetimi, <strong>Cron</strong> ile zamanlanmış görevler, <strong>SSH</strong> ile güvenli uzaktan erişim ve dosya sistemi izinleri (chmod, chown) gibi konular temel yetkinliklerdir."
+          },
+          {
+            "title": "Uygulama Sunucuları",
+            "subtitle": "WebLogic, WebSphere, JBoss",
+            "description": "<strong>Uygulama Sunucuları (Application Servers)</strong>, özellikle Java EE tabanlı kurumsal uygulamaların çalışması için gerekli olan servisleri (veritabanı bağlantısı, mesajlaşma, işlem yönetimi vb.) sağlayan orta katman yazılımlarıdır. <strong>Oracle WebLogic</strong>, <strong>IBM WebSphere</strong> ve <strong>Red Hat JBoss/WildFly</strong> bu alandaki en yaygın örneklerdir."
           },
           {
             "title": "Windows Server Yönetimi",
@@ -344,35 +918,70 @@
             "title": "Containerization & Orchestration",
             "description": "<strong>Docker</strong>, bir uygulamayı tüm bağımlılıklarıyla birlikte \"konteyner\" adı verilen paketlere koyar. <strong>Kubernetes (K8s)</strong> ise bu konteynerleri binlerce sunucu üzerinde yönetmek, otomatik olarak ölçeklendirmek ve bir sunucu çöktüğünde uygulamayı başka bir sunucuda yeniden başlatmak gibi karmaşık işleri yapan bir \"orkestrasyon\" aracıdır.",
             "children": [
-              { "title": "Docker / Podman", "subtitle": "Containerization" },
-              { "title": "Kubernetes / OpenShift", "subtitle": "Orchestration" }
+              {
+                "title": "Docker / Podman",
+                "subtitle": "Containerization",
+                "description": "<strong>Docker</strong>, uygulamaları bağımlılıklarıyla birlikte 'konteyner' adı verilen izole paketlere koyarak 'benim makinemde çalışıyordu' sorununu çözer. <strong>Podman</strong> ise Docker'a modern, daemon-less (arka plan servisi gerektirmeyen) bir alternatiftir."
+              },
+              {
+                "title": "Kubernetes / OpenShift",
+                "subtitle": "Orchestration",
+                "description": "<strong>Kubernetes (K8s)</strong>, konteynerleştirilmiş uygulamaların dağıtımını, ölçeklendirilmesini ve yönetimini otomatikleştiren açık kaynaklı bir platformdur. <strong>OpenShift</strong>, Red Hat tarafından geliştirilen, Kubernetes üzerine inşa edilmiş kurumsal bir konteyner platformudur."
+              }
             ]
           },
           {
             "title": "CI/CD (Sürekli Entegrasyon/Dağıtım)",
             "description": "Yazılım geliştirme sürecini otomatize etme pratiğidir. Geliştiriciler kodu her güncellediğinde, bu araçlar kodu otomatik olarak test eder, derler ve başarılı olursa canlı ortama dağıtır.",
             "children": [
-              { "title": "GitHub Actions" },
-              { "title": "GitLab CI" },
-              { "title": "Jenkins / CircleCI / Travis CI" }
+              {
+                "title": "GitHub Actions",
+                "description": "Doğrudan GitHub repositorileri içine entegre edilmiş, kod derleme, test etme ve dağıtma gibi iş akışlarını otomatikleştirmeyi sağlayan bir CI/CD platformudur."
+              },
+              {
+                "title": "GitLab CI",
+                "description": "GitLab platformunun içine yerleşik olarak gelen güçlü bir CI/CD aracıdır. Tek bir arayüz üzerinden kod yönetimi ve otomasyonu birleştirir."
+              },
+              {
+                "title": "Jenkins / CircleCI / Travis CI",
+                "description": "<strong>Jenkins</strong>, çok geniş eklenti ekosistemine sahip, son derece esnek ve en köklü CI/CD otomasyon sunucusudur. <strong>CircleCI</strong> ve <strong>Travis CI</strong> ise bulut tabanlı, kullanımı daha kolay modern alternatiflerdir."
+              }
             ]
           },
           {
             "title": "Infrastructure as Code (IaC)",
             "description": "Altyapıyı (sunucular, ağlar, veritabanları) manuel olarak tıklayarak kurmak yerine, kod yazarak (örn: Terraform) veya konfigürasyon dosyalarıyla (örn: Ansible) tanımlama pratiğidir. Bu sayede altyapı versiyonlanabilir, yeniden kullanılabilir ve tutarlı bir şekilde kurulabilir.",
             "children": [
-              { "title": "Terraform" },
-              { "title": "Ansible / Chef / Puppet" },
-              { "title": "Pulumi" }
+              {
+                "title": "Terraform",
+                "description": "Bulut sağlayıcısından bağımsız olarak (AWS, Azure, GCP vb.) altyapı kaynaklarını deklaratif konfigürasyon dosyalarıyla tanımlamayı, versiyonlamayı ve yönetmeyi sağlayan bir araçtır."
+              },
+              {
+                "title": "Ansible / Chef / Puppet",
+                "description": "Bunlar <strong>Konfigürasyon Yönetimi (Configuration Management)</strong> araçlarıdır. Mevcut sunucuların durumunu (yüklü paketler, servisler, ayar dosyaları) tanımlamak ve bu durumu korumak için kullanılırlar. Ansible, ajansız yapısı ve basitliği ile öne çıkar."
+              },
+              {
+                "title": "Pulumi",
+                "description": "Terraform'a modern bir alternatiftir. Altyapıyı HCL yerine TypeScript, Python, Go gibi genel amaçlı programlama dillerini kullanarak kodlamaya olanak tanır."
+              }
             ]
           },
           {
             "title": "Cloud Platforms",
             "description": "Kendi fiziksel sunucularınızı almak ve yönetmek yerine, internet üzerinden sanal sunucu, veritabanı, depolama gibi bilişim hizmetlerini kiralamanızı sağlayan platformlardır.",
             "children": [
-              { "title": "AWS / Azure / Google Cloud / DigitalOcean" },
-              { "title": "Firebase / Supabase / Vercel / Netlify" },
-              { "title": "Render / Cloudflare Pages" }
+              {
+                "title": "AWS / Azure / Google Cloud / DigitalOcean",
+                "description": "<strong>AWS (Amazon Web Services)</strong>, <strong>Azure (Microsoft)</strong> ve <strong>GCP (Google Cloud Platform)</strong>, yüzlerce hizmet sunan en büyük üç bulut sağlayıcısıdır. <strong>DigitalOcean</strong> ise daha basit ve geliştirici dostu bir alternatif sunar."
+              },
+              {
+                "title": "Firebase / Supabase / Vercel / Netlify",
+                "description": "Bunlar, geliştiricilerin altyapı yönetimiyle uğraşmadan hızlıca uygulama geliştirmesini ve dağıtmasını sağlayan modern platformlardır. <strong>Firebase/Supabase</strong> backend hizmetleri (veritabanı, kimlik doğrulama) sunarken, <strong>Vercel/Netlify</strong> özellikle frontend uygulamalarını dağıtmak için optimize edilmiştir."
+              },
+              {
+                "title": "Render / Cloudflare Pages",
+                "description": "Vercel ve Netlify'a benzer şekilde, modern web uygulamalarını ve statik siteleri kolayca dağıtmak için kullanılan diğer popüler platformlardır."
+              }
             ]
           },
           {
@@ -395,46 +1004,119 @@
             "title": "SQL Veritabanları",
             "description": "Verileri tablolar, satırlar ve sütunlar halinde yapılandırılmış bir şekilde saklayan ilişkisel veritabanlarıdır.",
             "children": [
-              { "title": "MySQL" },
-              { "title": "PostgreSQL" },
-              { "title": "MariaDB" },
-              { "title": "SQLite" },
-              { "title": "MS SQL Server / Oracle" }
+              {
+                "title": "MySQL",
+                "description": "Dünyanın en popüler açık kaynaklı ilişkisel veritabanıdır. Özellikle web uygulamaları (LAMP stack) için yaygın olarak kullanılır."
+              },
+              {
+                "title": "PostgreSQL",
+                "description": "Genişletilebilirliği ve standartlara uyumu ile bilinen, gelişmiş özelliklere (JSONB, coğrafi veriler) sahip güçlü bir açık kaynaklı ilişkisel veritabanıdır."
+              },
+              {
+                "title": "MariaDB",
+                "description": "MySQL'in orijinal geliştiricileri tarafından oluşturulan, MySQL ile yüksek uyumluluğa sahip, topluluk tarafından yönlendirilen bir veritabanı çatalıdır (fork)."
+              },
+              {
+                "title": "SQLite",
+                "description": "Sunucu gerektirmeyen, tek bir dosya içinde çalışan, hafif bir veritabanıdır. Mobil uygulamalar ve küçük masaüstü uygulamaları için idealdir."
+              },
+              {
+                "title": "MS SQL Server / Oracle",
+                "description": "Özellikle büyük kurumsal ortamlarda kullanılan, ticari, güçlü ve zengin özelliklere sahip ilişkisel veritabanı yönetim sistemleridir."
+              }
             ]
           },
           {
             "title": "NoSQL Veritabanları",
             "description": "İlişkisel olmayan, esnek veri modelleri sunan veritabanlarıdır (örn: doküman, anahtar-değer, graf).",
             "children": [
-              { "title": "MongoDB" },
-              { "title": "Redis" },
-              { "title": "Cassandra" },
-              { "title": "CouchDB" },
-              { "title": "DynamoDB (AWS)" }
+              {
+                "title": "MongoDB",
+                "description": "JSON benzeri dokümanları saklayan, esnek şema yapısıyla bilinen en popüler doküman tabanlı NoSQL veritabanıdır."
+              },
+              {
+                "title": "Redis",
+                "description": "Verileri bellekte (in-memory) tutan, çok hızlı bir anahtar-değer (key-value) deposudur. Önbellekleme (caching), oturum yönetimi ve mesaj kuyrukları için yaygın olarak kullanılır."
+              },
+              {
+                "title": "Cassandra",
+                "description": "Yüksek erişilebilirlik ve ölçeklenebilirlik için tasarlanmış, dağıtık bir NoSQL veritabanıdır. Büyük miktarda veri yazma işlemleri için idealdir."
+              },
+              {
+                "title": "CouchDB",
+                "description": "JSON dokümanlarını kullanan, özellikle çevrimdışı çalışma ve mobil cihazlarla senkronizasyon yetenekleriyle öne çıkan bir veritabanıdır."
+              },
+              {
+                "title": "DynamoDB (AWS)",
+                "description": "Amazon Web Services tarafından sunulan, tam yönetilen, yüksek performanslı bir NoSQL anahtar-değer ve doküman veritabanıdır."
+              }
             ]
           },
           {
             "title": "Graph Veritabanları",
+            "description": "Verileri ve aralarındaki ilişkileri düğümler (nodes) ve kenarlar (edges) olarak modelleyen veritabanlarıdır. Sosyal ağlar, tavsiye motorları ve dolandırıcılık tespiti gibi ilişkisel verilerin yoğun olduğu senaryolar için idealdir.",
             "children": [
-              { "title": "Neo4j" },
-              { "title": "ArangoDB" },
-              { "title": "Dgraph" }
+              {
+                "title": "Neo4j",
+                "description": "En popüler graf veritabanıdır. Cypher adında deklaratif bir sorgu diline sahiptir ve ilişkisel sorgularda çok yüksek performans sunar."
+              },
+              {
+                "title": "ArangoDB",
+                "description": "Çok modelli (multi-model) bir veritabanıdır; tek bir sistem içinde doküman, graf ve anahtar-değer modellerini destekler."
+              },
+              {
+                "title": "Dgraph",
+                "description": "Google tarafından tasarlanmış, yatay olarak ölçeklenebilen, dağıtık bir graf veritabanıdır."
+              }
             ]
           },
           {
             "title": "ORM / ODM Katmanları",
             "description": "Veritabanı sorgularını doğrudan yazmak yerine, programlama dilindeki nesneler aracılığıyla veritabanı işlemleri yapmayı sağlayan kütüphanelerdir.",
             "children": [
-              { "title": "Sequelize / Prisma / TypeORM (Node.js)" },
-              { "title": "Eloquent (Laravel)" },
-              { "title": "Django ORM" },
-              { "title": "Mongoose (MongoDB)" }
+              {
+                "title": "Sequelize / Prisma / TypeORM (Node.js)",
+                "description": "Node.js ekosisteminde SQL ve NoSQL veritabanlarıyla etkileşim kurmak için kullanılan popüler ORM ve ODM araçlarıdır. Prisma, tip güvenliği sağlayan modern bir alternatiftir."
+              },
+              {
+                "title": "Eloquent (Laravel)",
+                "description": "Laravel framework'ünün içine yerleşik olarak gelen, kullanımı kolay ve güçlü bir ORM'dir."
+              },
+              {
+                "title": "Django ORM",
+                "description": "Django framework'ünün ayrılmaz bir parçası olan, güçlü ve olgun bir ORM'dir."
+              },
+              {
+                "title": "Mongoose (MongoDB)",
+                "description": "Node.js uygulamalarında MongoDB ile çalışmayı kolaylaştıran, şema tabanlı bir modelleme (ODM) kütüphanesidir."
+              }
             ]
           },
           {
             "title": "Arama ve Analitik Veritabanları",
             "subtitle": "Elasticsearch, ClickHouse",
             "description": "<strong>Elasticsearch</strong>, temel olarak tam metin arama (full-text search) ve log analitiği için tasarlanmış, yüksek hızda arama ve analiz yapabilen bir arama motorudur. Log yönetimi (ELK Stack) ve ürün arama gibi senaryolarda yaygın olarak kullanılır. <strong>ClickHouse</strong> ise, çok büyük veri setleri üzerinde gerçek zamanlıya yakın analitik sorgular çalıştırmak için optimize edilmiş, sütun tabanlı (columnar) bir veritabanıdır. Geleneksel veritabanlarının yavaş kaldığı büyük raporlama ve analiz işleri için idealdir."
+          }
+        ]
+      },
+      {
+        "title": "Sanallaştırma ve Ortam Yönetimi",
+        "description": "Farklı işletim sistemlerini veya yazılım ortamlarını tek bir fiziksel makine üzerinde izole bir şekilde çalıştırma ve yönetme teknolojileridir. Bu, geliştirme, test ve dağıtım süreçlerinde tutarlılık ve esneklik sağlar.",
+        "children": [
+          {
+            "title": "Tam Sanallaştırma (Full Virtualization)",
+            "subtitle": "VMware, VirtualBox, Hyper-V, KVM",
+            "description": "Bir işletim sisteminin (Guest OS) başka bir işletim sistemi (Host OS) üzerinde tam bir sanal donanım setiyle (sanal CPU, RAM, disk) çalıştırılmasıdır. <strong>VMware (Workstation, ESXi)</strong>, <strong>Oracle VirtualBox</strong>, <strong>Microsoft Hyper-V</strong> ve <strong>KVM (Linux için)</strong> bu alandaki en popüler hipervizörlerdir. Farklı işletim sistemlerinde test yapmak veya izole sunucular oluşturmak için kullanılır."
+          },
+          {
+            "title": "Geliştirme Ortamı Otomasyonu",
+            "subtitle": "Vagrant",
+            "description": "<strong>Vagrant</strong>, sanal makineleri (örn: VirtualBox üzerinde) kod ile (Vagrantfile) tanımlayarak, taşınabilir ve tekrarlanabilir geliştirme ortamları oluşturmayı ve yönetmeyi otomatize eden bir araçtır. 'Benim makinemde çalışıyordu' sorununu çözmek için kullanılır ve tüm ekip üyelerinin aynı ortamda çalışmasını sağlar."
+          },
+          {
+            "title": "Uyumluluk Katmanları ve Simülasyon",
+            "subtitle": "WSL, Wine, MSYS2, Cygwin",
+            "description": "Bu araçlar, tam bir sanal makine kurmadan, bir işletim sisteminin ortamını veya API'lerini başka bir sistem üzerinde taklit eder veya entegre eder. <strong>WSL (Windows Subsystem for Linux)</strong>, Windows içinde tam bir Linux ortamını (komut satırı, araçlar ve hatta GUI uygulamaları) yüksek performansla çalıştırmayı sağlayan modern bir uyumluluk katmanıdır. <strong>Wine</strong>, tam tersi bir mantıkla Windows uygulamalarını Linux ve macOS üzerinde çalıştırır. <strong>MSYS2</strong> ve <strong>Cygwin</strong> ise Windows üzerinde Unix/Linux benzeri bir komut satırı ortamı sunan daha geleneksel çözümlerdir."
           }
         ]
       }
@@ -450,24 +1132,173 @@
         "children": [
           {
             "title": "Veri Analizi ve Manipülasyonu",
-            "children": [{ "title": "NumPy / Pandas / Matplotlib / Seaborn" }]
+            "children": [
+              {
+                "title": "NumPy / Pandas / Matplotlib / Seaborn",
+                "description": "<strong>NumPy</strong>, bilimsel hesaplamalar için temel olan çok boyutlu dizi nesneleri sunar. <strong>Pandas</strong>, veriyi 'DataFrame' adı verilen yapılarla temizlemek, işlemek ve analiz etmek için kullanılır. <strong>Matplotlib</strong> ve <strong>Seaborn</strong> ise bu verileri görselleştirmek için kullanılan çizim kütüphaneleridir."
+              }
+            ]
           },
           {
             "title": "Makine Öğrenmesi Kütüphaneleri",
-            "children": [{ "title": "Scikit-learn / XGBoost / LightGBM" }]
+            "children": [
+              {
+                "title": "Scikit-learn / XGBoost / LightGBM",
+                "description": "<strong>Scikit-learn</strong>, sınıflandırma, regresyon, kümeleme gibi geleneksel makine öğrenmesi algoritmalarını içeren en temel kütüphanedir. <strong>XGBoost</strong> ve <strong>LightGBM</strong> ise 'gradient boosting' algoritmalarını temel alan, yarışmalarda ve endüstride yüksek performanslarıyla bilinen popüler kütüphanelerdir."
+              }
+            ]
           },
           {
             "title": "Derin Öğrenme Framework'leri",
             "description": "<strong>PyTorch</strong> ve <strong>TensorFlow</strong>, derin öğrenme modelleri oluşturmak için kullanılan temel kütüphanelerdir. <strong>Hugging Face Transformers</strong> kütüphanesi ise, binlerce önceden eğitilmiş dil modeline (BERT, GPT gibi) kolayca erişim ve kullanım imkanı sunarak NLP (Doğal Dil İşleme) alanında devrim yaratmıştır.",
-            "children": [{ "title": "TensorFlow / PyTorch / Keras" }]
+            "children": [
+              {
+                "title": "TensorFlow / PyTorch / Keras",
+                "description": "<strong>TensorFlow (Google)</strong> ve <strong>PyTorch (Meta)</strong>, sinir ağları oluşturmak ve eğitmek için kullanılan iki ana derin öğrenme framework'üdür. <strong>Keras</strong>, TensorFlow üzerinde çalışan, daha basit ve kullanıcı dostu bir arayüz sunar."
+              },
+              {
+                "title": "Hugging Face Transformers",
+                "subtitle": "Önceden eğitilmiş modeller"
+              }
+            ]
+          },
+          {
+            "title": "LLM ve Agentic AI Framework'leri",
+            "description": "Büyük Dil Modelleri (LLM) ile uygulama geliştirmeyi kolaylaştıran kütüphanelerdir. <strong>LangChain</strong> ve <strong>LlamaIndex</strong>, LLM'leri harici veri kaynaklarına bağlamak (RAG - Retrieval-Augmented Generation) ve otonom ajanlar oluşturmak için popüler araçlardır.",
+            "children": [
+              {
+                "title": "LangChain / LlamaIndex",
+                "subtitle": "Agentic AI ve RAG",
+                "description": "Bu kütüphaneler, Büyük Dil Modellerini (LLM) kendi veritabanlarınız, dokümanlarınız veya API'leriniz gibi harici araçlarla birleştirerek daha yetenekli ve bağlama duyarlı uygulamalar (örn: bir doküman üzerinde soru-cevap yapan bir chatbot) oluşturmayı basitleştirir."
+              }
+            ]
+          },
+          {
+            "title": "LLM Özelleştirme ve Optimizasyon",
+            "subtitle": "Fine-tuning, Quantization, PEFT",
+            "description": "Önceden eğitilmiş Büyük Dil Modellerini (LLM) belirli bir görev veya veri seti için özelleştirme teknikleridir. <strong>Fine-tuning</strong>, modelin tüm ağırlıklarını yeni verilerle güncelleyerek performansını artırır. <strong>PEFT (Parameter-Efficient Fine-Tuning)</strong> gibi yöntemler (örn: LoRA), bunu çok daha az hesaplama kaynağıyla yapmayı sağlar. <strong>Quantization</strong> ise modelin boyutunu küçülterek daha hızlı çalışmasını ve daha az bellek kullanmasını sağlayan bir optimizasyon tekniğidir.",
+            "children": [
+              {
+                "title": "PEFT (LoRA, QLoRA)",
+                "description": "<strong>Parameter-Efficient Fine-Tuning</strong>, modelin tamamı yerine sadece küçük bir kısmını (adaptörler) eğiterek, çok daha az kaynakla ve daha hızlı bir şekilde modeli özelleştirmeyi sağlayan teknikler bütünüdür. LoRA ve onun quantize edilmiş hali QLoRA en popüler yöntemlerdir."
+              },
+              {
+                "title": "Full Fine-tuning",
+                "description": "Modelin tüm parametrelerinin yeni veri seti üzerinde yeniden eğitilmesi işlemidir. En iyi performansı sunar ancak çok yüksek hesaplama gücü ve veri gerektirir."
+              }
+            ]
           },
           {
             "title": "Görüntü İşleme",
-            "children": [{ "title": "OpenCV / PIL (görüntü işleme)" }]
+            "children": [
+              {
+                "title": "OpenCV / PIL (görüntü işleme)",
+                "description": "<strong>OpenCV (Open Source Computer Vision Library)</strong>, gerçek zamanlı görüntü işleme için tasarlanmış devasa bir kütüphanedir. <strong>PIL (Pillow)</strong> ise Python'da resim dosyalarını açma, işleme ve kaydetme gibi temel görevler için kullanılan daha basit bir kütüphanedir."
+              }
+            ]
           },
           {
             "title": "Arayüz ve Sunum",
-            "children": [{ "title": "Jupyter / Streamlit / Gradio (arayüz)" }]
+            "children": [
+              {
+                "title": "Jupyter / Streamlit / Gradio (arayüz)",
+                "description": "<strong>Jupyter Notebook</strong>, kod, metin ve görselleştirmeleri bir arada sunan interaktif bir geliştirme ortamıdır. <strong>Streamlit</strong> ve <strong>Gradio</strong> ise sadece Python kodu yazarak makine öğrenmesi modelleri için hızlıca web tabanlı demolar ve arayüzler oluşturmayı sağlayan kütüphanelerdir."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "🧠 Büyük Dil Modelleri (LLMs) ve Üretken Yapay Zeka",
+        "description": "Metin, resim, kod ve ses gibi yeni ve orijinal içerikler üretebilen yapay zeka modelleridir. Bu modeller, internet üzerindeki devasa veri kümeleriyle eğitilerek dilin ve desenlerin istatistiksel yapısını öğrenirler. Günümüzde teknoloji endüstrisinin en önemli ve dönüştürücü alanlarından biridir.",
+        "children": [
+          {
+            "title": "Temel Mimariler ve Kavramlar",
+            "description": "Modern LLM'lerin temelini oluşturan ve yeteneklerini belirleyen mimari prensiplerdir.",
+            "children": [
+              {
+                "title": "Transformer Mimarisi",
+                "description": "2017'de Google tarafından 'Attention Is All You Need' makalesiyle tanıtılan ve modern LLM'lerin tamamının temelini oluşturan devrimci bir sinir ağı mimarisidir. Kelimeler arasındaki bağlamı ve ilişkileri paralel olarak işleyebilmesi sayesinde önceki modellere (RNN, LSTM) göre çok daha verimlidir."
+              },
+              {
+                "title": "Attention Mekanizması",
+                "description": "Transformer mimarisinin kalbidir. Modelin, bir cümlenin anlamını çıkarırken hangi kelimelerin diğerlerinden daha önemli olduğuna 'dikkat etmesini' sağlayan bir mekanizmadır."
+              },
+              {
+                "title": "Mixture of Experts (MoE)",
+                "description": "Tek bir büyük model yerine, her biri farklı bir konuda uzmanlaşmış daha küçük 'uzman' modellerden oluşan bir yapıdır. Bir istek geldiğinde, sadece ilgili uzmanlar aktive edilir. Bu, çok daha büyük modelleri (örn: Mixtral, Gemini 1.5) daha az hesaplama maliyetiyle çalıştırmayı sağlar."
+              }
+            ]
+          },
+          {
+            "title": "Kapalı Kaynak (Proprietary / Blackbox) Modeller",
+            "description": "Modelin mimarisi ve ağırlıklarının halka açık olmadığı, genellikle bir API aracılığıyla hizmet olarak (Model-as-a-Service) sunulan ticari modellerdir. Genellikle en yüksek performansı sunarlar.",
+            "children": [
+              {
+                "title": "OpenAI GPT Ailesi",
+                "subtitle": "GPT-4o, GPT-4, GPT-3.5",
+                "description": "Üretken yapay zeka devrimini başlatan ve en popüler model ailesidir."
+              },
+              {
+                "title": "Google Gemini Ailesi",
+                "subtitle": "Gemini 1.5 Pro, Gemini 1.5 Flash",
+                "description": "Google'ın en gelişmiş, büyük bağlam penceresi (context window) ve çoklu modal (multimodal) yetenekleriyle öne çıkan model ailesidir."
+              },
+              {
+                "title": "Anthropic Claude Ailesi",
+                "subtitle": "Claude 3 (Opus, Sonnet, Haiku)",
+                "description": "Güvenlik, dürüstlük ve anayasal yapay zeka (Constitutional AI) prensipleriyle geliştirilen, özellikle uzun metin anlama ve yazma konusunda güçlü bir model ailesidir."
+              }
+            ]
+          },
+          {
+            "title": "Açık Kaynak & Açık Ağırlıklı Modeller",
+            "description": "Model ağırlıklarının halka açık olduğu, herkesin indirip kendi sunucularında çalıştırabileceği veya özelleştirebileceği (fine-tuning) modellerdir. İnovasyonu hızlandırır ve daha fazla şeffaflık sunarlar.",
+            "children": [
+              {
+                "title": "Meta Llama Ailesi",
+                "subtitle": "Llama 3, Llama 2",
+                "description": "Açık kaynak topluluğunun gelişiminde en büyük rolü oynayan, yüksek performanslı ve geniş bir topluluk tarafından desteklenen model ailesidir."
+              },
+              {
+                "title": "Mistral AI Modelleri",
+                "subtitle": "Mistral Large, Mixtral, Mistral 7B",
+                "description": "Fransız bir startup olan Mistral AI tarafından geliştirilen, özellikle performans/maliyet oranında çok verimli olan ve MoE mimarisini popülerleştiren modellerdir."
+              },
+              {
+                "title": "Google Gemma",
+                "description": "Google'ın, Gemini modellerini oluştururken kullandığı teknolojiyle geliştirdiği, daha küçük ve verimli açık kaynaklı model ailesidir."
+              },
+              {
+                "title": "DeepSeek Modelleri",
+                "subtitle": "DeepSeek-V2, DeepSeek Coder",
+                "description": "Özellikle kod üretme ve anlama konusunda çok başarılı olan, Çin merkezli bir şirket tarafından geliştirilen güçlü açık kaynaklı modellerdir."
+              },
+              {
+                "title": "Diğer Önemli Modeller",
+                "subtitle": "Qwen (Alibaba), Falcon, Phi-3 (Microsoft)",
+                "description": "Farklı şirketler ve araştırma grupları tarafından geliştirilen, farklı boyutlarda ve uzmanlıklarda çok sayıda başka açık kaynaklı model de bulunmaktadır."
+              }
+            ]
+          },
+          {
+            "title": "Yerel Çalıştırma ve Arayüz Araçları (Local Inference & UI Tools)",
+            "description": "Açık kaynaklı dil modellerini kişisel bilgisayarlarda (CPU veya GPU ile) çalıştırmayı ve kullanmayı kolaylaştıran yazılımlardır. Bu araçlar, internet bağlantısı olmadan veya veri gizliliğini koruyarak LLM'leri kullanma imkanı sunar.",
+            "children": [
+              {
+                "title": "Ollama",
+                "description": "Açık kaynaklı modelleri (Llama, Mistral vb.) tek bir komutla (`ollama run llama3`) indirip yerel bir API olarak çalıştırmayı sağlayan, son derece popüler ve kullanımı kolay bir araçtır. Geliştiricilerin uygulamalarına kolayca LLM entegre etmesini sağlar."
+              },
+              {
+                "title": "LM Studio / GPT4All",
+                "description": "Teknik bilgisi daha az olan kullanıcılar için tasarlanmış, grafiksel arayüze sahip masaüstü uygulamalarıdır. Bir model marketinden istenilen modeli seçip indirerek, sohbet arayüzü üzerinden doğrudan kullanma imkanı sunarlar."
+              },
+              {
+                "title": "Inference Kütüphaneleri",
+                "subtitle": "llama.cpp, vLLM, TGI",
+                "description": "<strong>llama.cpp</strong>, C/C++ ile yazılmış, çok yüksek performanslı ve minimum bağımlılıkla LLM'leri CPU üzerinde bile verimli bir şekilde çalıştırmayı sağlayan temel bir kütüphanedir. <strong>vLLM</strong> ve <strong>TGI (Text Generation Inference)</strong> ise özellikle yüksek trafikli sunucularda modelleri verimli bir şekilde sunmak (serving) için kullanılan gelişmiş Python kütüphaneleridir."
+              }
+            ]
           }
         ]
       },
@@ -475,12 +1306,28 @@
         "title": "Büyük Veri (Big Data) ve Depolama",
         "children": [
           {
-            "title": "İşleme Motorları",
-            "children": [{ "title": "Hadoop / Spark / Hive" }]
+            "title": "İşleme Motorları (Processing Engines)",
+            "children": [
+              {
+                "title": "Apache Spark",
+                "subtitle": "Büyük ölçekli veri işleme",
+                "description": "Büyük veri setlerini dağıtık bir şekilde, bellek içi (in-memory) hesaplama yaparak çok hızlı bir şekilde işlemek için kullanılan bir açık kaynaklı küme-hesaplama framework'üdür. Hadoop'un MapReduce paradigmasına modern bir alternatiftir."
+              },
+              {
+                "title": "Hadoop / Hive",
+                "subtitle": "Dağıtık depolama ve sorgulama",
+                "description": "<strong>Hadoop</strong>, büyük veriyi birden fazla bilgisayardan oluşan kümelerde depolamayı (HDFS) ve işlemeyi (MapReduce) sağlayan temel bir framework'tür. <strong>Hive</strong> ise Hadoop üzerinde depolanan verileri SQL benzeri bir dil (HiveQL) ile sorgulamayı sağlar."
+              }
+            ]
           },
           {
             "title": "Veri Ambarları",
-            "children": [{ "title": "BigQuery / Redshift" }]
+            "children": [
+              {
+                "title": "BigQuery / Redshift",
+                "description": "Analitik ve raporlama amacıyla çok büyük miktarda veriyi depolamak ve üzerinde karmaşık sorgular çalıştırmak için optimize edilmiş bulut tabanlı veritabanı hizmetleridir. <strong>BigQuery</strong> Google Cloud'un, <strong>Redshift</strong> ise AWS'in çözümüdür."
+              }
+            ]
           }
         ]
       },
@@ -488,9 +1335,20 @@
         "title": "MLOps (Makine Öğrenmesi Operasyonları)",
         "description": "Makine öğrenmesi modellerinin geliştirme, dağıtım ve bakım süreçlerini otomatize eden ve standartlaştıran pratikler bütünüdür.",
         "children": [
-          { "title": "MLflow / Kubeflow" },
-          { "title": "DVC / Airflow" },
-          { "title": "FastAPI + Docker + Cloud (deployment)" }
+          {
+            "title": "Deney Takibi ve Orkestrasyon",
+            "subtitle": "MLflow, Kubeflow, Airflow",
+            "description": "<strong>MLflow</strong>, makine öğrenmesi deneylerini (parametreler, metrikler, modeller) takip etmeyi ve yönetmeyi sağlar. <strong>Kubeflow</strong>, ML iş akışlarını Kubernetes üzerinde dağıtmak, ölçeklendirmek ve yönetmek için tasarlanmıştır. <strong>Airflow</strong> ise genel amaçlı bir iş akışı otomasyon aracıdır ve ML pijamalarının (pipelines) orkestrasyonu için sıkça kullanılır."
+          },
+          {
+            "title": "Veri Versiyonlama",
+            "subtitle": "DVC (Data Version Control)",
+            "description": "Git'in kod için yaptığını, büyük veri setleri ve modeller için yapan bir araçtır. Veri setlerini ve modelleri versiyonlayarak deneylerin tekrarlanabilirliğini sağlar."
+          },
+          {
+            "title": "FastAPI + Docker + Cloud (deployment)",
+            "description": "Eğitilmiş bir makine öğrenmesi modelini, <strong>FastAPI</strong> ile bir API olarak sunmak, <strong>Docker</strong> ile paketlemek ve bir <strong>Bulut Platformu</strong> (AWS, GCP vb.) üzerinde canlıya almak, modelleri üretim ortamına taşımanın yaygın bir yoludur."
+          }
         ]
       }
     ]
@@ -501,18 +1359,18 @@
     "children": [
       {
         "title": "Savunma ve Tespit Teknolojileri",
-        "subtitle": "SIEM, SOAR, EDR, WAF, IPS, PAM",
-        "description": "Siber savunma katmanlardan oluşur. <strong>SIEM</strong> logları toplayıp analiz ederken, <strong>SOAR (Security Orchestration, Automation, and Response)</strong> bu alarmlara otomatik yanıtlar verilmesini sağlar. <strong>EDR (Endpoint Detection and Response)</strong> son kullanıcı cihazlarını (bilgisayar, sunucu) korur. <strong>WAF (Web Application Firewall)</strong> web uygulamalarına yönelik saldırıları engeller. <strong>IPS (Intrusion Prevention System)</strong> ağ trafiğindeki zararlı aktiviteleri durdurur. <strong>PAM (Privileged Access Management)</strong> ise yönetici gibi kritik hesapların erişimini güvenli hale getirir."
+        "subtitle": "SIEM, SOAR, EDR, NDR, WAF, IPS, PAM",
+        "description": "Siber savunma katmanlardan oluşur. <strong>SIEM</strong> logları toplayıp analiz ederken, <strong>SOAR (Security Orchestration, Automation, and Response)</strong> bu alarmlara otomatik yanıtlar verilmesini sağlar. <strong>EDR (Endpoint Detection and Response)</strong> son kullanıcı cihazlarını (bilgisayar, sunucu) korur. <strong>NDR (Network Detection and Response)</strong> ağ trafiğindeki anormal aktiviteleri tespit eder. <strong>WAF (Web Application Firewall)</strong> web uygulamalarına yönelik saldırıları engeller. <strong>IPS (Intrusion Prevention System)</strong> ağ trafiğindeki zararlı aktiviteleri durdurur. <strong>PAM (Privileged Access Management)</strong> ise yönetici gibi kritik hesapların erişimini güvenli hale getirir."
       },
       {
         "title": "Güvenlik Süreç ve Çerçeveleri",
-        "subtitle": "MITRE ATT&CK, Threat Modeling, S-SDLC",
-        "description": "Teknolojiler kadar süreçler de önemlidir. <strong>MITRE ATT&CK</strong>, saldırganların kullandığı taktik ve teknikleri içeren bir bilgi tabanıdır ve savunma stratejilerini buna göre şekillendirmeyi sağlar. <strong>Threat Modeling (Tehdit Modelleme)</strong>, bir sistem daha geliştirilme aşamasındayken potansiyel güvenlik zafiyetlerini proaktif olarak belirleme sürecidir. <strong>S-SDLC (Secure Software Development Lifecycle)</strong> ise yazılım geliştirme yaşam döngüsünün her aşamasına (tasarım, kodlama, test, dağıtım) güvenlik kontrollerini entegre etme pratiğidir."
+        "subtitle": "MITRE ATT&CK, Threat Modeling, S-SDLC, ITIL",
+        "description": "Teknolojiler kadar süreçler de önemlidir. <strong>MITRE ATT&CK</strong>, saldırganların kullandığı taktik ve teknikleri içeren bir bilgi tabanıdır ve savunma stratejilerini buna göre şekillendirmeyi sağlar. <strong>Threat Modeling (Tehdit Modelleme)</strong>, bir sistem daha geliştirilme aşamasındayken potansiyel güvenlik zafiyetlerini proaktif olarak belirleme sürecidir. <strong>S-SDLC (Secure Software Development Lifecycle)</strong> ise yazılım geliştirme yaşam döngüsünün her aşamasına (tasarım, kodlama, test, dağıtım) güvenlik kontrollerini entegre etme pratiğidir. <strong>ITIL</strong> gibi çerçeveler ise olay ve değişiklik yönetimi gibi süreçleri standartlaştırır."
       },
       {
         "title": "Sızma Testi (Penetration Testing)",
         "subtitle": "OWASP, OSCP, Red/Purple Team",
-        "description": "Kontrollü ve yasal bir şekilde, bir \"etik hacker\" gibi davranarak bir sistemin güvenlik zafiyetlerini bulmaya çalışma işlemidir. <strong>Red Team</strong> operasyonları, gerçek bir saldırganı taklit ederek savunma ekibinin (<strong>Blue Team</strong>) hazırlığını test eder. <strong>Purple Team</strong> ise bu iki ekibin iş birliği içinde çalışarak savunmayı güçlendirdiği tatbikatlardır. <strong>OWASP (Open Web Application Security Project)</strong>, web uygulamalarındaki en kritik güvenlik risklerini (örn: SQL Injection) listeleyen ve bunlara karşı nasıl önlem alınacağını anlatan bir organizasyondur. <strong>OSCP</strong> gibi sertifikalar, bu alandaki pratik yetkinliği kanıtlar."
+        "description": "Kontrollü ve yasal bir şekilde, bir \"etik hacker\" gibi davranarak bir sistemin güvenlik zafiyetlerini bulmaya çalışma işlemidir. <strong>Red Team</strong> operasyonları, gerçek bir saldırganı taklit ederek savunma ekibinin (<strong>Blue Team</strong>) hazırlığını test eder. <strong>Purple Team</strong> ise bu iki ekibin iş birliği içinde çalışarak savunmayı güçlendirdiği tatbikatlardır. <strong>OWASP (Open Web Application Security Project)</strong>, web uygulamalarındaki en kritik güvenlik risklerini (örn: SQL Injection) listeleyen ve bunlara karşı nasıl önlem alınacağını anlatan bir organizasyondur. <strong>OSCP</strong>, <strong>ECPTX</strong>, <strong>CRTO</strong> gibi sertifikalar, bu alandaki pratik yetkinliği kanıtlar."
       }
     ]
   },
@@ -527,6 +1385,24 @@
       {
         "title": "Agile / Scrum Metodolojileri",
         "description": "<strong>Agile (Çevik)</strong>, yazılım geliştirmeye yönelik esnek ve iş birliğine dayalı bir yaklaşımdır. Projeyi en baştan sonuna kadar detaylıca planlamak yerine, işi \"sprint\" adı verilen kısa (1-4 hafta) periyotlara böler. Her sprint'in sonunda çalışan bir ürün parçası ortaya çıkarılır ve müşteriden geri bildirim alınır. <strong>Scrum</strong>, Agile'ı uygulamak için kullanılan en popüler çerçevedir (framework). Bu yaklaşım, değişen gereksinimlere hızla adapte olmayı ve müşteriye daha hızlı değer sunmayı sağlar."
+      },
+      {
+        "title": "Uygulama Yaşam Döngüsü Yönetimi (ALM) Araçları",
+        "description": "Yazılım geliştirme yaşam döngüsünün tamamını (gereksinim yönetimi, geliştirme, test, dağıtım, bakım) tek bir platformdan yönetmeyi sağlayan entegre araç setleridir. İzlenebilirlik (traceability) sağlayarak, bir kod değişikliğinin hangi gereksinimi karşıladığını ve hangi testlerle doğrulandığını görmeyi kolaylaştırırlar.",
+        "children": [
+          {
+            "title": "Jira",
+            "description": "Atlassian tarafından geliştirilen, özellikle Agile/Scrum takımları için proje yönetimi, görev takibi ve hata yönetimi konusunda endüstri standardı haline gelmiş bir araçtır. Geniş eklenti marketiyle özelleştirilebilir."
+          },
+          {
+            "title": "Helix ALM",
+            "description": "Gereksinim yönetimi, test senaryosu yönetimi ve hata takibini bir araya getiren, özellikle regülasyonların yoğun olduğu (medikal, havacılık, otomotiv) sektörlerde kullanılan kapsamlı bir ALM aracıdır."
+          },
+          {
+            "title": "Azure DevOps",
+            "description": "Microsoft'un sunduğu, CI/CD, kod repoları (Git), Agile planlama panoları ve test yönetimi gibi DevOps yaşam döngüsünün tamamını kapsayan entegre bir hizmetler bütünüdür."
+          }
+        ]
       }
     ]
   },
@@ -548,6 +1424,420 @@
   },
   {
     "title": "🌱 Kişisel Gelişim ve Öğrenme Alanları",
-    "description": "Teknoloji sürekli değişir ve gelişir. Dün popüler olan bir teknoloji yarın eskiyebilir. Bu nedenle, bir yazılım mühendisinin en önemli yeteneği \"öğrenmeyi öğrenmek\" ve kendini sürekli güncel tutmaktır. Teknik becerilerin yanı sıra, iletişim, liderlik ve ürün odaklı düşünme gibi \"yumuşak beceriler\" (soft skills), kariyerde ilerlemek ve etkili bir takım oyuncusu olmak için hayati önem taşır. <strong>AI destekli kodlama asistanları (Cursor, Copilot)</strong> gibi yeni araçları takip etmek ve verimli kullanmak da bu sürecin bir parçasıdır."
+    "description": "Teknoloji sürekli değişir ve gelişir. Dün popüler olan bir teknoloji yarın eskiyebilir. Bu nedenle, bir yazılım mühendisinin en önemli yeteneği \"öğrenmeyi öğrenmek\" ve kendini sürekli güncel tutmaktır. Teknik becerilerin yanı sıra, iletişim, liderlik ve ürün odaklı düşünme gibi \"yumuşak beceriler\" (soft skills), kariyerde ilerlemek ve etkili bir takım oyuncusu olmak için hayati önem taşır.",
+    "children": [
+      {
+        "title": "AI Destekli Geliştirme Araçları",
+        "subtitle": "GitHub Copilot, Cursor, Tabnine",
+        "description": "Yapay zeka destekli kodlama asistanları, kod yazma, hata ayıklama, test oluşturma ve dokümantasyon gibi süreçleri hızlandıran modern araçlardır. <strong>GitHub Copilot</strong> ve <strong>Cursor</strong> gibi editör entegrasyonları, geliştirici verimliliğini önemli ölçüde artırır ve rutin görevleri otomatize eder. Bu araçları etkin kullanmak, güncel bir mühendislik yetkinliği olarak kabul edilmektedir."
+      },
+      {
+        "title": "Freelance ve Uzaktan Çalışma Platformları",
+        "description": "Geliştirilen yetenekleri küresel veya yerel pazarda serbest zamanlı (freelance) olarak sunma ve gelir elde etme imkanı sağlayan online pazar yerleridir. Bu platformlar, home office çalışma modelinin temelini oluşturur ve coğrafi sınırlamaları ortadan kaldırır.",
+        "children": [
+          {
+            "title": "Upwork",
+            "description": "Dünyanın en büyük freelance platformlarından biridir. Saatlik veya proje bazlı işler sunar ve genellikle daha büyük, uzun vadeli projeler için tercih edilir. Geliştiricilerden danışmanlara, tasarımcılardan yazarlara kadar geniş bir yelpazede profesyonelleri barındırır."
+          },
+          {
+            "title": "Freelancer.com",
+            "description": "Upwork'e benzer şekilde, çok çeşitli kategorilerde milyonlarca proje ve kullanıcıya sahip büyük bir platformdur. Rekabetin yoğun olduğu, proje bazlı ihalelerin (bidding) yaygın olduğu bir yapıya sahiptir."
+          },
+          {
+            "title": "Fiverr",
+            "description": "Proje bazlı 'gig' (küçük iş) ekonomisi üzerine kuruludur. Freelancer'lar, '5 dolara logo yaparım' gibi belirli hizmet paketleri sunar ve müşteriler bu paketleri satın alır. Özellikle küçük ve net tanımlı işler için popülerdir."
+          },
+          {
+            "title": "Toptal",
+            "description": "Sadece en üst düzey (%3) freelance yetenekleri kabul ettiğini iddia eden, daha seçkin bir platformdur. Şirketlere, zorlu bir eleme sürecinden geçmiş, yüksek vasıflı profesyoneller sunar."
+          },
+          {
+            "title": "Bionluk",
+            "description": "Türkiye'nin en popüler freelance platformudur. Fiverr'a benzer bir 'gig' modeliyle çalışır ve çeşitli kategorilerde hizmet alıp vermeyi sağlar."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "🛠️ Geliştirme Ortamları ve Araçlar",
+    "description": "Kod yazmayı, hata ayıklamayı ve projeleri yönetmeyi kolaylaştıran yazılımlardır. Modern geliştirme süreçlerinin vazgeçilmez bir parçasıdırlar.",
+    "children": [
+      {
+        "title": "Entegre Geliştirme Ortamları (IDEs) ve Kod Editörleri",
+        "description": "Bir <strong>IDE (Integrated Development Environment)</strong>, kod editörü, derleyici/yorumlayıcı, hata ayıklayıcı (debugger) ve otomasyon araçlarını tek bir arayüzde birleştiren kapsamlı bir yazılımdır. Bir <strong>Kod Editörü</strong> ise daha hafif olup, genellikle eklentilerle IDE benzeri yetenekler kazanabilir. Doğru aracı seçmek, geliştirici verimliliğini doğrudan etkiler.",
+        "children": [
+          {
+            "title": "Visual Studio Code (VS Code)",
+            "subtitle": "Evrensel, eklenti tabanlı kod editörü",
+            "description": "Microsoft tarafından geliştirilen, hafif ama son derece güçlü bir kod editörüdür. Geniş eklenti ekosistemi sayesinde neredeyse her dil ve teknoloji (Web, Python, Go, Java, C#) için tam teşekküllü bir IDE'ye dönüştürülebilir. Hızı, esnekliği ve topluluk desteği ile günümüzün en popüler geliştirme aracıdır."
+          },
+          {
+            "title": "JetBrains IDE Ailesi",
+            "subtitle": "Dile özel, güçlü ve akıllı IDE'ler",
+            "description": "JetBrains, her bir programlama dili ve ekosistemi için özel olarak tasarlanmış, 'akıllı' kod tamamlama, analiz ve refactoring yetenekleriyle ünlü bir IDE ailesi sunar.",
+            "children": [
+              {
+                "title": "IntelliJ IDEA",
+                "subtitle": "Java, Kotlin (Spring, Android)"
+              },
+              {
+                "title": "WebStorm",
+                "subtitle": "JavaScript, TypeScript (React, Node.js)"
+              },
+              {
+                "title": "PyCharm",
+                "subtitle": "Python (Django, Veri Bilimi)"
+              },
+              { "title": "Rider", "subtitle": ".NET, C#" },
+              {
+                "title": "GoLand / CLion / PhpStorm",
+                "subtitle": "Go / C++ / PHP için özel IDE'ler"
+              }
+            ]
+          },
+          {
+            "title": "Visual Studio",
+            "subtitle": ".NET/C# (Windows, ASP.NET), C++",
+            "description": "Microsoft'un amiral gemisi IDE'sidir. Özellikle Windows platformu için uygulama geliştirme, .NET ekosistemi, oyun geliştirme (Unity ile entegrasyon) ve kurumsal C++ projeleri için endüstri standardıdır."
+          },
+          {
+            "title": "Android Studio",
+            "subtitle": "Resmi Android Geliştirme IDE'si (Kotlin/Java)",
+            "description": "Google tarafından IntelliJ IDEA temel alınarak geliştirilen, Android uygulamaları oluşturmak için gerekli tüm araçları (emülatör, layout editor, profiler) içeren resmi IDE'dir."
+          },
+          {
+            "title": "Xcode",
+            "subtitle": "Resmi Apple Geliştirme IDE'si (Swift/Objective-C)",
+            "description": "Apple ekosistemi (iOS, macOS, watchOS) için uygulama geliştirmek amacıyla kullanılan tek resmi IDE'dir. Simülatörler, arayüz tasarım araçları ve performans analiz araçlarını içerir."
+          },
+          {
+            "title": "Eclipse",
+            "subtitle": "Java, C++, PHP (Tarihsel önemi yüksek)",
+            "description": "Açık kaynaklı ve uzun yıllardır var olan bir IDE'dir. Özellikle eski kurumsal Java (Java EE) projelerinde ve bazı gömülü sistem (C/C++) geliştirme alanlarında hala kullanılmaktadır."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "🔩 Donanım Tasarımı ve Doğrulama (Hardware Design & Verification)",
+    "description": "Yazılımın üzerinde çalıştığı fiziksel elektronik devrelerin ve yongaların (chips) tasarlanması, geliştirilmesi ve test edilmesi sürecidir. Bu alan, mikroişlemcilerden (CPU) grafik kartlarına (GPU) ve özel amaçlı hızlandırıcılara (ASIC) kadar modern bilişimin temelini oluşturan donanımları yaratır.",
+    "children": [
+      {
+        "title": "Sayısal Mantık Tasarımı (Digital Logic Design)",
+        "description": "Tüm dijital sistemlerin temelini oluşturan mantık kapıları (AND, OR, NOT), flip-flop'lar, toplayıcılar ve sayıcılar gibi temel yapı taşlarının anlaşılması ve tasarlanmasıdır. Donanım tasarımının alfabesidir."
+      },
+      {
+        "title": "Donanım Tanımlama Dilleri (HDLs)",
+        "description": "Elektronik devrelerin ve dijital mantığın davranışını metin tabanlı olarak tanımlamak için kullanılan özel programlama dilleridir. Bu kodlar, sentezleme (synthesis) araçları tarafından gerçek donanım devrelerine dönüştürülür.",
+        "children": [
+          {
+            "title": "VHDL",
+            "description": "Özellikle Avrupa'da, savunma sanayii ve havacılık gibi yüksek güvenilirlik gerektiren alanlarda yaygın olarak kullanılan, güçlü tiplendirme (strongly-typed) yapısına sahip bir HDL'dir."
+          },
+          {
+            "title": "Verilog / SystemVerilog",
+            "description": "Verilog, C diline benzer sözdizimi ile daha esnek ve hızlı prototiplemeye olanak tanır. SystemVerilog ise Verilog'un üzerine inşa edilmiş, özellikle karmaşık yongaların doğrulanması (verification) için çok güçlü yetenekler sunan modern bir standarttır."
+          }
+        ]
+      },
+      {
+        "title": "FPGA Geliştirme",
+        "description": "<strong>FPGA (Field-Programmable Gate Array)</strong>, üretildikten sonra içindeki dijital devreleri programlanabilen esnek yongalardır. Bu, donanım tasarımını yazılım geliştirme hızına yaklaştırır ve prototipleme için idealdir.",
+        "children": [
+          {
+            "title": "FPGA Üreticileri ve Araçları",
+            "subtitle": "Xilinx (Vivado), Intel (Quartus)",
+            "description": "<strong>Xilinx (şimdi AMD'nin bir parçası)</strong> ve <strong>Intel (eski Altera)</strong>, FPGA pazarının iki büyük oyuncusudur. <strong>Vivado (Xilinx için)</strong> ve <strong>Quartus (Intel için)</strong>, HDL kodunu yazmaktan FPGA'yı programlamaya kadar tüm geliştirme sürecini yöneten entegre geliştirme ortamlarıdır (IDE)."
+          }
+        ]
+      },
+      {
+        "title": "ASIC / VLSI Tasarımı",
+        "description": "<strong>ASIC (Application-Specific Integrated Circuit)</strong>, belirli bir görev için özel olarak tasarlanmış ve seri üretilen yongalardır (örn: Bitcoin mining çipi, bir telefonun işlemcisi). <strong>VLSI (Very-Large-Scale Integration)</strong>, milyonlarca transistörü tek bir yonga üzerine entegre etme sürecini ifade eden genel bir terimdir ve ASIC tasarımını kapsar.",
+        "children": [
+          {
+            "title": "Tasarım ve Doğrulama Akışı",
+            "subtitle": "RTL, Sentez, P&R, UVM",
+            "description": "ASIC tasarımı, <strong>RTL (Register-Transfer Level)</strong> kodunun (VHDL/Verilog) yazılmasıyla başlar. Bu kod, <strong>Sentez (Synthesis)</strong> araçlarıyla mantık kapılarına dönüştürülür. <strong>Yerleştirme ve Yönlendirme (Place & Route - P&R)</strong> aşamasında bu kapılar yonga üzerinde fiziksel olarak yerleştirilir. Tasarımın doğru çalıştığından emin olmak için <strong>UVM (Universal Verification Methodology)</strong> gibi gelişmiş doğrulama (verification) metodolojileri kullanılır. Bu süreç, yazılım geliştirmeden çok daha uzun, maliyetli ve hataya toleransı olmayan bir süreçtir."
+          }
+        ]
+      },
+      {
+        "title": "Elektronik Tasarım Otomasyonu (EDA) ve Simülasyon",
+        "description": "Elektronik devrelerin ve baskı devre kartlarının (PCB) tasarlanması, simüle edilmesi ve test edilmesi için kullanılan yazılım araçlarıdır. Bu araçlar, fiziksel prototip üretmeden önce tasarım hatalarını yakalamayı sağlar.",
+        "children": [
+          {
+            "title": "PCB Tasarım Yazılımları",
+            "subtitle": "Altium Designer, KiCad, Eagle",
+            "description": "Elektronik bileşenlerin yerleştirileceği ve aralarındaki bağlantıların çizileceği <strong>Baskı Devre Kartı (PCB)</strong> tasarımını yapmak için kullanılan yazılımlardır. Bu araçlar, aynı zamanda kartın 3 boyutlu (3D) bir modelini oluşturarak mekanik kasaya uyumunu kontrol etmeyi ve montajı görselleştirmeyi sağlar. <strong>Altium Designer</strong> profesyonel ve endüstri standardı bir araçken, <strong>KiCad</strong> güçlü bir açık kaynaklı alternatiftir."
+          },
+          {
+            "title": "Devre Simülasyon Yazılımları",
+            "subtitle": "LTspice, Proteus, Multisim",
+            "description": "Tasarlanan elektronik devrelerin bilgisayar ortamında davranışını simüle ederek, çalışıp çalışmadığını test etmeyi sağlayan yazılımlardır. <strong>Proteus</strong>, özellikle mikrodenetleyici tabanlı devrelerin simülasyonu için popülerdir. <strong>LTspice</strong> ve <strong>PSpice</strong> ise analog ve karmaşık devrelerin simülasyonunda endüstri standardı olarak kabul edilir."
+          },
+          {
+            "title": "Diğer Profesyonel EDA Araçları",
+            "description": "<strong>Siemens EDA (Mentor Graphics)</strong> ve <strong>Cadence</strong>, özellikle ASIC ve karmaşık PCB tasarımları için Altium'a rakip olan, çok kapsamlı ve profesyonel EDA araç setleri sunan diğer büyük firmalardır."
+          },
+          {
+            "title": "Matematiksel ve Teknik Hesaplama",
+            "subtitle": "MATLAB & Simulink",
+            "description": "Mühendislik ve bilimsel hesaplamalar için kullanılan yüksek seviyeli bir programlama dili ve interaktif bir ortamdır. Özellikle sinyal işleme, kontrol sistemleri ve algoritma geliştirme gibi alanlarda yaygın olarak kullanılır. <strong>Simulink</strong>, MATLAB içinde çalışan, blok diyagramları ile dinamik sistemleri modellemek ve simüle etmek için kullanılan bir araçtır."
+          }
+        ]
+      },
+      {
+        "title": "Elektrik CAD (ECAD) ve Proje Planlama",
+        "description": "Elektrik panolarının, otomasyon sistemlerinin ve makine tesisatlarının elektrik şemalarını çizmek, projelendirmek ve dokümantasyonunu oluşturmak için kullanılan özel mühendislik yazılımlarıdır. Bu araçlar, sadece çizim yapmanın ötesinde, malzeme listeleri (BOM), kablo listeleri ve terminal planları gibi raporları otomatik olarak üreterek proje verimliliğini artırır.",
+        "children": [
+          {
+            "title": "EPLAN Electric P8",
+            "description": "Almanya merkezli EPLAN tarafından geliştirilen, elektrik projelendirme ve otomasyon mühendisliği alanında dünya çapında bir endüstri standardıdır. Akıllı cihaz yönetimi, otomatik raporlama ve diğer mühendislik disiplinleriyle (mekanik, PLC) entegrasyon yetenekleriyle öne çıkar."
+          },
+          {
+            "title": "WSCAD",
+            "description": "EPLAN'a benzer şekilde, elektrik mühendisliği, pano tasarımı ve otomasyon için kapsamlı çözümler sunan bir diğer popüler Alman yazılımıdır. Daha modüler ve esnek bir lisanslama yapısı sunabilir."
+          },
+          {
+            "title": "AutoCAD Electrical",
+            "description": "AutoCAD'in üzerine inşa edilmiş, elektrik kontrol sistemleri tasarımı için özel komutlar ve sembol kütüphaneleri içeren bir yazılımdır. Genel AutoCAD bilgisi olanlar için geçişi daha kolaydır."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "🏭 Endüstriyel Otomasyon ve Kontrol Sistemleri (Industrial Automation & Control Systems)",
+    "description": "Fabrikalardaki üretim hatları, enerji santralleri ve su arıtma tesisleri gibi endüstriyel süreçlerin insan müdahalesi olmadan, otomatik olarak çalışmasını sağlayan teknolojiler bütünüdür. Bu alan, yazılım, elektronik ve makine mühendisliğinin kesişim noktasında yer alır ve verimliliği, güvenliği ve kaliteyi artırmayı hedefler.",
+    "children": [
+      {
+        "title": "PLC (Programmable Logic Controller)",
+        "description": "<strong>Programlanabilir Mantıksal Denetleyici (PLC)</strong>, fabrika otomasyonu gibi zorlu endüstriyel ortamlar için tasarlanmış, son derece dayanıklı ve güvenilir bir bilgisayar türüdür. Sensörlerden gelen verileri okur, bir programı çalıştırır ve motorları, valfleri, konveyörleri kontrol eden çıkışları yönetir.",
+        "children": [
+          {
+            "title": "Önde Gelen Üreticiler ve IDE'leri",
+            "description": "Her üretici, kendi PLC'lerini programlamak için özel bir Entegre Geliştirme Ortamı (IDE) sunar.",
+            "children": [
+              {
+                "title": "Siemens",
+                "subtitle": "TIA Portal (Totally Integrated Automation)"
+              },
+              {
+                "title": "Rockwell Automation (Allen-Bradley)",
+                "subtitle": "Studio 5000 Logix Designer"
+              },
+              {
+                "title": "Schneider Electric",
+                "subtitle": "EcoStruxure Machine Expert"
+              },
+              {
+                "title": "Beckhoff",
+                "subtitle": "TwinCAT (PC tabanlı kontrol)"
+              },
+              { "title": "Omron", "subtitle": "Sysmac Studio" }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "PLC Programlama Dilleri (IEC 61131-3)",
+        "description": "PLC programlamayı standartlaştıran uluslararası bir standarttır. Geliştiricilerin farklı üreticilerin sistemleri arasında daha kolay geçiş yapmasını sağlar ve 5 farklı programlama dilini tanımlar.",
+        "children": [
+          {
+            "title": "Ladder Diagram (LD)",
+            "subtitle": "Merdiven Diyagramı",
+            "description": "Elektrik röle devre şemalarına benzer. Elektrik/elektronik teknisyenleri için en sezgisel ve yaygın dildir."
+          },
+          {
+            "title": "Function Block Diagram (FBD)",
+            "subtitle": "Fonksiyon Blok Diyagramı",
+            "description": "Mantıksal blokların (AND, OR, Timer, Counter) birbirine bağlanmasıyla oluşturulur. Süreç kontrolünde yaygındır."
+          },
+          {
+            "title": "Structured Text (ST)",
+            "subtitle": "Yapısal Metin",
+            "description": "Pascal veya C gibi yüksek seviyeli bir programlama diline benzer. Karmaşık matematiksel hesaplamalar ve algoritmalar için idealdir."
+          },
+          {
+            "title": "Sequential Function Chart (SFC)",
+            "subtitle": "Ardışıl Fonksiyon Şeması",
+            "description": "Bir sürecin adımlarını ve adımlar arası geçişleri grafiksel olarak gösterir. Makine durumlarını (state machine) yönetmek için kullanılır."
+          },
+          {
+            "title": "Instruction List (IL)",
+            "subtitle": "Komut Listesi",
+            "description": "Assembly diline benzer, düşük seviyeli bir metin tabanlı dildir. Modern uygulamalarda kullanımı azalmıştır."
+          }
+        ]
+      },
+      {
+        "title": "Görselleştirme ve Gözetim",
+        "description": "Operatörlerin ve mühendislerin endüstriyel süreci izlemesini, kontrol etmesini ve verileri analiz etmesini sağlayan arayüzlerdir.",
+        "children": [
+          {
+            "title": "HMI (Human-Machine Interface)",
+            "description": "<strong>İnsan-Makine Arayüzü</strong>, genellikle bir makinenin veya sürecin hemen yanında bulunan dokunmatik panellerdir. Operatörlerin makineyi çalıştırmasına, durdurmasına, alarmları görmesine ve parametreleri ayarlamasına olanak tanır. (Örn: Siemens WinCC, Rockwell FactoryTalk View ME)"
+          },
+          {
+            "title": "SCADA (Supervisory Control and Data Acquisition)",
+            "description": "<strong>Gözetleyici Kontrol ve Veri Toplama</strong> sistemleri, tüm bir tesis veya coğrafi olarak dağılmış bir sistem (örn: su şebekesi) hakkında merkezi bir kontrol odasından veri toplayan, izleyen ve kontrol eden daha büyük ölçekli yazılımlardır. HMI'lardan gelen verileri birleştirir, veritabanına kaydeder ve trend analizleri sunar."
+          }
+        ]
+      },
+      {
+        "title": "Endüstriyel Haberleşme Protokolleri",
+        "description": "PLC'lerin, HMI'ların, sensörlerin, motor sürücülerinin ve diğer otomasyon cihazlarının birbirleriyle güvenilir ve gerçek zamanlı olarak haberleşmesini sağlayan özel ağ protokolleridir.",
+        "children": [
+          {
+            "title": "Profinet / Profibus",
+            "subtitle": "Siemens tarafından yaygınlaştırılan standartlar"
+          },
+          {
+            "title": "EtherNet/IP",
+            "subtitle": "Rockwell Automation tarafından desteklenen standart"
+          },
+          {
+            "title": "Modbus (TCP/RTU)",
+            "subtitle": "Basit ve evrensel olarak desteklenen, eski bir protokol"
+          },
+          {
+            "title": "EtherCAT",
+            "subtitle": "Beckhoff tarafından geliştirilen, çok yüksek hızlı ve deterministik protokol"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "🔩 Mekanik Tasarım ve İmalat (Mechanical Design & Manufacturing)",
+    "description": "Fiziksel ürünlerin, makinelerin ve parçaların bilgisayar ortamında tasarlanması, analiz edilmesi ve üretilmesi sürecidir. Bu alan, bir fikri somut bir ürüne dönüştürmek için gereken dijital araçları ve metodolojileri kapsar.",
+    "children": [
+      {
+        "title": "CAD (Computer-Aided Design) - Bilgisayar Destekli Tasarım",
+        "description": "Ürünlerin 2D veya 3D modellerini oluşturmak için kullanılan yazılımlardır. Mühendisler ve tasarımcılar, bu araçları kullanarak parçaların geometrisini, montajlarını ve teknik resimlerini oluşturur.",
+        "children": [
+          {
+            "title": "Parametrik 3D Modelleme Yazılımları",
+            "subtitle": "Fusion 360, SolidWorks, CATIA, Inventor",
+            "description": "Tasarımın, ölçüler ve ilişkiler gibi 'parametreler' ile yönetildiği modern 3D modelleme yaklaşımıdır. Bir parametre değiştirildiğinde, tüm model otomatik olarak güncellenir. <strong>Autodesk Fusion 360</strong>, bulut tabanlı ve entegre CAM özellikleriyle popülerdir. <strong>SolidWorks</strong> ve <strong>CATIA</strong> ise özellikle profesyonel ve kurumsal dünyada yaygın olarak kullanılan endüstri standartlarıdır."
+          },
+          {
+            "title": "2D Tasarım ve Teknik Resim",
+            "subtitle": "AutoCAD",
+            "description": "Özellikle mimari, inşaat ve makine mühendisliğinde 2 boyutlu teknik çizimler ve planlar oluşturmak için kullanılan standart yazılımdır. 3D modelleme yetenekleri olsa da, asıl gücü 2D çizimdedir."
+          }
+        ]
+      },
+      {
+        "title": "CAM (Computer-Aided Manufacturing) - Bilgisayar Destekli İmalat",
+        "description": "CAD'de oluşturulan 3D modelleri, imalat makinelerinin (CNC tezgahları, 3D yazıcılar) anlayabileceği komutlara (G-code) dönüştüren yazılımlardır. Tasarım ile üretim arasında köprü kurar.",
+        "children": [
+          {
+            "title": "3D Yazıcı Dilimleyici (Slicer) Yazılımları",
+            "subtitle": "Cura, PrusaSlicer, Simplify3D",
+            "description": "3D model dosyasını (STL, 3MF) alıp, 3D yazıcının katman katman nasıl basacağını planlayan ve G-code üreten özel CAM yazılımlarıdır. Baskı hızı, katman yüksekliği, dolgu oranı gibi yüzlerce parametreyi kontrol etmeyi sağlarlar."
+          },
+          {
+            "title": "CNC Programlama",
+            "description": "Frezeleme, tornalama gibi talaşlı imalat yöntemleri için takım yollarını (toolpath) oluşturma sürecidir. Fusion 360 gibi birçok modern CAD yazılımı, entegre CAM modülleri sunar."
+          }
+        ]
+      },
+      {
+        "title": "CAE (Computer-Aided Engineering) - Bilgisayar Destekli Mühendislik",
+        "description": "Tasarlanan parçaların gerçek dünyada nasıl davranacağını, fiziksel prototip üretmeden önce simüle etmeyi sağlayan yazılımlardır. Yapısal analiz (mukavemet), termal analiz (ısı dağılımı) ve akışkanlar dinamiği (CFD) gibi analizler için kullanılır. (Örn: Ansys, Abaqus, SolidWorks Simulation)"
+      }
+    ]
+  },
+  {
+    "title": "📈 Kontrol Sistemleri Mühendisliği (Control Systems Engineering)",
+    "description": "Dinamik sistemlerin (mekanik, elektriksel, kimyasal vb.) davranışlarını istenen şekilde yönlendirmek için kontrolcüler tasarlama ve uygulama bilimidir. Bir uçağın otopilotundan, bir fabrikanın sıcaklık kontrolüne kadar her yerde kullanılır. Temel amaç, sistemin kararlı (stable), hızlı ve hatasız çalışmasını sağlamaktır.",
+    "children": [
+      {
+        "title": "Temel Kavramlar ve Modelleme",
+        "description": "Bir kontrolcü tasarlamadan önce, kontrol edilecek sistemin matematiksel olarak ifade edilmesi gerekir.",
+        "children": [
+          {
+            "title": "Sistem Modelleme ve Dinamiği",
+            "subtitle": "Laplace Dönüşümü, Transfer Fonksiyonları, Durum-Uzay",
+            "description": "Fiziksel bir sistemin (örn: bir motor) davranışını diferansiyel denklemlerle tanımlama ve bu denklemleri <strong>Laplace Dönüşümü</strong> kullanarak <strong>Transfer Fonksiyonu</strong> veya matrislerle <strong>Durum-Uzay (State-Space)</strong> gösterimi gibi standart formlara dönüştürme işlemidir. Bu, sistemin analizini ve kontrolcü tasarımını matematiksel olarak mümkün kılar."
+          },
+          {
+            "title": "Geri Beslemeli Kontrol (Feedback Control)",
+            "description": "Kontrol sistemlerinin temel prensibidir. Sistemin mevcut çıkışı (örn: odanın sıcaklığı) ölçülür, istenen değerle (setpoint) karşılaştırılır ve aradaki hatayı azaltacak şekilde sisteme bir giriş (örn: klimayı çalıştırma) uygulanır. Bu döngü, sistemi dış etkenlere (bozuculara) karşı kararlı tutar."
+          }
+        ]
+      },
+      {
+        "title": "Klasik Kontrol Teorisi",
+        "description": "Tek-girişli tek-çıkışlı (SISO) sistemler için frekans ve zaman domeni analizlerine dayanan geleneksel kontrolcü tasarım yöntemleridir.",
+        "children": [
+          {
+            "title": "PID Kontrolcüler",
+            "description": "<strong>Oransal-İntegral-Türevsel (PID)</strong> kontrolcü, endüstride en yaygın kullanılan kontrolcü türüdür. Mevcut hataya (Oransal), geçmiş hataların birikimine (İntegral) ve gelecekteki hata eğilimine (Türevsel) bakarak sisteme en uygun kontrol sinyalini üretir."
+          },
+          {
+            "title": "Frekans Domeni Analizi",
+            "subtitle": "Bode Diyagramları, Nyquist Kararlılık Kriteri",
+            "description": "Sistemin farklı frekanslardaki sinyallere nasıl tepki verdiğini analiz ederek kararlılığını ve performansını değerlendirme yöntemleridir. <strong>Bode Diyagramları</strong>, bu analizi yapmak için kullanılan standart grafiksel araçlardır."
+          }
+        ]
+      },
+      {
+        "title": "Modern ve İleri Kontrol Teorisi",
+        "description": "Çok-girişli çok-çıkışlı (MIMO) ve daha karmaşık sistemler için durum-uzay modellemesini temel alan gelişmiş tasarım teknikleridir.",
+        "children": [
+          {
+            "title": "Durum-Uzay Tasarımı",
+            "subtitle": "Kutup Yerleştirme, Gözlemleyici Tasarımı",
+            "description": "Sistemin dinamiklerini doğrudan durum değişkenleri üzerinden kontrol etmeyi ve ölçülemeyen durumları tahmin etmeyi (gözlemleyici) sağlayan güçlü tekniklerdir."
+          },
+          {
+            "title": "Optimal ve Gürbüz Kontrol",
+            "subtitle": "LQR, H-infinity",
+            "description": "<strong>Optimal Kontrol</strong>, belirli bir performans kriterini (örn: minimum enerji tüketimi) en iyileyen kontrolcüyü tasarlamayı hedefler. <strong>Gürbüz (Robust) Kontrol</strong> ise sistem modelindeki belirsizliklere ve dış bozuculara karşı sistemin kararlılığını garanti eden kontrolcüler tasarlar."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "📡 Dijital Sinyal İşleme (Digital Signal Processing - DSP)",
+    "description": "Gerçek dünyadaki analog sinyallerin (ses, görüntü, sıcaklık, basınç vb.) dijital ortama aktarılıp, matematiksel algoritmalar kullanılarak analiz edilmesi, değiştirilmesi veya iyileştirilmesi bilimidir. Gürültü temizleme, özellik çıkarma, sıkıştırma gibi işlemlerle modern haberleşme, tıp ve multimedya teknolojilerinin temelini oluşturur.",
+    "children": [
+      {
+        "title": "Temel Kavramlar ve Dönüşümler",
+        "description": "DSP'nin temelini oluşturan matematiksel ve teorik prensiplerdir.",
+        "children": [
+          {
+            "title": "Ayrık Zamanlı Sinyaller ve Sistemler",
+            "subtitle": "Örnekleme, Nicemleme, Konvolüsyon",
+            "description": "Analog bir sinyalin dijital bir sinyale nasıl dönüştürüldüğünü (<strong>Örnekleme ve Nicemleme</strong>) ve bu sinyallerin sistemlerden (filtrelerden) geçerken nasıl davrandığını (<strong>Konvolüsyon</strong>) inceler. Nyquist-Shannon örnekleme teoremi bu alanın temel taşıdır."
+          },
+          {
+            "title": "Frekans Domeni Analizi",
+            "subtitle": "Fourier Dönüşümü (DFT, FFT), Z-Dönüşümü",
+            "description": "Bir sinyalin zaman içindeki değişimini değil, hangi frekans bileşenlerinden oluştuğunu görmemizi sağlayan matematiksel dönüşümlerdir. <strong>DFT (Ayrık Fourier Dönüşümü)</strong> ve onun hızlı hesaplama algoritması olan <strong>FFT (Hızlı Fourier Dönüşümü)</strong>, sinyal analizi için vazgeçilmezdir. <strong>Z-Dönüşümü</strong> ise dijital filtrelerin analiz ve tasarımında kullanılır."
+          }
+        ]
+      },
+      {
+        "title": "Dijital Filtre Tasarımı",
+        "description": "Bir sinyalin içindeki istenmeyen frekans bileşenlerini bastırmak (örn: gürültü temizleme) veya istenenleri güçlendirmek için kullanılan algoritmalardır.",
+        "children": [
+          {
+            "title": "FIR (Finite Impulse Response) Filtreler",
+            "description": "<strong>Sonlu Dürtü Yanıtlı</strong> filtrelerdir. Tasarımları basittir ve her zaman kararlıdırlar. Özellikle doğrusal faz (linear phase) gerektiren ses ve görüntü işleme uygulamalarında tercih edilirler."
+          },
+          {
+            "title": "IIR (Infinite Impulse Response) Filtreler",
+            "description": "<strong>Sonsuz Dürtü Yanıtlı</strong> filtrelerdir. Aynı performansı çok daha az hesaplama ile (daha düşük dereceli) sağlayabildikleri için verimlidirler. Ancak tasarımları daha karmaşıktır ve kararlılık (stability) analizleri dikkatli yapılmalıdır."
+          }
+        ]
+      }
+    ]
   }
 ]
