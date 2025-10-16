@@ -13,6 +13,7 @@
         color: #d4d4d4;
         line-height: 1.6;
         padding: 20px;
+        padding-top: 80px; /* Sabit header için boşluk */
       }
 
       h1 {
@@ -20,6 +21,37 @@
         border-bottom: 2px solid #569cd6;
         padding-bottom: 10px;
         text-shadow: 0 0 5px rgba(86, 156, 214, 0.3);
+      }
+
+      .sticky-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background-color: rgba(37, 37, 38, 0.8); /* Gri, %80 opaklık */
+        backdrop-filter: blur(8px); /* Arka planı bulanıklaştır */
+        -webkit-backdrop-filter: blur(8px);
+        padding: 10px 20px;
+        z-index: 5; /* Ağacın üstünde, modalın altında */
+        border-bottom: 1px solid #3c3c3c;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .sticky-header button {
+        background-color: #5a5a5a;
+        color: #f0f0f0;
+        border: 1px solid #777;
+        padding: 5px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        flex-shrink: 0;
+      }
+      .sticky-header button:hover {
+        background-color: #6b6b6b;
       }
 
       .tree {
@@ -54,11 +86,35 @@
       }
 
       .node-title .icon {
-        margin-right: 8px;
-        width: 1em;
+        flex-shrink: 0; /* Daralmasını engelle */
+        width: 20px;
+        height: 20px;
+        margin-right: 12px; /* Başlıkla arasındaki boşluğu artır */
+        border: 1px solid #666;
+        border-radius: 4px;
+        background-color: #333;
+        color: #d4d4d4;
+        font-size: 16px;
+        font-weight: bold;
+        line-height: 18px; /* Artı/eksi işaretini dikeyde ortala */
         text-align: center;
-        font-family: monospace;
-        color: #9cdcfe;
+        cursor: pointer; /* İkonun tıklanabilir olduğunu belirtir */
+        position: relative;
+        transition: background-color 0.2s, border-color 0.2s;
+      }
+
+      .node-title .icon:hover {
+        background-color: #444;
+        border-color: #888;
+      }
+
+      /* CSS ile + ve - ikonları oluşturma */
+      .closed > .node-title .icon::before {
+        content: "+";
+      }
+
+      .open > .node-title .icon::before {
+        content: "−"; /* Bu normal tire değil, daha estetik bir eksi işareti */
       }
 
       .node-title strong {
@@ -93,19 +149,15 @@
       }
 
       .children {
-        display: block; /* Başlangıçta açık olması için değiştirildi */
+        display: none; /* Başlangıçta kapalı */
       }
 
       .open > .children {
         display: block;
       }
 
-      .open > .node-title .icon::before {
-        content: "[-]";
-      }
-
-      .closed > .node-title .icon::before {
-        content: "[+]";
+      .closed > .children {
+        display: none;
       }
 
       .leaf > .node-title .icon {
@@ -137,50 +189,152 @@
         overflow-y: auto;
       }
 
+      /* --- Responsive Tasarım (Dikey/Dar Ekranlar) --- */
+      @media (max-width: 600px) {
+        body {
+          /* Sabit başlığın içeriği örtmemesi için üst boşluğu koru */
+          padding-top: 120px; /* Mobil için daha fazla boşluk */
+          padding-left: 10px;
+          padding-right: 10px;
+        }
+        .modal-content {
+          width: 95%;
+        }
+      }
+
       /* --- Seviyeli Renklendirme --- */
 
-      /* Seviye 1 (Ana Dallar) */
+      /* Seviye 1 (Ana Dallar) - Mavi */
       .tree > li > .node-title {
-        background-color: #26324f;
+        background-color: #2a3a5e;
       }
-      .tree > li > .node-title strong { color: #82aaff; }
-      .tree > li > .node-title:hover { background-color: #2e3c61; }
+      .tree > li > .node-title strong {
+        color: #a9c7ff;
+      }
+      .tree > li > .node-title:hover {
+        background-color: #354a78;
+      }
 
-      /* Seviye 2 */
+      /* Seviye 2 - Yeşil/Turkuaz */
       .tree > li > .children > li > .node-title {
-        background-color: #204545;
+        background-color: #2a5e5e;
       }
-      .tree > li > .children > li > .node-title strong { color: #7fffd4; }
-      .tree > li > .children > li > .node-title:hover { background-color: #295757; }
+      .tree > li > .children > li > .node-title strong {
+        color: #a9ffeb;
+      }
+      .tree > li > .children > li > .node-title:hover {
+        background-color: #357878;
+      }
 
-      /* Seviye 3 */
+      /* Seviye 3 - Mor/Magenta */
       .tree > li > .children > li > .children > li > .node-title {
-        background-color: #4f264f;
+        background-color: #5e2a5e;
       }
-      .tree > li > .children > li > .children > li > .node-title strong { color: #ff77ff; }
-      .tree > li > .children > li > .children > li > .node-title:hover { background-color: #612e61; }
+      .tree > li > .children > li > .children > li > .node-title strong {
+        color: #ffa9ff;
+      }
+      .tree > li > .children > li > .children > li > .node-title:hover {
+        background-color: #783578;
+      }
 
-      /* Seviye 4 */
-      .tree > li > .children > li > .children > li > .children > li > .node-title {
-        background-color: #504029;
+      /* Seviye 4 - Turuncu/Kahve */
+      .tree
+        > li
+        > .children
+        > li
+        > .children
+        > li
+        > .children
+        > li
+        > .node-title {
+        background-color: #5e4a2a;
       }
-      .tree > li > .children > li > .children > li > .children > li > .node-title strong { color: #ffd787; }
-      .tree > li > .children > li > .children > li > .children > li > .node-title:hover { background-color: #635032; }
+      .tree
+        > li
+        > .children
+        > li
+        > .children
+        > li
+        > .children
+        > li
+        > .node-title
+        strong {
+        color: #ffddb0;
+      }
+      .tree
+        > li
+        > .children
+        > li
+        > .children
+        > li
+        > .children
+        > li
+        > .node-title:hover {
+        background-color: #785f35;
+      }
+
+      /* Seviye 5 - Kırmızı/Bordo */
+      .tree
+        > li
+        > .children
+        > li
+        > .children
+        > li
+        > .children
+        > li
+        > .children
+        > li
+        > .node-title {
+        background-color: #5e2a2a;
+      }
+      .tree
+        > li
+        > .children
+        > li
+        > .children
+        > li
+        > .children
+        > li
+        > .children
+        > li
+        > .node-title
+        strong {
+        color: #ffb0b0;
+      }
+      .tree
+        > li
+        > .children
+        > li
+        > .children
+        > li
+        > .children
+        > li
+        > .children
+        > li
+        > .node-title:hover {
+        background-color: #783535;
+      }
 
       /* Genel Hover Rengi (Yukarıdakilerle eşleşmezse) */
       .node-title:hover {
         background-color: #333;
       }
-
     </style>
   </head>
   <body>
-    <h1>
-      🌳 Öğrenme Ağaç Diyagramı – Başvurulan İş İlanlarından Türetilen Konular
-    </h1>
+    <div class="sticky-header">
+      <button id="btn-collapse-all">Hepsini Kapat</button>
+      <button id="btn-expand-1">1. Seviye Aç</button>
+      <button id="btn-expand-2">2. Seviye Aç</button>
+      <button id="btn-expand-3">3. Seviye Aç</button>
+      <button id="btn-expand-all">Hepsini Aç</button>
+    </div>
+
+    <h1>Teknoloji Dünyası Ağaç Diyagramı</h1>
     <p>
-      Detayları görmek için bir başlığın üzerinde 1.5 saniye bekleyin. Alt
-      dalları açmak/kapatmak için başlığa tıklayabilirsiniz.
+      Detayları görmek için başlık metinlerine tıklayın. Alt dalları açıp
+      kapatmak için başlığın boş alanına veya <strong>[+]</strong> /
+      <strong>[-]</strong> ikonlarına tıklayabilirsiniz.
     </p>
 
     <ul id="tree-root" class="tree">
@@ -203,28 +357,38 @@
         const modalContent = document.getElementById(
           "description-modal-content"
         );
-        let hoverTimer;
 
         // JSON verisinden HTML ağacını oluşturan ana fonksiyon
-        function buildTree(data, parentElement, prefix = "") {
+        function buildTree(data, parentElement, prefix = "", level = 1) {
           data.forEach((nodeData, index) => {
-            const currentNumber = prefix ? `${prefix}.${index + 1}` : `${index + 1}`;
-            const li = createNodeElement(nodeData, currentNumber);
+            const currentNumber = prefix
+              ? `${prefix}.${index + 1}`
+              : `${index + 1}`;
+            const li = createNodeElement(nodeData, currentNumber, level);
             parentElement.appendChild(li);
+
+            // Olay dinleyicilerini ve başlangıç durumunu ayarla
+            setupNode(li, nodeData, level);
 
             if (nodeData.children && nodeData.children.length > 0) {
               const childrenUl = document.createElement("ul");
               childrenUl.className = "children";
               li.appendChild(childrenUl);
-              buildTree(nodeData.children, childrenUl, currentNumber); // Recursive call
+              buildTree(
+                nodeData.children,
+                childrenUl,
+                currentNumber,
+                level + 1
+              ); // Recursive call
             }
           });
         }
 
         // Tek bir düğüm (li elementi) oluşturan yardımcı fonksiyon
-        function createNodeElement(nodeData, number) {
+        function createNodeElement(nodeData, number, level) {
           const li = document.createElement("li");
           li.className = "node";
+          li.dataset.level = level;
 
           const titleDiv = document.createElement("div");
           titleDiv.className = "node-title";
@@ -254,44 +418,80 @@
             li.appendChild(descriptionDiv);
           }
 
-          // Olay dinleyicilerini ve başlangıç durumunu ayarla
-          setupNode(li, nodeData);
-
           return li;
         }
 
         // Düğümlere olay dinleyicileri ve başlangıç durumu atayan fonksiyon
-        function setupNode(nodeElement, nodeData) {
+        function setupNode(nodeElement, nodeData, level) {
           const title = nodeElement.querySelector(".node-title");
-          const children = nodeElement.querySelector("ul.children");
+          const icon = title.querySelector(".icon");
+          const strong = title.querySelector("strong");
+          const subtitle = title.querySelector("span:not(.icon)");
 
-          if (!children) {
+          // Bir düğümün alt dalları olup olmadığını JSON verisine göre kontrol et
+          if (!nodeData.children || nodeData.children.length === 0) {
             nodeElement.classList.add("leaf");
-          } else {
-            nodeElement.classList.add("closed");
-            title.querySelector(".icon").textContent = "[+]";
-
-            title.addEventListener("click", (event) => {
-              if (event.target.tagName === "A") return;
-              nodeElement.classList.toggle("open");
-              nodeElement.classList.toggle("closed");
-              title.querySelector(".icon").textContent = nodeElement.classList.contains("open") ? "[-]" : "[+]";
-              event.stopPropagation();
-            });
           }
 
-          // Modal için hover mantığı
-          title.addEventListener("mouseenter", () => {
-            if (!nodeData.description) return;
-            hoverTimer = setTimeout(() => {
+          // Başlangıçta 1. seviye dallar açık olsun (2. seviye görünsün)
+          if (level < 2 && !nodeElement.classList.contains("leaf")) {
+            nodeElement.classList.add("open");
+          } else {
+            nodeElement.classList.add("closed");
+          }
+
+          // Tüm başlık div'ine tek bir click dinleyicisi ekle
+          title.addEventListener("click", (event) => {
+            // Tıklanan yer metin ise modal'ı aç
+            if (
+              nodeData.description &&
+              (event.target === strong || event.target === subtitle)
+            ) {
               modalContent.innerHTML = `<h4>${nodeData.title}</h4><p>${nodeData.description}</p>`;
               modalOverlay.style.display = "flex";
-            }, 1500);
+            } else if (!nodeElement.classList.contains("leaf")) {
+              // Tıklanan yer ikon veya div'in boşluğu ise genişlet/daralt
+              // Bu işlem sadece yaprak olmayan düğümler için geçerlidir.
+              nodeElement.classList.toggle("open");
+              nodeElement.classList.toggle("closed");
+            }
           });
+        }
 
-          title.addEventListener("mouseleave", () => {
-            clearTimeout(hoverTimer);
+        // Ağacı belirli bir seviyeye kadar açan/kapatan fonksiyon
+        function expandToLevel(targetLevel) {
+          const allNodes = document.querySelectorAll(".node");
+          allNodes.forEach((node) => {
+            if (node.classList.contains("leaf")) return; // Yaprakları atla
+
+            const nodeLevel = parseInt(node.dataset.level, 10);
+            if (nodeLevel < targetLevel) {
+              node.classList.add("open");
+              node.classList.remove("closed");
+            } else {
+              node.classList.add("closed");
+              node.classList.remove("open");
+            }
           });
+        }
+
+        // Header butonlarına olay dinleyicileri ekle
+        function setupHeaderButtons() {
+          document
+            .getElementById("btn-collapse-all")
+            .addEventListener("click", () => expandToLevel(1));
+          document
+            .getElementById("btn-expand-1")
+            .addEventListener("click", () => expandToLevel(2));
+          document
+            .getElementById("btn-expand-2")
+            .addEventListener("click", () => expandToLevel(3));
+          document
+            .getElementById("btn-expand-3")
+            .addEventListener("click", () => expandToLevel(4));
+          document
+            .getElementById("btn-expand-all")
+            .addEventListener("click", () => expandToLevel(99)); // Tüm seviyeleri aç
         }
 
         // Modal kapatma mekanizmaları
@@ -319,6 +519,7 @@
           const data = await response.json();
           buildTree(data, treeRoot, "");
           setupModal();
+          setupHeaderButtons();
         }
 
         initializeTree();
@@ -326,12 +527,3 @@
     </script>
   </body>
 </html>
-
-``` Umarım bu yapılandırılmış ve detaylı anlatım, bu karmaşık konuları
-anlamanızda ve aralarındaki ilişkileri kurmanızda size yardımcı olur.
-Başvurularınızda ve kariyer yolculuğunuzda bol şans dilerim!
-
-<!--
-[PROMPT_SUGGESTION]Bu listedeki backend teknolojilerinden hangileriyle bir e-ticaret sitesinin temel servislerini (kullanıcı, ürün, sipariş) kurabilirim? Örnek bir mimari çizimiyle açıklar mısın?[/PROMPT_SUGGESTION]
-[PROMPT_SUGGESTION]Frontend tarafında React, Next.js ve Redux arasındaki ilişkiyi daha basit bir araba analojisi ile anlatır mısın?[/PROMPT_SUGGESTION]
--->
