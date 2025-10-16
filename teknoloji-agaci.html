@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Teknoloji Öğrenme Ağacı</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        background-color: #1a1d24;
+        background-image: linear-gradient(180deg, #1a1d24 0%, #121417 100%);
+        color: #d4d4d4;
+        line-height: 1.6;
+        padding: 20px;
+      }
+
+      h1 {
+        color: #569cd6;
+        border-bottom: 2px solid #569cd6;
+        padding-bottom: 10px;
+        text-shadow: 0 0 5px rgba(86, 156, 214, 0.3);
+      }
+
+      .tree {
+        list-style-type: none;
+        padding-left: 0;
+      }
+
+      .tree ul {
+        list-style-type: none;
+        padding-left: 25px;
+        border-left: 1px solid #444;
+        margin-left: 10px;
+      }
+
+      .tree li {
+        margin: 8px 0;
+      }
+
+      .node-title {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        padding: 5px;
+        border-radius: 4px;
+        transition: background-color 0.3s, box-shadow 0.3s, transform 0.2s;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+      }
+
+      .node-title:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        transform: translateY(-2px);
+      }
+
+      .node-title .icon {
+        margin-right: 8px;
+        width: 1em;
+        text-align: center;
+        font-family: monospace;
+        color: #9cdcfe;
+      }
+
+      .node-title strong {
+        color: #9cdcfe;
+      }
+
+      .node-title span {
+        color: #ce9178;
+        margin-left: 8px;
+        font-style: italic;
+        font-size: 0.9em;
+      }
+
+      .description {
+        display: none; /* Başlangıçta gizli olacak */
+        padding: 15px;
+        margin-top: 8px;
+        margin-left: 35px;
+        background-color: #252526;
+        border: 1px solid #3c3c3c;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      }
+
+      .description h4 {
+        color: #4ec9b0;
+        margin-top: 0;
+      }
+
+      .description p {
+        margin-bottom: 0;
+      }
+
+      .children {
+        display: block; /* Başlangıçta açık olması için değiştirildi */
+      }
+
+      .open > .children {
+        display: block;
+      }
+
+      .open > .node-title .icon::before {
+        content: "[-]";
+      }
+
+      .closed > .node-title .icon::before {
+        content: "[+]";
+      }
+
+      .leaf > .node-title .icon {
+        visibility: hidden; /* Yaprak düğümler için ikon gizli */
+      }
+
+      .modal-overlay {
+        display: none; /* Başlangıçta gizli */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 10;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .modal-content {
+        background-color: #252526;
+        padding: 25px;
+        border: 1px solid #3c3c3c;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        max-width: 600px;
+        width: 90%;
+        max-height: 80vh;
+        overflow-y: auto;
+      }
+
+      /* --- Seviyeli Renklendirme --- */
+
+      /* Seviye 1 (Ana Dallar) */
+      .tree > li > .node-title {
+        background-color: #26324f;
+      }
+      .tree > li > .node-title strong { color: #82aaff; }
+      .tree > li > .node-title:hover { background-color: #2e3c61; }
+
+      /* Seviye 2 */
+      .tree > li > .children > li > .node-title {
+        background-color: #204545;
+      }
+      .tree > li > .children > li > .node-title strong { color: #7fffd4; }
+      .tree > li > .children > li > .node-title:hover { background-color: #295757; }
+
+      /* Seviye 3 */
+      .tree > li > .children > li > .children > li > .node-title {
+        background-color: #4f264f;
+      }
+      .tree > li > .children > li > .children > li > .node-title strong { color: #ff77ff; }
+      .tree > li > .children > li > .children > li > .node-title:hover { background-color: #612e61; }
+
+      /* Seviye 4 */
+      .tree > li > .children > li > .children > li > .children > li > .node-title {
+        background-color: #504029;
+      }
+      .tree > li > .children > li > .children > li > .children > li > .node-title strong { color: #ffd787; }
+      .tree > li > .children > li > .children > li > .children > li > .node-title:hover { background-color: #635032; }
+
+      /* Genel Hover Rengi (Yukarıdakilerle eşleşmezse) */
+      .node-title:hover {
+        background-color: #333;
+      }
+
+    </style>
+  </head>
+  <body>
+    <h1>
+      🌳 Öğrenme Ağaç Diyagramı – Başvurulan İş İlanlarından Türetilen Konular
+    </h1>
+    <p>
+      Detayları görmek için bir başlığın üzerinde 1.5 saniye bekleyin. Alt
+      dalları açmak/kapatmak için başlığa tıklayabilirsiniz.
+    </p>
+
+    <ul id="tree-root" class="tree">
+      <!-- Ağaç yapısı JavaScript ile buraya oluşturulacak -->
+    </ul>
+
+    <!-- Açıklamalar için Modal Penceresi -->
+    <div id="description-modal-overlay" class="modal-overlay">
+      <div id="description-modal-content" class="modal-content">
+        <!-- İçerik JavaScript ile buraya eklenecek -->
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const treeRoot = document.getElementById("tree-root");
+        const modalOverlay = document.getElementById(
+          "description-modal-overlay"
+        );
+        const modalContent = document.getElementById(
+          "description-modal-content"
+        );
+        let hoverTimer;
+
+        // JSON verisinden HTML ağacını oluşturan ana fonksiyon
+        function buildTree(data, parentElement, prefix = "") {
+          data.forEach((nodeData, index) => {
+            const currentNumber = prefix ? `${prefix}.${index + 1}` : `${index + 1}`;
+            const li = createNodeElement(nodeData, currentNumber);
+            parentElement.appendChild(li);
+
+            if (nodeData.children && nodeData.children.length > 0) {
+              const childrenUl = document.createElement("ul");
+              childrenUl.className = "children";
+              li.appendChild(childrenUl);
+              buildTree(nodeData.children, childrenUl, currentNumber); // Recursive call
+            }
+          });
+        }
+
+        // Tek bir düğüm (li elementi) oluşturan yardımcı fonksiyon
+        function createNodeElement(nodeData, number) {
+          const li = document.createElement("li");
+          li.className = "node";
+
+          const titleDiv = document.createElement("div");
+          titleDiv.className = "node-title";
+
+          const iconSpan = document.createElement("span");
+          iconSpan.className = "icon";
+          titleDiv.appendChild(iconSpan);
+
+          const strong = document.createElement("strong");
+          strong.textContent = `${number} ${nodeData.title}`;
+          titleDiv.appendChild(strong);
+
+          if (nodeData.subtitle) {
+            const subtitleSpan = document.createElement("span");
+            subtitleSpan.textContent = nodeData.subtitle;
+            titleDiv.appendChild(subtitleSpan);
+          }
+
+          li.appendChild(titleDiv);
+
+          if (nodeData.description) {
+            const descriptionDiv = document.createElement("div");
+            descriptionDiv.className = "description";
+            const p = document.createElement("p");
+            p.innerHTML = nodeData.description;
+            descriptionDiv.appendChild(p);
+            li.appendChild(descriptionDiv);
+          }
+
+          // Olay dinleyicilerini ve başlangıç durumunu ayarla
+          setupNode(li, nodeData);
+
+          return li;
+        }
+
+        // Düğümlere olay dinleyicileri ve başlangıç durumu atayan fonksiyon
+        function setupNode(nodeElement, nodeData) {
+          const title = nodeElement.querySelector(".node-title");
+          const children = nodeElement.querySelector("ul.children");
+
+          if (!children) {
+            nodeElement.classList.add("leaf");
+          } else {
+            nodeElement.classList.add("closed");
+            title.querySelector(".icon").textContent = "[+]";
+
+            title.addEventListener("click", (event) => {
+              if (event.target.tagName === "A") return;
+              nodeElement.classList.toggle("open");
+              nodeElement.classList.toggle("closed");
+              title.querySelector(".icon").textContent = nodeElement.classList.contains("open") ? "[-]" : "[+]";
+              event.stopPropagation();
+            });
+          }
+
+          // Modal için hover mantığı
+          title.addEventListener("mouseenter", () => {
+            if (!nodeData.description) return;
+            hoverTimer = setTimeout(() => {
+              modalContent.innerHTML = `<h4>${nodeData.title}</h4><p>${nodeData.description}</p>`;
+              modalOverlay.style.display = "flex";
+            }, 1500);
+          });
+
+          title.addEventListener("mouseleave", () => {
+            clearTimeout(hoverTimer);
+          });
+        }
+
+        // Modal kapatma mekanizmaları
+        function setupModal() {
+          modalOverlay.addEventListener("click", () => {
+            modalOverlay.style.display = "none";
+            modalContent.innerHTML = "";
+          });
+
+          modalContent.addEventListener("click", (event) => {
+            event.stopPropagation();
+          });
+
+          document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape") {
+              modalOverlay.style.display = "none";
+              modalContent.innerHTML = "";
+            }
+          });
+        }
+
+        // Ana veri yükleme ve ağacı oluşturma işlemi
+        async function initializeTree() {
+          const response = await fetch("teknoloji-agaci.json");
+          const data = await response.json();
+          buildTree(data, treeRoot, "");
+          setupModal();
+        }
+
+        initializeTree();
+      });
+    </script>
+  </body>
+</html>
+
+``` Umarım bu yapılandırılmış ve detaylı anlatım, bu karmaşık konuları
+anlamanızda ve aralarındaki ilişkileri kurmanızda size yardımcı olur.
+Başvurularınızda ve kariyer yolculuğunuzda bol şans dilerim!
+
+<!--
+[PROMPT_SUGGESTION]Bu listedeki backend teknolojilerinden hangileriyle bir e-ticaret sitesinin temel servislerini (kullanıcı, ürün, sipariş) kurabilirim? Örnek bir mimari çizimiyle açıklar mısın?[/PROMPT_SUGGESTION]
+[PROMPT_SUGGESTION]Frontend tarafında React, Next.js ve Redux arasındaki ilişkiyi daha basit bir araba analojisi ile anlatır mısın?[/PROMPT_SUGGESTION]
+-->

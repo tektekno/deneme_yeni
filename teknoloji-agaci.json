@@ -1,0 +1,553 @@
+[
+  {
+    "title": "🎓 Bilgisayar Bilimlerinin Temelleri (CS Fundamentals)",
+    "description": "Bu kategori, popüler teknolojilerin ve araçların arkasındaki \"neden\" ve \"nasıl\"ı açıklayan evrensel ve zamanla değişmeyen prensipleri içerir. İyi bir mühendis, sadece bir aracı kullanmayı değil, o aracın hangi temel prensipler üzerine kurulu olduğunu da bilir. Bu bilgi, daha verimli, performanslı ve doğru çözümler üretmeyi sağlar ve kariyer boyunca en değerli yatırım haline gelir.",
+    "children": [
+      {
+        "title": "Veri Yapıları ve Algoritmalar",
+        "subtitle": "Big O, Array, Linked List, Tree, Graph",
+        "description": "<strong>Veri Yapıları</strong>, veriyi bilgisayarın belleğinde verimli bir şekilde organize etme, saklama ve yönetme yöntemleridir (örn: Array, Linked List, Stack, Queue, Hash Table, Tree, Graph). <strong>Algoritmalar</strong> ise belirli bir problemi çözmek için izlenen adım adım talimatlardır (örn: Sıralama, Arama). <strong>Big O Notasyonu</strong>, bir algoritmanın veri boyutu büyüdükçe ne kadar yavaşlayacağını (zaman ve bellek karmaşıklığı) ölçmemizi sağlar. Bu bilgi, milyonlarca kullanıcıya hizmet verirken sistemin çökmemesi için doğru çözümü seçmemizi sağlar."
+      },
+      {
+        "title": "Ağ (Networking) Temelleri",
+        "subtitle": "OSI, TCP/IP, HTTP, DNS",
+        "description": "Modern uygulamaların neredeyse tamamı ağ üzerinde iletişim kurar. Bu iletişimin nasıl gerçekleştiğini bilmek, bir backend veya DevOps mühendisi için zorunluluktur. <strong>OSI ve TCP/IP Modelleri</strong>, ağ iletişimini katmanlara ayırır. <strong>IP</strong> adreslemeyi, <strong>TCP</strong> güvenilir veri transferini, <strong>UDP</strong> hızlı ama güvensiz veri transferini sağlar. <strong>DNS</strong>, \"google.com\" gibi alan adlarını IP adreslerine çevirir. <strong>HTTP/HTTPS</strong>, web'in temel iletişim protokolüdür. Bu bilgi, \"API neden yavaş?\" veya \"Sunucuya neden bağlanamıyorum?\" gibi sorunları çözmek için gereklidir."
+      }
+    ]
+  },
+  {
+    "title": "💻 Yazılım Geliştirme",
+    "description": "Yazılım geliştirme, bilgisayar programları ve uygulamaları oluşturma sürecidir. Modern dünyanın temel taşıdır; bankacılıktan eğlenceye, sağlıktan iletişime kadar her alanda hayatımızı kolaylaştıran ve otomatize eden araçları sağlar. Bu alan, problemleri mantıksal adımlara bölerek çözme ve bu çözümleri bilgisayarın anlayacağı bir dile çevirme sanatıdır.",
+    "children": [
+      {
+        "title": "🌐 Web Geliştirme",
+        "description": "İnternet tarayıcıları veya sunucular üzerinde çalışan web siteleri ve uygulamaları oluşturma disiplinidir. Frontend (kullanıcının gördüğü arayüz) ve Backend (sunucu, veritabanı ve uygulama mantığı) olmak üzere iki ana bölümden oluşur.",
+        "children": [
+          {
+            "title": "🌍 Frontend (Kullanıcı Arayüzü)",
+            "children": [
+              {
+                "title": "Temel Teknolojiler",
+                "children": [
+                  { "title": "HTML", "subtitle": "Yapı" },
+                  { "title": "CSS", "subtitle": "Görsel tasarım" },
+                  { "title": "JavaScript", "subtitle": "Dinamik davranış" },
+                  { "title": "TypeScript", "subtitle": "JavaScript'in tipli versiyonu" }
+                ]
+              },
+              {
+                "title": "Framework / Kütüphaneler",
+                "children": [
+                  { "title": "React.js", "subtitle": "UI bileşenleri (Meta)" },
+                  { "title": "Next.js", "subtitle": "React üzerine kurulu SSR/SSG framework" },
+                  { "title": "Angular", "subtitle": "Google destekli tam kapsamlı framework" },
+                  { "title": "Vue.js", "subtitle": "Hafif, reaktif framework" },
+                  { "title": "Nuxt.js", "subtitle": "Vue için SSR framework" },
+                  { "title": "Svelte", "subtitle": "Yeni nesil derleyici tabanlı framework" },
+                  { "title": "SvelteKit", "subtitle": "Svelte için full-stack çözüm" },
+                  { "title": "Solid.js", "subtitle": "Performans odaklı reaktif kütüphane" },
+                  { "title": "Qwik", "subtitle": "Anında yüklenen “resumable” framework" },
+                  { "title": "Alpine.js", "subtitle": "Minimalist mikroframework" },
+                  { "title": "jQuery", "subtitle": "(Tarihî ama hâlâ bazı yerlerde aktif)" }
+                ]
+              },
+              {
+                "title": "Stil ve UI Araçları",
+                "children": [
+                  { "title": "Bootstrap" },
+                  { "title": "Tailwind CSS" },
+                  { "title": "Material UI" },
+                  { "title": "Ant Design" },
+                  { "title": "Bulma / Foundation / Chakra UI" },
+                  { "title": "SCSS / SASS / LESS" }
+                ]
+              },
+              {
+                "title": "Derleme ve Paketleme",
+                "children": [
+                  { "title": "Webpack" },
+                  { "title": "Vite" },
+                  { "title": "Rollup" },
+                  { "title": "Parcel" },
+                  { "title": "Babel" }
+                ]
+              },
+              {
+                "title": "Test / UI Test",
+                "children": [
+                  { "title": "Jest" },
+                  { "title": "Cypress" },
+                  { "title": "Playwright" },
+                  { "title": "Vitest" }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "⚙️ Backend (Sunucu Tarafı)",
+            "children": [
+              {
+                "title": "JavaScript / TypeScript Ekosistemi",
+                "children": [
+                  { "title": "Node.js", "subtitle": "Sunucu tarafı çalışma zamanı" },
+                  { "title": "Express.js", "subtitle": "Minimal REST API framework" },
+                  { "title": "Nest.js", "subtitle": "Kurumsal, modüler backend framework" },
+                  { "title": "Fastify", "subtitle": "Hızlı ve hafif alternatif" },
+                  { "title": "Koa.js", "subtitle": "Modern middleware yapısı" },
+                  { "title": "AdonisJS", "subtitle": "Laravel benzeri Node framework" },
+                  { "title": "Hapi.js / Feathers.js", "subtitle": "API odaklı yapılar" }
+                ]
+              },
+              {
+                "title": "Python Ekosistemi",
+                "description": "Python, okunabilirliği yüksek ve öğrenmesi kolay bir dildir. Web geliştirmede Django (tam kapsamlı), Flask (hafif) ve FastAPI (modern, asenkron) gibi framework'lerle hızlıca API'ler oluşturulabilir.",
+                "children": [
+                  { "title": "Django", "subtitle": "MVC + ORM + Admin panel dahil framework" },
+                  { "title": "Flask", "subtitle": "Minimal, mikroframework" },
+                  { "title": "FastAPI", "subtitle": "Asenkron REST API framework" },
+                  { "title": "Tornado / Falcon", "subtitle": "Yüksek performanslı alternatifler" }
+                ]
+              },
+              {
+                "title": "Java Ekosistemi",
+                "description": "Java, \"bir kere yaz, her yerde çalıştır\" felsefesiyle bilinen, platform bağımsız, güvenli ve çok güçlü bir dildir. Özellikle büyük kurumsal uygulamalar (bankacılık, sigortacılık) için tercih edilir. Spring Boot, REST API tabanlı mikroservisler oluşturmak için endüstri standardı haline gelmiştir.",
+                "children": [
+                  { "title": "Spring Boot", "subtitle": "Java tabanlı kurumsal framework" },
+                  { "title": "Micronaut / Quarkus", "subtitle": "Hafif modern çözümler" }
+                ]
+              },
+              {
+                "title": "C# Ekosistemi",
+                "description": "C# (C Sharp), Microsoft tarafından geliştirilen, Java'ya benzeyen modern ve güçlü bir dildir. .NET Core, C#'ın Windows, Linux ve macOS üzerinde çalışabilen modern versiyonudur. ASP.NET Web API ile yüksek performanslı web servisleri ve API'ler oluşturulur.",
+                "children": [
+                  { "title": ".NET / ASP.NET Core", "subtitle": "Web API + MVC" }
+                ]
+              },
+              {
+                "title": "PHP Ekosistemi",
+                "description": "PHP, özellikle web geliştirme için tasarlanmış, sunucu taraflı bir betik dilidir. İnternet'teki web sitelerinin çok büyük bir kısmına güç verir. Laravel ve Symfony gibi modern framework'ler, PHP ile büyük ve ölçeklenebilir uygulamalar geliştirmeyi kolaylaştırır.",
+                "children": [
+                  { "title": "Laravel", "subtitle": "Modern MVC framework" },
+                  { "title": "Symfony", "subtitle": "Büyük kurumsal projeler" },
+                  { "title": "CodeIgniter / Yii / CakePHP", "subtitle": "Hafif frameworkler" },
+                  { "title": "WordPress", "subtitle": "CMS tabanlı sistem" }
+                ]
+              },
+              {
+                "title": "Go Ekosistemi",
+                "description": "Go, Google tarafından geliştirilen, basitliği ve yüksek eşzamanlılık (concurrency) performansıyla öne çıkan bir dildir. Binlerce isteği aynı anda çok az kaynak kullanarak yönetebilir. Bu özelliği, onu mikroservis mimarileri ve bulut tabanlı uygulamalar için ideal kılar.",
+                "children": [
+                  { "title": "Gin / Fiber / Echo", "subtitle": "Go backend frameworkleri" }
+                ]
+              },
+              {
+                "title": "Ruby Ekosistemi",
+                "description": "Ruby, okunabilir ve zarif sözdizimi ile bilinen dinamik bir dildir. En ünlü framework'ü olan Ruby on Rails (RoR), 'Convention over Configuration' felsefesiyle hızlı uygulama geliştirmeyi (RAD) teşvik eder.",
+                "children": [
+                  { "title": "Ruby on Rails", "subtitle": "MVC yapısı, CRUD hızında" }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "title": "📱 Mobil Geliştirme",
+        "description": "Akıllı telefonlar ve tabletler için iOS ve Android platformlarına özel uygulamalar geliştirme disiplinidir. 2025'te mobil geliştiricilerden sadece uygulama yazmaları değil, aynı zamanda kusursuz bir kullanıcı deneyimi (UI/UX) sunmaları, modern deklaratif UI framework'lerini (Jetpack Compose, SwiftUI) kullanmaları ve temiz, ölçeklenebilir mimariler (MVVM, Clean Architecture) kurmaları beklenmektedir.",
+        "children": [
+          {
+            "title": "Native Geliştirme",
+            "children": [
+              {
+                "title": "Kotlin (Android)",
+                "description": "Google'ın resmi olarak desteklediği modern, güvenli ve öz bir dildir. Jetpack Compose, Android'de modern, hızlı ve daha az kodla UI geliştirmeyi sağlayan deklaratif bir UI aracıdır."
+              },
+              {
+                "title": "Swift (iOS)",
+                "description": "Apple'ın geliştirdiği modern, hızlı ve güvenli bir dildir. SwiftUI, tıpkı Jetpack Compose gibi, iOS'te modern ve deklaratif bir şekilde UI oluşturmayı sağlar."
+              }
+            ]
+          },
+          {
+            "title": "Cross-platform (Çapraz Platform)",
+            "children": [
+              { "title": "React Native (JavaScript/TypeScript)" },
+              { "title": "Flutter (Dart)" },
+              { "title": "Ionic (Web tabanlı)" },
+              { "title": "Xamarin (.NET / C#)" },
+              { "title": "NativeScript (Angular / Vue tabanlı)" }
+            ]
+          },
+          {
+            "title": "Mimari ve Tasarım Desenleri",
+            "subtitle": "MVVM, Clean Architecture, Modularization",
+            "description": "<strong>MVVM (Model-View-ViewModel)</strong>, UI kodunu (View) iş mantığından (ViewModel) ayırarak test edilebilirliği ve yönetilebilirliği artıran en yaygın mimari desendir. <strong>Clean Architecture</strong>, bu ayrımı daha da ileri taşıyarak uygulamanın katmanlarını (UI, Domain, Data) kesin çizgilerle ayırır ve büyük, uzun ömürlü projeler için idealdir. <strong>Modularization</strong> ise büyük bir uygulamayı küçük ve bağımsız modüllere bölerek derleme sürelerini kısaltır ve takımların paralel çalışmasını sağlar."
+          }
+        ]
+      },
+      {
+        "title": "🖥️ Masaüstü Geliştirme",
+        "description": "Windows, macOS ve Linux gibi işletim sistemleri üzerinde çalışan masaüstü uygulamaları oluşturma alanıdır.",
+        "children": [
+          { "title": "Electron.js (JS + HTML + CSS)" },
+          { "title": "Tauri", "subtitle": "Rust tabanlı, hafif Electron alternatifi" },
+          { "title": "PyQt / PySide (Python)" },
+          { "title": "GTK / WxPython / Tkinter" },
+          { "title": ".NET WPF / WinUI / MAUI" },
+          { "title": "JavaFX / Swing (Java)" }
+        ]
+      },
+      {
+        "title": "🎮 Oyun Geliştirme",
+        "description": "Bilgisayarlar, konsollar ve mobil cihazlar için 2D veya 3D interaktif oyunlar oluşturma sürecidir. Genellikle C++ veya C# gibi performans odaklı diller ve Unity, Unreal Engine gibi oyun motorları kullanılır.",
+        "children": [
+          { "title": "Unity (C#)" },
+          { "title": "Unreal Engine (C++)" },
+          { "title": "Godot (GDScript / C# / C++)" },
+          { "title": "Phaser.js (JS 2D oyun motoru)" },
+          { "title": "Cocos2d / Love2D / Pygame" }
+        ]
+      },
+      {
+        "title": "Yazılım Mimari ve Mühendislik",
+        "description": "Bir bina yaparken mimari plana ihtiyaç duyulması gibi, büyük bir yazılım projesi yaparken de bir plana ihtiyaç duyulur. Yazılım mimarisi, projenin temel yapısını, bileşenlerin nasıl organize edileceğini ve birbiriyle nasıl iletişim kuracağını belirler. İyi bir mimari, projenin performanslı, güvenli, ölçeklenebilir ve gelecekte kolayca değiştirilebilir olmasını sağlar. Kötü bir mimari ise projenin çökmesine veya bakımının imkansız hale gelmesine neden olur.",
+        "children": [
+          {
+            "title": "Tasarım Prensipleri",
+            "subtitle": "SOLID, KISS, DRY, YAGNI",
+            "description": "Bunlar, iyi, sürdürülebilir ve anlaşılır yazılımlar oluşturmak için evrensel olarak kabul görmüş kurallardır. <strong>SOLID</strong>, nesne yönelimli tasarımın 5 temel prensibini içerir. <strong>KISS (Keep It Simple, Stupid)</strong>, gereksiz karmaşıklıktan kaçınmayı ve en basit çözümün genellikle en iyisi olduğunu savunur. <strong>DRY (Don't Repeat Yourself)</strong>, kod tekrarını önlemeyi hedefler; bir mantık sadece tek bir yerde tanımlanmalıdır. <strong>YAGNI (You Ain't Gonna Need It)</strong>, \"ileride belki lazım olur\" diyerek henüz ihtiyaç duyulmayan özellikleri eklememek gerektiğini söyler. Bu prensipler, kodun bakım maliyetini düşürür ve takım çalışmasını kolaylaştırır."
+          },
+          {
+            "title": "CI/CD Sistemleri",
+            "subtitle": "Jenkins, GitHub Actions, ArgoCD",
+            "description": "<strong>CI/CD (Continuous Integration / Continuous Deployment - Sürekli Entegrasyon / Sürekli Dağıtım)</strong>, yazılım geliştirme sürecini otomatize etme pratiğidir. Geliştiriciler kodu her güncellediğinde, <strong>Jenkins</strong> veya <strong>GitHub Actions</strong> gibi araçlar bu kodu otomatik olarak test eder, derler ve başarılı olursa canlı ortama (veya test ortamına) dağıtır. Bu, hataların erken fark edilmesini, geliştirme hızının artmasını ve manuel işlemlerden kaynaklanan risklerin azalmasını sağlar. <strong>ArgoCD</strong>, özellikle Kubernetes ortamları için tasarlanmış modern bir CD aracıdır."
+          },
+          {
+            "title": "Containerization",
+            "subtitle": "Docker, Kubernetes, Helm",
+            "description": "<strong>Docker</strong>, bir uygulamayı tüm bağımlılıklarıyla (kütüphaneler, ayarlar vb.) birlikte \"konteyner\" adı verilen paketlere koyar. Bu sayede uygulama, \"benim bilgisayarımda çalışıyordu\" sorununu ortadan kaldırarak her ortamda (geliştirici bilgisayarı, test sunucusu, canlı sunucu) aynı şekilde çalışır. <strong>Kubernetes (K8s)</strong>, bu konteynerleri binlerce sunucu üzerinde yönetmek, otomatik olarak ölçeklendirmek ve bir sunucu çöktüğünde uygulamayı başka bir sunucuda yeniden başlatmak gibi karmaşık işleri yapan bir \"orkestrasyon\" aracıdır. <strong>Helm</strong>, Kubernetes uygulamalarını paketlemeyi ve yönetmeyi kolaylaştıran bir paket yöneticisidir."
+          },
+          {
+            "title": "Event-driven, CQRS, Event Sourcing",
+            "description": "Bu üçü, genellikle birlikte kullanılan ileri düzey mimari desenlerdir. <strong>Event-driven (Olay Güdümlü) Mimari</strong>, sistemin farklı parçalarının birbirleriyle \"olaylar\" (events) aracılığıyla haberleştiği bir yapıdır. Örneğin, \"Sipariş Oluşturuldu\" bir olaydır. <strong>CQRS (Command Query Responsibility Segregation)</strong>, veri yazma (Command) ve veri okuma (Query) işlemlerini birbirinden ayırır. Bu, okuma ve yazma yoğunlukları farklı olan sistemlerde performansı optimize etmeyi sağlar. <strong>Event Sourcing</strong> ise bir verinin mevcut durumunu değil, o duruma gelinene kadar gerçekleşen tüm olayların listesini kaydeder. Bu, sistemin geçmişteki herhangi bir ana geri döndürülebilmesini ve denetlenebilirliğini (audit) artırır."
+          },
+          {
+            "title": "Mikroservis Mimarileri",
+            "description": "<strong>Mikroservis Mimarisi</strong>, büyük ve karmaşık bir uygulamayı, her biri kendi işini yapan küçük, bağımsız servislere bölme yaklaşımıdır. Örneğin, bir e-ticaret sitesinde \"kullanıcı servisi\", \"ürün servisi\" ve \"sipariş servisi\" gibi. Bu, takımların bağımsız çalışmasını, farklı teknolojiler kullanabilmesini ve sistemin daha kolay ölçeklenmesini sağlar. Bu servisler birbirleriyle genellikle API'ler aracılığıyla konuşur."
+          },
+          {
+            "title": "API Teknolojileri",
+            "subtitle": "REST, GraphQL, gRPC",
+            "description": "Servislerin ve istemcilerin (örn: mobil uygulama) birbiriyle konuşmasını sağlayan arayüzlerdir. <strong>REST (Representational State Transfer)</strong>, HTTP metotlarını (GET, POST, PUT, DELETE) kullanarak kaynaklar üzerinde işlem yapan, en yaygın ve standart mimari tarzdır. <strong>GraphQL</strong>, Facebook tarafından geliştirilmiştir ve istemcinin ihtiyaç duyduğu veriyi tek bir istekte, tam olarak istediği formatta almasını sağlar; bu, \"over-fetching\" (gereğinden fazla veri çekme) sorununu çözer. <strong>gRPC</strong>, Google tarafından geliştirilen, özellikle mikroservisler arası yüksek performanslı iletişim için tasarlanmış modern bir RPC (Remote Procedure Call) framework'üdür."
+          },
+          {
+            "title": "High availability, scalability, fault tolerance",
+            "description": "Bu üç kavram, modern sistemlerin temel gereksinimleridir. <strong>High Availability (Yüksek Erişilebilirlik)</strong>, sistemin kesintisiz çalışmasını sağlamaktır (örn: %99.99 uptime). <strong>Scalability (Ölçeklenebilirlik)</strong>, artan kullanıcı yükünü karşılamak için sistemin kapasitesini (yatayda yeni sunucular ekleyerek veya dikeyde mevcut sunucuyu güçlendirerek) artırabilme yeteneğidir. <strong>Fault Tolerance (Hata Toleransı)</strong>, sistemin bir veya daha fazla bileşeni arızalandığında bile çalışmaya devam edebilmesidir. Bu kavramlar, kullanıcıların uygulamaya her zaman güvenilir bir şekilde erişebilmesini garanti altına almak için kritiktir."
+          },
+          {
+            "title": "Secure Coding ve OWASP",
+            "subtitle": "Güvenli Kodlama",
+            "description": "Yazılımı sadece işlevsel değil, aynı zamanda siber saldırılara karşı dayanıklı bir şekilde geliştirme pratiğidir. <strong>OWASP (Open Web Application Security Project)</strong>, web uygulamalarında en sık karşılaşılan güvenlik risklerini (örn: SQL Injection, XSS) ve bunlara karşı nasıl kod yazılması gerektiğini anlatan küresel bir standarttır. Güvenli kodlama, güvenlik zafiyetlerini daha en başından, kod yazılırken engellemeyi hedefler. Bu, sonradan yapılacak pahalı ve zorlu güvenlik düzeltmelerini önler."
+          }
+        ]
+      },
+      {
+        "title": "Test & Kalite",
+        "description": "Yazılımın beklendiği gibi çalıştığından ve hatalar içermediğinden emin olma sürecidir. Kaliteli bir yazılım, kullanıcı memnuniyetini artırır, şirketin itibarını korur ve gelecekteki bakım maliyetlerini düşürür. Test edilmemiş bir yazılım, finansal kayıplara, veri sızıntılarına ve hatta can kayıplarına (tıbbi cihazlar, otonom araçlar vb.) yol açabilir. \"Kalite sonradan eklenemez, en başından itibaren inşa edilir.\"",
+        "children": [
+          {
+            "title": "Unit & Integration Tests",
+            "subtitle": "JUnit, Pytest",
+            "description": "<strong>Unit Test (Birim Test)</strong>, kodun en küçük parçalarının (fonksiyonlar, metotlar) tek başına doğru çalışıp çalışmadığını kontrol eder. <strong>Integration Test (Entegrasyon Testi)</strong> ise bu küçük parçaların bir araya geldiğinde uyum içinde çalışıp çalışmadığını test eder. <strong>JUnit</strong> (Java için) ve <strong>Pytest</strong> (Python için) gibi kütüphaneler bu testleri otomatize etmeyi sağlar. Bu testler, CI/CD süreçlerinin temelini oluşturur ve bir değişiklik yapıldığında mevcut fonksiyonların bozulmadığından emin olmayı (regresyonu önlemeyi) sağlar."
+          },
+          {
+            "title": "API & Manual Testing",
+            "description": "<strong>API Testing</strong>, kullanıcı arayüzü olmadan, doğrudan servislerin (API'lerin) doğru sonuçları döndürüp döndürmediğini, doğru hataları verip vermediğini test etmektir. Bu, arayüz testlerinden daha hızlı ve güvenilirdir. <strong>Manual Testing (Manuel Test)</strong> ise bir insanın, son kullanıcı gibi uygulamayı kullanarak hataları bulmaya çalıştığı test türüdür. Özellikle kullanılabilirlik (usability) ve keşifsel (exploratory) testler için hala vazgeçilmezdir."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "⚙️ İşletim Sistemleri (Operating Systems)",
+    "description": "İşletim sistemi, bilgisayar donanım kaynaklarını yöneten ve uygulama yazılımları için temel hizmetleri sağlayan bir yazılım bütünüdür. Yazdığımız her kod, işletim sisteminin sağladığı soyutlama katmanı üzerinde çalışır. Bu nedenle, bir yazılımın nasıl performans gösterdiğini, kaynakları nasıl kullandığını ve hatalarını nasıl ayıklayacağımızı anlamak için işletim sisteminin temel yapı taşlarını bilmek zorunludur.",
+    "children": [
+      {
+        "title": "Temel Kavramlar (Core Concepts)",
+        "description": "Tüm modern işletim sistemlerinin paylaştığı evrensel prensiplerdir. Bu kavramlar, bir sistemin en alt seviyede nasıl çalıştığını anlamanın anahtarıdır.",
+        "children": [
+          {
+            "title": "Çekirdek (Kernel)",
+            "subtitle": "Monolitik, Mikroçekirdek, Hibrit",
+            "description": "<strong>Çekirdek (Kernel)</strong>, işletim sisteminin kalbidir. Donanım (CPU, bellek, diskler) ile yazılım arasında bir köprü görevi görür. Uygulamaların donanım kaynaklarına güvenli ve kontrollü bir şekilde erişmesini sağlar. <strong>Monolitik Çekirdek</strong> (örn: Linux), tüm temel servisleri tek bir büyük program olarak çalıştırır ve yüksek performans sunar. <strong>Mikroçekirdek</strong>, sadece en temel işlevleri (iletişim, bellek yönetimi) çekirdekte tutar, geri kalanını kullanıcı seviyesinde çalıştırır. <strong>Hibrit Çekirdek</strong> (örn: Windows, macOS) ise bu iki yaklaşımın bir karışımıdır."
+          },
+          {
+            "title": "Süreç ve İş Parçacığı (Process & Thread)",
+            "subtitle": "Concurrency, Parallelism, Scheduler",
+            "description": "<strong>Process (Süreç)</strong>, çalışan bir programın örneğidir ve kendine ait izole bir bellek alanına sahiptir. <strong>Thread (İş Parçacığı)</strong> ise bir süreç içinde yer alan ve bağımsız olarak çalışabilen en küçük yürütme birimidir. Bir süreç birden fazla thread içerebilir. <strong>Concurrency (Eşzamanlılık)</strong>, birden fazla görevin aynı anda ilerliyormuş gibi görünmesidir (tek çekirdekte bile olabilir). <strong>Parallelism (Paralellik)</strong> ise birden fazla görevin fiziksel olarak aynı anda (çok çekirdekte) çalışmasıdır. <strong>Scheduler (Zamanlayıcı)</strong>, hangi sürecin veya thread'in ne zaman CPU'yu kullanacağına karar veren çekirdek bileşenidir."
+          },
+          {
+            "title": "Bellek Yönetimi (Memory Management)",
+            "subtitle": "Sanal Bellek, Sayfalama (Paging)",
+            "description": "İşletim sistemi, fiziksel RAM'i süreçler arasında verimli ve güvenli bir şekilde paylaştırır. <strong>Sanal Bellek (Virtual Memory)</strong>, her sürece kendi özel, büyük ve kesintisiz bellek alanına sahipmiş gibi bir yanılsama sunar. Bu, süreçleri birbirinden izole eder ve fiziksel RAM'den daha büyük programların çalışmasına olanak tanır. Bu işlem genellikle <strong>Sayfalama (Paging)</strong> adı verilen bir teknikle, belleğin \"sayfa\" adı verilen küçük, sabit boyutlu bloklara bölünmesiyle gerçekleştirilir."
+          },
+          {
+            "title": "Dosya Sistemleri (File Systems)",
+            "subtitle": "NTFS, ext4, APFS, VFS",
+            "description": "Dosya sistemi, verilerin disk gibi kalıcı depolama aygıtlarında nasıl organize edildiğini, saklandığını ve erişildiğini tanımlayan yapıdır. <strong>NTFS</strong> (Windows), <strong>ext4</strong> (Linux) ve <strong>APFS</strong> (macOS) yaygın dosya sistemleridir. İşletim sistemi, <strong>VFS (Virtual File System)</strong> gibi bir soyutlama katmanı sayesinde uygulamaların, altta yatan dosya sisteminin türünden bağımsız olarak dosyalarla (okuma, yazma, silme) etkileşim kurmasını sağlar."
+          }
+        ]
+      },
+      {
+        "title": "Platforma Özgü Mimariler",
+        "description": "Temel kavramlar evrensel olsa da, Windows ve Unix/Linux gibi işletim sistemi aileleri bu kavramları farklı şekillerde uygular ve kendilerine özgü ek yapılar sunarlar.",
+        "children": [
+          {
+            "title": "Windows Mimarisi",
+            "subtitle": "WinAPI, DLL, Kayıt Defteri (Registry)",
+            "description": "Windows, uygulamaların işletim sistemi servislerine erişmek için kullandığı <strong>WinAPI (Windows API)</strong> adlı geniş bir fonksiyon seti sunar. <strong>DLL (Dynamic-Link Library)</strong> dosyaları, birden fazla program tarafından paylaşılabilen kod ve veri içeren kütüphanelerdir. Bu, kod tekrarını önler ve bellek kullanımını azaltır. <strong>Kayıt Defteri (Registry)</strong>, sistem ve uygulama ayarlarının saklandığı hiyerarşik bir veritabanıdır."
+          },
+          {
+            "title": "Linux/Unix Mimarisi",
+            "subtitle": "Kabuk (Shell), Sistem Çağrıları (Syscalls), 'Her Şey Bir Dosyadır'",
+            "description": "Unix felsefesinin temelinde \"her şey bir dosyadır\" prensibi yatar. Donanım aygıtları, ağ bağlantıları ve süreçler bile dosya sistemi üzerinden erişilebilen özel dosyalar olarak temsil edilir. Kullanıcılar, <strong>Kabuk (Shell)</strong> (örn: Bash) adı verilen bir komut satırı yorumlayıcısı aracılığıyla işletim sistemiyle etkileşime girer. Uygulamalar ise çekirdek servislerini kullanmak için <strong>Sistem Çağrıları (System Calls)</strong> (örn: `fork()`, `exec()`, `open()`) adı verilen standart bir arayüzü kullanır. Kabuk, aslında bu sistem çağrılarını kullanan bir kullanıcı programıdır."
+          }
+        ]
+      },
+      {
+        "title": "Sistem Yönetimi ve Otomasyon",
+        "description": "İşletim sistemlerinin kurulumu, yapılandırılması, bakımı ve günlük operasyonlarının yönetilmesi süreçleridir. Otomasyon, bu süreçleri daha verimli ve hatasız hale getirmek için kritik öneme sahiptir.",
+        "children": [
+          {
+            "title": "Linux/Unix Yönetimi",
+            "subtitle": "Bash, Systemd, Cron, SSH, Dosya İzinleri",
+            "description": "Sunucu dünyasının büyük çoğunluğuna hakim olan Linux (Debian, CentOS, Ubuntu vb.) ve Unix benzeri sistemlerin yönetimi. <strong>Bash/Shell scripting</strong> ile otomasyon, <strong>Systemd</strong> ile servis yönetimi, <strong>Cron</strong> ile zamanlanmış görevler, <strong>SSH</strong> ile güvenli uzaktan erişim ve dosya sistemi izinleri (chmod, chown) gibi konular temel yetkinliklerdir."
+          },
+          {
+            "title": "Windows Server Yönetimi",
+            "subtitle": "PowerShell, Active Directory, IIS, Group Policy",
+            "description": "Kurumsal ortamlarda yaygın olarak kullanılan Windows sunucu işletim sisteminin yönetimi. <strong>PowerShell</strong> ile güçlü otomasyon ve script yazma, <strong>Active Directory</strong> ile kullanıcı ve kimlik yönetimi, <strong>IIS</strong> ile web sunucusu yapılandırması ve <strong>Group Policy</strong> ile merkezi konfigürasyon yönetimi bu alanın temel taşlarıdır."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "☁️ Altyapı ve Sistem Mühendisliği",
+    "description": "Yazılımın üzerinde çalışacağı \"zemin\"dir. Sunucular, ağlar, veritabanları ve bulut platformları gibi bileşenlerin kurulması, yapılandırılması ve bakımının yapılmasıdır. Sağlam bir altyapı olmadan en iyi yazılım bile yavaş, güvensiz ve erişilemez olur. Bu alan, yazılımın performanslı, güvenli ve kesintisiz bir şekilde kullanıcılara ulaşmasını sağlar.",
+    "children": [
+      {
+        "title": "DevOps",
+        "description": "DevOps, Yazılım Geliştirme (Development) ve Altyapı Operasyonları (Operations) kelimelerinin birleşimidir. Geliştirme ve operasyon ekipleri arasındaki duvarları yıkarak, yazılımın daha hızlı ve güvenilir bir şekilde üretilip dağıtılmasını hedefleyen bir kültür ve pratikler bütünüdür. Otomasyon, iş birliği ve sürekli iyileştirme temel prensipleridir.",
+        "children": [
+          {
+            "title": "Containerization & Orchestration",
+            "description": "<strong>Docker</strong>, bir uygulamayı tüm bağımlılıklarıyla birlikte \"konteyner\" adı verilen paketlere koyar. <strong>Kubernetes (K8s)</strong> ise bu konteynerleri binlerce sunucu üzerinde yönetmek, otomatik olarak ölçeklendirmek ve bir sunucu çöktüğünde uygulamayı başka bir sunucuda yeniden başlatmak gibi karmaşık işleri yapan bir \"orkestrasyon\" aracıdır.",
+            "children": [
+              { "title": "Docker / Podman", "subtitle": "Containerization" },
+              { "title": "Kubernetes / OpenShift", "subtitle": "Orchestration" }
+            ]
+          },
+          {
+            "title": "CI/CD (Sürekli Entegrasyon/Dağıtım)",
+            "description": "Yazılım geliştirme sürecini otomatize etme pratiğidir. Geliştiriciler kodu her güncellediğinde, bu araçlar kodu otomatik olarak test eder, derler ve başarılı olursa canlı ortama dağıtır.",
+            "children": [
+              { "title": "GitHub Actions" },
+              { "title": "GitLab CI" },
+              { "title": "Jenkins / CircleCI / Travis CI" }
+            ]
+          },
+          {
+            "title": "Infrastructure as Code (IaC)",
+            "description": "Altyapıyı (sunucular, ağlar, veritabanları) manuel olarak tıklayarak kurmak yerine, kod yazarak (örn: Terraform) veya konfigürasyon dosyalarıyla (örn: Ansible) tanımlama pratiğidir. Bu sayede altyapı versiyonlanabilir, yeniden kullanılabilir ve tutarlı bir şekilde kurulabilir.",
+            "children": [
+              { "title": "Terraform" },
+              { "title": "Ansible / Chef / Puppet" },
+              { "title": "Pulumi" }
+            ]
+          },
+          {
+            "title": "Cloud Platforms",
+            "description": "Kendi fiziksel sunucularınızı almak ve yönetmek yerine, internet üzerinden sanal sunucu, veritabanı, depolama gibi bilişim hizmetlerini kiralamanızı sağlayan platformlardır.",
+            "children": [
+              { "title": "AWS / Azure / Google Cloud / DigitalOcean" },
+              { "title": "Firebase / Supabase / Vercel / Netlify" },
+              { "title": "Render / Cloudflare Pages" }
+            ]
+          },
+          {
+            "title": "Monitoring & Log Management",
+            "subtitle": "Prometheus, Grafana, Elastic",
+            "description": "<strong>Monitoring (İzleme)</strong>, sistemin sağlığını (CPU, bellek, ağ kullanımı vb.) sürekli olarak takip etmektir. <strong>Prometheus</strong> metrik tabanlı izleme için popüler bir araçtır ve <strong>Grafana</strong> ile bu metrikler görsel panolara (dashboard) dönüştürülür. <strong>Log Management (Log Yönetimi)</strong> ise uygulamaların ve sistemlerin ürettiği olay kayıtlarını (logları) merkezi bir yerde toplayıp analiz etmektir. <strong>Elastic Stack (ELK - Elasticsearch, Logstash, Kibana)</strong> bu alanda en popüler çözümdür. İzleme ve loglama, bir sorun olduğunda nedenini hızlıca bulmak ve proaktif olarak sorunları önlemek için hayati önem taşır."
+          },
+          {
+            "title": "Network & System Management",
+            "subtitle": "Nginx, Load Balancer, Active Directory",
+            "description": "<strong>Nginx</strong> ve <strong>Apache</strong> gibi web sunucuları, gelen istekleri karşılar ve ilgili uygulamalara yönlendirir. <strong>Load Balancer</strong> (Yük Dengeleyici), gelen trafiği birden fazla sunucuya dağıtarak tek bir sunucunun aşırı yüklenmesini engeller ve sistemin kesintisiz çalışmasını sağlar. <strong>Active Directory (AD)</strong>, Windows tabanlı ağlarda kullanıcı kimliklerini, yetkilerini ve bilgisayarları merkezi olarak yöneten bir dizin hizmetidir. <strong>Linux/Unix</strong> sistem yönetimi ise bu işletim sistemlerinin kurulumu, konfigürasyonu, güvenliği ve bakımını kapsar."
+          }
+        ]
+      },
+      {
+        "title": "💾 Veritabanı ve Veri Yönetimi",
+        "description": "Verinin depolanması, yönetilmesi, güvenliğinin sağlanması ve analiz için hazır hale getirilmesi süreçleridir. Veri, günümüzün en değerli varlığıdır ve doğru yönetilmediğinde bir anlam ifade etmez. DataOps, DevOps prensiplerini veri yönetimi ve analitiği süreçlerine uygulayarak veri akışını otomatize etmeyi ve hızlandırmayı hedefler.",
+        "children": [
+          {
+            "title": "SQL Veritabanları",
+            "description": "Verileri tablolar, satırlar ve sütunlar halinde yapılandırılmış bir şekilde saklayan ilişkisel veritabanlarıdır.",
+            "children": [
+              { "title": "MySQL" },
+              { "title": "PostgreSQL" },
+              { "title": "MariaDB" },
+              { "title": "SQLite" },
+              { "title": "MS SQL Server / Oracle" }
+            ]
+          },
+          {
+            "title": "NoSQL Veritabanları",
+            "description": "İlişkisel olmayan, esnek veri modelleri sunan veritabanlarıdır (örn: doküman, anahtar-değer, graf).",
+            "children": [
+              { "title": "MongoDB" },
+              { "title": "Redis" },
+              { "title": "Cassandra" },
+              { "title": "CouchDB" },
+              { "title": "DynamoDB (AWS)" }
+            ]
+          },
+          {
+            "title": "Graph Veritabanları",
+            "children": [
+              { "title": "Neo4j" },
+              { "title": "ArangoDB" },
+              { "title": "Dgraph" }
+            ]
+          },
+          {
+            "title": "ORM / ODM Katmanları",
+            "description": "Veritabanı sorgularını doğrudan yazmak yerine, programlama dilindeki nesneler aracılığıyla veritabanı işlemleri yapmayı sağlayan kütüphanelerdir.",
+            "children": [
+              { "title": "Sequelize / Prisma / TypeORM (Node.js)" },
+              { "title": "Eloquent (Laravel)" },
+              { "title": "Django ORM" },
+              { "title": "Mongoose (MongoDB)" }
+            ]
+          },
+          {
+            "title": "Arama ve Analitik Veritabanları",
+            "subtitle": "Elasticsearch, ClickHouse",
+            "description": "<strong>Elasticsearch</strong>, temel olarak tam metin arama (full-text search) ve log analitiği için tasarlanmış, yüksek hızda arama ve analiz yapabilen bir arama motorudur. Log yönetimi (ELK Stack) ve ürün arama gibi senaryolarda yaygın olarak kullanılır. <strong>ClickHouse</strong> ise, çok büyük veri setleri üzerinde gerçek zamanlıya yakın analitik sorgular çalıştırmak için optimize edilmiş, sütun tabanlı (columnar) bir veritabanıdır. Geleneksel veritabanlarının yavaş kaldığı büyük raporlama ve analiz işleri için idealdir."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "🤖 Yapay Zeka ve Veri Bilimi",
+    "description": "Veriden anlamlı desenler ve bilgiler çıkararak geleceğe yönelik tahminler yapan, karar alma süreçlerini otomatize eden ve insan benzeri yetenekler (görme, anlama, konuşma) sergileyen sistemler oluşturma bilimidir. Şirketlerin daha akıllı kararlar almasını, verimliliği artırmasını ve tamamen yeni ürün ve hizmetler yaratmasını sağlar.",
+    "children": [
+      {
+        "title": "Python Temelli Ekosistem",
+        "description": "Makine Öğrenmesi (ML), bilgisayarlara açıkça programlanmadan, veriden öğrenme yeteneği kazandırma alanıdır. Yapay Zeka'nın (AI) bir alt dalıdır. Spam filtreleri, ürün tavsiye sistemleri, yüz tanıma gibi teknolojiler ML sayesinde çalışır.",
+        "children": [
+          {
+            "title": "Veri Analizi ve Manipülasyonu",
+            "children": [{ "title": "NumPy / Pandas / Matplotlib / Seaborn" }]
+          },
+          {
+            "title": "Makine Öğrenmesi Kütüphaneleri",
+            "children": [{ "title": "Scikit-learn / XGBoost / LightGBM" }]
+          },
+          {
+            "title": "Derin Öğrenme Framework'leri",
+            "description": "<strong>PyTorch</strong> ve <strong>TensorFlow</strong>, derin öğrenme modelleri oluşturmak için kullanılan temel kütüphanelerdir. <strong>Hugging Face Transformers</strong> kütüphanesi ise, binlerce önceden eğitilmiş dil modeline (BERT, GPT gibi) kolayca erişim ve kullanım imkanı sunarak NLP (Doğal Dil İşleme) alanında devrim yaratmıştır.",
+            "children": [{ "title": "TensorFlow / PyTorch / Keras" }]
+          },
+          {
+            "title": "Görüntü İşleme",
+            "children": [{ "title": "OpenCV / PIL (görüntü işleme)" }]
+          },
+          {
+            "title": "Arayüz ve Sunum",
+            "children": [{ "title": "Jupyter / Streamlit / Gradio (arayüz)" }]
+          }
+        ]
+      },
+      {
+        "title": "Büyük Veri (Big Data) ve Depolama",
+        "children": [
+          {
+            "title": "İşleme Motorları",
+            "children": [{ "title": "Hadoop / Spark / Hive" }]
+          },
+          {
+            "title": "Veri Ambarları",
+            "children": [{ "title": "BigQuery / Redshift" }]
+          }
+        ]
+      },
+      {
+        "title": "MLOps (Makine Öğrenmesi Operasyonları)",
+        "description": "Makine öğrenmesi modellerinin geliştirme, dağıtım ve bakım süreçlerini otomatize eden ve standartlaştıran pratikler bütünüdür.",
+        "children": [
+          { "title": "MLflow / Kubeflow" },
+          { "title": "DVC / Airflow" },
+          { "title": "FastAPI + Docker + Cloud (deployment)" }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "🧱 Siber Güvenlik",
+    "description": "Bilgisayar sistemlerini, ağları ve verileri yetkisiz erişimden, saldırılardan ve hasardan koruma pratiğidir. Dijital dünyada veri en değerli varlık olduğundan, siber güvenlik; finansal kayıpları, itibar zedelenmesini, yasal yaptırımları ve müşteri verilerinin çalınmasını önlemek için vazgeçilmezdir.",
+    "children": [
+      {
+        "title": "Savunma ve Tespit Teknolojileri",
+        "subtitle": "SIEM, SOAR, EDR, WAF, IPS, PAM",
+        "description": "Siber savunma katmanlardan oluşur. <strong>SIEM</strong> logları toplayıp analiz ederken, <strong>SOAR (Security Orchestration, Automation, and Response)</strong> bu alarmlara otomatik yanıtlar verilmesini sağlar. <strong>EDR (Endpoint Detection and Response)</strong> son kullanıcı cihazlarını (bilgisayar, sunucu) korur. <strong>WAF (Web Application Firewall)</strong> web uygulamalarına yönelik saldırıları engeller. <strong>IPS (Intrusion Prevention System)</strong> ağ trafiğindeki zararlı aktiviteleri durdurur. <strong>PAM (Privileged Access Management)</strong> ise yönetici gibi kritik hesapların erişimini güvenli hale getirir."
+      },
+      {
+        "title": "Güvenlik Süreç ve Çerçeveleri",
+        "subtitle": "MITRE ATT&CK, Threat Modeling, S-SDLC",
+        "description": "Teknolojiler kadar süreçler de önemlidir. <strong>MITRE ATT&CK</strong>, saldırganların kullandığı taktik ve teknikleri içeren bir bilgi tabanıdır ve savunma stratejilerini buna göre şekillendirmeyi sağlar. <strong>Threat Modeling (Tehdit Modelleme)</strong>, bir sistem daha geliştirilme aşamasındayken potansiyel güvenlik zafiyetlerini proaktif olarak belirleme sürecidir. <strong>S-SDLC (Secure Software Development Lifecycle)</strong> ise yazılım geliştirme yaşam döngüsünün her aşamasına (tasarım, kodlama, test, dağıtım) güvenlik kontrollerini entegre etme pratiğidir."
+      },
+      {
+        "title": "Sızma Testi (Penetration Testing)",
+        "subtitle": "OWASP, OSCP, Red/Purple Team",
+        "description": "Kontrollü ve yasal bir şekilde, bir \"etik hacker\" gibi davranarak bir sistemin güvenlik zafiyetlerini bulmaya çalışma işlemidir. <strong>Red Team</strong> operasyonları, gerçek bir saldırganı taklit ederek savunma ekibinin (<strong>Blue Team</strong>) hazırlığını test eder. <strong>Purple Team</strong> ise bu iki ekibin iş birliği içinde çalışarak savunmayı güçlendirdiği tatbikatlardır. <strong>OWASP (Open Web Application Security Project)</strong>, web uygulamalarındaki en kritik güvenlik risklerini (örn: SQL Injection) listeleyen ve bunlara karşı nasıl önlem alınacağını anlatan bir organizasyondur. <strong>OSCP</strong> gibi sertifikalar, bu alandaki pratik yetkinliği kanıtlar."
+      }
+    ]
+  },
+  {
+    "title": "🧠 Yazılım Süreçleri ve Analiz",
+    "description": "Doğru yazılımı, doğru şekilde üretmek için gereken metodolojiler ve planlama disiplinleridir. Sadece kod yazmak yeterli değildir; neyin, neden ve kimin için yapıldığını anlamak, projenin başarısı için kritiktir. Bu alan, iş hedefleri ile teknik uygulama arasında köprü kurar.",
+    "children": [
+      {
+        "title": "İş Analizi, Gereksinim Yönetimi",
+        "description": "<strong>İş Analizi</strong>, paydaşların (müşteri, kullanıcılar, yöneticiler) ihtiyaçlarını anlama ve bunları yazılım ekibinin anlayacağı net \"gereksinimlere\" dönüştürme sürecidir. Yanlış veya eksik anlaşılmış bir gereksinim, projenin tamamen yanlış bir ürün ortaya çıkarmasına neden olabilir. Gereksinim yönetimi, bu ihtiyaçların proje yaşam döngüsü boyunca takip edilmesini ve yönetilmesini sağlar."
+      },
+      {
+        "title": "Agile / Scrum Metodolojileri",
+        "description": "<strong>Agile (Çevik)</strong>, yazılım geliştirmeye yönelik esnek ve iş birliğine dayalı bir yaklaşımdır. Projeyi en baştan sonuna kadar detaylıca planlamak yerine, işi \"sprint\" adı verilen kısa (1-4 hafta) periyotlara böler. Her sprint'in sonunda çalışan bir ürün parçası ortaya çıkarılır ve müşteriden geri bildirim alınır. <strong>Scrum</strong>, Agile'ı uygulamak için kullanılan en popüler çerçevedir (framework). Bu yaklaşım, değişen gereksinimlere hızla adapte olmayı ve müşteriye daha hızlı değer sunmayı sağlar."
+      }
+    ]
+  },
+  {
+    "title": "🏦 Sektörel Alan Bilgileri",
+    "description": "Teknik bilgi tek başına yeterli değildir. Bir yazılım mühendisinin, çalıştığı sektörün (bankacılık, oyun, sağlık vb.) dinamiklerini, terminolojisini ve iş süreçlerini anlaması gerekir. Bu \"domain bilgisi\", doğru soruları sormayı, iş ihtiyaçlarını daha iyi anlamayı ve sonuç olarak daha değerli ve amaca uygun ürünler geliştirmeyi sağlar.",
+    "children": [
+      {
+        "title": "Bankacılık ve Finans (Fintech)",
+        "subtitle": "Kredi süreçleri, Yatırım, Dijital Bankacılık",
+        "description": "Yüksek güvenlik, regülasyon uyumluluğu (BDDK, PCI-DSS) ve performans gerektiren bir alandır. Kredi başvuru ve değerlendirme süreçleri, skorlama modelleri, limit yönetimi, yatırım ve hazine sistemleri, kartlı ödeme sistemleri ve dijital bankacılık uygulamaları (mobil/internet bankacılığı) gibi karmaşık iş akışları içerir."
+      },
+      {
+        "title": "Diğer Sektörler",
+        "subtitle": "Oyun, E-ticaret, Medya, Telekom, Enerji/IoT",
+        "description": "Her sektörün kendine özgü zorlukları ve teknolojileri vardır. <strong>Oyun Geliştirme</strong>'de grafik, fizik ve performans optimizasyonu öne çıkar. <strong>E-ticaret</strong>'te envanter yönetimi, ödeme sistemleri ve kullanıcı deneyimi kritiktir. <strong>Medya</strong>'da içerik akışı (streaming) ve CMS entegrasyonları önemlidir. <strong>Telekom</strong>'da ağ izleme ve VOIP sistemleri, <strong>Enerji ve IoT</strong>'de ise sensör verilerinin işlenmesi ve B2B SaaS platformları merkezde yer alır."
+      }
+    ]
+  },
+  {
+    "title": "🌱 Kişisel Gelişim ve Öğrenme Alanları",
+    "description": "Teknoloji sürekli değişir ve gelişir. Dün popüler olan bir teknoloji yarın eskiyebilir. Bu nedenle, bir yazılım mühendisinin en önemli yeteneği \"öğrenmeyi öğrenmek\" ve kendini sürekli güncel tutmaktır. Teknik becerilerin yanı sıra, iletişim, liderlik ve ürün odaklı düşünme gibi \"yumuşak beceriler\" (soft skills), kariyerde ilerlemek ve etkili bir takım oyuncusu olmak için hayati önem taşır. <strong>AI destekli kodlama asistanları (Cursor, Copilot)</strong> gibi yeni araçları takip etmek ve verimli kullanmak da bu sürecin bir parçasıdır."
+  }
+]
