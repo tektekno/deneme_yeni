@@ -329,6 +329,23 @@
         font-weight: bold;
         cursor: pointer;
       }
+
+      /* Yağış uyarısı için yanıp sönme animasyonu */
+      @keyframes flash-warning {
+        0%,
+        100% {
+          color: #e8f53c; /* Beyaz */
+          transform: scale(1);
+        }
+        50% {
+          color: #00ffff; /* Cyan */
+          transform: scale(1.05);
+        }
+      }
+
+      .weather-warning {
+        animation: flash-warning 0.8s infinite;
+      }
     </style>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
@@ -560,15 +577,20 @@
             95, 96, 99,
           ];
           const tomorrowCode = today.weathercode[1];
+          const weatherRow = infoWeather.parentElement; // <tr> elementini al
 
           if (badWeatherCodes.includes(tomorrowCode)) {
-            infoWeather.textContent = "Yakında yağış var, araç yıkanmaz."; // Renk CSS'den gelecek
+            infoWeather.textContent = "🌧️☂️Yakında yağış var, araç yıkanmaz."; // Renk CSS'den gelecek
+            // Yağış varsa, tüm satıra uyarı sınıfını ekle
+            weatherRow.classList.add("weather-warning");
           } else {
             infoWeather.textContent = "Yakında yağış yok, araç yıkanır."; // Renk CSS'den gelecek
+            // Yağış yoksa, uyarı sınıfını kaldır
+            weatherRow.classList.remove("weather-warning");
           }
         } catch (error) {
           console.error("Hava durumu verisi alınamadı:", error);
-          infoWeather.textContent = "Bilgi alınamadı."; // Renk CSS'den gelecek
+          infoWeather.textContent = "Bilgi alınamadı.";
         }
       }
 
