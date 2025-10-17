@@ -2,20 +2,40 @@
 <html lang="tr">
   <head>
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-4Y5K6S0S87"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-4Y5K6S0S87"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
 
-  gtag('config', 'G-4Y5K6S0S87');
-</script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+      gtag("config", "G-4Y5K6S0S87");
+    </script>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes"
+    />
+
+    <!-- Önbelleği Engelleme Etiketleri: Kullanıcıların her zaman en güncel sürümü almasını sağlar. -->
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
     <title>Duraklara Göralama</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400..700&family=Madimi+One&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400..700&family=Madimi+One&family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
       /* Genel ayarlar */
       body {
@@ -26,7 +46,7 @@
         width: 100vw;
         background-color: black;
         color: white;
-        font-family: 'Kode Mono', monospace;
+        font-family: "Kode Mono", monospace;
         overflow: hidden;
       }
 
@@ -67,8 +87,12 @@
       }
 
       @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
       }
 
       /* Durakları içeren container */
@@ -81,7 +105,7 @@
 
       /* Durak kutuları */
       .durak {
-        padding: 1vh 2vw; 
+        padding: 1vh 2vw;
         border: 0.2vw solid #ccc;
         border-radius: 2vw;
         text-align: center;
@@ -97,8 +121,14 @@
       }
 
       .durak {
-        width: var(--durak-width, 80vw); /* JS'den gelen veya varsayılan değer */
-        font-size: var(--durak-font-size, 4vw); /* JS'den gelen veya varsayılan değer */
+        width: var(
+          --durak-width,
+          80vw
+        ); /* JS'den gelen veya varsayılan değer */
+        font-size: var(
+          --durak-font-size,
+          4vw
+        ); /* JS'den gelen veya varsayılan değer */
       }
 
       /* Dinamik renk sınıfları */
@@ -121,57 +151,61 @@
       /* --- DİYAGONAL ŞERİT STİLLERİ BAŞLANGIÇ --- */
       /* --- YENİ GÜNCELLEME: DAHA AŞAĞI KONUMLANDIRMA VE KÜÇÜK YAZI BOYUTU --- */
       /* ------------------------------------------- */
-      
+
       .durak::after {
-          position: absolute;
-          font-family: 'Madimi One', sans-serif; /* Şeridi daha çarpıcı göstermek için font */
-          color: white;
-          
-          /* YAZI ORTALAMASI */
-          display: flex; 
-          justify-content: center; /* Yatayda ortala */
-          align-items: center; /* Dikeyde ortala */
-          
-          /* Diyagonal şerit ayarları */
-          width: 160%;
-          top: 3vw;  /* <--- YENİ GÜNCELLEME: Şeridin başlangıç noktasını daha da aşağı kaydırdık. */
-          left: -70%;  
-          padding: 0.5vw 0;
-          font-size: clamp(9px, 1.6vw, 16px); /* <--- YENİ GÜNCELLEME: Genel font boyutu küçültüldü. */
-          font-weight: 700;
-          line-height: 1.2;
-          transform: rotate(-45deg); /* Diyagonal eğim (SOL ÜSTTEN SAĞ ALTA) */
-          z-index: 10;
-          box-shadow: 0 0 1vw rgba(0, 0, 0, 0.5);
-          text-shadow: 1px 1px 2px black;
-          pointer-events: none; 
+        position: absolute;
+        font-family: "Madimi One", sans-serif; /* Şeridi daha çarpıcı göstermek için font */
+        color: white;
+
+        /* YAZI ORTALAMASI */
+        display: flex;
+        justify-content: center; /* Yatayda ortala */
+        align-items: center; /* Dikeyde ortala */
+
+        /* Diyagonal şerit ayarları */
+        width: 160%;
+        top: 3vw; /* <--- YENİ GÜNCELLEME: Şeridin başlangıç noktasını daha da aşağı kaydırdık. */
+        left: -70%;
+        padding: 0.5vw 0;
+        font-size: clamp(
+          9px,
+          1.6vw,
+          16px
+        ); /* <--- YENİ GÜNCELLEME: Genel font boyutu küçültüldü. */
+        font-weight: 700;
+        line-height: 1.2;
+        transform: rotate(-45deg); /* Diyagonal eğim (SOL ÜSTTEN SAĞ ALTA) */
+        z-index: 10;
+        box-shadow: 0 0 1vw rgba(0, 0, 0, 0.5);
+        text-shadow: 1px 1px 2px black;
+        pointer-events: none;
       }
 
       /* En Hızlı Şeridi */
       .durak.hizli::after {
-          content: 'EN HIZLI';
-          background-color: #00cc00; /* Parlak yeşil şerit */
+        content: "EN HIZLI";
+        background-color: #00cc00; /* Parlak yeşil şerit */
       }
 
       /* Orta Hızlı Şeridi */
       .durak.orta::after {
-          content: 'ORTA HIZLI';
-          background-color: #ffcc00; /* Parlak sarı şerit */
+        content: "ORTA HIZLI";
+        background-color: #ffcc00; /* Parlak sarı şerit */
       }
 
       /* En Yavaş Şeridi */
       .durak.yavas::after {
-          content: 'YAVAŞ';
-          background-color: #ff3333; /* Parlak kırmızı şerit */
+        content: "YAVAŞ";
+        background-color: #ff3333; /* Parlak kırmızı şerit */
       }
 
       /* Küçük ekranlar (Dikey mobil) için şerit ayarı optimizasyonu */
       @media (max-width: 600px) {
-          .durak::after {
-              top: 20px; /* <--- YENİ GÜNCELLEME: Mobilde daha da aşağı (içeri) indirildi. */
-              left: -70%; 
-              font-size: 13px; /* <--- YENİ GÜNCELLEME: Mobildeki font boyutu küçültüldü. */
-          }
+        .durak::after {
+          top: 20px; /* <--- YENİ GÜNCELLEME: Mobilde daha da aşağı (içeri) indirildi. */
+          left: -70%;
+          font-size: 13px; /* <--- YENİ GÜNCELLEME: Mobildeki font boyutu küçültüldü. */
+        }
       }
       /* ------------------------------------------- */
       /* --- DİYAGONAL ŞERİT STİLLERİ BİTİŞ --- */
@@ -188,10 +222,18 @@
       }
 
       /* Satır Renkleri */
-      #info-table tr:nth-child(1) { color: #C8A2C8; } /* Açık Mor */
-      #info-table tr:nth-child(2) { color: #FFC085; } /* Açık Turuncu */
-      #info-table tr:nth-child(3) { color: #FF8C8C; } /* Açık Kırmızı */
-      #info-table tr:nth-child(4) { color: #87CEEB; } /* Açık Mavi */
+      #info-table tr:nth-child(1) {
+        color: #c8a2c8;
+      } /* Açık Mor */
+      #info-table tr:nth-child(2) {
+        color: #ffc085;
+      } /* Açık Turuncu */
+      #info-table tr:nth-child(3) {
+        color: #ff8c8c;
+      } /* Açık Kırmızı */
+      #info-table tr:nth-child(4) {
+        color: #87ceeb;
+      } /* Açık Mavi */
 
       /* Yatay düzende tablo genişliğini ayarla */
       @media (min-aspect-ratio: 1.1) {
@@ -255,7 +297,7 @@
         padding: 8px 12px;
         background-color: transparent; /* Başlangıçta şeffaf */
         color: transparent; /* Başlangıçta şeffaf */
-        font-family: 'Kode Mono', monospace;
+        font-family: "Kode Mono", monospace;
         font-size: 0.8rem;
         border-radius: 5px;
         cursor: pointer;
@@ -263,7 +305,7 @@
         user-select: none;
         transition: color 0.3s ease, background-color 0.3s ease;
       }
-      
+
       /* Tıklanabilir olduğunda rengi biraz görünür yapma */
       #viewport-info:hover {
         background-color: rgba(0, 0, 0, 0.6);
@@ -295,13 +337,12 @@
         font-weight: bold;
         cursor: pointer;
       }
-
     </style>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
   </head>
   <body>
-    <div id="debug-controls" style="display: none;">
+    <div id="debug-controls" style="display: none">
       <div>
         <span>Merkez:</span>
         <button id="add-merkez">+</button>
@@ -323,7 +364,15 @@
     </div>
     <div id="viewport-info"></div>
     <div class="content">
-      <div id="debug-warning" style="color: yellow; font-weight: bold; display: none; margin-bottom: 1rem;">
+      <div
+        id="debug-warning"
+        style="
+          color: yellow;
+          font-weight: bold;
+          display: none;
+          margin-bottom: 1rem;
+        "
+      >
         DİKKAT: DEBUG MODU AKTİF
       </div>
       <div id="main-container">
@@ -331,7 +380,7 @@
           <!-- Yükleniyor simgesi -->
           <div id="loader" class="loader"></div>
           <!-- Yeni Bilgi Tablosu -->
-          <table id="info-table" style="display: none;">
+          <table id="info-table" style="display: none">
             <tbody>
               <tr>
                 <td class="info-key">Son Güncelleme:</td>
@@ -352,23 +401,26 @@
             </tbody>
           </table>
         </div>
-        <div id="duraklar-container" class="container">
-          </div>
+        <div id="duraklar-container" class="container"></div>
       </div>
     </div>
     <script>
       // --- Cihaz Engelleme Kontrolü ---
       // Bu fonksiyon, sayfanın geri kalanı çalışmadan önce çağrılır.
-      (function() {
+      (function () {
         // Engellenecek cihaz modellerini bu diziye ekleyebilirsiniz.
         const blockedModels = [];
         const userAgent = navigator.userAgent;
 
         // User agent'ın engellenen modellerden herhangi birini içerip içermediğini kontrol et
-        const isBlocked = blockedModels.some(model => userAgent.includes(model));
+        const isBlocked = blockedModels.some((model) =>
+          userAgent.includes(model)
+        );
 
         if (isBlocked) {
-          const blockedModelFound = blockedModels.find(model => userAgent.includes(model));
+          const blockedModelFound = blockedModels.find((model) =>
+            userAgent.includes(model)
+          );
           // Sayfa içeriğini temizle ve uyarı mesajı göster
           document.documentElement.innerHTML = `
             <head><title>Desteklenmiyor</title><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
@@ -382,26 +434,27 @@
       const firebaseConfig = {
         apiKey: "AIzaSyCTTDvLsIY3ZS8zNP77lxLG0SdoOke2vLk",
         authDomain: "kptakip.firebaseapp.com",
-        databaseURL: "https://kptakip-default-rtdb.europe-west1.firebasedatabase.app",
+        databaseURL:
+          "https://kptakip-default-rtdb.europe-west1.firebasedatabase.app",
         projectId: "kptakip",
         storageBucket: "kptakip.firebasestorage.app",
         messagingSenderId: "401633293269",
-        appId: "1:401633293269:web:8386edc126aafe1929435c"
+        appId: "1:401633293269:web:8386edc126aafe1929435c",
       };
       // Firebase uygulamasını başlat
       firebase.initializeApp(firebaseConfig);
       const database = firebase.database();
-      const ref = database.ref('taksi_verileri');
+      const ref = database.ref("taksi_verileri");
       // Elemanları seç
-      const mainContainer = document.getElementById('main-container');
-      const duraklarContainer = document.getElementById('duraklar-container');
-      const loaderElement = document.getElementById('loader');
-      const viewportInfo = document.getElementById('viewport-info');
-      const infoTable = document.getElementById('info-table');
-      const infoUpdateTime = document.getElementById('info-updatetime');
-      const infoGps = document.getElementById('info-gps');
-      const infoClosedVehicle = document.getElementById('info-closed-vehicle');
-      const infoWeather = document.getElementById('info-weather');
+      const mainContainer = document.getElementById("main-container");
+      const duraklarContainer = document.getElementById("duraklar-container");
+      const loaderElement = document.getElementById("loader");
+      const viewportInfo = document.getElementById("viewport-info");
+      const infoTable = document.getElementById("info-table");
+      const infoUpdateTime = document.getElementById("info-updatetime");
+      const infoGps = document.getElementById("info-gps");
+      const infoClosedVehicle = document.getElementById("info-closed-vehicle");
+      const infoWeather = document.getElementById("info-weather");
 
       /**
        * Saniye cinsinden verilen süreyi "Xgn Ysa Zdk Psn" formatına dönüştürür.
@@ -429,9 +482,8 @@
           parts.push(`${minutes}dk`);
         }
         parts.push(`${seconds}sn`);
-        
 
-        return parts.join(' ');
+        return parts.join(" ");
       }
 
       /**
@@ -443,9 +495,14 @@
        * @param {string} [padChar='&nbsp;'] - Tek haneli değerler için kullanılacak dolgu karakteri.
        * @returns {string} Doldurulmuş ve hizalanmış metin veya boş string.
        */
-      function padTimeDisplay(value, unit, forceDisplayZero = false, padChar = '&nbsp;') {
+      function padTimeDisplay(
+        value,
+        unit,
+        forceDisplayZero = false,
+        padChar = "&nbsp;"
+      ) {
         if (value === 0 && !forceDisplayZero) {
-          return '';
+          return "";
         }
         // Tek haneli değerler için bir boşluk ekle
         if (value < 10 && value >= 0) {
@@ -460,37 +517,37 @@
        * @returns {string} Hava durumu açıklaması.
        */
       function getWeatherDescription(code) {
-          const descriptions = {
-              0: 'Açık',
-              1: 'Parçalı Bulutlu',
-              2: 'Parçalı Bulutlu',
-              3: 'Bulutlu',
-              45: 'Sisli',
-              48: 'Sisli',
-              51: 'Çiselemeli',
-              53: 'Çiselemeli',
-              55: 'Çiselemeli',
-              56: 'Dondurucu Çiseleme',
-              57: 'Dondurucu Çiseleme',
-              61: 'Yağmurlu',
-              63: 'Yağmurlu',
-              65: 'Şiddetli Yağmurlu',
-              66: 'Dondurucu Yağmur',
-              67: 'Dondurucu Yağmur',
-              71: 'Karlı',
-              73: 'Karlı',
-              75: 'Yoğun Karlı',
-              77: 'Kar Taneleri',
-              80: 'Sağanak Yağışlı',
-              81: 'Sağanak Yağışlı',
-              82: 'Şiddetli Sağanak',
-              95: 'Gök Gürültülü',
-              96: 'Hafif Dolu',
-              85: 'Kar Sağanağı',
-              86: 'Yoğun Kar Sağanağı',
-              99: 'Şiddetli Dolu'
-          };
-          return descriptions[code] || 'Bilinmiyor';
+        const descriptions = {
+          0: "Açık",
+          1: "Parçalı Bulutlu",
+          2: "Parçalı Bulutlu",
+          3: "Bulutlu",
+          45: "Sisli",
+          48: "Sisli",
+          51: "Çiselemeli",
+          53: "Çiselemeli",
+          55: "Çiselemeli",
+          56: "Dondurucu Çiseleme",
+          57: "Dondurucu Çiseleme",
+          61: "Yağmurlu",
+          63: "Yağmurlu",
+          65: "Şiddetli Yağmurlu",
+          66: "Dondurucu Yağmur",
+          67: "Dondurucu Yağmur",
+          71: "Karlı",
+          73: "Karlı",
+          75: "Yoğun Karlı",
+          77: "Kar Taneleri",
+          80: "Sağanak Yağışlı",
+          81: "Sağanak Yağışlı",
+          82: "Şiddetli Sağanak",
+          95: "Gök Gürültülü",
+          96: "Hafif Dolu",
+          85: "Kar Sağanağı",
+          86: "Yoğun Kar Sağanağı",
+          99: "Şiddetli Dolu",
+        };
+        return descriptions[code] || "Bilinmiyor";
       }
 
       /**
@@ -498,13 +555,18 @@
        */
       async function fetchWeather() {
         try {
-          const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=38.46&longitude=27.22&daily=weathercode&timezone=Europe/Istanbul');
+          const response = await fetch(
+            "https://api.open-meteo.com/v1/forecast?latitude=38.46&longitude=27.22&daily=weathercode&timezone=Europe/Istanbul"
+          );
           const data = await response.json();
-          
+
           const today = data.daily;
-          
+
           // Yağmur, kar, dolu ve fırtına gibi araç yıkamaya uygun olmayan tüm kötü hava kodları
-          const badWeatherCodes = [51, 53, 55, 61, 63, 65, 66, 67, 71, 73, 75, 77, 80, 81, 82, 85, 86, 95, 96, 99];
+          const badWeatherCodes = [
+            51, 53, 55, 61, 63, 65, 66, 67, 71, 73, 75, 77, 80, 81, 82, 85, 86,
+            95, 96, 99,
+          ];
           const tomorrowCode = today.weathercode[1];
 
           if (badWeatherCodes.includes(tomorrowCode)) {
@@ -513,45 +575,48 @@
             infoWeather.textContent = "Yakında yağış yok, araç yıkanır."; // Renk CSS'den gelecek
           }
         } catch (error) {
-          console.error('Hava durumu verisi alınamadı:', error);
-          infoWeather.textContent = 'Bilgi alınamadı.'; // Renk CSS'den gelecek
+          console.error("Hava durumu verisi alınamadı:", error);
+          infoWeather.textContent = "Bilgi alınamadı."; // Renk CSS'den gelecek
         }
       }
 
       function renderData(data) {
         // Yükleme simgesini gizle ve güncelleme metinlerini göster
-        loaderElement.style.display = 'none';
-        infoTable.style.display = 'table';
+        loaderElement.style.display = "none";
+        infoTable.style.display = "table";
 
         // Güncelleme zamanını ve GPS bilgi metnini ayarla
         infoUpdateTime.textContent = data.son_guncelleme;
         infoGps.textContent = "29 (5023) - 30 (7274) - 32 (6383)";
-        infoClosedVehicle.textContent = "Kırmızı renkteki araçlar kapalıdır, sıraya dahil değildir.";
+        infoClosedVehicle.textContent =
+          "Kırmızı renkteki araçlar kapalıdır, sıraya dahil değildir.";
 
         // Hava durumu verisini sadece ana veri yüklendikten sonra çek ve göster
         fetchWeather();
 
         // Dinamik font büyüklüğü sınıfları için stilleri dinamik olarak ekle
         // Bu, media query'lerdeki .font-size-large gibi sınıfların yerini alır
-        const contentDiv = document.querySelector('.content');
-        const aspectRatio = window.innerWidth / window.innerHeight;        
+        const contentDiv = document.querySelector(".content");
+        const aspectRatio = window.innerWidth / window.innerHeight;
         // Durak bilgilerini işle
-        duraklarContainer.innerHTML = '';
+        duraklarContainer.innerHTML = "";
         const duraklar = data.duraklar;
         const durak_names = {
           suvari: "Süvari",
           merkez: "Merkez",
-          metro: "Metro"
+          metro: "Metro",
         };
-        
+
         // Durakları belirli bir sırada oluştur
-        const orderedDuraks = ['merkez', 'metro', 'suvari'];
-        
+        const orderedDuraks = ["merkez", "metro", "suvari"];
+
         // Ortalama kalkış sürelerini topla ve sırala
-        const averageTimes = orderedDuraks.map(key => ({
+        const averageTimes = orderedDuraks
+          .map((key) => ({
             key,
-            time: duraklar[key].ortalama_kalkis
-        })).sort((a, b) => a.time - b.time);
+            time: duraklar[key].ortalama_kalkis,
+          }))
+          .sort((a, b) => a.time - b.time);
 
         // En hızlı, orta ve en yavaş durakları belirle
         const fastest = averageTimes[0].key;
@@ -561,315 +626,486 @@
         // --- YENİ ORANTISAL YÜKSEKLİK HESAPLAMA MANTIĞI ---
         // 1. Tüm duraklardaki araç sayılarını al
         const vehicleCounts = {
-            merkez: duraklar.merkez.liste ? duraklar.merkez.liste.length : 0,
-            metro: duraklar.metro.liste ? duraklar.metro.liste.length : 0,
-            suvari: duraklar.suvari.liste ? duraklar.suvari.liste.length : 0,
+          merkez: duraklar.merkez.liste ? duraklar.merkez.liste.length : 0,
+          metro: duraklar.metro.liste ? duraklar.metro.liste.length : 0,
+          suvari: duraklar.suvari.liste ? duraklar.suvari.liste.length : 0,
         };
-        const totalVehicles = vehicleCounts.merkez + vehicleCounts.metro + vehicleCounts.suvari;
+        const totalVehicles =
+          vehicleCounts.merkez + vehicleCounts.metro + vehicleCounts.suvari;
 
         // Her bir durak için ayrı ayrı hizalama uzunluğunu belirle
-        orderedDuraks.forEach(key => {
-            if (duraklar.hasOwnProperty(key)) {
-                const durak = duraklar[key];
-                const durakDiv = document.createElement('div');
-                durakDiv.className = 'durak';
-                
-                // Hız durumuna göre sınıf ekle
-                if (key === fastest) {
-                    durakDiv.classList.add('hizli');
-                } else if (key === middle) {
-                    durakDiv.classList.add('orta');
-                } else if (key === slowest) {
-                    durakDiv.classList.add('yavas');
-                }
-                
-                let htmlContent = '';
-                
-                const aracListesi = durak.liste || [];
-                const activeVehicles = aracListesi.filter(arac => !arac.is_closed);
-                const closedVehicles = aracListesi.filter(arac => arac.is_closed);
-                const aracSayisi = activeVehicles.length; // Sadece aktif araçları say
+        orderedDuraks.forEach((key) => {
+          if (duraklar.hasOwnProperty(key)) {
+            const durak = duraklar[key];
+            const durakDiv = document.createElement("div");
+            durakDiv.className = "durak";
 
-                // Başlık satırı
-                htmlContent += `${durak_names[key]} (${aracSayisi})<br>`;
-                
-                // Ortalama kalkış satırı
-                const formattedAverageDeparture = formatDuration(durak.ortalama_kalkis);
-                htmlContent += `Ortalama Kalkış: ${formattedAverageDeparture}<br>`;
-
-
-                // --- YENİ STİL MANTIĞI ---
-                // Genel container stilleri sadece bir kez ayarlanır
-                if (!duraklarContainer.style.flexDirection || !duraklarContainer.style.flexDirection.includes('column') && aspectRatio < 1.1) {
-                  // Dikey ve kareye yakın düzenler
-                  if (aspectRatio < 1.1) { 
-                    duraklarContainer.style.flexDirection = 'column';
-                    duraklarContainer.style.alignItems = 'center';
-                    duraklarContainer.style.paddingTop = '2vh';
-                    duraklarContainer.style.gap = '2.4vh'; // 18px / 754px
-                  } else { // Yatay düzenler
-                    duraklarContainer.style.flexDirection = 'row';
-                    duraklarContainer.style.justifyContent = 'center';
-                    duraklarContainer.style.marginTop = '2%';
-                    duraklarContainer.style.alignItems = 'flex-start'; // Elemanların uzamasını engelle, yukarı hizala.
-                    duraklarContainer.style.gap = '2vw';
-                  }
-                }
-
-                // --- AKIŞKAN FORMÜL İLE STİL HESAPLAMA ---
-                
-                // 1. Akışkan Font Boyutu: Ekran daraldıkça (aspectRatio küçüldükçe) font büyür.
-                const fluidFontSize = `clamp(1.4vw, ${2 / aspectRatio}vw, 4.5vw)`;
-                
-                // 2. Akışkan Genişlik: Ekran daraldıkça genişlik artar.
-                const fluidWidth = `clamp(30vw, ${50 / aspectRatio}vw, 85vw)`;
-
-                // 3. Hesaplanan değerleri CSS değişkenleri olarak ata
-                durakDiv.style.setProperty('--durak-font-size', fluidFontSize);
-                durakDiv.style.setProperty('--durak-width', fluidWidth);
-                
-                // Bilgi tablosunun genişliğini de duraklarla aynı yapmak için
-                document.documentElement.style.setProperty('--durak-width', fluidWidth);
-
-                // 4. Dikey/Yatay düzene göre flex-grow ve height ayarla
-                if (aspectRatio < 1.1) { // Dikey Düzen
-                  durakDiv.style.height = 'auto';
-                  let flexGrowValue = 1;
-                  if (totalVehicles > 0) {
-                    flexGrowValue = 1 + (vehicleCounts[key] / totalVehicles) * 10;
-                  }
-                  durakDiv.style.flexGrow = flexGrowValue.toFixed(2);
-                } else { // Yatay Düzen
-                  // Yatayda yükseklik araç sayısıyla orantılı olsun.
-                  const baseHeightVh = 15; // Başlık vb. için temel yükseklik.
-                  const heightPerVehicleVh = 3; // Her araç satırı için ek yükseklik.
-                  const totalHeight = baseHeightVh + (aracSayisi * heightPerVehicleVh);
-
-                  durakDiv.style.height = 'auto'; // Yüksekliğin içeriğe göre doğal olarak büyümesine izin ver.
-                  durakDiv.style.minHeight = `${totalHeight}vh`; // Ancak en azından hesaplanan kadar yer kaplamasını sağla.
-                  durakDiv.style.maxHeight = '80vh'; // Ekranı taşmasını önlemek için maksimum yükseklik.
-                  durakDiv.style.flexGrow = '0'; // Yatayda esnemesin
-                }
-                
-                // Ayırıcı çizgi
-                htmlContent += `<hr class="separator-line">`;
-
-                // Araç listesi
-                if (aracListesi.length > 0) {
-                    htmlContent += '<table class="vehicle-table"><tbody>';
-
-                    // Tüm araçlar için (aktif ve kapalı) hangi zaman birimlerinin gösterileceğini belirle
-                    const showDays = aracListesi.some(a => a.entry_duration >= 86400);
-                    const showHours = aracListesi.some(a => a.entry_duration >= 3600);
-                    const showMinutes = aracListesi.some(a => a.entry_duration >= 60);
-
-                    // 1. Kapalı araçları render et
-                    closedVehicles.forEach(arac => {
-                        const rowStyle = 'style="color: #FF4C4C;"'; // Her zaman kırmızı
-                        const totalSeconds = arac.entry_duration;
-                        const days = Math.floor(totalSeconds / (24 * 60 * 60));
-                        const hours = Math.floor((totalSeconds % (24 * 60 * 60)) / (60 * 60));
-                        const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
-                        const seconds = totalSeconds % 60;
- 
-                        htmlContent += `<tr ${rowStyle}>`;
-                        htmlContent += `<td>K)</td>`; // Ön ek "K)"
-                        htmlContent += `<td>${arac.code}</td>`;
-                        htmlContent += `<td>${arac.plate}</td>`;
-                        
-                        // Süre gösterimi (aktif araçlarla aynı formatta)
-                        if (showDays && days > 0) {
-                            htmlContent += `<td class="right-align">${padTimeDisplay(days, 'gn')}</td>`;
-                        }
-                        if (showHours) {
-                            htmlContent += `<td class="right-align">${padTimeDisplay(hours, 'sa')}</td>`;
-                            htmlContent += `<td class="right-align">${padTimeDisplay(minutes, 'dk')}</td>`;
-                            htmlContent += `<td class="right-align">${padTimeDisplay(seconds, 'sn', true)}</td>`;
-                        } else if (showMinutes) {
-                            htmlContent += `<td class="right-align">${padTimeDisplay(minutes, 'dk')}</td>`;
-                            htmlContent += `<td class="right-align">${padTimeDisplay(seconds, 'sn', true)}</td>`;
-                        } else {
-                            htmlContent += `<td class="right-align">${padTimeDisplay(seconds, 'sn', true)}</td>`;
-                        }
-                        
-                        htmlContent += `</tr>`;
-                    });
-
-                    // Kapalı ve aktif araçlar arasında ayırıcı
-                    if (closedVehicles.length > 0 && activeVehicles.length > 0) {
-                        htmlContent += `<tr><td colspan="7"><hr class="sub-separator-line"></td></tr>`;
-                    }
-
-                    // 2. Aktif araçları render et
-                    activeVehicles.forEach((arac, index) => {
-                        const totalSeconds = arac.entry_duration;
-                        const days = Math.floor(totalSeconds / (24 * 60 * 60));
-                        const hours = Math.floor((totalSeconds % (24 * 60 * 60)) / (60 * 60));
-                        const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
-                        const seconds = totalSeconds % 60;
-
-                        htmlContent += `<tr>`;
-                        htmlContent += `<td>${index + 1})</td>`; // Numaralı ön ek
-                        htmlContent += `<td>${arac.code}</td>`;
-                        htmlContent += `<td>${arac.plate}</td>`;
-                        
-                        if (showDays && days > 0) {
-                            htmlContent += `<td class="right-align">${padTimeDisplay(days, 'gn')}</td>`;
-                        }
-                        if (showHours) {
-                            htmlContent += `<td class="right-align">${padTimeDisplay(hours, 'sa')}</td>`;
-                            htmlContent += `<td class="right-align">${padTimeDisplay(minutes, 'dk')}</td>`;
-                            htmlContent += `<td class="right-align">${padTimeDisplay(seconds, 'sn', true)}</td>`;
-                        } else if (showMinutes) {
-                            htmlContent += `<td class="right-align">${padTimeDisplay(minutes, 'dk')}</td>`;
-                            htmlContent += `<td class="right-align">${padTimeDisplay(seconds, 'sn', true)}</td>`;
-                        } else {
-                            htmlContent += `<td class="right-align">${padTimeDisplay(seconds, 'sn', true)}</td>`;
-                        }
-                        
-                        htmlContent += `</tr>`;
-                    });
-
-                    htmlContent += '</tbody></table>';
-                } else {
-                    htmlContent += 'Boş'; // Hiç araç yoksa
-                }
-
-                // YENİ: Sadece kapalı araç varsa, altına çizgi ve "Boş" yazısı ekle
-                if (closedVehicles.length > 0 && activeVehicles.length === 0) {
-                    htmlContent += `<hr class="sub-separator-line">`;
-                    htmlContent += 'Boş';
-                }
-
-                
-                durakDiv.innerHTML = htmlContent;
-                duraklarContainer.appendChild(durakDiv);
+            // Hız durumuna göre sınıf ekle
+            if (key === fastest) {
+              durakDiv.classList.add("hizli");
+            } else if (key === middle) {
+              durakDiv.classList.add("orta");
+            } else if (key === slowest) {
+              durakDiv.classList.add("yavas");
             }
+
+            let htmlContent = "";
+
+            const aracListesi = durak.liste || [];
+            const activeVehicles = aracListesi.filter(
+              (arac) => !arac.is_closed
+            );
+            const closedVehicles = aracListesi.filter((arac) => arac.is_closed);
+            const aracSayisi = activeVehicles.length; // Sadece aktif araçları say
+
+            // Başlık satırı
+            htmlContent += `${durak_names[key]} (${aracSayisi})<br>`;
+
+            // Ortalama kalkış satırı
+            const formattedAverageDeparture = formatDuration(
+              durak.ortalama_kalkis
+            );
+            htmlContent += `Ortalama Kalkış: ${formattedAverageDeparture}<br>`;
+
+            // --- YENİ STİL MANTIĞI ---
+            // Genel container stilleri sadece bir kez ayarlanır
+            if (
+              !duraklarContainer.style.flexDirection ||
+              (!duraklarContainer.style.flexDirection.includes("column") &&
+                aspectRatio < 1.1)
+            ) {
+              // Dikey ve kareye yakın düzenler
+              if (aspectRatio < 1.1) {
+                duraklarContainer.style.flexDirection = "column";
+                duraklarContainer.style.alignItems = "center";
+                duraklarContainer.style.paddingTop = "2vh";
+                duraklarContainer.style.gap = "2.4vh"; // 18px / 754px
+              } else {
+                // Yatay düzenler
+                duraklarContainer.style.flexDirection = "row";
+                duraklarContainer.style.justifyContent = "center";
+                duraklarContainer.style.marginTop = "2%";
+                duraklarContainer.style.alignItems = "flex-start"; // Elemanların uzamasını engelle, yukarı hizala.
+                duraklarContainer.style.gap = "2vw";
+              }
+            }
+
+            // --- AKIŞKAN FORMÜL İLE STİL HESAPLAMA ---
+
+            // 1. Akışkan Font Boyutu: Ekran daraldıkça (aspectRatio küçüldükçe) font büyür.
+            const fluidFontSize = `clamp(1.4vw, ${2 / aspectRatio}vw, 4.5vw)`;
+
+            // 2. Akışkan Genişlik: Ekran daraldıkça genişlik artar.
+            const fluidWidth = `clamp(30vw, ${50 / aspectRatio}vw, 85vw)`;
+
+            // 3. Hesaplanan değerleri CSS değişkenleri olarak ata
+            durakDiv.style.setProperty("--durak-font-size", fluidFontSize);
+            durakDiv.style.setProperty("--durak-width", fluidWidth);
+
+            // Bilgi tablosunun genişliğini de duraklarla aynı yapmak için
+            document.documentElement.style.setProperty(
+              "--durak-width",
+              fluidWidth
+            );
+
+            // 4. Dikey/Yatay düzene göre flex-grow ve height ayarla
+            if (aspectRatio < 1.1) {
+              // Dikey Düzen
+              durakDiv.style.height = "auto";
+              let flexGrowValue = 1;
+              if (totalVehicles > 0) {
+                flexGrowValue = 1 + (vehicleCounts[key] / totalVehicles) * 10;
+              }
+              durakDiv.style.flexGrow = flexGrowValue.toFixed(2);
+            } else {
+              // Yatay Düzen
+              // Yatayda yükseklik araç sayısıyla orantılı olsun.
+              const baseHeightVh = 15; // Başlık vb. için temel yükseklik.
+              const heightPerVehicleVh = 3; // Her araç satırı için ek yükseklik.
+              const totalHeight =
+                baseHeightVh + aracSayisi * heightPerVehicleVh;
+
+              durakDiv.style.height = "auto"; // Yüksekliğin içeriğe göre doğal olarak büyümesine izin ver.
+              durakDiv.style.minHeight = `${totalHeight}vh`; // Ancak en azından hesaplanan kadar yer kaplamasını sağla.
+              durakDiv.style.maxHeight = "80vh"; // Ekranı taşmasını önlemek için maksimum yükseklik.
+              durakDiv.style.flexGrow = "0"; // Yatayda esnemesin
+            }
+
+            // Ayırıcı çizgi
+            htmlContent += `<hr class="separator-line">`;
+
+            // Araç listesi
+            if (aracListesi.length > 0) {
+              htmlContent += '<table class="vehicle-table"><tbody>';
+
+              // Tüm araçlar için (aktif ve kapalı) hangi zaman birimlerinin gösterileceğini belirle
+              const showDays = aracListesi.some(
+                (a) => a.entry_duration >= 86400
+              );
+              const showHours = aracListesi.some(
+                (a) => a.entry_duration >= 3600
+              );
+              const showMinutes = aracListesi.some(
+                (a) => a.entry_duration >= 60
+              );
+
+              // 1. Kapalı araçları render et
+              closedVehicles.forEach((arac) => {
+                const rowStyle = 'style="color: #FF4C4C;"'; // Her zaman kırmızı
+                const totalSeconds = arac.entry_duration;
+                const days = Math.floor(totalSeconds / (24 * 60 * 60));
+                const hours = Math.floor(
+                  (totalSeconds % (24 * 60 * 60)) / (60 * 60)
+                );
+                const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
+                const seconds = totalSeconds % 60;
+
+                htmlContent += `<tr ${rowStyle}>`;
+                htmlContent += `<td>K)</td>`; // Ön ek "K)"
+                htmlContent += `<td>${arac.code}</td>`;
+                htmlContent += `<td>${arac.plate}</td>`;
+
+                // Süre gösterimi (aktif araçlarla aynı formatta)
+                if (showDays && days > 0) {
+                  htmlContent += `<td class="right-align">${padTimeDisplay(
+                    days,
+                    "gn"
+                  )}</td>`;
+                }
+                if (showHours) {
+                  htmlContent += `<td class="right-align">${padTimeDisplay(
+                    hours,
+                    "sa"
+                  )}</td>`;
+                  htmlContent += `<td class="right-align">${padTimeDisplay(
+                    minutes,
+                    "dk"
+                  )}</td>`;
+                  htmlContent += `<td class="right-align">${padTimeDisplay(
+                    seconds,
+                    "sn",
+                    true
+                  )}</td>`;
+                } else if (showMinutes) {
+                  htmlContent += `<td class="right-align">${padTimeDisplay(
+                    minutes,
+                    "dk"
+                  )}</td>`;
+                  htmlContent += `<td class="right-align">${padTimeDisplay(
+                    seconds,
+                    "sn",
+                    true
+                  )}</td>`;
+                } else {
+                  htmlContent += `<td class="right-align">${padTimeDisplay(
+                    seconds,
+                    "sn",
+                    true
+                  )}</td>`;
+                }
+
+                htmlContent += `</tr>`;
+              });
+
+              // Kapalı ve aktif araçlar arasında ayırıcı
+              if (closedVehicles.length > 0 && activeVehicles.length > 0) {
+                htmlContent += `<tr><td colspan="7"><hr class="sub-separator-line"></td></tr>`;
+              }
+
+              // 2. Aktif araçları render et
+              activeVehicles.forEach((arac, index) => {
+                const totalSeconds = arac.entry_duration;
+                const days = Math.floor(totalSeconds / (24 * 60 * 60));
+                const hours = Math.floor(
+                  (totalSeconds % (24 * 60 * 60)) / (60 * 60)
+                );
+                const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
+                const seconds = totalSeconds % 60;
+
+                const displayCode = HIDDEN_MODE ? "**" : arac.code;
+                const displayPlate =
+                  HIDDEN_MODE && arac.plate.includes("T")
+                    ? arac.plate.substring(0, arac.plate.indexOf("T") + 1) +
+                      "****"
+                    : arac.plate;
+
+                htmlContent += `<tr>`;
+                htmlContent += `<td>${index + 1})</td>`; // Numaralı ön ek
+                htmlContent += `<td>${displayCode}</td>`;
+                htmlContent += `<td>${displayPlate}</td>`;
+
+                if (showDays && days > 0) {
+                  htmlContent += `<td class="right-align">${padTimeDisplay(
+                    days,
+                    "gn"
+                  )}</td>`;
+                }
+                if (showHours) {
+                  htmlContent += `<td class="right-align">${padTimeDisplay(
+                    hours,
+                    "sa"
+                  )}</td>`;
+                  htmlContent += `<td class="right-align">${padTimeDisplay(
+                    minutes,
+                    "dk"
+                  )}</td>`;
+                  htmlContent += `<td class="right-align">${padTimeDisplay(
+                    seconds,
+                    "sn",
+                    true
+                  )}</td>`;
+                } else if (showMinutes) {
+                  htmlContent += `<td class="right-align">${padTimeDisplay(
+                    minutes,
+                    "dk"
+                  )}</td>`;
+                  htmlContent += `<td class="right-align">${padTimeDisplay(
+                    seconds,
+                    "sn",
+                    true
+                  )}</td>`;
+                } else {
+                  htmlContent += `<td class="right-align">${padTimeDisplay(
+                    seconds,
+                    "sn",
+                    true
+                  )}</td>`;
+                }
+
+                htmlContent += `</tr>`;
+              });
+
+              htmlContent += "</tbody></table>";
+            } else {
+              htmlContent += "Boş"; // Hiç araç yoksa
+            }
+
+            // YENİ: Sadece kapalı araç varsa, altına çizgi ve "Boş" yazısı ekle
+            if (closedVehicles.length > 0 && activeVehicles.length === 0) {
+              htmlContent += `<hr class="sub-separator-line">`;
+              htmlContent += "Boş";
+            }
+
+            durakDiv.innerHTML = htmlContent;
+            duraklarContainer.appendChild(durakDiv);
+          }
         });
       }
 
       // --- DEBUG MODU ---
       // Test verilerini kullanmak için `true`, gerçek zamanlı Firebase verilerini kullanmak için `false` yapın.
-      const DEBUG_MODE = false; 
+      const DEBUG_MODE = false;
+
+      // --- GİZLİ MOD AYARLARI ---
+
+      // Zamanlayıcıyı aktif etmek için `true`, manuel kontrol için `false` yapın.
+      const HIDDEN_MODE_TIMER = true;
+
+      // Zamanlayıcı kapalıyken (HIDDEN_MODE_TIMER = false) gizli modu manuel açıp kapatmak için bu ayarı kullanın.
+      const HIDDEN_MODE_MANUAL = false;
+
+      // Zamanlayıcı ayarları (Sadece HIDDEN_MODE_TIMER = true ise geçerlidir)
+      const HIDDEN_MODE_START_HOUR = 16;
+      const HIDDEN_MODE_START_MINUTE = 0;
+      const HIDDEN_MODE_END_HOUR = 5;
+      const HIDDEN_MODE_END_MINUTE = 30;
+
+      // --- GİZLİ MOD KONTROL MANTIĞI ---
+      function isHiddenModeActive() {
+        if (!HIDDEN_MODE_TIMER) {
+          return HIDDEN_MODE_MANUAL;
+        }
+
+        const now = new Date();
+        // UTC saatini alıp üzerine 3 saat ekleyerek Türkiye saatini buluyoruz.
+        const turkeyHour = (now.getUTCHours() + 3) % 24;
+        const turkeyMinute = now.getUTCMinutes();
+
+        // Saat başlangıç saatinden sonra mı?
+        const isAfterStart =
+          turkeyHour > HIDDEN_MODE_START_HOUR ||
+          (turkeyHour === HIDDEN_MODE_START_HOUR &&
+            turkeyMinute >= HIDDEN_MODE_START_MINUTE);
+        // Saat bitiş saatinden önce mi?
+        const isBeforeEnd =
+          turkeyHour < HIDDEN_MODE_END_HOUR ||
+          (turkeyHour === HIDDEN_MODE_END_HOUR &&
+            turkeyMinute <= HIDDEN_MODE_END_MINUTE);
+
+        // Gece yarısını geçen bir aralık mı kontrolü (örn: 16:00 - 05:30)
+        if (HIDDEN_MODE_START_HOUR > HIDDEN_MODE_END_HOUR) {
+          return isAfterStart || isBeforeEnd;
+        }
+        // Aynı gün içindeki aralık kontrolü (örn: 09:00 - 17:00)
+        else {
+          return isAfterStart && isBeforeEnd;
+        }
+      }
+      const HIDDEN_MODE = isHiddenModeActive();
 
       if (DEBUG_MODE) {
         // --- DEBUG MODU İÇİN KONTROL VE VERİ YAPISI ---
 
         // 1. Butonları ve kontrol panelini görünür yap
-        const debugControls = document.getElementById('debug-controls');
-        const STORAGE_KEY = 'debugVehicleState';
-        debugControls.style.display = 'flex';
-        document.getElementById('debug-warning').style.display = 'block';
+        const debugControls = document.getElementById("debug-controls");
+        const STORAGE_KEY = "debugVehicleState";
+        debugControls.style.display = "flex";
+        document.getElementById("debug-warning").style.display = "block";
 
         // Viewport bilgisini görünür yap
-        const viewportInfoDiv = document.getElementById('viewport-info');
-        viewportInfoDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
-        viewportInfoDiv.style.color = 'white';
+        const viewportInfoDiv = document.getElementById("viewport-info");
+        viewportInfoDiv.style.backgroundColor = "rgba(0, 0, 0, 0.6)";
+        viewportInfoDiv.style.color = "white";
 
         // 2. Tüm olası araçları içeren bir havuz oluştur
         const allVehicles = [
-            { code: "21", plate: "35T7575" }, { code: "22", plate: "35T5702" },
-            { code: "23", plate: "35T6619" }, { code: "24", plate: "35T7734" },
-            { code: "25", plate: "35T5595" }, { code: "26", plate: "35T6913" },
-            { code: "27", plate: "35T6581" }, { code: "28", plate: "35T6272" },
-            { code: "29", plate: "35T5023" }, { code: "30", plate: "35T7274" },
-            { code: "32", plate: "35T6383" }, { code: "33", plate: "35T7623" },
-            { code: "34", plate: "35T6975" }, { code: "35", plate: "35T5601" },
-            { code: "36", plate: "35T7812" }, { code: "37", plate: "35T5071" }
+          { code: "21", plate: "35T7575" },
+          { code: "22", plate: "35T5702" },
+          { code: "23", plate: "35T6619" },
+          { code: "24", plate: "35T7734" },
+          { code: "25", plate: "35T5595" },
+          { code: "26", plate: "35T6913" },
+          { code: "27", plate: "35T6581" },
+          { code: "28", plate: "35T6272" },
+          { code: "29", plate: "35T5023" },
+          { code: "30", plate: "35T7274" },
+          { code: "32", plate: "35T6383" },
+          { code: "33", plate: "35T7623" },
+          { code: "34", plate: "35T6975" },
+          { code: "35", plate: "35T5601" },
+          { code: "36", plate: "35T7812" },
+          { code: "37", plate: "35T5071" },
         ];
 
         // 3. localStorage'dan kayıtlı durumu yükle veya başlangıç verisini oluştur
         const savedState = localStorage.getItem(STORAGE_KEY);
-        const initialDuraklarState = savedState ? JSON.parse(savedState) : {
-            merkez: { liste: [], ortalama_kalkis: 6200 },
-            metro: { liste: [], ortalama_kalkis: 950 },
-            suvari: { liste: [{ code: "27", plate: "35T6581", entry_duration: 40 }], ortalama_kalkis: 40 }
-        };
+        const initialDuraklarState = savedState
+          ? JSON.parse(savedState)
+          : {
+              merkez: { liste: [], ortalama_kalkis: 6200 },
+              metro: { liste: [], ortalama_kalkis: 950 },
+              suvari: {
+                liste: [{ code: "27", plate: "35T6581", entry_duration: 40 }],
+                ortalama_kalkis: 40,
+              },
+            };
 
         const mockData = {
           son_guncelleme: "18.09.2023 | 10:00:00 (Test Verisi)",
-          duraklar: initialDuraklarState
+          duraklar: initialDuraklarState,
         };
 
         // 4. Butonlara olay dinleyicileri ekle
-        document.getElementById('add-merkez').addEventListener('click', () => addVehicle('merkez'));
-        document.getElementById('add-closed-merkez').addEventListener('click', () => addVehicle('merkez', true));
-        document.getElementById('remove-merkez').addEventListener('click', () => removeVehicle('merkez'));
+        document
+          .getElementById("add-merkez")
+          .addEventListener("click", () => addVehicle("merkez"));
+        document
+          .getElementById("add-closed-merkez")
+          .addEventListener("click", () => addVehicle("merkez", true));
+        document
+          .getElementById("remove-merkez")
+          .addEventListener("click", () => removeVehicle("merkez"));
 
-        document.getElementById('add-metro').addEventListener('click', () => addVehicle('metro'));
-        document.getElementById('add-closed-metro').addEventListener('click', () => addVehicle('metro', true));
-        document.getElementById('remove-metro').addEventListener('click', () => removeVehicle('metro'));
+        document
+          .getElementById("add-metro")
+          .addEventListener("click", () => addVehicle("metro"));
+        document
+          .getElementById("add-closed-metro")
+          .addEventListener("click", () => addVehicle("metro", true));
+        document
+          .getElementById("remove-metro")
+          .addEventListener("click", () => removeVehicle("metro"));
 
-        document.getElementById('add-suvari').addEventListener('click', () => addVehicle('suvari'));
-        document.getElementById('add-closed-suvari').addEventListener('click', () => addVehicle('suvari', true));
-        document.getElementById('remove-suvari').addEventListener('click', () => removeVehicle('suvari'));
-
+        document
+          .getElementById("add-suvari")
+          .addEventListener("click", () => addVehicle("suvari"));
+        document
+          .getElementById("add-closed-suvari")
+          .addEventListener("click", () => addVehicle("suvari", true));
+        document
+          .getElementById("remove-suvari")
+          .addEventListener("click", () => removeVehicle("suvari"));
 
         function saveState() {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(mockData.duraklar));
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(mockData.duraklar));
         }
 
         function getTotalVehicleCount() {
-            return mockData.duraklar.merkez.liste.length + 
-                    mockData.duraklar.metro.liste.length + 
-                    mockData.duraklar.suvari.liste.length;
+          return (
+            mockData.duraklar.merkez.liste.length +
+            mockData.duraklar.metro.liste.length +
+            mockData.duraklar.suvari.liste.length
+          );
         }
 
         function addVehicle(durakKey, isClosed = false) {
-            if (mockData.duraklar[durakKey].liste.length >= 10) {
-                // Not: alert() yerine daha iyi bir yöntem kullanılmalıdır, ancak debug için kabul edilebilir.
-                console.error("Bu durağa daha fazla araç eklenemez (maksimum 10)!");
-                return;
-            }
+          if (mockData.duraklar[durakKey].liste.length >= 10) {
+            // Not: alert() yerine daha iyi bir yöntem kullanılmalıdır, ancak debug için kabul edilebilir.
+            console.error("Bu durağa daha fazla araç eklenemez (maksimum 10)!");
+            return;
+          }
 
-            if (getTotalVehicleCount() >= 16) {
-                console.error("Toplam araç sayısı 16'yı geçemez!");
-                return;
-            }
-            
-            // Henüz duraklarda olmayan bir araç bul
-            const assignedPlates = [...mockData.duraklar.merkez.liste, ...mockData.duraklar.metro.liste, ...mockData.duraklar.suvari.liste].map(v => v.plate);
-            const availableVehicle = allVehicles.find(v => !assignedPlates.includes(v.plate));
+          if (getTotalVehicleCount() >= 16) {
+            console.error("Toplam araç sayısı 16'yı geçemez!");
+            return;
+          }
 
-            if (availableVehicle) {
-                const newVehicle = { 
-                    ...availableVehicle, 
-                    entry_duration: Math.floor(Math.random() * 10000),
-                    is_closed: isClosed // Kapalı olup olmadığını ayarla
-                };
-                mockData.duraklar[durakKey].liste.push(newVehicle);
-                saveState(); // Durumu localStorage'a kaydet
-                renderData(mockData); // Arayüzü güncelle
-            }
+          // Henüz duraklarda olmayan bir araç bul
+          const assignedPlates = [
+            ...mockData.duraklar.merkez.liste,
+            ...mockData.duraklar.metro.liste,
+            ...mockData.duraklar.suvari.liste,
+          ].map((v) => v.plate);
+          const availableVehicle = allVehicles.find(
+            (v) => !assignedPlates.includes(v.plate)
+          );
+
+          if (availableVehicle) {
+            const newVehicle = {
+              ...availableVehicle,
+              entry_duration: Math.floor(Math.random() * 10000),
+              is_closed: isClosed, // Kapalı olup olmadığını ayarla
+            };
+            mockData.duraklar[durakKey].liste.push(newVehicle);
+            saveState(); // Durumu localStorage'a kaydet
+            renderData(mockData); // Arayüzü güncelle
+          }
         }
 
         function removeVehicle(durakKey) {
-            if (mockData.duraklar[durakKey].liste.length > 0) {
-                mockData.duraklar[durakKey].liste.pop(); // Son aracı sil
-                saveState(); // Durumu localStorage'a kaydet
-                renderData(mockData); // Arayüzü güncelle
-            } else {
-                console.error(`${durakKey} durağında silinecek araç yok.`);
-            }
+          if (mockData.duraklar[durakKey].liste.length > 0) {
+            mockData.duraklar[durakKey].liste.pop(); // Son aracı sil
+            saveState(); // Durumu localStorage'a kaydet
+            renderData(mockData); // Arayüzü güncelle
+          } else {
+            console.error(`${durakKey} durağında silinecek araç yok.`);
+          }
         }
 
         // 5. Sayfa ilk yüklendiğinde boş veri ile render et
-        renderData(mockData); 
-
+        renderData(mockData);
       } else {
         // Veritabanı referansındaki veriyi dinle (DEBUG_MODE = false ise çalışır)
-        ref.on('value', (snapshot) => {
-          const data = snapshot.val();
-          if (data && data.duraklar) {
-            renderData(data);
-          } else {
-            console.error("Veri alınamadı veya 'duraklar' anahtarı bulunamadı.");
-            duraklarContainer.innerHTML = '<p style="color:red; text-align:center;">Veri alınamadı. Lütfen Python betiğinin çalıştığından emin olun.</p>';
+        ref.on(
+          "value",
+          (snapshot) => {
+            const data = snapshot.val();
+            if (data && data.duraklar) {
+              renderData(data);
+            } else {
+              console.error(
+                "Veri alınamadı veya 'duraklar' anahtarı bulunamadı."
+              );
+              duraklarContainer.innerHTML =
+                '<p style="color:red; text-align:center;">Veri alınamadı. Lütfen Python betiğinin çalıştığından emin olun.</p>';
+            }
+          },
+          (error) => {
+            console.error("Veri okuma hatası: ", error);
+            duraklarContainer.innerHTML =
+              '<p style="color:red; text-align:center;">Veri okuma hatası oluştu. Konsolu kontrol edin.</p>';
           }
-        }, (error) => {
-          console.error("Veri okuma hatası: ", error);
-          duraklarContainer.innerHTML = '<p style="color:red; text-align:center;">Veri okuma hatası oluştu. Konsolu kontrol edin.</p>';
-        });
+        );
       }
 
       // Viewport bilgisi fonksiyonları
@@ -880,38 +1116,38 @@
         const aspectRatio = (width / height).toFixed(2);
         viewportInfo.textContent = `Viewport: ${width}x${height} | En/Boy Oranı: ${aspectRatio} w/h`;
       }
-      
+
       // Viewport bilgisi div'ine tıklama olayı ekle
-      viewportInfo.onclick = function() {
+      viewportInfo.onclick = function () {
         const textToCopy = this.textContent;
-        const tempTextArea = document.createElement('textarea');
+        const tempTextArea = document.createElement("textarea");
         tempTextArea.value = textToCopy;
         document.body.appendChild(tempTextArea);
         tempTextArea.select();
-        document.execCommand('copy');
+        document.execCommand("copy");
         document.body.removeChild(tempTextArea);
-        
-        this.textContent = 'Kopyalandı!';
+
+        this.textContent = "Kopyalandı!";
         // Kopyalama mesajı görünür hale getirildi
-        this.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
-        this.style.color = 'white';
+        this.style.backgroundColor = "rgba(255, 255, 255, 0.2)";
+        this.style.color = "white";
 
         setTimeout(() => {
-            // Mesajı eski haline döndür
-            updateViewportInfo();
-            this.style.backgroundColor = 'transparent';
-            this.style.color = 'rgba(0, 0, 0, 0)';
+          // Mesajı eski haline döndür
+          updateViewportInfo();
+          this.style.backgroundColor = "transparent";
+          this.style.color = "rgba(0, 0, 0, 0)";
         }, 1000);
       };
 
       // Sayfa yüklendiğinde ve pencere yeniden boyutlandırıldığında tüm ayarları yap
-      window.addEventListener('load', () => {
-          // İlk yüklemede viewport bilgisini güncelle
-          updateViewportInfo();
+      window.addEventListener("load", () => {
+        // İlk yüklemede viewport bilgisini güncelle
+        updateViewportInfo();
       });
 
       // Pencere boyutu değiştiğinde viewport bilgisini güncelle
-      window.addEventListener('resize', () => {
+      window.addEventListener("resize", () => {
         updateViewportInfo();
         // Veriyi yeniden render etmek için, mevcut veriyi bir değişkende saklayıp onu kullanabiliriz
         // veya basitçe sayfayı yeniden yükleyebiliriz. Şimdilik yeniden yükleme daha basit.
