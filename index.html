@@ -465,6 +465,9 @@
       const infoClosedVehicle = document.getElementById("info-closed-vehicle");
       const infoWeather = document.getElementById("info-weather");
 
+      // En son yüklenen veriyi tutmak için değişken
+      let latestData = null;
+
       /**
        * Saniye cinsinden verilen süreyi "Xgn Ysa Zdk Psn" formatına dönüştürür.
        * @param {number} totalSeconds - Toplam saniye süresi.
@@ -595,6 +598,9 @@
       }
 
       function renderData(data) {
+        // En son veriyi global olarak sakla
+        latestData = data;
+
         // Yükleme simgesini gizle ve güncelleme metinlerini göster
         loaderElement.style.display = "none";
         infoTable.style.display = "table";
@@ -836,9 +842,10 @@
                 const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
                 const seconds = totalSeconds % 60;
 
-                const displayCode = HIDDEN_MODE ? "**" : arac.code;
+                // Gizli mod aktifse kod ve plaka gösterimini değiştir
+                const displayCode = currentHiddenMode ? "**" : arac.code;
                 const displayPlate =
-                  HIDDEN_MODE && arac.plate.includes("T")
+                  currentHiddenMode && arac.plate.includes("T")
                     ? arac.plate.substring(0, arac.plate.indexOf("T") + 1) +
                       "****"
                     : arac.plate;
@@ -932,30 +939,60 @@
 
         const now = new Date();
         // UTC saatini alıp üzerine 3 saat ekleyerek Türkiye saatini buluyoruz.
+        // Bu metod, tarayıcı saat dilimi ayarından bağımsız olarak UTC+3 saatini hesaplar.
         const turkeyHour = (now.getUTCHours() + 3) % 24;
         const turkeyMinute = now.getUTCMinutes();
 
-        // Saat başlangıç saatinden sonra mı?
+        // Saat başlangıç saatinden sonra mı? (Başlangıç dakikası dahildir: >=)
         const isAfterStart =
           turkeyHour > HIDDEN_MODE_START_HOUR ||
           (turkeyHour === HIDDEN_MODE_START_HOUR &&
             turkeyMinute >= HIDDEN_MODE_START_MINUTE);
-        // Saat bitiş saatinden önce mi?
+
+        // Saat bitiş saatinden önce mi? (Bitiş dakikası dahil değildir: <)
+        // DÜZELTME: Gizli modun bitiş saatinde (örn. 05:30) kapanması için minute kontrolünü '<' yaptık.
         const isBeforeEnd =
           turkeyHour < HIDDEN_MODE_END_HOUR ||
           (turkeyHour === HIDDEN_MODE_END_HOUR &&
-            turkeyMinute <= HIDDEN_MODE_END_MINUTE);
+            turkeyMinute < HIDDEN_MODE_END_MINUTE);
 
         // Gece yarısını geçen bir aralık mı kontrolü (örn: 16:00 - 05:30)
         if (HIDDEN_MODE_START_HOUR > HIDDEN_MODE_END_HOUR) {
+          // Ya başlangıçtan sonra (aynı gün) YA DA bitişten önce (ertesi gün)
           return isAfterStart || isBeforeEnd;
         }
         // Aynı gün içindeki aralık kontrolü (örn: 09:00 - 17:00)
         else {
+          // Hem başlangıçtan sonra HEM DE bitişten önce olmalı
           return isAfterStart && isBeforeEnd;
         }
       }
-      const HIDDEN_MODE = isHiddenModeActive();
+
+      // Başlangıçta gizli mod durumunu hesapla ve sakla
+      let currentHiddenMode = isHiddenModeActive();
+
+      /**
+       * Gizli mod durumunu 5 saniyede bir kontrol eder ve arayüzü günceller.
+       */
+      function checkHiddenModeAndRefresh() {
+        const newHiddenMode = isHiddenModeActive();
+
+        // Eğer gizli mod durumu değiştiyse VEYA DEBUG modunda isek (mock data'yı güncellemek için)
+        if (newHiddenMode !== currentHiddenMode || DEBUG_MODE) {
+          currentHiddenMode = newHiddenMode;
+          // Yeni durumla birlikte arayüzü yeniden çiz
+          if (latestData) {
+            renderData(latestData);
+          } else if (DEBUG_MODE) {
+            // DEBUG modunda mockData'yı tekrar render et
+            // MockData'nın güncel HiddenMode ile çalışmasını sağla
+            renderData(mockData);
+          }
+        }
+      }
+
+      // Her 5 saniyede bir gizli mod durumunu kontrol et
+      setInterval(checkHiddenModeAndRefresh, 5000);
 
       if (DEBUG_MODE) {
         // --- DEBUG MODU İÇİN KONTROL VE VERİ YAPISI ---
@@ -1096,7 +1133,7 @@
           }
         }
 
-        // 5. Sayfa ilk yüklendiğinde boş veri ile render et
+        // 5. Sayfa ilk yüklendiğinde mock veriyi render et
         renderData(mockData);
       } else {
         // Veritabanı referansındaki veriyi dinle (DEBUG_MODE = false ise çalışır)
@@ -1128,7 +1165,9 @@
         const height = window.innerHeight;
         // En/Boy oranını hesapla ve 2 ondalık basamağa yuvarla
         const aspectRatio = (width / height).toFixed(2);
-        viewportInfo.textContent = `Viewport: ${width}x${height} | En/Boy Oranı: ${aspectRatio} w/h`;
+        viewportInfo.textContent = `Viewport: ${width}x${height} | En/Boy Oranı: ${aspectRatio} w/h | Hidden Mode: ${
+          currentHiddenMode ? "ON" : "OFF"
+        }`;
       }
 
       // Viewport bilgisi div'ine tıklama olayı ekle
@@ -1170,3 +1209,4 @@
     </script>
   </body>
 </html>
+
