@@ -343,7 +343,7 @@
         }
       }
 
-      .weather-warning {
+      .flash-animation {
         animation: flash-warning 0.8s infinite;
       }
     </style>
@@ -396,7 +396,7 @@
                 <td id="info-updatetime" class="info-value"></td>
               </tr>
               <tr>
-                <td class="info-key">Sorunlu Araçlar:</td>
+                <td class="info-key">Araç Durumları:</td>
                 <td id="info-gps" class="info-value"></td>
               </tr>
               <tr>
@@ -584,12 +584,12 @@
 
           if (badWeatherCodes.includes(tomorrowCode)) {
             infoWeather.textContent = "🌧️☂️Yakında yağış var, araç yıkanmaz."; // Renk CSS'den gelecek
-            // Yağış varsa, tüm satıra uyarı sınıfını ekle
-            weatherRow.classList.add("weather-warning");
+            // Yağış varsa, satır rengini camgöbeği yap ama animasyon ekleme
+            weatherRow.style.color = "#00ffff";
           } else {
             infoWeather.textContent = "Yakında yağış yok, araç yıkanır."; // Renk CSS'den gelecek
-            // Yağış yoksa, uyarı sınıfını kaldır
-            weatherRow.classList.remove("weather-warning");
+            // Yağış yoksa, satır rengini varsayılana döndür
+            weatherRow.style.color = "";
           }
         } catch (error) {
           console.error("Hava durumu verisi alınamadı:", error);
@@ -607,7 +607,7 @@
 
         // Güncelleme zamanını ve GPS bilgi metnini ayarla
         infoUpdateTime.textContent = data.son_guncelleme;
-        infoGps.textContent = "29 (5023) - 30 (7274) - 32 (6383)";
+        infoGps.textContent = "Tüm araçlardaki sorunlar düzeltildi."; // Metin zaten doğru, teyit edildi.
         infoClosedVehicle.textContent =
           "Kırmızı renkteki araçlar kapalıdır, sıraya dahil değildir.";
 
@@ -615,6 +615,9 @@
         fetchWeather();
 
         // Dinamik font büyüklüğü sınıfları için stilleri dinamik olarak ekle
+        // "Sorunlu Araçlar" satırına yanıp sönme efekti ekle
+        infoGps.parentElement.classList.add("flash-animation");
+
         // Bu, media query'lerdeki .font-size-large gibi sınıfların yerini alır
         const contentDiv = document.querySelector(".content");
         const aspectRatio = window.innerWidth / window.innerHeight;
@@ -920,7 +923,7 @@
       // --- GİZLİ MOD AYARLARI ---
 
       // Zamanlayıcıyı aktif etmek için `true`, manuel kontrol için `false` yapın.
-      const HIDDEN_MODE_TIMER = true;
+      const HIDDEN_MODE_TIMER = false;
 
       // Zamanlayıcı kapalıyken (HIDDEN_MODE_TIMER = false) gizli modu manuel açıp kapatmak için bu ayarı kullanın.
       const HIDDEN_MODE_MANUAL = false;
@@ -1209,4 +1212,3 @@
     </script>
   </body>
 </html>
-
