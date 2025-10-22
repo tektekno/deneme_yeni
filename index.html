@@ -498,6 +498,9 @@
       };
       // İlk kullanıcı etkileşimini takip etmek için bayrak
       let firstInteraction = false;
+      // Sesleri sırayla çalmak için bir kuyruk ve durum değişkeni
+      let audioQueue = [];
+      let isPlayingAudio = false;
 
       /**
        * Saniye cinsinden verilen süreyi "Xgn Ysa Zdk Psn" formatına dönüştürür.
@@ -629,20 +632,34 @@
       }
 
       /**
-       * Verilen URL'deki ses dosyasını çalar.
-       * @param {string} url - Çalınacak ses dosyasının URL'si.
+       * Ses kuyruğundaki dosyaları sırayla çalar.
        */
-      function playAudio(url) {
-        if (!firstInteraction) {
-          // Kullanıcı etkileşimi olmadan ses çalınamaz, bu yüzden işlemi atla.
+      function playAudioFromQueue() {
+        if (isPlayingAudio || audioQueue.length === 0 || !firstInteraction) {
           return;
         }
-        const audio = new Audio(url);
-        audio.play().catch((error) => {
-          // Oynatma hatası (genellikle kullanıcı etkileşimi olmadan engellendiğinde)
-          // Bu hatayı konsolda göstermek genellikle gereksizdir çünkü beklenen bir durumdur.
-          // console.error("Ses çalma hatası:", error);
+
+        isPlayingAudio = true;
+        const urlToPlay = audioQueue.shift(); // Kuyruktan ilk sesi al
+        const audio = new Audio(urlToPlay);
+
+        audio.play().catch(error => {
+          console.error("Ses çalma hatası:", error);
+          isPlayingAudio = false; // Hata durumunda bayrağı sıfırla
+          playAudioFromQueue(); // Bir sonraki sesi çalmayı dene
         });
+
+        audio.onended = () => {
+          isPlayingAudio = false;
+          // Sesler arasında küçük bir nefes payı bırakmak için kısa bir gecikme
+          setTimeout(playAudioFromQueue, 200);
+        };
+
+        audio.onerror = () => {
+            console.error(`Ses dosyası yüklenemedi: ${urlToPlay}`);
+            isPlayingAudio = false;
+            setTimeout(playAudioFromQueue, 200); // Hatalı olsa bile sıradakine geç
+        };
       }
 
       function renderData(data) {
@@ -706,6 +723,7 @@
 
         // --- SESLİ BİLDİRİM İÇİN DEĞİŞİKLİK KONTROLÜ ---
         const newVehicleCounts = {};
+        const priorityOrder = ['suvari', 'merkez', 'metro']; // Öncelik sırası
         orderedDuraks.forEach((key) => {
           const aracSayisi = data.duraklar[key].liste
             ? data.duraklar[key].liste.filter((arac) => !arac.is_closed).length
@@ -713,21 +731,27 @@
           newVehicleCounts[key] = aracSayisi;
 
           // Eğer bu durağın önceki sayısı varsa ve değişmişse sesli bildirim yap
+        });
+
+        // Öncelik sırasına göre sesleri kuyruğa ekle
+        priorityOrder.forEach(key => {
           if (
             previousVehicleCounts[key] !== undefined &&
-            previousVehicleCounts[key] !== aracSayisi &&
+            previousVehicleCounts[key] !== newVehicleCounts[key] &&
             !stationMuteStatus[key] // Eğer ses kapalı değilse
           ) {
-            // Çalınacak ses dosyasının adını oluştur (örn: merkez2.opus, suvari0.opus)
-            const audioFileName = `${key}${aracSayisi}.opus`;
-            // GitHub raw content URL'sini oluştur
+            const audioFileName = `${key}${newVehicleCounts[key]}.opus`;
             const audioUrl = `https://raw.githubusercontent.com/tektekno/deneme_yeni/master/voices/${audioFileName}`;
-
-            // Render döngüsünü bloklamamak için konuşmayı kısa bir gecikmeyle yap
-            // Bu, özellikle WebView ve mobil cihazlarda performansı artırır.
-            setTimeout(() => playAudio(audioUrl), 100);
+            audioQueue.push(audioUrl);
           }
         });
+
+        // Eğer kuyruğa yeni ses eklendiyse ve çalma işlemi aktif değilse, başlat.
+        if (audioQueue.length > 0 && !isPlayingAudio) {
+            playAudioFromQueue();
+        }
+
+
 
         // Bir sonraki kontrol için mevcut sayıları kaydet
         previousVehicleCounts = newVehicleCounts;
@@ -997,7 +1021,7 @@
 
       // --- DEBUG MODU ---
       // Test verilerini kullanmak için `true`, gerçek zamanlı Firebase verilerini kullanmak için `false` yapın.
-      const DEBUG_MODE = false;
+      const DEBUG_MODE = true;
 
       // --- GİZLİ MOD AYARLARI ---
 
@@ -1280,17 +1304,18 @@
         // İlk yüklemede viewport bilgisini güncelle
         updateViewportInfo();
 
+        // Mobil cihazlarda/WebView'da ses motorunu otomatik olarak "uyandırmayı" dene.
+        // Bu, kullanıcı etkileşimi olmadan seslerin çalınabilmesi için bir denemedir.
+        if (!firstInteraction) {
+          firstInteraction = true;
+          new Audio().play().catch(() => {}); // Boş bir ses çalarak ses bağlamını başlat
+        }
+
         // Ses kontrol ikonları için olay dinleyicisi
         document.body.addEventListener("click", function (e) {
           if (e.target && e.target.classList.contains("speaker-icon")) {
             const durakKey = e.target.getAttribute("data-durak-key");
             if (durakKey && stationMuteStatus.hasOwnProperty(durakKey)) {
-              // Mobil cihazlarda ses motorunu "uyandırmak" için ilk kullanıcı etkileşimini kullan.
-              if (!firstInteraction) {
-                firstInteraction = true;
-                new Audio().play().catch(() => {}); // Boş bir ses çalarak ses bağlamını başlat
-              }
-
               // Ses durumunu tersine çevir
               stationMuteStatus[durakKey] = !stationMuteStatus[durakKey];
               // İkonu güncelle
