@@ -552,6 +552,10 @@
       // Sesleri sırayla çalmak için bir kuyruk ve durum değişkeni
       let audioQueue = [];
       let isPlayingAudio = false;
+      // Web Audio API için değişkenler
+      let audioContext;
+      let audioBuffers = {};
+      let isPreloading = false;
 
       /**
        * Saniye cinsinden verilen süreyi "Xgn Ysa Zdk Psn" formatına dönüştürür.
@@ -683,6 +687,40 @@
       }
 
       /**
+       * Tüm ses dosyalarını önceden yükler ve audioBuffers nesnesine kaydeder.
+       */
+      async function preloadAudioFiles() {
+        if (isPreloading || Object.keys(audioBuffers).length > 33) return; // Zaten yükleniyorsa veya yüklendiyse çık
+        isPreloading = true;
+        console.log("Ses dosyaları ön yükleniyor...");
+
+        const duraklar = ["merkez", "metro", "suvari"];
+        const promises = [];
+
+        for (const durak of duraklar) {
+          for (let i = 0; i <= 10; i++) {
+            const fileName = `${durak}${i}.opus`;
+            const url = `https://raw.githubusercontent.com/tektekno/deneme_yeni/master/voices/${fileName}`;
+
+            const promise = fetch(url)
+              .then((response) => response.arrayBuffer())
+              .then((arrayBuffer) => audioContext.decodeAudioData(arrayBuffer))
+              .then((decodedData) => {
+                audioBuffers[url] = decodedData;
+              })
+              .catch((err) => {
+                // console.error(`${fileName} yüklenemedi:`, err);
+              });
+            promises.push(promise);
+          }
+        }
+
+        await Promise.all(promises);
+        isPreloading = false;
+        console.log("Tüm ses dosyaları ön yüklendi.");
+      }
+
+      /**
        * Ses kuyruğundaki dosyaları sırayla çalar.
        */
       function playAudioFromQueue() {
@@ -690,26 +728,27 @@
           return;
         }
 
-        isPlayingAudio = true;
         const urlToPlay = audioQueue.shift(); // Kuyruktan ilk sesi al
-        const audio = new Audio(urlToPlay);
+        const audioBuffer = audioBuffers[urlToPlay];
 
-        audio.play().catch((error) => {
-          console.error("Ses çalma hatası:", error);
-          isPlayingAudio = false; // Hata durumunda bayrağı sıfırla
-          playAudioFromQueue(); // Bir sonraki sesi çalmayı dene
-        });
+        if (!audioBuffer) {
+          console.error(`Ses buffer'ı bulunamadı: ${urlToPlay}`);
+          // Hatalı olsa bile sıradakine geç
+          setTimeout(playAudioFromQueue, 200);
+          return;
+        }
 
-        audio.onended = () => {
+        isPlayingAudio = true;
+
+        const source = audioContext.createBufferSource();
+        source.buffer = audioBuffer;
+        source.connect(audioContext.destination);
+        source.start(0);
+
+        source.onended = () => {
           isPlayingAudio = false;
           // Sesler arasında küçük bir nefes payı bırakmak için kısa bir gecikme
           setTimeout(playAudioFromQueue, 200);
-        };
-
-        audio.onerror = () => {
-          console.error(`Ses dosyası yüklenemedi: ${urlToPlay}`);
-          isPlayingAudio = false;
-          setTimeout(playAudioFromQueue, 200); // Hatalı olsa bile sıradakine geç
         };
       }
 
@@ -1365,17 +1404,31 @@
             // Ses motorunu "uyandır"
             if (!firstInteraction) {
               firstInteraction = true;
+              // AudioContext'i oluştur veya devam ettir
+              if (!audioContext) {
+                audioContext = new (window.AudioContext ||
+                  window.webkitAudioContext)();
+              }
+              if (audioContext.state === "suspended") {
+                audioContext.resume();
+              }
+
               // Giriş sesini çal
               const enterSound = new Audio(
                 "https://raw.githubusercontent.com/tektekno/deneme_yeni/master/voices/enter.opus"
               );
               enterSound.play().catch(() => {});
+
+              // Diğer sesleri arka planda yükle
+              preloadAudioFiles();
             }
             // Giriş ekranını yavaşça gizle
             introOverlay.style.opacity = "0";
             // Animasyon bittikten sonra DOM'dan kaldır
             setTimeout(() => {
-              introOverlay.remove();
+              if (introOverlay) {
+                introOverlay.remove();
+              }
             }, 500);
           },
           { once: true }
