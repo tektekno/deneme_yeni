@@ -357,6 +357,16 @@
           background-position: -150% 0; /* Bitiş pozisyonu (solda) */
         }
       }
+
+      /* Ses kontrol ikonu */
+      .speaker-icon {
+        position: absolute;
+        top: 1vh;
+        right: 2vw;
+        font-size: clamp(14px, 3vw, 24px);
+        cursor: pointer;
+        user-select: none; /* İkonun seçilmesini engelle */
+      }
     </style>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
@@ -478,6 +488,14 @@
 
       // En son yüklenen veriyi tutmak için değişken
       let latestData = null;
+      // Önceki araç sayılarını tutmak için değişken
+      let previousVehicleCounts = {};
+      // Durakların ses durumunu tutmak için değişken
+      let stationMuteStatus = {
+        merkez: false, // false = ses açık, true = ses kapalı
+        metro: false,
+        suvari: false,
+      };
 
       /**
        * Saniye cinsinden verilen süreyi "Xgn Ysa Zdk Psn" formatına dönüştürür.
@@ -608,6 +626,43 @@
         }
       }
 
+      /**
+       * Verilen metni Türkçe olarak seslendirir.
+       * @param {string} text - Seslendirilecek metin.
+       */
+      function speak(text) {
+        if ("speechSynthesis" in window) {
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = "tr-TR";
+
+          // Tarayıcıdaki mevcut sesleri al
+          const voices = window.speechSynthesis.getVoices();
+
+          // "Microsoft Tolga" yerine daha doğal bir ses bulmaya çalış
+          // 1. Öncelik: Google'ın Türkçe sesini ara (genellikle daha doğal)
+          let selectedVoice = voices.find(
+            (voice) => voice.lang === "tr-TR" && voice.name.includes("Google")
+          );
+
+          // 2. Öncelik: Tolga dışında başka bir Türkçe ses ara
+          if (!selectedVoice) {
+            selectedVoice = voices.find(
+              (voice) =>
+                voice.lang === "tr-TR" && !voice.name.includes("Tolga")
+            );
+          }
+
+          // Eğer daha iyi bir ses bulunduysa onu kullan, yoksa varsayılan devam etsin
+          if (selectedVoice) {
+            utterance.voice = selectedVoice;
+          }
+
+          window.speechSynthesis.speak(utterance);
+        } else {
+          console.log("Sesli asistan bu tarayıcıda desteklenmiyor.");
+        }
+      }
+
       function renderData(data) {
         // En son veriyi global olarak sakla
         latestData = data;
@@ -667,6 +722,31 @@
         const totalVehicles =
           vehicleCounts.merkez + vehicleCounts.metro + vehicleCounts.suvari;
 
+        // --- SESLİ BİLDİRİM İÇİN DEĞİŞİKLİK KONTROLÜ ---
+        const newVehicleCounts = {};
+        orderedDuraks.forEach((key) => {
+          const aracSayisi = data.duraklar[key].liste
+            ? data.duraklar[key].liste.filter((arac) => !arac.is_closed).length
+            : 0;
+          newVehicleCounts[key] = aracSayisi;
+
+          // Eğer bu durağın önceki sayısı varsa ve değişmişse sesli bildirim yap
+          if (
+            previousVehicleCounts[key] !== undefined &&
+            previousVehicleCounts[key] !== aracSayisi &&
+            !stationMuteStatus[key] // Eğer ses kapalı değilse
+          ) {
+            let speechText = `${durak_names[key]} ${aracSayisi} tane`;
+            if (aracSayisi === 0) {
+              speechText = `${durak_names[key]} boş kaldı`;
+            }
+            speak(speechText);
+          }
+        });
+
+        // Bir sonraki kontrol için mevcut sayıları kaydet
+        previousVehicleCounts = newVehicleCounts;
+
         // Her bir durak için ayrı ayrı hizalama uzunluğunu belirle
         orderedDuraks.forEach((key) => {
           if (duraklar.hasOwnProperty(key)) {
@@ -693,6 +773,9 @@
             const aracSayisi = activeVehicles.length; // Sadece aktif araçları say
 
             // Başlık satırı
+            const speakerIcon = stationMuteStatus[key] ? "🔇" : "🔊";
+            htmlContent += `<span class="speaker-icon" data-durak-key="${key}">${speakerIcon}</span>`;
+
             htmlContent += `${durak_names[key]} (${aracSayisi})<br>`;
 
             // Ortalama kalkış satırı
@@ -1211,6 +1294,19 @@
       window.addEventListener("load", () => {
         // İlk yüklemede viewport bilgisini güncelle
         updateViewportInfo();
+
+        // Ses kontrol ikonları için olay dinleyicisi
+        document.body.addEventListener("click", function (e) {
+          if (e.target && e.target.classList.contains("speaker-icon")) {
+            const durakKey = e.target.getAttribute("data-durak-key");
+            if (durakKey && stationMuteStatus.hasOwnProperty(durakKey)) {
+              // Ses durumunu tersine çevir
+              stationMuteStatus[durakKey] = !stationMuteStatus[durakKey];
+              // İkonu güncelle
+              e.target.textContent = stationMuteStatus[durakKey] ? "🔇" : "🔊";
+            }
+          }
+        });
       });
 
       // Pencere boyutu değiştiğinde viewport bilgisini güncelle
