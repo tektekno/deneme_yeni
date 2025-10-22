@@ -496,6 +496,19 @@
         metro: false,
         suvari: false,
       };
+      // Tarayıcıdaki mevcut sesleri saklamak için global değişken
+      let synthesisVoices = [];
+
+      /**
+       * Tarayıcıdaki mevcut sesleri yükler ve `synthesisVoices` dizisini doldurur.
+       */
+      function loadVoices() {
+        synthesisVoices = window.speechSynthesis.getVoices();
+      }
+
+      // Ses motoru hazır olduğunda sesleri yükle (Mobil uyumluluğu için önemli)
+      loadVoices();
+      window.speechSynthesis.onvoiceschanged = loadVoices;
 
       /**
        * Saniye cinsinden verilen süreyi "Xgn Ysa Zdk Psn" formatına dönüştürür.
@@ -631,24 +644,30 @@
        * @param {string} text - Seslendirilecek metin.
        */
       function speak(text) {
-        if ("speechSynthesis" in window) {
-          const utterance = new SpeechSynthesisUtterance(text);
-          utterance.lang = "tr-TR";
+        if ('speechSynthesis' in window) {
+          // Android'de olası takılmaları önlemek için önceki konuşmayı iptal et
+          window.speechSynthesis.cancel();
 
-          // Tarayıcıdaki mevcut sesleri al
-          const voices = window.speechSynthesis.getVoices();
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = 'tr-TR';
+          utterance.rate = 1.2; // Konuşma hızını artır (varsayılan: 1)
+
+          // Mobil cihazlarda sesler hemen yüklenmeyebilir, bu yüzden tekrar kontrol et
+          if (synthesisVoices.length === 0) {
+            loadVoices();
+          }
 
           // "Microsoft Tolga" yerine daha doğal bir ses bulmaya çalış
           // 1. Öncelik: Google'ın Türkçe sesini ara (genellikle daha doğal)
-          let selectedVoice = voices.find(
-            (voice) => voice.lang === "tr-TR" && voice.name.includes("Google")
+          let selectedVoice = synthesisVoices.find(
+            (voice) => voice.lang === 'tr-TR' && voice.name.includes('Google')
           );
 
           // 2. Öncelik: Tolga dışında başka bir Türkçe ses ara
           if (!selectedVoice) {
-            selectedVoice = voices.find(
+            selectedVoice = synthesisVoices.find(
               (voice) =>
-                voice.lang === "tr-TR" && !voice.name.includes("Tolga")
+                voice.lang === 'tr-TR' && !voice.name.includes('Tolga')
             );
           }
 
@@ -659,7 +678,7 @@
 
           window.speechSynthesis.speak(utterance);
         } else {
-          console.log("Sesli asistan bu tarayıcıda desteklenmiyor.");
+          console.log('Sesli asistan bu tarayıcıda desteklenmiyor.');
         }
       }
 
@@ -736,9 +755,13 @@
             previousVehicleCounts[key] !== aracSayisi &&
             !stationMuteStatus[key] // Eğer ses kapalı değilse
           ) {
-            let speechText = `${durak_names[key]} ${aracSayisi} tane`;
+            let speechText;
             if (aracSayisi === 0) {
               speechText = `${durak_names[key]} boş kaldı`;
+            } else if (aracSayisi === 1) {
+              speechText = `${durak_names[key]} tek kaldı`;
+            } else {
+              speechText = `${durak_names[key]} ${aracSayisi} tane`;
             }
             speak(speechText);
           }
