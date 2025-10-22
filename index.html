@@ -498,6 +498,8 @@
       };
       // Tarayıcıdaki mevcut sesleri saklamak için global değişken
       let synthesisVoices = [];
+      // İlk kullanıcı etkileşimini takip etmek için bayrak
+      let firstInteraction = false;
 
       /**
        * Tarayıcıdaki mevcut sesleri yükler ve `synthesisVoices` dizisini doldurur.
@@ -644,52 +646,53 @@
        * @param {string} text - Seslendirilecek metin.
        */
       function speak(text) {
-        if (!('speechSynthesis' in window)) {
+        if (!('speechSynthesis' in window) || !firstInteraction) {
           console.log('Sesli asistan bu tarayıcıda desteklenmiyor.');
           return;
         }
 
         // Konuşmayı gerçekleştiren iç fonksiyon
         const performSpeak = () => {
-            // Android'de olası takılmaları önlemek için önceki konuşmayı iptal et
-            window.speechSynthesis.cancel();
+          // Android'de olası takılmaları önlemek için önceki konuşmayı iptal et
+          window.speechSynthesis.cancel();
 
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'tr-TR';
-            utterance.rate = 1.2; // Konuşma hızını artır (varsayılan: 1)
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = 'tr-TR';
+          utterance.rate = 1.2; // Konuşma hızını artır (varsayılan: 1)
 
-            // "Microsoft Tolga" yerine daha doğal bir ses bulmaya çalış
-            // 1. Öncelik: Google'ın Türkçe sesini ara (genellikle daha doğal)
-            let selectedVoice = synthesisVoices.find(
-              (voice) => voice.lang === 'tr-TR' && voice.name.includes('Google')
+          // "Microsoft Tolga" yerine daha doğal bir ses bulmaya çalış
+          // 1. Öncelik: Google'ın Türkçe sesini ara (genellikle daha doğal)
+          let selectedVoice = synthesisVoices.find(
+            (voice) => voice.lang === 'tr-TR' && voice.name.includes('Google')
+          );
+
+          // 2. Öncelik: Tolga dışında başka bir Türkçe ses ara
+          if (!selectedVoice) {
+            selectedVoice = synthesisVoices.find(
+              (voice) =>
+                voice.lang === 'tr-TR' && !voice.name.includes('Tolga')
             );
+          }
 
-            // 2. Öncelik: Tolga dışında başka bir Türkçe ses ara
-            if (!selectedVoice) {
-              selectedVoice = synthesisVoices.find(
-                (voice) =>
-                  voice.lang === 'tr-TR' && !voice.name.includes('Tolga')
-              );
-            }
+          // Eğer daha iyi bir ses bulunduysa onu kullan, yoksa varsayılan devam etsin
+          if (selectedVoice) {
+            utterance.voice = selectedVoice;
+          }
 
-            // Eğer daha iyi bir ses bulunduysa onu kullan, yoksa varsayılan devam etsin
-            if (selectedVoice) {
-              utterance.voice = selectedVoice;
-            }
-
-            window.speechSynthesis.speak(utterance);
+          window.speechSynthesis.speak(utterance);
         };
 
         // Eğer ses listesi henüz yüklenmediyse, yüklenmesini bekle ve sonra konuş.
         // Bu, özellikle mobil cihazlardaki gecikmeyi telafi eder.
         if (synthesisVoices.length === 0) {
-            window.speechSynthesis.onvoiceschanged = () => {
-                loadVoices();
-                performSpeak();
-            };
-            loadVoices(); // Tekrar yüklemeyi tetikle
+          // Sesler henüz hazır değilse, bir sonraki olayda tekrar denemek için bekleyelim.
+          // Bu, `speak` fonksiyonunun render döngüsünü bloklamasını engeller.
+          setTimeout(() => {
+            loadVoices(); // Sesleri tekrar yüklemeyi dene
+            if (synthesisVoices.length > 0) performSpeak();
+          }, 100);
         } else {
-            performSpeak();
+          performSpeak();
         }
       }
 
@@ -774,7 +777,9 @@
             } else {
               speechText = `${durak_names[key]} ${aracSayisi} tane`;
             }
-            speak(speechText);
+            // Render döngüsünü bloklamamak için konuşmayı kısa bir gecikmeyle yap
+            // Bu, özellikle WebView ve mobil cihazlarda performansı artırır.
+            setTimeout(() => speak(speechText), 100);
           }
         });
 
@@ -1042,6 +1047,17 @@
             duraklarContainer.appendChild(durakDiv);
           }
         });
+
+        // --- YENİ: Ses motorunu otomatik olarak etkinleştir ---
+        // Durak div'leri yüklendikten sonra ve sadece bir kez çalışacak şekilde
+        // ses motorunu "uyandır". Bu, mobil cihazlardaki otomatik oynatma
+        // kısıtlamalarını aşmaya yardımcı olur.
+        if (!firstInteraction) {
+          firstInteraction = true;
+          // Boş bir ses çalarak ses motorunu etkinleştir.
+          // Bu, kullanıcı etkileşimi olmadan sesin başlamasını sağlar.
+          window.speechSynthesis.speak(new SpeechSynthesisUtterance(""));
+        }
       }
 
       // --- DEBUG MODU ---
