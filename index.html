@@ -380,9 +380,10 @@
         justify-content: center;
         align-items: center;
         z-index: 9999;
-        cursor: default; /* İmleci normal yap */
+        cursor: pointer;
         transition: opacity 0.5s ease-out;
       }
+
       .intro-content {
         text-align: center;
         color: white;
@@ -392,24 +393,23 @@
         margin-bottom: 10px;
       }
       .intro-button {
-        /* Matrix stili */
         margin-top: 30px;
         padding: 12px 28px;
         font-size: clamp(16px, 4vw, 22px);
         font-family: "Kode Mono", monospace;
-        color: #00ff41; /* Matrix yeşili */
-        background-color: transparent;
-        border: 2px solid #00ff41;
+        color: white;
+        background-color: #1a1a1a;
+        border: 2px solid #555;
         border-radius: 8px;
         cursor: pointer;
-        text-shadow: 0 0 5px #00ff41, 0 0 10px #00ff41;
-        box-shadow: 0 0 5px #00ff41, inset 0 0 5px #00ff41;
-        transition: text-shadow 0.3s, box-shadow 0.3s;
+        transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
       }
       .intro-button:hover {
-        /* Üzerine gelince parlamayı artır */
-        text-shadow: 0 0 10px #00ff41, 0 0 20px #00ff41;
-        box-shadow: 0 0 10px #00ff41, inset 0 0 10px #00ff41;
+        background-color: #333;
+        border-color: #777;
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
       }
     </style>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -418,7 +418,7 @@
   <body>
     <div id="intro-overlay">
       <div class="intro-content">
-        <h1>Durak Takip Asistanı</h1>
+        <h1>Durak Takip</h1>
         <button class="intro-button">Giriş Yapmak İçin Tıkla</button>
       </div>
     </div>
@@ -548,9 +548,6 @@
       };
       // İlk kullanıcı etkileşimini takip etmek için bayrak
       let firstInteraction = false;
-      // Sesleri sırayla çalmak için bir kuyruk ve durum değişkeni
-      let audioQueue = [];
-      let isPlayingAudio = false;
 
       /**
        * Saniye cinsinden verilen süreyi "Xgn Ysa Zdk Psn" formatına dönüştürür.
@@ -682,34 +679,20 @@
       }
 
       /**
-       * Ses kuyruğundaki dosyaları sırayla çalar.
+       * Verilen URL'deki ses dosyasını çalar.
+       * @param {string} url - Çalınacak ses dosyasının URL'si.
        */
-      function playAudioFromQueue() {
-        if (isPlayingAudio || audioQueue.length === 0 || !firstInteraction) {
+      function playAudio(url) {
+        if (!firstInteraction) {
+          // Kullanıcı etkileşimi olmadan ses çalınamaz, bu yüzden işlemi atla.
           return;
         }
-
-        isPlayingAudio = true;
-        const urlToPlay = audioQueue.shift(); // Kuyruktan ilk sesi al
-        const audio = new Audio(urlToPlay);
-
+        const audio = new Audio(url);
         audio.play().catch(error => {
-          console.error("Ses çalma hatası:", error);
-          isPlayingAudio = false; // Hata durumunda bayrağı sıfırla
-          playAudioFromQueue(); // Bir sonraki sesi çalmayı dene
+          // Oynatma hatası (genellikle kullanıcı etkileşimi olmadan engellendiğinde)
+          // Bu hatayı konsolda göstermek genellikle gereksizdir çünkü beklenen bir durumdur.
+          // console.error("Ses çalma hatası:", error);
         });
-
-        audio.onended = () => {
-          isPlayingAudio = false;
-          // Sesler arasında küçük bir nefes payı bırakmak için kısa bir gecikme
-          setTimeout(playAudioFromQueue, 200);
-        };
-
-        audio.onerror = () => {
-            console.error(`Ses dosyası yüklenemedi: ${urlToPlay}`);
-            isPlayingAudio = false;
-            setTimeout(playAudioFromQueue, 200); // Hatalı olsa bile sıradakine geç
-        };
       }
 
       function renderData(data) {
@@ -773,7 +756,6 @@
 
         // --- SESLİ BİLDİRİM İÇİN DEĞİŞİKLİK KONTROLÜ ---
         const newVehicleCounts = {};
-        const priorityOrder = ['suvari', 'merkez', 'metro']; // Öncelik sırası
         orderedDuraks.forEach((key) => {
           const aracSayisi = data.duraklar[key].liste
             ? data.duraklar[key].liste.filter((arac) => !arac.is_closed).length
@@ -781,20 +763,19 @@
           newVehicleCounts[key] = aracSayisi;
 
           // Eğer bu durağın önceki sayısı varsa ve değişmişse sesli bildirim yap
-        });
-
-        // Öncelik sırasına göre sesleri kuyruğa ekle
-        priorityOrder.forEach(key => {
           if (
             previousVehicleCounts[key] !== undefined &&
-            previousVehicleCounts[key] !== newVehicleCounts[key] &&
+            previousVehicleCounts[key] !== aracSayisi &&
             !stationMuteStatus[key] // Eğer ses kapalı değilse
           ) {
             // Çalınacak ses dosyasının adını oluştur (örn: merkez2.opus, suvari0.opus)
-            const audioFileName = `${key}${newVehicleCounts[key]}.opus`;
+            const audioFileName = `${key}${aracSayisi}.opus`;
             // GitHub raw content URL'sini oluştur
             const audioUrl = `https://raw.githubusercontent.com/tektekno/deneme_yeni/master/voices/${audioFileName}`;
-            audioQueue.push(audioUrl);
+
+            // Render döngüsünü bloklamamak için konuşmayı kısa bir gecikmeyle yap
+            // Bu, özellikle WebView ve mobil cihazlarda performansı artırır.
+            setTimeout(() => playAudio(audioUrl), 100);
           }
         });
 
@@ -1354,29 +1335,12 @@
         // İlk yüklemede viewport bilgisini güncelle
         updateViewportInfo();
 
-        // Giriş ekranı için olay dinleyicisi
-        const introOverlay = document.getElementById("intro-overlay");
-        const introButton = introOverlay.querySelector(".intro-button");
-
-        introButton.addEventListener(
-          "click",
-          function () {
-            // Ses motorunu "uyandır"
-            if (!firstInteraction) {
-              firstInteraction = true;
-              // Giriş sesini çal
-              const enterSound = new Audio("https://raw.githubusercontent.com/tektekno/deneme_yeni/master/voices/enter.opus");
-              enterSound.play().catch(() => {}); 
-            }
-            // Giriş ekranını yavaşça gizle
-            introOverlay.style.opacity = "0";
-            // Animasyon bittikten sonra DOM'dan kaldır
-            setTimeout(() => {
-              introOverlay.remove();
-            }, 500);
-          },
-          { once: true }
-        ); // Olay dinleyicisi sadece bir kez çalışsın
+        // Mobil cihazlarda/WebView'da ses motorunu otomatik olarak "uyandırmayı" dene.
+        // Bu, kullanıcı etkileşimi olmadan seslerin çalınabilmesi için bir denemedir.
+        if (!firstInteraction) {
+          firstInteraction = true;
+          new Audio().play().catch(() => {}); // Boş bir ses çalarak ses bağlamını başlat
+        }
 
         // Ses kontrol ikonları için olay dinleyicisi
         document.body.addEventListener("click", function (e) {
