@@ -330,21 +330,32 @@
         cursor: pointer;
       }
 
-      /* Yağış uyarısı için yanıp sönme animasyonu */
-      @keyframes flash-warning {
-        0%,
-        100% {
-          color: #e8f53c; /* Beyaz */
-          transform: scale(1);
-        }
-        50% {
-          color: #00ffff; /* Cyan */
-          transform: scale(1.05);
-        }
+      .metal-effect {
+        font-weight: bold;
+        color: #c0c0c0; /* Gümüş rengi */
+        background: linear-gradient(
+          90deg,
+          #c0c0c0 48%,
+          #ffffff 50%,
+          #c0c0c0 52%
+        );
+        background-size: 300% 100%;
+        background-position: 150% 0;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: metal-shine 3s linear infinite;
+        animation: metal-shine 5s linear infinite;
+        filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.3));
       }
 
-      .flash-animation {
-        animation: flash-warning 0.8s infinite;
+      @keyframes metal-shine {
+        0% {
+          background-position: 150% 0; /* Başlangıç pozisyonu (sağda) */
+        }
+        100% {
+          background-position: -150% 0; /* Bitiş pozisyonu (solda) */
+        }
       }
     </style>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -615,8 +626,8 @@
         fetchWeather();
 
         // Dinamik font büyüklüğü sınıfları için stilleri dinamik olarak ekle
-        // "Sorunlu Araçlar" satırına yanıp sönme efekti ekle
-        infoGps.parentElement.classList.add("flash-animation");
+        // "Araç Durumları" satırına metalik parlama efekti ekle
+        infoGps.parentElement.classList.add("metal-effect");
 
         // Bu, media query'lerdeki .font-size-large gibi sınıfların yerini alır
         const contentDiv = document.querySelector(".content");
