@@ -1419,6 +1419,20 @@
               );
               enterSound.play().catch(() => {});
 
+              // --- EKRAN KİLİTLEME ---
+              // Sadece mobil cihazlarda ve destekleniyorsa ekranı dikey moda kilitle
+              try {
+                if (screen.orientation && screen.orientation.lock) {
+                  screen.orientation
+                    .lock("portrait-primary")
+                    .catch(function (error) {
+                      // Kilitleme başarısız olursa (genellikle masaüstü tarayıcılarda olur), hatayı görmezden gel.
+                    });
+                }
+              } catch (err) {
+                /* Hata durumunda da devam et */
+              }
+
               // Diğer sesleri arka planda yükle
               preloadAudioFiles();
             }
