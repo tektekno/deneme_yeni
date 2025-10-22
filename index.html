@@ -357,6 +357,16 @@
           background-position: -150% 0; /* Bitiş pozisyonu (solda) */
         }
       }
+
+      /* Ses kontrol ikonu */
+      .speaker-icon {
+        position: absolute;
+        top: 1vh;
+        right: 2vw;
+        font-size: clamp(14px, 3vw, 24px);
+        cursor: pointer;
+        user-select: none; /* İkonun seçilmesini engelle */
+      }
     </style>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
@@ -478,6 +488,16 @@
 
       // En son yüklenen veriyi tutmak için değişken
       let latestData = null;
+      // Önceki araç sayılarını tutmak için değişken
+      let previousVehicleCounts = {};
+      // Durakların ses durumunu tutmak için değişken
+      let stationMuteStatus = {
+        merkez: false, // false = ses açık, true = ses kapalı
+        metro: false,
+        suvari: false,
+      };
+      // İlk kullanıcı etkileşimini takip etmek için bayrak
+      let firstInteraction = false;
 
       /**
        * Saniye cinsinden verilen süreyi "Xgn Ysa Zdk Psn" formatına dönüştürür.
@@ -608,6 +628,23 @@
         }
       }
 
+      /**
+       * Verilen URL'deki ses dosyasını çalar.
+       * @param {string} url - Çalınacak ses dosyasının URL'si.
+       */
+      function playAudio(url) {
+        if (!firstInteraction) {
+          // Kullanıcı etkileşimi olmadan ses çalınamaz, bu yüzden işlemi atla.
+          return;
+        }
+        const audio = new Audio(url);
+        audio.play().catch((error) => {
+          // Oynatma hatası (genellikle kullanıcı etkileşimi olmadan engellendiğinde)
+          // Bu hatayı konsolda göstermek genellikle gereksizdir çünkü beklenen bir durumdur.
+          // console.error("Ses çalma hatası:", error);
+        });
+      }
+
       function renderData(data) {
         // En son veriyi global olarak sakla
         latestData = data;
@@ -667,6 +704,34 @@
         const totalVehicles =
           vehicleCounts.merkez + vehicleCounts.metro + vehicleCounts.suvari;
 
+        // --- SESLİ BİLDİRİM İÇİN DEĞİŞİKLİK KONTROLÜ ---
+        const newVehicleCounts = {};
+        orderedDuraks.forEach((key) => {
+          const aracSayisi = data.duraklar[key].liste
+            ? data.duraklar[key].liste.filter((arac) => !arac.is_closed).length
+            : 0;
+          newVehicleCounts[key] = aracSayisi;
+
+          // Eğer bu durağın önceki sayısı varsa ve değişmişse sesli bildirim yap
+          if (
+            previousVehicleCounts[key] !== undefined &&
+            previousVehicleCounts[key] !== aracSayisi &&
+            !stationMuteStatus[key] // Eğer ses kapalı değilse
+          ) {
+            // Çalınacak ses dosyasının adını oluştur (örn: merkez2.opus, suvari0.opus)
+            const audioFileName = `${key}${aracSayisi}.opus`;
+            // GitHub raw content URL'sini oluştur
+            const audioUrl = `https://raw.githubusercontent.com/tektekno/deneme_yeni/master/voices/${audioFileName}`;
+
+            // Render döngüsünü bloklamamak için konuşmayı kısa bir gecikmeyle yap
+            // Bu, özellikle WebView ve mobil cihazlarda performansı artırır.
+            setTimeout(() => playAudio(audioUrl), 100);
+          }
+        });
+
+        // Bir sonraki kontrol için mevcut sayıları kaydet
+        previousVehicleCounts = newVehicleCounts;
+
         // Her bir durak için ayrı ayrı hizalama uzunluğunu belirle
         orderedDuraks.forEach((key) => {
           if (duraklar.hasOwnProperty(key)) {
@@ -693,6 +758,9 @@
             const aracSayisi = activeVehicles.length; // Sadece aktif araçları say
 
             // Başlık satırı
+            const speakerIcon = stationMuteStatus[key] ? "🔇" : "🔊";
+            htmlContent += `<span class="speaker-icon" data-durak-key="${key}">${speakerIcon}</span>`;
+
             htmlContent += `${durak_names[key]} (${aracSayisi})<br>`;
 
             // Ortalama kalkış satırı
@@ -1211,14 +1279,35 @@
       window.addEventListener("load", () => {
         // İlk yüklemede viewport bilgisini güncelle
         updateViewportInfo();
+
+        // Ses kontrol ikonları için olay dinleyicisi
+        document.body.addEventListener("click", function (e) {
+          if (e.target && e.target.classList.contains("speaker-icon")) {
+            const durakKey = e.target.getAttribute("data-durak-key");
+            if (durakKey && stationMuteStatus.hasOwnProperty(durakKey)) {
+              // Mobil cihazlarda ses motorunu "uyandırmak" için ilk kullanıcı etkileşimini kullan.
+              if (!firstInteraction) {
+                firstInteraction = true;
+                new Audio().play().catch(() => {}); // Boş bir ses çalarak ses bağlamını başlat
+              }
+
+              // Ses durumunu tersine çevir
+              stationMuteStatus[durakKey] = !stationMuteStatus[durakKey];
+              // İkonu güncelle
+              e.target.textContent = stationMuteStatus[durakKey] ? "🔇" : "🔊";
+            }
+          }
+        });
       });
 
       // Pencere boyutu değiştiğinde viewport bilgisini güncelle
       window.addEventListener("resize", () => {
         updateViewportInfo();
-        // Veriyi yeniden render etmek için, mevcut veriyi bir değişkende saklayıp onu kullanabiliriz
-        // veya basitçe sayfayı yeniden yükleyebiliriz. Şimdilik yeniden yükleme daha basit.
-        location.reload();
+        // WebView uyumluluğu için sayfayı yeniden yüklemek yerine veriyi yeniden render et.
+        // Bu, hem daha hızlıdır hem de WebView'da sonsuz döngüye girme riskini ortadan kaldırır.
+        if (latestData) {
+          renderData(latestData);
+        }
       });
     </script>
   </body>
