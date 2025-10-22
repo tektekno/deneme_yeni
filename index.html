@@ -411,12 +411,23 @@
         text-shadow: 0 0 10px #00ff41, 0 0 20px #00ff41;
         box-shadow: 0 0 10px #00ff41, inset 0 0 10px #00ff41;
       }
+
+      #matrix-canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 1; /* Düşük opaklık */
+        z-index: -1; /* İçeriğin arkasında kalması için */
+      }
     </style>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
   </head>
   <body>
     <div id="intro-overlay">
+      <canvas id="matrix-canvas"></canvas>
       <div class="intro-content">
         <h1>Küçükpark Taksi</h1>
         <h2>Durak Takip Uygulaması</h2>
@@ -1394,6 +1405,52 @@
         // İlk yüklemede viewport bilgisini güncelle
         updateViewportInfo();
 
+        // --- Matrix Arka Plan Animasyonu ---
+        const canvas = document.getElementById("matrix-canvas");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const katakana =
+          "アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン";
+        const latin = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const nums = "0123456789";
+        const alphabet = katakana + latin + nums;
+
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const rainDrops = [];
+
+        for (let x = 0; x < columns; x++) {
+          rainDrops[x] = 1;
+        }
+
+        const drawMatrix = () => {
+          ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+          ctx.fillStyle = "#00ff41"; // Matrix yeşili
+          ctx.font = fontSize + "px monospace";
+
+          for (let i = 0; i < rainDrops.length; i++) {
+            const text = alphabet.charAt(
+              Math.floor(Math.random() * alphabet.length)
+            );
+            ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+
+            if (
+              rainDrops[i] * fontSize > canvas.height &&
+              Math.random() > 0.975
+            ) {
+              rainDrops[i] = 0;
+            }
+            rainDrops[i]++;
+          }
+        };
+
+        const matrixInterval = setInterval(drawMatrix, 33);
+
         // Giriş ekranı için olay dinleyicisi
         const introOverlay = document.getElementById("intro-overlay");
         const introButton = document.querySelector(".intro-button");
@@ -1441,6 +1498,7 @@
             // Animasyon bittikten sonra DOM'dan kaldır
             setTimeout(() => {
               if (introOverlay) {
+                clearInterval(matrixInterval); // Animasyonu durdur
                 introOverlay.remove();
               }
             }, 500);
