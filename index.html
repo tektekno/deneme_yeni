@@ -498,11 +498,9 @@
       };
       // Tarayıcıdaki mevcut sesleri saklamak için global değişken
       let synthesisVoices = [];
-      // İlk kullanıcı etkileşimini takip etmek için bayrak
-      let firstInteraction = false;
 
       /**
-       * Tarayıcıdaki mevcut sesleri yükler ve `synthesisVoices` dizisini doldurur.
+       * Tarayıcıdaki mevcut sesleri yükler ve synthesisVoices dizisini doldurur.
        */
       function loadVoices() {
         synthesisVoices = window.speechSynthesis.getVoices();
@@ -529,15 +527,15 @@
 
         const parts = [];
         if (days > 0) {
-          parts.push(`${days}gn`);
+          parts.push(${days}gn);
         }
         if (hours > 0) {
-          parts.push(`${hours}sa`);
+          parts.push(${hours}sa);
         }
         if (minutes > 0) {
-          parts.push(`${minutes}dk`);
+          parts.push(${minutes}dk);
         }
-        parts.push(`${seconds}sn`);
+        parts.push(${seconds}sn);
 
         return parts.join(" ");
       }
@@ -562,9 +560,9 @@
         }
         // Tek haneli değerler için bir boşluk ekle
         if (value < 10 && value >= 0) {
-          return `${padChar}${value}${unit}`;
+          return ${padChar}${value}${unit};
         }
-        return `${value}${unit}`;
+        return ${value}${unit};
       }
 
       /**
@@ -627,7 +625,7 @@
           const weatherRow = infoWeather.parentElement; // <tr> elementini al
 
           if (badWeatherCodes.includes(tomorrowCode)) {
-            infoWeather.textContent = "🌧️☂️Yakında yağış var, araç yıkanmaz."; // Renk CSS'den gelecek
+            infoWeather.textContent = "🌧☂Yakında yağış var, araç yıkanmaz."; // Renk CSS'den gelecek
             // Yağış varsa, satır rengini camgöbeği yap ama animasyon ekleme
             weatherRow.style.color = "#00ffff";
           } else {
@@ -646,19 +644,17 @@
        * @param {string} text - Seslendirilecek metin.
        */
       function speak(text) {
-        if (!('speechSynthesis' in window) || !firstInteraction) {
-          console.log('Sesli asistan bu tarayıcıda desteklenmiyor.');
-          return;
-        }
-
-        // Konuşmayı gerçekleştiren iç fonksiyon
-        const performSpeak = () => {
+        if ('speechSynthesis' in window) {
           // Android'de olası takılmaları önlemek için önceki konuşmayı iptal et
           window.speechSynthesis.cancel();
 
           const utterance = new SpeechSynthesisUtterance(text);
           utterance.lang = 'tr-TR';
-          utterance.rate = 1.2; // Konuşma hızını artır (varsayılan: 1)
+
+          // Mobil cihazlarda sesler hemen yüklenmeyebilir, bu yüzden tekrar kontrol et
+          if (synthesisVoices.length === 0) {
+            loadVoices();
+          }
 
           // "Microsoft Tolga" yerine daha doğal bir ses bulmaya çalış
           // 1. Öncelik: Google'ın Türkçe sesini ara (genellikle daha doğal)
@@ -680,19 +676,8 @@
           }
 
           window.speechSynthesis.speak(utterance);
-        };
-
-        // Eğer ses listesi henüz yüklenmediyse, yüklenmesini bekle ve sonra konuş.
-        // Bu, özellikle mobil cihazlardaki gecikmeyi telafi eder.
-        if (synthesisVoices.length === 0) {
-          // Sesler henüz hazır değilse, bir sonraki olayda tekrar denemek için bekleyelim.
-          // Bu, `speak` fonksiyonunun render döngüsünü bloklamasını engeller.
-          setTimeout(() => {
-            loadVoices(); // Sesleri tekrar yüklemeyi dene
-            if (synthesisVoices.length > 0) performSpeak();
-          }, 100);
         } else {
-          performSpeak();
+          console.log('Sesli asistan bu tarayıcıda desteklenmiyor.');
         }
       }
 
@@ -769,17 +754,11 @@
             previousVehicleCounts[key] !== aracSayisi &&
             !stationMuteStatus[key] // Eğer ses kapalı değilse
           ) {
-            let speechText;
+            let speechText = ${durak_names[key]} ${aracSayisi} tane;
             if (aracSayisi === 0) {
-              speechText = `${durak_names[key]} boş kaldı`;
-            } else if (aracSayisi === 1) {
-              speechText = `${durak_names[key]} tek kaldı`;
-            } else {
-              speechText = `${durak_names[key]} ${aracSayisi} tane`;
+              speechText = ${durak_names[key]} boş kaldı;
             }
-            // Render döngüsünü bloklamamak için konuşmayı kısa bir gecikmeyle yap
-            // Bu, özellikle WebView ve mobil cihazlarda performansı artırır.
-            setTimeout(() => speak(speechText), 100);
+            speak(speechText);
           }
         });
 
@@ -813,15 +792,15 @@
 
             // Başlık satırı
             const speakerIcon = stationMuteStatus[key] ? "🔇" : "🔊";
-            htmlContent += `<span class="speaker-icon" data-durak-key="${key}">${speakerIcon}</span>`;
+            htmlContent += <span class="speaker-icon" data-durak-key="${key}">${speakerIcon}</span>;
 
-            htmlContent += `${durak_names[key]} (${aracSayisi})<br>`;
+            htmlContent += ${durak_names[key]} (${aracSayisi})<br>;
 
             // Ortalama kalkış satırı
             const formattedAverageDeparture = formatDuration(
               durak.ortalama_kalkis
             );
-            htmlContent += `Ortalama Kalkış: ${formattedAverageDeparture}<br>`;
+            htmlContent += Ortalama Kalkış: ${formattedAverageDeparture}<br>;
 
             // --- YENİ STİL MANTIĞI ---
             // Genel container stilleri sadece bir kez ayarlanır
@@ -849,10 +828,10 @@
             // --- AKIŞKAN FORMÜL İLE STİL HESAPLAMA ---
 
             // 1. Akışkan Font Boyutu: Ekran daraldıkça (aspectRatio küçüldükçe) font büyür.
-            const fluidFontSize = `clamp(1.4vw, ${2 / aspectRatio}vw, 4.5vw)`;
+            const fluidFontSize = clamp(1.4vw, ${2 / aspectRatio}vw, 4.5vw);
 
             // 2. Akışkan Genişlik: Ekran daraldıkça genişlik artar.
-            const fluidWidth = `clamp(30vw, ${50 / aspectRatio}vw, 85vw)`;
+            const fluidWidth = clamp(30vw, ${50 / aspectRatio}vw, 85vw);
 
             // 3. Hesaplanan değerleri CSS değişkenleri olarak ata
             durakDiv.style.setProperty("--durak-font-size", fluidFontSize);
@@ -882,13 +861,13 @@
                 baseHeightVh + aracSayisi * heightPerVehicleVh;
 
               durakDiv.style.height = "auto"; // Yüksekliğin içeriğe göre doğal olarak büyümesine izin ver.
-              durakDiv.style.minHeight = `${totalHeight}vh`; // Ancak en azından hesaplanan kadar yer kaplamasını sağla.
+              durakDiv.style.minHeight = ${totalHeight}vh; // Ancak en azından hesaplanan kadar yer kaplamasını sağla.
               durakDiv.style.maxHeight = "80vh"; // Ekranı taşmasını önlemek için maksimum yükseklik.
               durakDiv.style.flexGrow = "0"; // Yatayda esnemesin
             }
 
             // Ayırıcı çizgi
-            htmlContent += `<hr class="separator-line">`;
+            htmlContent += <hr class="separator-line">;
 
             // Araç listesi
             if (aracListesi.length > 0) {
@@ -916,10 +895,10 @@
                 const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
                 const seconds = totalSeconds % 60;
 
-                htmlContent += `<tr ${rowStyle}>`;
-                htmlContent += `<td>K)</td>`; // Ön ek "K)"
-                htmlContent += `<td>${arac.code}</td>`;
-                htmlContent += `<td>${arac.plate}</td>`;
+                htmlContent += <tr ${rowStyle}>;
+                htmlContent += <td>K)</td>; // Ön ek "K)"
+                htmlContent += <td>${arac.code}</td>;
+                htmlContent += <td>${arac.plate}</td>;
 
                 // Süre gösterimi (aktif araçlarla aynı formatta)
                 if (showDays && days > 0) {
@@ -960,12 +939,12 @@
                   )}</td>`;
                 }
 
-                htmlContent += `</tr>`;
+                htmlContent += </tr>;
               });
 
               // Kapalı ve aktif araçlar arasında ayırıcı
               if (closedVehicles.length > 0 && activeVehicles.length > 0) {
-                htmlContent += `<tr><td colspan="7"><hr class="sub-separator-line"></td></tr>`;
+                htmlContent += <tr><td colspan="7"><hr class="sub-separator-line"></td></tr>;
               }
 
               // 2. Aktif araçları render et
@@ -979,17 +958,17 @@
                 const seconds = totalSeconds % 60;
 
                 // Gizli mod aktifse kod ve plaka gösterimini değiştir
-                const displayCode = currentHiddenMode ? "**" : arac.code;
+                const displayCode = currentHiddenMode ? "" : arac.code;
                 const displayPlate =
                   currentHiddenMode && arac.plate.includes("T")
                     ? arac.plate.substring(0, arac.plate.indexOf("T") + 1) +
-                      "****"
+                      ""
                     : arac.plate;
 
-                htmlContent += `<tr>`;
-                htmlContent += `<td>${index + 1})</td>`; // Numaralı ön ek
-                htmlContent += `<td>${displayCode}</td>`;
-                htmlContent += `<td>${displayPlate}</td>`;
+                htmlContent += <tr>;
+                htmlContent += <td>${index + 1})</td>; // Numaralı ön ek
+                htmlContent += <td>${displayCode}</td>;
+                htmlContent += <td>${displayPlate}</td>;
 
                 if (showDays && days > 0) {
                   htmlContent += `<td class="right-align">${padTimeDisplay(
@@ -1029,7 +1008,7 @@
                   )}</td>`;
                 }
 
-                htmlContent += `</tr>`;
+                htmlContent += </tr>;
               });
 
               htmlContent += "</tbody></table>";
@@ -1039,7 +1018,7 @@
 
             // YENİ: Sadece kapalı araç varsa, altına çizgi ve "Boş" yazısı ekle
             if (closedVehicles.length > 0 && activeVehicles.length === 0) {
-              htmlContent += `<hr class="sub-separator-line">`;
+              htmlContent += <hr class="sub-separator-line">;
               htmlContent += "Boş";
             }
 
@@ -1047,26 +1026,15 @@
             duraklarContainer.appendChild(durakDiv);
           }
         });
-
-        // --- YENİ: Ses motorunu otomatik olarak etkinleştir ---
-        // Durak div'leri yüklendikten sonra ve sadece bir kez çalışacak şekilde
-        // ses motorunu "uyandır". Bu, mobil cihazlardaki otomatik oynatma
-        // kısıtlamalarını aşmaya yardımcı olur.
-        if (!firstInteraction) {
-          firstInteraction = true;
-          // Boş bir ses çalarak ses motorunu etkinleştir.
-          // Bu, kullanıcı etkileşimi olmadan sesin başlamasını sağlar.
-          window.speechSynthesis.speak(new SpeechSynthesisUtterance(""));
-        }
       }
 
       // --- DEBUG MODU ---
-      // Test verilerini kullanmak için `true`, gerçek zamanlı Firebase verilerini kullanmak için `false` yapın.
+      // Test verilerini kullanmak için true, gerçek zamanlı Firebase verilerini kullanmak için false yapın.
       const DEBUG_MODE = false;
 
       // --- GİZLİ MOD AYARLARI ---
 
-      // Zamanlayıcıyı aktif etmek için `true`, manuel kontrol için `false` yapın.
+      // Zamanlayıcıyı aktif etmek için true, manuel kontrol için false yapın.
       const HIDDEN_MODE_TIMER = false;
 
       // Zamanlayıcı kapalıyken (HIDDEN_MODE_TIMER = false) gizli modu manuel açıp kapatmak için bu ayarı kullanın.
@@ -1276,7 +1244,7 @@
             saveState(); // Durumu localStorage'a kaydet
             renderData(mockData); // Arayüzü güncelle
           } else {
-            console.error(`${durakKey} durağında silinecek araç yok.`);
+            console.error(${durakKey} durağında silinecek araç yok.);
           }
         }
 
@@ -1362,11 +1330,9 @@
       // Pencere boyutu değiştiğinde viewport bilgisini güncelle
       window.addEventListener("resize", () => {
         updateViewportInfo();
-        // WebView uyumluluğu için sayfayı yeniden yüklemek yerine veriyi yeniden render et.
-        // Bu, hem daha hızlıdır hem de WebView'da sonsuz döngüye girme riskini ortadan kaldırır.
-        if (latestData) {
-          renderData(latestData);
-        }
+        // Veriyi yeniden render etmek için, mevcut veriyi bir değişkende saklayıp onu kullanabiliriz
+        // veya basitçe sayfayı yeniden yükleyebiliriz. Şimdilik yeniden yükleme daha basit.
+        location.reload();
       });
     </script>
   </body>
