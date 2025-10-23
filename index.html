@@ -55,6 +55,7 @@
         height: 99.9vh; /* Tam yükseklik */
         display: flex;
         flex-direction: column;
+        position: relative; /* YENİ: İçindeki absolute konumlandırılmış elementler için referans noktası olur. */
         overflow: hidden;
       }
 
@@ -151,7 +152,8 @@
         flex-wrap: nowrap;
         width: 100%;
         justify-content: center;
-        margin-top: 2vh; /* YENİ: Bilgi tablosu ile araya boşluk ekler */
+        margin-top: 2vh; /* Bilgi tablosu ile araya boşluk ekler */
+        margin-bottom: 2vh; /* YENİ: Komut satırı ile araya boşluk ekler */
       }
 
       /* Durak kutuları */
@@ -493,14 +495,21 @@
       /* Yanıp Sönen İmleç Stili */
       #global-cursor {
         position: absolute;
-        width: 2px; /* İmleci daha ince yaptık */
+        width: 8px;
         height: 1.2em; /* Satır yüksekliğine benzer */
         background-color: #00ff41;
         animation: blink 1.2s step-end infinite;
         z-index: 1000;
         display: none; /* Başlangıçta gizli */
         pointer-events: none; /* İmlecin tıklama olaylarını engellememesi için */
+        transform: translateY(-10%);
         /* Akıcı JS kontrolü için CSS transition kaldırıldı */
+      }
+
+      /* YENİ: PWD içindeki metin imleci */
+      .blinking-cursor {
+        color: #00ff41;
+        animation: blink 1.2s step-end infinite;
       }
 
       @keyframes blink {
@@ -679,6 +688,10 @@
 
       // YENİ: Giriş animasyonunu kontrol etmek için sabit
       const ENABLE_BOOT_SEQUENCE = true;
+
+      // YENİ: Yükleme ekranı bittikten sonra beklemek için anahtar.
+      // `true` yaparsanız, animasyon biter ve uygulama o ekranda kalır.
+      const HALT_AFTER_BOOT = false;
 
       // En son yüklenen veriyi tutmak için değişken
       let latestData = null;
@@ -972,13 +985,11 @@
             setTimeout(type, speed);
             charIndex++; // Önce zamanlayıcıyı kur, sonra indeksi artır
           } else {
-            // YENİ: Hizalama sorununu önlemek için imleci hemen gizle.
-            globalCursor.style.display = "none";
-
             // Efekt bitince orijinal HTML'i geri yükle
             cellContents.forEach(
               (content, i) => (cells[i].innerHTML = content)
             );
+            globalCursor.style.display = "none"; // YENİ: Animasyon bitince global imleci gizle.
             // YENİ: Hizalama sorununu kesin olarak çözmek için, animasyon bittikten sonra
             // tüm arayüzü en güncel veriyle yeniden çiz. Bu, tarayıcının tablo
             // düzenini sıfırlamasını ve doğru hizalamayı yapmasını sağlar.
@@ -1022,7 +1033,7 @@
 
           // Eğer hala geçerli bir hücre varsa, silme işlemine devam et
           if (cell) {
-            cell.textContent = cell.textContent.slice(0, -1);
+            cell.textContent = cell.textContent.slice(0, -1); // Son karakteri sil
 
             // YALNIZCA metin varsa imleci güncelle, aksi takdirde ışınlanma olur.
             if (cell.firstChild) {
@@ -1033,9 +1044,13 @@
               globalCursor.style.top = `${rect.top + window.scrollY}px`;
               globalCursor.style.left = `${rect.left + window.scrollX}px`;
             }
+            setTimeout(deleteFromCell, speed);
+          } else {
+            // Silinecek başka hücre kalmadıysa animasyonu bitir.
+            globalCursor.style.display = "none"; // Global imleci gizle.
+            moveCursorToBottom(); // Ana imleci ve prompt'u göster.
+            onComplete();
           }
-
-          setTimeout(deleteFromCell, speed);
         }
         deleteFromCell();
       }
@@ -1099,74 +1114,83 @@
        * @param {Function} onComplete - Animasyon bittiğinde çalışacak fonksiyon.
        */
       function animateCursorToRow(targetRow, onComplete) {
-        if (!globalCursor || !targetRow) {
+        const promptLine = document.getElementById("prompt-line");
+        if (!globalCursor || !targetRow || !promptLine) {
           if (onComplete) onComplete();
           return;
         }
+
+        promptLine.style.display = "none"; // YENİ: Animasyon başlarken komut satırını gizle.
+
+        // YENİ: Animasyon başlarken ana imleci gizle, global imleci göster.
+        document
+          .getElementById("main-cursor")
+          ?.style.setProperty("display", "none");
+        globalCursor.style.display = "block";
 
         const targetRect = targetRow.getBoundingClientRect();
         const targetTop = targetRect.top + window.scrollY;
         const targetLeft = targetRect.left + window.scrollX;
 
-        moveCursorStepByStep(targetLeft, targetTop, onComplete);
+        // YENİ: Animasyon bittiğinde komut satırını tekrar göster.
+        const animationCompleteCallback = () => {
+          promptLine.style.display = "block"; // Komut satırını göster.
+          if (onComplete) onComplete();
+        };
+        moveCursorStepByStep(targetLeft, targetTop, animationCompleteCallback);
       }
 
       /**
        * Global imleci en alttaki durak kutusunun altına taşır.
        */
       function moveCursorToBottom() {
+        // YENİ: Eğer başlangıç animasyonu hala çalışıyorsa (yani ilk veri henüz gelmediyse),
+        // bu fonksiyonun kendi prompt'unu oluşturmasını engelle. Animasyon kendi prompt'unu yönetir.
+        if (ENABLE_BOOT_SEQUENCE && !latestData) return;
+
         // YENİ: Prompt için bir element oluştur (eğer yoksa)
-        let promptLine =
-          document.getElementById("prompt-line") ||
-          document.createElement("div");
-
-        promptLine.id = "prompt-line";
-        promptLine.innerHTML = `<span style="color: #00ff41;">kucukpark@taksi</span><span style="color: white;">:</span><span style="color: #5c99ff;">~</span><span style="color: white;">$ </span>`;
-        // Eğer element yeni oluşturulduysa, DOM'a ekle
-        if (!promptLine.parentElement)
-          document.getElementById("terminal-window").appendChild(promptLine);
-
-        const durakDivs = Array.from(document.querySelectorAll(".durak"));
-        let targetElement =
-          durakDivs.length > 0
-            ? durakDivs.reduce((a, b) =>
-                a.getBoundingClientRect().bottom >
-                b.getBoundingClientRect().bottom
-                  ? a
-                  : b
-              )
-            : infoTable;
-
-        const terminalWindow = document.getElementById("terminal-window");
-        const terminalRect = terminalWindow.getBoundingClientRect();
-        let targetTop;
-        let targetLeft;
-
-        const aspectRatio = window.innerWidth / window.innerHeight;
-        if (aspectRatio > 1) {
-          // --- YATAY MOD (Sol Alt) ---
-          targetTop = terminalRect.bottom - 30; // Pencerenin altından 30px yukarıda
-          targetLeft = terminalRect.left + 15; // Pencerenin solundan 15px içeride
-        } else {
-          // --- DİKEY MOD (Mevcut Davranış) ---
-          if (!targetElement) return;
-          const targetRect = targetElement.getBoundingClientRect();
-          targetTop = targetRect.bottom + window.scrollY + 20; // İçeriğin altına
-          targetLeft = targetRect.left + window.scrollX; // İçeriğin soluna
+        let promptLine = document.getElementById("prompt-line");
+        if (!promptLine) {
+          promptLine = document.createElement("div");
+          promptLine.id = "prompt-line";
+          promptLine.innerHTML = `<span style="color: #00ff41;">kucukpark@taksi</span><span style="color: white;">:</span><span style="color: #5c99ff;">~</span><span style="color: white;">$&nbsp;</span><span id="main-cursor" class="blinking-cursor">█</span>`;
+          const mainContainer = document.getElementById("main-container");
+          if (mainContainer) mainContainer.appendChild(promptLine);
         }
 
-        // Prompt'u göster ve konumlandır
-        promptLine.style.position = "absolute";
-        promptLine.style.top = `${targetTop}px`;
-        promptLine.style.left = `${targetLeft}px`;
-        promptLine.style.display = "inline";
-        // İmleci prompt'un sonuna taşı
-        moveCursorStepByStep(targetLeft + promptLine.offsetWidth, targetTop);
+        // YENİ: Prompt'u mutlak konumlandırmak yerine normal akışta bırak.
+        promptLine.style.position = "static";
+        promptLine.style.display = "block"; // Veya 'inline-block'
+        mainContainer.appendChild(promptLine); // Her zaman sonda olduğundan emin ol
+        mainContainer.scrollTop = mainContainer.scrollHeight; // En alta kaydır
+
+        // İmleci prompt'un sonuna konumlandır
+        const promptRect = promptLine.getBoundingClientRect();
+        // YENİ: Artık global imleç burada konumlanmıyor, sadece ana imleç gösteriliyor.
+        globalCursor.style.display = "none";
+        document
+          .getElementById("main-cursor")
+          ?.style.setProperty("display", "inline");
       }
 
       function runBootSequence(onComplete) {
         const container = document.getElementById("main-container");
         container.innerHTML = ""; // Ana içeriği temizle
+
+        // YENİ: Komut satırını ve imleci animasyon sırasında yönetmek için oluştur.
+        const promptLine = document.createElement("div");
+        promptLine.id = "prompt-line";
+
+        // YENİ: Yatay ve dikey mod için farklı padding değerleri ayarla.
+        const aspectRatio = window.innerWidth / window.innerHeight;
+        // YENİ: Metinleri sola yaslamak için yatay padding kaldırıldı.
+        const paddingStyle = "0 0.2vw";
+
+        promptLine.style.padding =
+          "0"; /* YENİ: Padding'i sıfırla, hizalama için span'e ekle */
+        promptLine.style.whiteSpace = "pre";
+        promptLine.innerHTML = `<span style="padding: 0 0.1vw; display: inline-block;"><span style="color: #00ff41;">kucukpark@taksi</span><span style="color: white;">:</span><span style="color: #5c99ff;">~</span><span style="color: white;">$&nbsp;</span><span id="main-cursor" class="blinking-cursor">█</span></span>`;
+        container.appendChild(promptLine);
 
         const modules = [
           "core-services",
@@ -1186,31 +1210,57 @@
         function loadNextModule() {
           if (moduleIndex < modules.length) {
             const moduleName = modules[moduleIndex];
-            const lineElement = document.createElement("div");
-            lineElement.style.paddingLeft = "2vw";
-            lineElement.style.whiteSpace = "pre";
-            container.appendChild(lineElement);
+
+            // YENİ: Yükleme metni ve progress bar için ayrı elementler oluştur.
+            const textElement = document.createElement("div");
+            textElement.style.padding = paddingStyle;
+            textElement.style.whiteSpace = "pre";
+            textElement.textContent = `Loading ${moduleName}...`;
+
+            const barContainer = document.createElement("div");
+            barContainer.style.padding = paddingStyle;
+            barContainer.style.whiteSpace = "pre";
+
+            // Elementleri komut satırının üstüne ekle.
+            container.insertBefore(textElement, promptLine);
+            container.insertBefore(barContainer, promptLine);
 
             let progress = 0;
-            const progressBarWidth = 30;
+            const totalAnimationTime = 400; // Her bar için toplam animasyon süresi (ms)
+            const charWidth =
+              parseFloat(getComputedStyle(document.documentElement).fontSize) *
+              0.6;
+            const containerWidth = container.clientWidth;
+            const fixedTextWidth = `[] 100%`.length * charWidth; // Sadece bar ve yüzde metni
+            const padding =
+              2 * parseFloat(getComputedStyle(barContainer).paddingLeft);
+            const availableWidth = containerWidth - fixedTextWidth - padding;
+            const progressBarWidth = Math.max(
+              10,
+              Math.floor(availableWidth / charWidth)
+            );
+            const stepDelay = totalAnimationTime / progressBarWidth;
 
             function updateProgress() {
               if (progress <= progressBarWidth) {
                 const bar =
                   "[" +
                   "█".repeat(progress) +
-                  "░".repeat(progressBarWidth - progress) +
-                  "]"; // YENİ: Progress bar karakterleri değiştirildi.
+                  "─".repeat(progressBarWidth - progress) +
+                  "]"; // YENİ: Taşma sorununu çözmek için karakter değiştirildi.
                 const percentage = Math.floor(
                   (progress / progressBarWidth) * 100
                 );
-                lineElement.textContent = `Loading ${moduleName}... ${bar} ${percentage}%`;
+                barContainer.textContent = `${bar} ${percentage}%`;
+
                 container.scrollTop = container.scrollHeight;
+
                 progress++;
-                setTimeout(updateProgress, Math.random() * 20 + 10);
+                setTimeout(updateProgress, stepDelay);
               } else {
                 // Yükleme tamamlandı, [OK] göster
-                lineElement.innerHTML = `Loading ${moduleName}... <span style="color: #00ff41;">[OK]</span>`;
+                textElement.innerHTML += ` <span style="color: #00ff41;">[OK]</span>`;
+                barContainer.remove(); // Progress bar'ı kaldır.
                 moduleIndex++;
                 setTimeout(loadNextModule, Math.random() * 150 + 50);
               }
@@ -1219,12 +1269,15 @@
           } else {
             // Tüm modüller yüklendi
             const finalMsg = document.createElement("div");
-            finalMsg.style.paddingLeft = "2vw";
+            finalMsg.style.padding = paddingStyle;
             finalMsg.style.color = "#ffc800";
             finalMsg.textContent = "\nSystem ready. Welcome, operator.";
-            container.appendChild(finalMsg);
+            container.insertBefore(finalMsg, promptLine); // YENİ: Mesajı komut satırının üzerine ekle.
+
             container.scrollTop = container.scrollHeight;
-            setTimeout(onComplete, 700);
+            if (!HALT_AFTER_BOOT) {
+              setTimeout(onComplete, 700);
+            }
           }
         }
         loadNextModule();
