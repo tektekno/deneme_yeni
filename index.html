@@ -42,6 +42,64 @@
         overflow: hidden;
       }
 
+      /* CRT Monitör Scanline Efekti */
+      body::after {
+        content: " ";
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: repeating-linear-gradient(
+          0deg,
+          rgba(0, 0, 0, 0.5),
+          rgba(0, 0, 0, 0.5) 1px,
+          transparent 1px,
+          transparent 2px
+        );
+        pointer-events: none; /* Arkadaki elemanların tıklanabilmesini sağlar */
+        z-index: 10000; /* Her şeyin üzerinde olmalı */
+      }
+
+      /* --- YENİ: Terminal Penceresi Stilleri --- */
+      #terminal-window {
+        border: 2px solid #555;
+        border-radius: 8px;
+        background-color: #0d0d0d;
+        box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+        width: 95vw; /* Tam genişlik */
+        height: 95vh; /* Tam yükseklik */
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      #title-bar {
+        background-color: #333;
+        padding: 5px 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid #555;
+        user-select: none;
+      }
+
+      #title-bar .title {
+        color: #ddd;
+        font-weight: bold;
+      }
+
+      #title-bar .buttons span {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        margin-left: 8px;
+        background-color: #555;
+      }
+      /* --- Bitiş: Terminal Penceresi Stilleri --- */
+
       /* Tüm içeriği kapsayan container */
       .content {
         display: flex;
@@ -56,6 +114,8 @@
         display: flex;
         flex-direction: column;
         width: 100%;
+        height: 100%; /* Terminal penceresini doldurması için */
+        overflow-y: auto; /* Gerektiğinde kaydırma çubuğu */
         padding: 0 2vw; /* Sağ ve soldan %2'lik güven aralığı bırak */
         box-sizing: border-box; /* Padding'in genişliğe dahil edilmesini sağla */
       }
@@ -98,16 +158,12 @@
       /* Durak kutuları */
       .durak {
         padding: 1vh 2vw;
-        border: 0.2vw solid #ccc;
-        border-radius: 2vw;
         text-align: center;
-        background-color: #333 !important;
-        box-shadow: 0 1vw 1vw rgba(255, 255, 255, 0);
+        background-color: #1a1a1a; /* Kutuları arka plandan ayırmak için */
         color: white;
         overflow: hidden; /* Şeritin köşelerden taşan kısımlarını gizle */
         line-height: 1.2;
-        /* Varsayılan çerçeve kalınlığı */
-        border: 0.2vw solid #ccc;
+        border: 2px dashed #888; /* Kesikli çizgi çerçeve */
         transition: border-color 0.5s ease;
         position: relative; /* Şerit için zorunlu */
       }
@@ -125,18 +181,21 @@
 
       /* Dinamik renk sınıfları */
       .durak.hizli {
-        border-color: #00ff00; /* Yeşil */
-        border-width: 0.5vw;
+        border-color: #00ff41;
+        box-shadow: 0 0 5px #00ff41;
+        text-shadow: 0 0 2px #00ff41;
       }
 
       .durak.orta {
-        border-color: #ffff00; /* Sarı */
-        border-width: 0.5vw;
+        border-color: #ffc800;
+        box-shadow: 0 0 5px #ffc800;
+        text-shadow: 0 0 2px #ffc800;
       }
 
       .durak.yavas {
-        border-color: #ff0000; /* Kırmızı */
-        border-width: 0.5vw;
+        border-color: #ff0000;
+        box-shadow: 0 0 5px #ff0000;
+        text-shadow: 0 0 2px #ff0000;
       }
 
       /* ------------------------------------------- */
@@ -211,20 +270,26 @@
         border-collapse: collapse;
         font-size: clamp(10px, 2.5vw, 18px); /* Akışkan font boyutu */
         line-height: 1.4;
+        border: 2px dashed #888; /* Kesikli çizgi çerçeve */
+        box-shadow: 0 0 5px #888;
       }
 
       /* Satır Renkleri */
       #info-table tr:nth-child(1) {
         color: #c8a2c8;
+        text-shadow: 0 0 3px #c8a2c8;
       } /* Açık Mor */
       #info-table tr:nth-child(2) {
         color: #ffc085;
+        text-shadow: 0 0 3px #ffc085;
       } /* Açık Turuncu */
       #info-table tr:nth-child(3) {
         color: #ff8c8c;
+        text-shadow: 0 0 3px #ff8c8c;
       } /* Açık Kırmızı */
       #info-table tr:nth-child(4) {
         color: #87ceeb;
+        text-shadow: 0 0 3px #87ceeb;
       } /* Açık Mavi */
 
       /* Yatay düzende tablo genişliğini ayarla */
@@ -269,14 +334,14 @@
       /* Ayırıcı Çizgi Stilleri */
       .separator-line {
         border: none;
-        border-top: 1px solid #ccc; /* Ana ayırıcı çizgi rengi */
+        border-top: 1px dashed #555; /* Dijital ayırıcı çizgi */
         width: 100%;
         margin: 0.5rem 0;
       }
 
       .sub-separator-line {
         border: none;
-        border-top: 1px solid #ccc; /* Alt ayırıcı çizgi rengi (ana çizgiyle aynı) */
+        border-top: 1px dashed #444; /* Daha soluk alt ayırıcı */
         width: 100%;
         margin: 0.3rem 0;
       }
@@ -397,10 +462,9 @@
         padding: 12px 28px;
         font-size: clamp(16px, 4vw, 22px);
         font-family: "Kode Mono", monospace;
-        color: #00ff41; /* Matrix yeşili */
+        color: #00ff41;
         background-color: transparent;
-        border: 2px solid #00ff41;
-        border-radius: 8px;
+        border: 2px solid #00ff41; /* Köşeli buton */
         cursor: pointer;
         text-shadow: 0 0 5px #00ff41, 0 0 10px #00ff41;
         box-shadow: 0 0 5px #00ff41, inset 0 0 5px #00ff41;
@@ -419,16 +483,41 @@
         width: 100%;
         height: 100%;
         opacity: 1; /* Düşük opaklık */
-        z-index: -1; /* İçeriğin arkasında kalması için */
+        z-index: 0; /* İçeriğin arkasında kalması için */
+      }
+
+      /* Yanıp Sönen İmleç Stili */
+      #global-cursor {
+        position: absolute;
+        width: 2px; /* İmleci daha ince yaptık */
+        height: 1.2em; /* Satır yüksekliğine benzer */
+        background-color: #00ff41;
+        animation: blink 1.2s step-end infinite;
+        z-index: 1000;
+        display: none; /* Başlangıçta gizli */
+        pointer-events: none; /* İmlecin tıklama olaylarını engellememesi için */
+        /* Akıcı JS kontrolü için CSS transition kaldırıldı */
+      }
+
+      @keyframes blink {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0;
+        }
       }
     </style>
+    <!-- Firebase SDK'ları -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
   </head>
   <body>
     <div id="intro-overlay">
       <canvas id="matrix-canvas"></canvas>
-      <div class="intro-content">
+      <div class="intro-content" style="position: relative; z-index: 1">
         <h1>Küçükpark Taksi</h1>
         <h2>Durak Takip Uygulaması</h2>
         <button class="intro-button">Giriş Yapmak İçin Tıkla</button>
@@ -455,47 +544,60 @@
       </div>
     </div>
     <div id="viewport-info"></div>
-    <div class="content">
-      <div
-        id="debug-warning"
-        style="
-          color: yellow;
-          font-weight: bold;
-          display: none;
-          margin-bottom: 1rem;
-        "
-      >
-        DİKKAT: DEBUG MODU AKTİF
-      </div>
-      <div id="main-container">
-        <div class="updatetime-container">
-          <!-- Yükleniyor simgesi -->
-          <div id="loader" class="loader"></div>
-          <!-- Yeni Bilgi Tablosu -->
-          <table id="info-table" style="display: none">
-            <tbody>
-              <tr>
-                <td class="info-key">Son Güncelleme:</td>
-                <td id="info-updatetime" class="info-value"></td>
-              </tr>
-              <tr>
-                <td class="info-key">Araç Durumları:</td>
-                <td id="info-gps" class="info-value"></td>
-              </tr>
-              <tr>
-                <td class="info-key">Duyuru:</td>
-                <td id="info-closed-vehicle" class="info-value"></td>
-              </tr>
-              <tr>
-                <td class="info-key">Hava Durumu:</td>
-                <td id="info-weather" class="info-value"></td>
-              </tr>
-            </tbody>
-          </table>
+    <!-- YENİ: Terminal Penceresi Çerçevesi -->
+    <div class="content" style="display: none">
+      <div id="terminal-window">
+        <div id="title-bar">
+          <div class="buttons">
+            <span style="background: #ff5f57"></span>
+            <span style="background: #ffbd2e"></span>
+            <span style="background: #27c93f"></span>
+          </div>
+          <div class="title">kucukpark@taksi: ~</div>
         </div>
-        <div id="duraklar-container" class="container"></div>
+        <div
+          id="debug-warning"
+          style="
+            color: yellow;
+            font-weight: bold;
+            display: none;
+            margin-bottom: 1rem;
+            text-align: center;
+          "
+        >
+          DİKKAT: DEBUG MODU AKTİF
+        </div>
+        <div id="main-container">
+          <div class="updatetime-container">
+            <!-- Yükleniyor simgesi -->
+            <div id="loader" class="loader"></div>
+            <!-- Yeni Bilgi Tablosu -->
+            <table id="info-table" style="display: none">
+              <tbody>
+                <tr>
+                  <td class="info-key">Son Güncelleme:</td>
+                  <td id="info-updatetime" class="info-value"></td>
+                </tr>
+                <tr>
+                  <td class="info-key">Araç Durumları:</td>
+                  <td id="info-gps" class="info-value"></td>
+                </tr>
+                <tr>
+                  <td class="info-key">Duyuru:</td>
+                  <td id="info-closed-vehicle" class="info-value"></td>
+                </tr>
+                <tr>
+                  <td class="info-key">Hava Durumu:</td>
+                  <td id="info-weather" class="info-value"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="duraklar-container" class="container"></div>
+        </div>
       </div>
     </div>
+    <div id="global-cursor"></div>
     <script>
       // --- Cihaz Engelleme Kontrolü ---
       // Bu fonksiyon, sayfanın geri kalanı çalışmadan önce çağrılır.
@@ -547,6 +649,8 @@
       const infoGps = document.getElementById("info-gps");
       const infoClosedVehicle = document.getElementById("info-closed-vehicle");
       const infoWeather = document.getElementById("info-weather");
+      const globalCursor = document.getElementById("global-cursor");
+      const terminalContent = document.querySelector(".content");
 
       // En son yüklenen veriyi tutmak için değişken
       let latestData = null;
@@ -565,6 +669,10 @@
       let isPlayingAudio = false;
       // Web Audio API için değişkenler
       let audioContext;
+      // Son işlem yapılan aracı ve durağı takip etmek için
+      let lastModifiedVehicle = { durakKey: null, plate: null, action: null };
+      // Önceki tam veriyi tutmak için
+      let previousData = null;
       let audioBuffers = {};
       let isPreloading = false;
 
@@ -763,9 +871,259 @@
         };
       }
 
-      function renderData(data) {
+      /**
+       * Bir satıra karakter karakter yazma efekti uygular.
+       * @param {HTMLTableRowElement} row - Efektin uygulanacağı satır.
+       * @param {string[]} cellContents - Hücrelere yazılacak içerikler.
+       * @param {number} speed - Yazma hızı (ms).
+       */
+      function typewriterEffect(row, cellContents, speed = 80) {
+        // innerHTML yerine textContent kullanarak &nbsp; gibi karakterlerin görünmesini engelle
+        const textContents = cellContents.map((html) => {
+          const tempDiv = document.createElement("div");
+          tempDiv.innerHTML = html;
+          return tempDiv.textContent || "";
+        });
+        const totalContent = textContents.join("");
+        if (totalContent.length === 0) return;
+
+        // Önce satırı boşalt ve imleci ekle
+        const cells = row.querySelectorAll("td");
+        let charIndex = 0;
+
+        // --- YENİ İYİLEŞTİRME: Sütun kaymasını engelleme ---
+        // Animasyon başlamadan önce hücrelere tam içeriği görünmez bir şekilde yükleyip
+        // tarayıcının sütun genişliklerini hesaplamasını sağla, sonra temizle.
+        cells.forEach((cell, i) => {
+            cell.style.visibility = 'hidden';
+            cell.innerHTML = cellContents[i];
+        });
+        // Tarayıcının DOM'u güncellemesi için kısa bir gecikme
+        setTimeout(() => {
+            cells.forEach(cell => {
+                cell.style.visibility = 'visible';
+                cell.innerHTML = '';
+            });
+            type(); // Animasyonu başlat
+        }, 0);
+
+        function type() {
+          if (charIndex < totalContent.length) {
+            let currentLength = 0;
+            for (let i = 0; i < textContents.length; i++) {
+              const cellText = textContents[i];
+              const remainingLengthInCell = charIndex - currentLength;
+
+              if (remainingLengthInCell >= 0) {
+                const currentCellText = cellText.substring(
+                  0,
+                  remainingLengthInCell + 1
+                );
+                cells[i].textContent = currentCellText;
+
+                // İmleci sadece son karakterin yazıldığı hücrede güncelle
+                if (charIndex < currentLength + cellText.length) {
+                  // --- YENİ YÖNTEM: İmleç pozisyonunu Range ile al ---
+                  const range = document.createRange();
+                  // Hücrede metin yoksa, hücrenin kendisini referans al
+                  const textNode = cells[i].firstChild || cells[i];
+                  range.setStart(textNode, currentCellText.length);
+                  range.collapse(true);
+                  const rect = range.getBoundingClientRect();
+
+                  globalCursor.style.top = `${rect.top + window.scrollY}px`;
+                  globalCursor.style.left = `${rect.left + window.scrollX}px`;
+                }
+              }
+
+              currentLength += cellText.length;
+              if (charIndex < currentLength) break;
+            }
+
+            setTimeout(type, speed);
+            charIndex++; // Önce zamanlayıcıyı kur, sonra indeksi artır
+          } else {
+            // Efekt bitince orijinal HTML'i geri yükle
+            cellContents.forEach(
+              (content, i) => (cells[i].innerHTML = content)
+            );
+            // Efekt bittikten sonra global imleci hareket ettir
+            moveCursorToBottom();
+          }
+        }
+      }
+
+      /**
+       * Bir satırdan karakter karakter silme efekti uygular.
+       * @param {HTMLTableRowElement} row - Efektin uygulanacağı satır.
+       * @param {Function} onComplete - Silme işlemi bittiğinde çağrılacak fonksiyon.
+       * @param {number} speed - Silme hızı (ms).
+       */
+      function deleteEffect(row, onComplete, speed = 50) {
+        const cells = Array.from(row.querySelectorAll("td"));
+        const reversedCells = [...cells].reverse(); // Sondan başa doğru silmek için
+        let currentCellIndex = 0;
+
+        // Silinecek metin kalmadıysa bitir
+        if (reversedCells.every(cell => cell.textContent.length === 0)) {
+          onComplete();
+          return;
+        }
+
+        function deleteFromCell() {
+          // Tüm hücreler boşaldıysa animasyonu bitir
+          if (currentCellIndex >= reversedCells.length) {
+            moveCursorToBottom();
+            onComplete();
+            return;
+          }
+
+          let cell = reversedCells[currentCellIndex];
+
+          // Eğer mevcut hücre zaten boşsa, bir sonrakine geç
+          while (cell && cell.textContent.length === 0) {
+            currentCellIndex++;
+            cell = reversedCells[currentCellIndex];
+          }
+
+          // Eğer hala geçerli bir hücre varsa, silme işlemine devam et
+          if (cell) {
+            cell.textContent = cell.textContent.slice(0, -1);
+            
+            // YALNIZCA metin varsa imleci güncelle, aksi takdirde ışınlanma olur.
+            if (cell.firstChild) {
+              const range = document.createRange();
+              range.setStart(cell.firstChild, cell.textContent.length);
+              range.collapse(true);
+              const rect = range.getBoundingClientRect();
+              globalCursor.style.top = `${rect.top + window.scrollY}px`;
+              globalCursor.style.left = `${rect.left + window.scrollX}px`;
+            }
+          }
+
+          setTimeout(deleteFromCell, speed);
+        }
+        deleteFromCell();
+      }
+
+      /**
+       * İmleci hedef konuma satır satır, sütun sütun taşır.
+       * @param {number} targetLeft - Hedef sol pozisyon.
+       * @param {number} targetTop - Hedef üst pozisyon.
+       * @param {Function} onComplete - Animasyon bittiğinde çalışacak fonksiyon.
+       */
+      function moveCursorStepByStep(targetLeft, targetTop, onComplete) {
+        const cursorRect = globalCursor.getBoundingClientRect();
+        let currentTop = cursorRect.top + window.scrollY;
+        let currentLeft = cursorRect.left + window.scrollX;
+
+        // 1px adım kullan
+        const stepY = 20; // Dikey hızı artırmak için değeri yükselttim
+        const stepX = 15; // Yatay hızı artırmak için değeri yükselttim
+
+        function animate() {
+          let moved = false;
+
+          // Dikey hareket
+          if (Math.abs(targetTop - currentTop) > 0.1) {
+            const direction = Math.sign(targetTop - currentTop);
+            currentTop += direction * stepY;
+            // Hedefi geçme kontrolü
+            if (direction > 0 ? currentTop > targetTop : currentTop < targetTop) {
+              currentTop = targetTop;
+            }
+            globalCursor.style.top = `${currentTop}px`;
+            moved = true;
+          }
+          // Yatay hareket (dikey bittikten sonra)
+          else if (Math.abs(targetLeft - currentLeft) > 0.1) {
+            const direction = Math.sign(targetLeft - currentLeft);
+            currentLeft += direction * stepX;
+            // Hedefi geçme kontrolü
+            if (direction > 0 ? currentLeft > targetLeft : currentLeft < targetLeft) {
+              currentLeft = targetLeft;
+            }
+            globalCursor.style.left = `${currentLeft}px`;
+            moved = true;
+          }
+
+          if (moved) requestAnimationFrame(animate);
+          else if (onComplete) onComplete();
+        }
+        animate();
+      }
+
+      /**
+       * İmleci hedef satıra animasyonla taşır.
+       * @param {HTMLElement} targetRow - Hedef satır elementi.
+       * @param {Function} onComplete - Animasyon bittiğinde çalışacak fonksiyon.
+       */
+      function animateCursorToRow(targetRow, onComplete) {
+        // Animasyon başlarken prompt'u gizle
+        const promptLine = document.getElementById("prompt-line");
+        if (promptLine) {
+            promptLine.style.display = 'none';
+        }
+
+        if (!globalCursor || !targetRow) {
+          if(onComplete) onComplete();
+          return;
+        };
+
+        const targetRect = targetRow.getBoundingClientRect();
+        const targetTop = targetRect.top + window.scrollY;
+        const targetLeft = targetRect.left + window.scrollX;
+
+        moveCursorStepByStep(targetLeft, targetTop, onComplete);
+      }
+
+      /**
+       * Global imleci en alttaki durak kutusunun altına taşır.
+       */
+      function moveCursorToBottom() {
+        // YENİ: Prompt için bir element oluştur (eğer yoksa)
+        let promptLine = document.getElementById("prompt-line");
+        if (!promptLine) {
+            promptLine = document.createElement('div');
+            promptLine.id = 'prompt-line';
+            promptLine.innerHTML = `<span style="color: #00ff41;">kucukpark@taksi</span><span style="color: white;">:</span><span style="color: #5c99ff;">~</span><span style="color: white;">$ </span>`;
+            mainContainer.appendChild(promptLine);
+        }
+
+        const durakDivs = Array.from(document.querySelectorAll(".durak"));
+        let targetElement = durakDivs.length > 0
+            ? durakDivs.reduce((a, b) => a.getBoundingClientRect().bottom > b.getBoundingClientRect().bottom ? a : b)
+            : infoTable;
+
+        if (!targetElement) return;
+
+        const rect = targetElement.getBoundingClientRect();
+        const targetTop = rect.bottom + window.scrollY + 20; // Biraz daha boşluk
+        const targetLeft = rect.left + window.scrollX;
+
+        // Prompt'u göster ve konumlandır
+        promptLine.style.position = 'absolute';
+        promptLine.style.top = `${targetTop}px`;
+        promptLine.style.left = `${targetLeft}px`;
+        promptLine.style.display = 'inline';
+        moveCursorStepByStep(targetLeft + promptLine.getBoundingClientRect().width, targetTop);
+      }
+
+      function renderData(data, removedVehicleInfo = null, clonedRow = null) {
         // En son veriyi global olarak sakla
         latestData = data;
+
+        // --- SİLME EFEKTİ İÇİN ÖN HAZIRLIK ---
+        // renderData DOM'u yeniden çizmeden önce, silinecek satırı bul ve klonla.
+        let rowToDelete = clonedRow; // Debug moddan gelen klonlanmış satırı öncelikli olarak kullan
+        if (!rowToDelete && removedVehicleInfo) {
+          // Normal mod için (Firebase'den veri geldiğinde), satırı burada bul
+          const plateId = removedVehicleInfo.plate.replace(/\s/g, "");
+          const existingRow = document.getElementById(`vehicle-${plateId}`);
+          if (existingRow) {
+            rowToDelete = existingRow.cloneNode(true);
+          }
+        }
 
         // Yükleme simgesini gizle ve güncelleme metinlerini göster
         loaderElement.style.display = "none";
@@ -788,7 +1146,10 @@
         const contentDiv = document.querySelector(".content");
         const aspectRatio = window.innerWidth / window.innerHeight;
         // Durak bilgilerini işle
-        duraklarContainer.innerHTML = "";
+        // --- ANİMASYON İYİLEŞTİRMESİ ---
+        // Silme animasyonunun bozulmaması için, eğer silme işlemi yapılmıyorsa veya zaten durak yoksa DOM'u temizle.
+        // Silme işlemi sırasında DOM temizlenmeyecek, sadece ilgili satır animasyonla silinecek.
+        duraklarContainer.innerHTML = ""; // Her render öncesi temizle, animasyonlar için DOM'u sonra manipüle edeceğiz.
         const duraklar = data.duraklar;
         const durak_names = {
           suvari: "Süvari",
@@ -822,6 +1183,50 @@
         const totalVehicles =
           vehicleCounts.merkez + vehicleCounts.metro + vehicleCounts.suvari;
 
+        // --- DEĞİŞİKLİK TESPİTİ ---
+        // DEBUG modunda silme işlemi için, `removeVehicle` fonksiyonundan gelen bilgiyi doğrudan kullan.
+        // Bu, animasyonun yanlış durakta (merkez) tetiklenmesini engeller.
+        if (DEBUG_MODE && removedVehicleInfo) {
+          lastModifiedVehicle = {
+            durakKey: Object.keys(mockData.duraklar).find(durakKey => 
+              previousData.duraklar[durakKey].liste.some(v => v.plate === removedVehicleInfo.plate)
+            ),
+            plate: removedVehicleInfo.plate,
+            action: "remove",
+          };
+        } else {
+          // Normal mod (Firebase) veya ekleme işlemleri için değişiklik tespiti yap.
+          if (previousData) {
+            for (const key of orderedDuraks) {
+              const prevList = previousData.duraklar[key].liste || [];
+              const newList = data.duraklar[key].liste || [];
+
+              // Silinen araç tespiti (Sadece Firebase modunda çalışır)
+              const removedVehicle = prevList.find((p) => !newList.some((n) => n.plate === p.plate));
+              if (removedVehicle) {
+                lastModifiedVehicle = {
+                  durakKey: key,
+                  plate: removedVehicle.plate,
+                  action: "remove",
+                };
+                break; // İlk değişikliği bul ve çık
+              }
+
+              // Eklenen araç tespiti
+              const addedVehicle = newList.find(
+                (n) => !prevList.some((p) => p.plate === n.plate)
+              );
+              if (addedVehicle) {
+                lastModifiedVehicle = {
+                  durakKey: key,
+                  plate: addedVehicle.plate,
+                  action: "add",
+                };
+                break; // İlk değişikliği bul ve çık
+              }
+            }
+          }
+        }
         // --- SESLİ BİLDİRİM İÇİN DEĞİŞİKLİK KONTROLÜ ---
         const newVehicleCounts = {};
         const priorityOrder = ["suvari", "merkez", "metro"]; // Öncelik sırası
@@ -856,6 +1261,8 @@
 
         // Bir sonraki kontrol için mevcut sayıları kaydet
         previousVehicleCounts = newVehicleCounts;
+        // Bir sonraki render için tam veriyi kaydet
+        previousData = JSON.parse(JSON.stringify(data));
 
         // Her bir durak için ayrı ayrı hizalama uzunluğunu belirle
         orderedDuraks.forEach((key) => {
@@ -1057,7 +1464,10 @@
                       "****"
                     : arac.plate;
 
-                htmlContent += `<tr>`;
+                // Satıra özel ID ekle
+                const rowId = `vehicle-${arac.plate.replace(/\s/g, "")}`;
+
+                htmlContent += `<tr id="${rowId}">`;
                 htmlContent += `<td>${index + 1})</td>`; // Numaralı ön ek
                 htmlContent += `<td>${displayCode}</td>`;
                 htmlContent += `<td>${displayPlate}</td>`;
@@ -1118,11 +1528,51 @@
             duraklarContainer.appendChild(durakDiv);
           }
         });
+
+        // --- EFEKT UYGULAMA ---
+        if (lastModifiedVehicle.action && lastModifiedVehicle.plate) {
+          const plateId = lastModifiedVehicle.plate.replace(/\s/g, "");
+          const rowElement = document.getElementById(`vehicle-${plateId}`);
+
+          if (rowElement) {
+            if (lastModifiedVehicle.action === "add") {
+              const cells = Array.from(rowElement.querySelectorAll("td"));
+              const cellContents = cells.map((td) => td.innerHTML);
+              // Önce satırı boşalt ki animasyon başlarken görünmesin.
+              rowElement.innerHTML = "<td>&nbsp;</td>".repeat(cells.length);
+              animateCursorToRow(rowElement, () => {
+                typewriterEffect(rowElement, cellContents);
+              });
+            }
+          } else if (lastModifiedVehicle.action === "remove" && rowToDelete) {
+            // Silme efekti için, ilgili durak div'ini bul ve klonlanmış satırı geçici olarak ekle.
+            const durakDiv = document.querySelector(
+              `[data-durak-key="${lastModifiedVehicle.durakKey}"]`
+            )?.parentElement; // .speaker-icon'dan parent'a (durakDiv) git
+
+            const tableBody = durakDiv?.querySelector(".vehicle-table tbody");
+
+            if (tableBody) {
+              // Klonu animasyon için geçici olarak ekle
+              tableBody.appendChild(rowToDelete);
+              // Silme animasyonunu başlat ve bittiğinde klonu kaldır
+              deleteEffect(rowToDelete, () => {
+                rowToDelete.remove();
+              });
+            }
+          }
+          // Efekt uygulandıktan sonra sıfırla
+          lastModifiedVehicle = { durakKey: null, plate: null, action: null };
+        } else {
+          // Eğer ekleme/silme efekti yoksa, imleci direkt hareket ettir.
+          // renderData'nın DOM'u güncellemesi için küçük bir gecikme bırak.
+          setTimeout(moveCursorToBottom, 100);
+        }
       }
 
       // --- DEBUG MODU ---
       // Test verilerini kullanmak için `true`, gerçek zamanlı Firebase verilerini kullanmak için `false` yapın.
-      const DEBUG_MODE = false;
+      const DEBUG_MODE = true;
 
       // --- GİZLİ MOD AYARLARI ---
 
@@ -1332,9 +1782,34 @@
 
         function removeVehicle(durakKey) {
           if (mockData.duraklar[durakKey].liste.length > 0) {
-            mockData.duraklar[durakKey].liste.pop(); // Son aracı sil
-            saveState(); // Durumu localStorage'a kaydet
-            renderData(mockData); // Arayüzü güncelle
+            // 1. Silinecek aracı belirle
+            const vehicleToRemove =
+              mockData.duraklar[durakKey].liste[
+                mockData.duraklar[durakKey].liste.length - 1
+              ];
+
+            // 2. Animasyon için satırı DOM'dan bul ve klonla (veri silinmeden ÖNCE).
+            const plateId = vehicleToRemove.plate.replace(/\s/g, "");
+            const rowElement = document.getElementById(`vehicle-${plateId}`);
+            const rowToDelete = rowElement ? rowElement.cloneNode(true) : null;
+
+            if (rowElement) {
+              // 3. Animasyonu başlat.
+              deleteEffect(rowElement, () => {
+                // 4. Animasyon bittiğinde aracı veriden çıkar.
+                mockData.duraklar[durakKey].liste.pop();
+                saveState(); // State'i kaydet
+
+                // 5. Arayüzü animasyonsuz şekilde, sadece sayıları güncellemek için yeniden render et.
+                // Efekt bilgilerini null göndererek tekrar animasyon tetiklenmesini engelle.
+                renderData(mockData, null, null);
+              });
+            } else {
+              // Eğer satır bulunamazsa, veriyi direkt güncelle.
+              mockData.duraklar[durakKey].liste.pop();
+              saveState();
+              renderData(mockData);
+            }
           } else {
             console.error(`${durakKey} durağında silinecek araç yok.`);
           }
@@ -1493,6 +1968,11 @@
               // Diğer sesleri arka planda yükle
               preloadAudioFiles();
             }
+            // Global imleci göster
+            globalCursor.style.display = "block";
+            // Terminal içeriğini göster
+            terminalContent.style.display = "flex";
+            moveCursorToBottom();
             // Giriş ekranını yavaşça gizle
             introOverlay.style.opacity = "0";
             // Animasyon bittikten sonra DOM'dan kaldır
@@ -1526,6 +2006,9 @@
         // WebView uyumluluğu için sayfayı yeniden yüklemek yerine veriyi yeniden render et.
         // Bu, hem daha hızlıdır hem de WebView'da sonsuz döngüye girme riskini ortadan kaldırır.
         if (latestData) {
+          // Efektlerin yeniden tetiklenmemesi için önceki veriyi sıfırla
+          previousData = null;
+          lastModifiedVehicle = { durakKey: null, plate: null, action: null };
           renderData(latestData);
         }
       });
