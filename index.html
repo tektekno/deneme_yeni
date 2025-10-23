@@ -1211,11 +1211,11 @@
             tempSpan.style.visibility = "hidden";
             tempSpan.style.position = "absolute";
             tempSpan.textContent = "█"; // Ölçüm için referans karakter
-            document.body.appendChild(tempSpan);
-            const charWidth = tempSpan.getBoundingClientRect().width;
-            document.body.removeChild(tempSpan);
+            document.body.appendChild(tempSpan); // Temporarily add to DOM to measure
+            const measuredCharWidth = tempSpan.getBoundingClientRect().width;
+            document.body.removeChild(tempSpan); // Remove after measurement
 
-            const charWidth =
+            const charWidth = // Use the measured width or a fallback
               parseFloat(getComputedStyle(document.documentElement).fontSize) *
               0.6;
             const containerWidth = container.clientWidth; // Konteynerin mevcut genişliği
