@@ -662,20 +662,23 @@
       const database = firebase.database();
       const ref = database.ref("taksi_verileri");
       // Elemanları seç
-      const mainContainer = document.getElementById("main-container");
-      const duraklarContainer = document.getElementById("duraklar-container");
-      const loaderElement = document.getElementById("loader");
+      let mainContainer = document.getElementById("main-container");
+      let duraklarContainer = document.getElementById("duraklar-container");
+      let loaderElement = document.getElementById("loader");
       const viewportInfo = document.getElementById("viewport-info");
-      const infoTable = document.getElementById("info-table");
-      const infoUpdateTime = document.getElementById("info-updatetime");
-      const infoGps = document.getElementById("info-gps");
-      const infoClosedVehicle = document.getElementById("info-closed-vehicle");
-      const infoWeather = document.getElementById("info-weather");
+      let infoTable = document.getElementById("info-table");
+      let infoUpdateTime = document.getElementById("info-updatetime");
+      let infoGps = document.getElementById("info-gps");
+      let infoClosedVehicle = document.getElementById("info-closed-vehicle");
+      let infoWeather = document.getElementById("info-weather");
       const globalCursor = document.getElementById("global-cursor");
       const terminalContent = document.querySelector(".content");
 
       // YENİ: Durakları belirli bir sırada tutmak için sabit
       const orderedDuraks = ["merkez", "metro", "suvari"];
+
+      // YENİ: Giriş animasyonunu kontrol etmek için sabit
+      const ENABLE_BOOT_SEQUENCE = true;
 
       // En son yüklenen veriyi tutmak için değişken
       let latestData = null;
@@ -1159,6 +1162,72 @@
         promptLine.style.display = "inline";
         // İmleci prompt'un sonuna taşı
         moveCursorStepByStep(targetLeft + promptLine.offsetWidth, targetTop);
+      }
+
+      function runBootSequence(onComplete) {
+        const container = document.getElementById("main-container");
+        container.innerHTML = ""; // Ana içeriği temizle
+
+        const modules = [
+          "core-services",
+          "network-interfaces",
+          "security-protocols",
+          "audio-subsystem",
+          "geolocation-api",
+          "data-sync-manager",
+          "ui-renderer",
+          "voice-assistant-module",
+          "realtime-listeners",
+          "asset-preloader",
+        ];
+
+        let moduleIndex = 0;
+
+        function loadNextModule() {
+          if (moduleIndex < modules.length) {
+            const moduleName = modules[moduleIndex];
+            const lineElement = document.createElement("div");
+            lineElement.style.paddingLeft = "2vw";
+            lineElement.style.whiteSpace = "pre";
+            container.appendChild(lineElement);
+
+            let progress = 0;
+            const progressBarWidth = 30;
+
+            function updateProgress() {
+              if (progress <= progressBarWidth) {
+                const bar =
+                  "[" +
+                  "█".repeat(progress) +
+                  "░".repeat(progressBarWidth - progress) +
+                  "]"; // YENİ: Progress bar karakterleri değiştirildi.
+                const percentage = Math.floor(
+                  (progress / progressBarWidth) * 100
+                );
+                lineElement.textContent = `Loading ${moduleName}... ${bar} ${percentage}%`;
+                container.scrollTop = container.scrollHeight;
+                progress++;
+                setTimeout(updateProgress, Math.random() * 20 + 10);
+              } else {
+                // Yükleme tamamlandı, [OK] göster
+                lineElement.innerHTML = `Loading ${moduleName}... <span style="color: #00ff41;">[OK]</span>`;
+                moduleIndex++;
+                setTimeout(loadNextModule, Math.random() * 150 + 50);
+              }
+            }
+            updateProgress();
+          } else {
+            // Tüm modüller yüklendi
+            const finalMsg = document.createElement("div");
+            finalMsg.style.paddingLeft = "2vw";
+            finalMsg.style.color = "#ffc800";
+            finalMsg.textContent = "\nSystem ready. Welcome, operator.";
+            container.appendChild(finalMsg);
+            container.scrollTop = container.scrollHeight;
+            setTimeout(onComplete, 700);
+          }
+        }
+        loadNextModule();
       }
 
       function renderData(data) {
@@ -1961,34 +2030,85 @@
           "click",
           function () {
             // Ses motorunu "uyandır"
-            if (!firstInteraction) {
-              firstInteraction = true;
-              // AudioContext'i oluştur veya devam ettir
-              if (!audioContext) {
-                audioContext = new (window.AudioContext ||
-                  window.webkitAudioContext)();
-              }
-              if (audioContext.state === "suspended") {
-                audioContext.resume();
-              }
+            function startApp() {
+              if (!firstInteraction) {
+                firstInteraction = true;
+                // AudioContext'i oluştur veya devam ettir
+                if (!audioContext) {
+                  audioContext = new (window.AudioContext ||
+                    window.webkitAudioContext)();
+                }
+                if (audioContext.state === "suspended") {
+                  audioContext.resume();
+                }
 
-              // Diğer sesleri arka planda yükle
-              preloadAudioFiles();
-            }
-            // Global imleci göster
-            globalCursor.style.display = "block";
-            // Terminal içeriğini göster
-            terminalContent.style.display = "flex";
-            moveCursorToBottom();
-            // Giriş ekranını yavaşça gizle
-            introOverlay.style.opacity = "0";
-            // Animasyon bittikten sonra DOM'dan kaldır
-            setTimeout(() => {
-              if (introOverlay) {
-                clearInterval(matrixInterval); // Animasyonu durdur
-                introOverlay.remove();
+                // Diğer sesleri arka planda yükle
+                preloadAudioFiles();
               }
-            }, 500);
+              // Global imleci göster
+              globalCursor.style.display = "block";
+              // Terminal içeriğini göster
+              terminalContent.style.display = "flex";
+              // Giriş ekranını yavaşça gizle
+              introOverlay.style.opacity = "0";
+              // Animasyon bittikten sonra DOM'dan kaldır
+              setTimeout(() => {
+                if (introOverlay) {
+                  clearInterval(matrixInterval); // Animasyonu durdur
+                  introOverlay.remove();
+                }
+              }, 500);
+
+              // Eğer boot animasyonu aktif değilse, imleci direkt aşağı taşı.
+              // Aktifse, animasyon bittiğinde veri zaten çizileceği için imleç de konumlanacak.
+              if (!ENABLE_BOOT_SEQUENCE) {
+                moveCursorToBottom();
+              }
+            }
+
+            if (ENABLE_BOOT_SEQUENCE) {
+              // Önce arayüzü hazırla, sonra animasyonu başlat.
+              startApp();
+              // Animasyon bittiğinde, Firebase'den gelen ilk verinin çizilmesini bekle.
+              // Firebase listener zaten veriyi alınca renderData'yı çağıracak.
+              runBootSequence(() => {
+                // Animasyon bittiğinde ana container'ı temizle ki asıl içerik gelsin.
+                document.getElementById("main-container").innerHTML = `
+                  <div class="updatetime-container">
+                    <div id="loader" class="loader"></div>
+                    <table id="info-table" style="display: none">
+                      <tbody>
+                        <tr><td class="info-key">Son Güncelleme:</td><td id="info-updatetime" class="info-value"></td></tr>
+                        <tr><td class="info-key">Araç Durumları:</td><td id="info-gps" class="info-value"></td></tr>
+                        <tr><td class="info-key">Duyuru:</td><td id="info-closed-vehicle" class="info-value"></td></tr>
+                        <tr><td class="info-key">Hava Durumu:</td><td id="info-weather" class="info-value"></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div id="duraklar-container" class="container"></div>
+                `;
+                // YENİ: DOM elementleri yeniden oluşturulduğu için referansları güncelle.
+                mainContainer = document.getElementById("main-container");
+                duraklarContainer =
+                  document.getElementById("duraklar-container");
+                loaderElement = document.getElementById("loader");
+                infoTable = document.getElementById("info-table");
+                infoUpdateTime = document.getElementById("info-updatetime");
+                infoGps = document.getElementById("info-gps");
+                infoClosedVehicle = document.getElementById(
+                  "info-closed-vehicle"
+                );
+                infoWeather = document.getElementById("info-weather");
+
+                // Eğer veri çoktan geldiyse (animasyon sırasında), hemen çiz.
+                if (latestData) {
+                  renderData(latestData);
+                }
+              });
+            } else {
+              // Animasyon kapalıysa, uygulamayı direkt başlat.
+              startApp();
+            }
           },
           { once: true }
         ); // Olay dinleyicisi sadece bir kez çalışsın
