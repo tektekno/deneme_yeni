@@ -1202,23 +1202,26 @@
 
             let progress = 0;
             const totalAnimationTime = 400; // Her bar için toplam animasyon süresi (ms)
+
+            // --- YENİ GÜVENLİ GENİŞLİK HESAPLAMASI ---
+            // Karakter genişliğini daha güvenilir bir şekilde ölçmek için geçici bir element kullan.
+            const tempSpan = document.createElement("span");
+            tempSpan.style.fontFamily = getComputedStyle(container).fontFamily;
+            tempSpan.style.fontSize = getComputedStyle(container).fontSize;
+            tempSpan.style.visibility = "hidden";
+            tempSpan.style.position = "absolute";
+            tempSpan.textContent = "█"; // Ölçüm için referans karakter
+            document.body.appendChild(tempSpan);
+            const charWidth = tempSpan.getBoundingClientRect().width;
+            document.body.removeChild(tempSpan);
+
             const charWidth =
               parseFloat(getComputedStyle(document.documentElement).fontSize) *
               0.6;
             const containerWidth = container.clientWidth; // Konteynerin mevcut genişliği
-            // YENİ: Yatay ve dikey modda taşmayı önlemek için orantısal bir güvenlik payı (buffer) bırakalım.
-            // Ekran genişliğinin %5'i kadar bir alanı boş bırakarak daha güvenli hale getiriyoruz.
-            const safetyBuffer = Math.floor(
-              (containerWidth / charWidth) * 0.05
-            );
-            const fixedTextWidth = `[] 100%`.length + safetyBuffer; // Barın dışındaki metin ve güvenlik payı
-            const padding =
-              2 * parseFloat(getComputedStyle(barContainer).paddingLeft);
-            const availableWidth = containerWidth - padding; // Sadece padding'i çıkar
-            const progressBarWidth = Math.max(
-              10,
-              Math.floor(availableWidth / charWidth) - fixedTextWidth
-            );
+            const fixedTextCharLength = "[] 100%".length + 4; // Sabit metinler ve ekstra güvenlik payı
+            const progressBarWidth =
+              Math.floor(containerWidth / charWidth) - fixedTextCharLength;
             const stepDelay = totalAnimationTime / progressBarWidth;
 
             function updateProgress() {
