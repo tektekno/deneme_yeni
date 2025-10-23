@@ -1929,7 +1929,8 @@
         const rainDrops = [];
 
         for (let x = 0; x < columns; x++) {
-          rainDrops[x] = 1;
+          // YENİ: Damlaların rastgele dikey konumlarda başlamasını sağla
+          rainDrops[x] = Math.floor(Math.random() * (canvas.height / fontSize));
         }
 
         const drawMatrix = () => {
@@ -2013,14 +2014,17 @@
 
       // Pencere boyutu değiştiğinde viewport bilgisini güncelle
       window.addEventListener("resize", () => {
-        updateViewportInfo();
-        // WebView uyumluluğu için sayfayı yeniden yüklemek yerine veriyi yeniden render et.
-        // Bu, hem daha hızlıdır hem de WebView'da sonsuz döngüye girme riskini ortadan kaldırır.
-        if (latestData) {
-          // Efektlerin yeniden tetiklenmemesi için önceki veriyi sıfırla
-          previousData = null;
-          lastModifiedVehicle = { durakKey: null, plate: null, action: null };
-          renderData(latestData);
+        // Sadece giriş yapıldıysa ve veri varsa yeniden çiz.
+        if (firstInteraction && latestData) {
+          updateViewportInfo();
+
+          // Efektlerin ve animasyonların yeniden tetiklenmesini önlemek için
+          // önceki veri durumunu ve son işlem bilgisini sıfırla.
+          previousData = null; // Bu, renderData içindeki değişiklik tespitini sıfırlar.
+          lastModifiedVehicle = { durakKey: null, plate: null, action: null }; // Animasyonları sıfırlar.
+
+          // Arayüzü mevcut veriyle yeniden çiz.
+          renderData(latestData, null, null);
         }
       });
     </script>
