@@ -1230,14 +1230,16 @@
             const charWidth =
               parseFloat(getComputedStyle(document.documentElement).fontSize) *
               0.6;
-            const containerWidth = container.clientWidth;
-            const fixedTextWidth = `[] 100%`.length * charWidth; // Sadece bar ve yüzde metni
+            const containerWidth = container.clientWidth; // Konteynerin mevcut genişliği
+            // YENİ: Sağ tarafta taşmayı önlemek için bir güvenlik payı (buffer) bırakalım.
+            const safetyBuffer = 10; // 10 karakterlik bir boşluk
+            const fixedTextWidth = `[] 100%`.length + safetyBuffer; // Barın dışındaki metin ve güvenlik payı
             const padding =
               2 * parseFloat(getComputedStyle(barContainer).paddingLeft);
-            const availableWidth = containerWidth - fixedTextWidth - padding;
+            const availableWidth = containerWidth - padding; // Sadece padding'i çıkar
             const progressBarWidth = Math.max(
               10,
-              Math.floor(availableWidth / charWidth)
+              Math.floor(availableWidth / charWidth) - fixedTextWidth
             );
             const stepDelay = totalAnimationTime / progressBarWidth;
 
