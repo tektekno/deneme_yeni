@@ -859,12 +859,7 @@
        * Ses kuyruğundaki dosyaları sırayla çalar.
        */
       function playAudioFromQueue() {
-        if (isPlayingAudio || audioQueue.length === 0 || !firstInteraction) {
-          return;
-        }
-
         const urlToPlay = audioQueue.shift(); // Kuyruktan ilk sesi al
-        const audioBuffer = audioBuffers[urlToPlay];
 
         if (!audioBuffer) {
           console.error(`Ses buffer'ı bulunamadı: ${urlToPlay}`);
@@ -2013,13 +2008,9 @@
               if (!firstInteraction) {
                 firstInteraction = true;
                 // AudioContext'i oluştur veya devam ettir
-                if (!audioContext) {
-                  audioContext = new (window.AudioContext ||
-                    window.webkitAudioContext)();
-                }
-                if (audioContext.state === "suspended") {
-                  audioContext.resume();
-                }
+                audioContext = new (window.AudioContext ||
+                  window.webkitAudioContext)({ latencyHint: "playback" });
+                audioContext.resume(); // Kullanıcı etkileşiminden sonra başlat
 
                 // Diğer sesleri arka planda yükle
                 preloadAudioFiles();
