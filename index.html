@@ -44,11 +44,14 @@
 
       /* --- YENİ: Terminal Penceresi Stilleri --- */
       #terminal-window {
-        border: 2px solid #555;
+        border-top: 2px solid #8b5151;
+        border-left: 5px solid #8b5151;
+        border-right: 5px solid #8b5151;
+        border-bottom: 5px solid #8b5151;
         border-radius: 8px;
         background-color: #0d0d0d;
         box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
-        width: 99.9vw; /* Tam genişlik */
+        width: 99.2vw; /* Tam genişlik */
         height: 99.9vh; /* Tam yükseklik */
         display: flex;
         flex-direction: column;
@@ -56,7 +59,7 @@
       }
 
       #title-bar {
-        background-color: #333;
+        background-color: #8b5151;
         padding: 5px 10px;
         display: flex;
         align-items: center;
@@ -76,7 +79,22 @@
         height: 12px;
         border-radius: 50%;
         margin-left: 8px;
-        background-color: #555;
+      }
+
+      /* YENİ: Tam Ekran Butonu */
+      #fullscreen-btn {
+        color: #00ff41; /* YENİ: Rengi belirgin yeşil yapıldı */
+        cursor: pointer;
+        font-size: 24px; /* YENİ: Boyutu büyütüldü */
+        padding: 0 10px; /* YENİ: Tıklama alanı genişletildi */
+        user-select: none;
+        text-shadow: 0 0 3px #00ff41; /* YENİ: Hafif parlama eklendi */
+        transition: color 0.2s, text-shadow 0.2s; /* YENİ: Geçiş efekti eklendi */
+      }
+
+      #fullscreen-btn:hover {
+        color: #8aff8a; /* YENİ: Üzerine gelince daha parlak yeşil */
+        text-shadow: 0 0 8px #00ff41; /* YENİ: Parlama artırıldı */
       }
       /* --- Bitiş: Terminal Penceresi Stilleri --- */
 
@@ -556,6 +574,8 @@
             <span style="background: #27c93f"></span>
           </div>
           <div class="title">kucukpark@taksi: ~</div>
+          <!-- YENİ: Tam Ekran Butonu -->
+          <div id="fullscreen-btn">⛶</div>
         </div>
         <div
           id="debug-warning"
@@ -2007,6 +2027,24 @@
               stationMuteStatus[durakKey] = !stationMuteStatus[durakKey];
               // İkonu güncelle
               e.target.textContent = stationMuteStatus[durakKey] ? "🔇" : "🔊";
+            }
+          }
+        });
+
+        // YENİ: Tam ekran butonu için olay dinleyicisi
+        const fullscreenBtn = document.getElementById("fullscreen-btn");
+        fullscreenBtn.addEventListener("click", () => {
+          if (!document.fullscreenElement) {
+            // Tam ekranda değilse, tam ekrana geç
+            document.documentElement.requestFullscreen().catch((err) => {
+              alert(
+                `Tam ekran moduna geçilemedi: ${err.message} (${err.name})`
+              );
+            });
+          } else {
+            // Tam ekrandaysa, çık
+            if (document.exitFullscreen) {
+              document.exitFullscreen();
             }
           }
         });
