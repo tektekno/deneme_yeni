@@ -674,6 +674,9 @@
       const globalCursor = document.getElementById("global-cursor");
       const terminalContent = document.querySelector(".content");
 
+      // YENİ: Durakları belirli bir sırada tutmak için sabit
+      const orderedDuraks = ["merkez", "metro", "suvari"];
+
       // En son yüklenen veriyi tutmak için değişken
       let latestData = null;
       // Önceki araç sayılarını tutmak için değişken
@@ -945,14 +948,15 @@
 
                 // İmleci sadece son karakterin yazıldığı hücrede güncelle
                 if (charIndex < currentLength + cellText.length) {
-                  // --- YENİ YÖNTEM: İmleç pozisyonunu Range ile al ---
+                  // --- YENİ YÖNTEM: İmleç pozisyonunu Range ile al (Hizalama sorununu çözer) ---
                   const range = document.createRange();
-                  // Hücrede metin yoksa, hücrenin kendisini referans al
+                  // Hücrede metin düğümü varsa onu, yoksa hücrenin kendisini referans al.
                   const textNode = cells[i].firstChild || cells[i];
+                  // Range'i metnin sonuna ayarla.
                   range.setStart(textNode, currentCellText.length);
-                  range.collapse(true);
-                  const rect = range.getBoundingClientRect();
+                  range.collapse(true); // Range'i başlangıç noktasına daralt.
 
+                  const rect = range.getBoundingClientRect();
                   globalCursor.style.top = `${rect.top + window.scrollY}px`;
                   globalCursor.style.left = `${rect.left + window.scrollX}px`;
                 }
@@ -965,12 +969,17 @@
             setTimeout(type, speed);
             charIndex++; // Önce zamanlayıcıyı kur, sonra indeksi artır
           } else {
+            // YENİ: Hizalama sorununu önlemek için imleci hemen gizle.
+            globalCursor.style.display = "none";
+
             // Efekt bitince orijinal HTML'i geri yükle
             cellContents.forEach(
               (content, i) => (cells[i].innerHTML = content)
             );
-            // Efekt bittikten sonra global imleci hareket ettir
-            moveCursorToBottom();
+            // YENİ: Hizalama sorununu kesin olarak çözmek için, animasyon bittikten sonra
+            // tüm arayüzü en güncel veriyle yeniden çiz. Bu, tarayıcının tablo
+            // düzenini sıfırlamasını ve doğru hizalamayı yapmasını sağlar.
+            renderData(latestData);
           }
         }
       }
@@ -1087,12 +1096,6 @@
        * @param {Function} onComplete - Animasyon bittiğinde çalışacak fonksiyon.
        */
       function animateCursorToRow(targetRow, onComplete) {
-        // Animasyon başlarken prompt'u gizle
-        const promptLine = document.getElementById("prompt-line");
-        if (promptLine) {
-          promptLine.style.display = "none";
-        }
-
         if (!globalCursor || !targetRow) {
           if (onComplete) onComplete();
           return;
@@ -1110,13 +1113,15 @@
        */
       function moveCursorToBottom() {
         // YENİ: Prompt için bir element oluştur (eğer yoksa)
-        let promptLine = document.getElementById("prompt-line");
-        if (!promptLine) {
-          promptLine = document.createElement("div");
-          promptLine.id = "prompt-line";
-          promptLine.innerHTML = `<span style="color: #00ff41;">kucukpark@taksi</span><span style="color: white;">:</span><span style="color: #5c99ff;">~</span><span style="color: white;">$ </span>`;
-          document.getElementById("terminal-window").appendChild(promptLine); // Ana pencereye ekle
-        }
+        let promptLine =
+          document.getElementById("prompt-line") ||
+          document.createElement("div");
+
+        promptLine.id = "prompt-line";
+        promptLine.innerHTML = `<span style="color: #00ff41;">kucukpark@taksi</span><span style="color: white;">:</span><span style="color: #5c99ff;">~</span><span style="color: white;">$ </span>`;
+        // Eğer element yeni oluşturulduysa, DOM'a ekle
+        if (!promptLine.parentElement)
+          document.getElementById("terminal-window").appendChild(promptLine);
 
         const durakDivs = Array.from(document.querySelectorAll(".durak"));
         let targetElement =
@@ -1156,21 +1161,9 @@
         moveCursorStepByStep(targetLeft + promptLine.offsetWidth, targetTop);
       }
 
-      function renderData(data, removedVehicleInfo = null, clonedRow = null) {
+      function renderData(data) {
         // En son veriyi global olarak sakla
         latestData = data;
-
-        // --- SİLME EFEKTİ İÇİN ÖN HAZIRLIK ---
-        // renderData DOM'u yeniden çizmeden önce, silinecek satırı bul ve klonla.
-        let rowToDelete = clonedRow; // Debug moddan gelen klonlanmış satırı öncelikli olarak kullan
-        if (!rowToDelete && removedVehicleInfo) {
-          // Normal mod için (Firebase'den veri geldiğinde), satırı burada bul
-          const plateId = removedVehicleInfo.plate.replace(/\s/g, "");
-          const existingRow = document.getElementById(`vehicle-${plateId}`);
-          if (existingRow) {
-            rowToDelete = existingRow.cloneNode(true);
-          }
-        }
 
         // Yükleme simgesini gizle ve güncelleme metinlerini göster
         loaderElement.style.display = "none";
@@ -1196,19 +1189,13 @@
         // --- ANİMASYON İYİLEŞTİRMESİ ---
         // Silme animasyonunun bozulmaması için, eğer silme işlemi yapılmıyorsa veya zaten durak yoksa DOM'u temizle.
         // Silme işlemi sırasında DOM temizlenmeyecek, sadece ilgili satır animasyonla silinecek.
-        if (!lastModifiedVehicle.action) {
-          // Sadece animasyon olmadığında tüm konteyneri temizle.
-          duraklarContainer.innerHTML = "";
-        }
+        duraklarContainer.innerHTML = "";
         const duraklar = data.duraklar;
         const durak_names = {
           suvari: "Süvari",
           merkez: "Merkez",
           metro: "Metro",
         };
-
-        // Durakları belirli bir sırada oluştur
-        const orderedDuraks = ["merkez", "metro", "suvari"];
 
         // Ortalama kalkış sürelerini topla ve sırala
         const averageTimes = orderedDuraks
@@ -1233,54 +1220,27 @@
         const totalVehicles =
           vehicleCounts.merkez + vehicleCounts.metro + vehicleCounts.suvari;
 
-        // --- DEĞİŞİKLİK TESPİTİ ---
-        // DEBUG modunda silme işlemi için, `removeVehicle` fonksiyonundan gelen bilgiyi doğrudan kullan.
-        // Bu, animasyonun yanlış durakta (merkez) tetiklenmesini engeller.
-        if (DEBUG_MODE && removedVehicleInfo) {
-          lastModifiedVehicle = {
-            durakKey: Object.keys(mockData.duraklar).find((durakKey) =>
-              previousData.duraklar[durakKey].liste.some(
-                (v) => v.plate === removedVehicleInfo.plate
-              )
-            ),
-            plate: removedVehicleInfo.plate,
-            action: "remove",
-          };
-        } else {
-          // Normal mod (Firebase) veya ekleme işlemleri için değişiklik tespiti yap.
-          if (previousData) {
-            for (const key of orderedDuraks) {
-              const prevList = previousData.duraklar[key].liste || [];
-              const newList = data.duraklar[key].liste || [];
+        // Değişiklik tespiti (Ekleme/Silme)
+        if (previousData) {
+          for (const key of orderedDuraks) {
+            const prevList = previousData.duraklar[key].liste || [];
+            const newList = data.duraklar[key].liste || [];
 
-              // Silinen araç tespiti (Sadece Firebase modunda çalışır)
-              const removedVehicle = prevList.find(
-                (p) => !newList.some((n) => n.plate === p.plate)
-              );
-              if (removedVehicle) {
-                lastModifiedVehicle = {
-                  durakKey: key,
-                  plate: removedVehicle.plate,
-                  action: "remove",
-                };
-                break; // İlk değişikliği bul ve çık
-              }
-
-              // Eklenen araç tespiti
-              const addedVehicle = newList.find(
-                (n) => !prevList.some((p) => p.plate === n.plate)
-              );
-              if (addedVehicle) {
-                lastModifiedVehicle = {
-                  durakKey: key,
-                  plate: addedVehicle.plate,
-                  action: "add",
-                };
-                break; // İlk değişikliği bul ve çık
-              }
+            // Eklenen araç tespiti
+            const addedVehicle = newList.find(
+              (n) => !prevList.some((p) => p.plate === n.plate)
+            );
+            if (addedVehicle) {
+              lastModifiedVehicle = {
+                durakKey: key,
+                plate: addedVehicle.plate,
+                action: "add",
+              };
+              break; // İlk değişikliği bul ve çık
             }
           }
         }
+
         // --- SESLİ BİLDİRİM İÇİN DEĞİŞİKLİK KONTROLÜ ---
         const newVehicleCounts = {};
         const priorityOrder = ["suvari", "merkez", "metro"]; // Öncelik sırası
@@ -1580,37 +1540,17 @@
           }
         });
 
-        // --- EFEKT UYGULAMA ---
-        if (lastModifiedVehicle.action && lastModifiedVehicle.plate) {
+        // --- EKLEME EFEKTİ UYGULAMA ---
+        if (lastModifiedVehicle.action === "add" && lastModifiedVehicle.plate) {
           const plateId = lastModifiedVehicle.plate.replace(/\s/g, "");
           const rowElement = document.getElementById(`vehicle-${plateId}`);
-
           if (rowElement) {
-            if (lastModifiedVehicle.action === "add") {
-              const cells = Array.from(rowElement.querySelectorAll("td"));
-              const cellContents = cells.map((td) => td.innerHTML);
-              // Önce satırı boşalt ki animasyon başlarken görünmesin.
-              rowElement.innerHTML = "<td>&nbsp;</td>".repeat(cells.length);
-              animateCursorToRow(rowElement, () => {
-                typewriterEffect(rowElement, cellContents);
-              });
-            }
-          } else if (lastModifiedVehicle.action === "remove" && rowToDelete) {
-            // Silme efekti için, ilgili durak div'ini bul ve klonlanmış satırı geçici olarak ekle.
-            const durakDiv = document.querySelector(
-              `[data-durak-key="${lastModifiedVehicle.durakKey}"]`
-            )?.parentElement; // .speaker-icon'dan parent'a (durakDiv) git
-
-            const tableBody = durakDiv?.querySelector(".vehicle-table tbody");
-
-            if (tableBody) {
-              // Klonu animasyon için geçici olarak ekle
-              tableBody.appendChild(rowToDelete);
-              // Silme animasyonunu başlat ve bittiğinde klonu kaldır
-              deleteEffect(rowToDelete, () => {
-                rowToDelete.remove();
-              });
-            }
+            const cells = Array.from(rowElement.querySelectorAll("td"));
+            const cellContents = cells.map((td) => td.innerHTML);
+            rowElement.innerHTML = "<td>&nbsp;</td>".repeat(cells.length);
+            animateCursorToRow(rowElement, () => {
+              typewriterEffect(rowElement, cellContents);
+            });
           }
           // Efekt uygulandıktan sonra sıfırla
           lastModifiedVehicle = { durakKey: null, plate: null, action: null };
@@ -1834,33 +1774,36 @@
         function removeVehicle(durakKey) {
           if (mockData.duraklar[durakKey].liste.length > 0) {
             // 1. Silinecek aracı belirle
-            const vehicleToRemove =
-              mockData.duraklar[durakKey].liste[
-                mockData.duraklar[durakKey].liste.length - 1
-              ];
+            const vehicleToRemove = mockData.duraklar[durakKey].liste.pop(); // .pop() hem siler hem de silineni döndürür.
 
-            // 2. Animasyon için satırı DOM'dan bul ve klonla (veri silinmeden ÖNCE).
+            // 2. Animasyon için satırı DOM'dan bul ve klonla (veri silindikten SONRA).
             const plateId = vehicleToRemove.plate.replace(/\s/g, "");
             const rowElement = document.getElementById(`vehicle-${plateId}`);
-            const rowToDelete = rowElement ? rowElement.cloneNode(true) : null;
 
+            // 3. Arayüzü güncel veriyle (araç silinmiş haliyle) yeniden çiz.
+            renderData(mockData);
+
+            // 4. Klonlanmış satır varsa (yani DOM'da bulunduysa) animasyonu başlat.
             if (rowElement) {
-              // 3. Animasyonu başlat.
-              deleteEffect(rowElement, () => {
-                // 4. Animasyon bittiğinde aracı veriden çıkar.
-                mockData.duraklar[durakKey].liste.pop();
-                saveState(); // State'i kaydet
+              const clonedRow = rowElement.cloneNode(true);
+              const durakDiv = document.querySelector(
+                `[data-durak-key="${durakKey}"]`
+              )?.parentElement;
+              const tableBody = durakDiv?.querySelector(".vehicle-table tbody");
 
-                // 5. Arayüzü animasyonsuz şekilde, sadece sayıları güncellemek için yeniden render et.
-                // Efekt bilgilerini null göndererek tekrar animasyon tetiklenmesini engelle.
-                renderData(mockData, null, null);
-              });
-            } else {
-              // Eğer satır bulunamazsa, veriyi direkt güncelle.
-              mockData.duraklar[durakKey].liste.pop();
-              saveState();
-              renderData(mockData);
+              if (tableBody) {
+                // Klonu animasyon için geçici olarak ekle
+                tableBody.appendChild(clonedRow);
+                // Silme animasyonunu başlat ve bittiğinde klonu kaldır
+                animateCursorToRow(clonedRow, () => {
+                  deleteEffect(clonedRow, () => {
+                    clonedRow.remove();
+                  });
+                });
+              }
             }
+
+            saveState(); // State'i kaydet
           } else {
             console.error(`${durakKey} durağında silinecek araç yok.`);
           }
@@ -1874,15 +1817,47 @@
           "value",
           (snapshot) => {
             const data = snapshot.val();
-            if (data && data.duraklar) {
-              renderData(data);
-            } else {
+            // YENİ: İlk yüklemede veya veri formatı bozuksa hata ver.
+            if (!data || !data.duraklar) {
               console.error(
                 "Veri alınamadı veya 'duraklar' anahtarı bulunamadı."
               );
               duraklarContainer.innerHTML =
                 '<p style="color:red; text-align:center;">Veri alınamadı. Lütfen Python betiğinin çalıştığından emin olun.</p>';
+              return; // Fonksiyondan çık
             }
+
+            // YENİ: Eğer `previousData` varsa (yani ilk yükleme değilse) silme animasyonu için kontrol yap.
+            if (previousData) {
+              // Değişiklik tespiti
+              const removedVehicleInfo = orderedDuraks
+                .map((key) => {
+                  const prevList = previousData.duraklar[key].liste || [];
+                  const newList = data.duraklar[key].liste || [];
+                  const removed = prevList.find(
+                    (p) => !newList.some((n) => n.plate === p.plate)
+                  );
+                  return removed ? { durakKey: key, ...removed } : null;
+                })
+                .find(Boolean);
+
+              if (removedVehicleInfo) {
+                const plateId = removedVehicleInfo.plate.replace(/\s/g, "");
+                const rowElement = document.getElementById(
+                  `vehicle-${plateId}`
+                );
+                if (rowElement) {
+                  animateCursorToRow(rowElement, () => {
+                    deleteEffect(rowElement, () => {
+                      renderData(data); // Animasyon bitince DOM'u temizle ve yeniden çiz
+                    });
+                  });
+                  return; // Animasyon bitene kadar renderData'yı tekrar çağırma
+                }
+              }
+            }
+            // Değişiklik yoksa, ekleme varsa veya ilk yükleme ise normal render yap.
+            renderData(data);
           },
           (error) => {
             console.error("Veri okuma hatası: ", error);
@@ -2062,7 +2037,7 @@
           lastModifiedVehicle = { durakKey: null, plate: null, action: null }; // Animasyonları sıfırlar.
 
           // Arayüzü mevcut veriyle yeniden çiz.
-          renderData(latestData, null, null);
+          renderData(latestData);
         }
       });
     </script>
