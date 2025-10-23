@@ -48,8 +48,8 @@
         border-radius: 8px;
         background-color: #0d0d0d;
         box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
-        width: 95vw; /* Tam genişlik */
-        height: 95vh; /* Tam yükseklik */
+        width: 99.9vw; /* Tam genişlik */
+        height: 99.9vh; /* Tam yükseklik */
         display: flex;
         flex-direction: column;
         overflow: hidden;
@@ -94,9 +94,9 @@
         display: flex;
         flex-direction: column;
         width: 100%;
-        height: 100%; /* Terminal penceresini doldurması için */
+        flex-grow: 1; /* Terminal penceresinde kalan boşluğu doldurması için */
         overflow-y: auto; /* Gerektiğinde kaydırma çubuğu */
-        padding: 0 2vw; /* Sağ ve soldan %2'lik güven aralığı bırak */
+        padding: 0 2vw 5vh 2vw; /* YENİ: Alttan %5'lik boşluk eklendi */
         box-sizing: border-box; /* Padding'in genişliğe dahil edilmesini sağla */
       }
 
@@ -133,6 +133,7 @@
         flex-wrap: nowrap;
         width: 100%;
         justify-content: center;
+        margin-top: 2vh; /* YENİ: Bilgi tablosu ile araya boşluk ekler */
       }
 
       /* Durak kutuları */
@@ -248,7 +249,7 @@
         max-width: 96%; /* Ekranın kenarlarına yapışmasını önle */
         margin: 0 auto;
         border-collapse: collapse;
-        font-size: clamp(10px, 2.5vw, 18px); /* Akışkan font boyutu */
+        font-size: clamp(10px, 1.8vw, 16px); /* YENİ: Akışkan font boyutu (yatay için küçültüldü) */
         line-height: 1.4;
         border: 2px dashed #888; /* Kesikli çizgi çerçeve */
         box-shadow: 0 0 5px #888;
@@ -486,6 +487,22 @@
         }
         50% {
           opacity: 0;
+        }
+      }
+
+      /* --- YENİ: Yatay Mod Düzeni --- */
+      @media (orientation: landscape) {
+        #main-container {
+          overflow-y: hidden; /* Yatayda kaydırma çubuğunu gizle */
+        }
+        #duraklar-container {
+          flex-direction: row;
+          align-items: stretch; /* Çocukların (durakların) yüksekliğini eşitler */
+          flex-grow: 0.9; /* YENİ: Altta komut satırına yer açmak için biraz küçültüldü */
+          gap: 1vw;
+        }
+        .durak {
+          flex: 1; /* Eşit genişlikte yer kapla */
         }
       }
     </style>
@@ -1067,26 +1084,39 @@
             promptLine = document.createElement('div');
             promptLine.id = 'prompt-line';
             promptLine.innerHTML = `<span style="color: #00ff41;">kucukpark@taksi</span><span style="color: white;">:</span><span style="color: #5c99ff;">~</span><span style="color: white;">$ </span>`;
-            mainContainer.appendChild(promptLine);
+            document.getElementById('terminal-window').appendChild(promptLine); // Ana pencereye ekle
         }
 
         const durakDivs = Array.from(document.querySelectorAll(".durak"));
         let targetElement = durakDivs.length > 0
             ? durakDivs.reduce((a, b) => a.getBoundingClientRect().bottom > b.getBoundingClientRect().bottom ? a : b)
             : infoTable;
+        
+        const terminalWindow = document.getElementById("terminal-window");
+        const terminalRect = terminalWindow.getBoundingClientRect();
+        let targetTop;
+        let targetLeft;
 
-        if (!targetElement) return;
-
-        const rect = targetElement.getBoundingClientRect();
-        const targetTop = rect.bottom + window.scrollY + 20; // Biraz daha boşluk
-        const targetLeft = rect.left + window.scrollX;
+        const aspectRatio = window.innerWidth / window.innerHeight;
+        if (aspectRatio > 1) {
+          // --- YATAY MOD (Sol Alt) ---
+          targetTop = terminalRect.bottom - 30; // Pencerenin altından 30px yukarıda
+          targetLeft = terminalRect.left + 15; // Pencerenin solundan 15px içeride
+        } else {
+          // --- DİKEY MOD (Mevcut Davranış) ---
+          if (!targetElement) return;
+          const targetRect = targetElement.getBoundingClientRect();
+          targetTop = targetRect.bottom + window.scrollY + 20; // İçeriğin altına
+          targetLeft = targetRect.left + window.scrollX; // İçeriğin soluna
+        }
 
         // Prompt'u göster ve konumlandır
         promptLine.style.position = 'absolute';
         promptLine.style.top = `${targetTop}px`;
         promptLine.style.left = `${targetLeft}px`;
         promptLine.style.display = 'inline';
-        moveCursorStepByStep(targetLeft + promptLine.getBoundingClientRect().width, targetTop);
+        // İmleci prompt'un sonuna taşı
+        moveCursorStepByStep(targetLeft + promptLine.offsetWidth, targetTop);
       }
 
       function renderData(data, removedVehicleInfo = null, clonedRow = null) {
@@ -1285,26 +1315,18 @@
             htmlContent += `Ortalama Kalkış: ${formattedAverageDeparture}<br>`;
 
             // --- YENİ STİL MANTIĞI ---
-            // Genel container stilleri sadece bir kez ayarlanır
-            if (
-              !duraklarContainer.style.flexDirection ||
-              (!duraklarContainer.style.flexDirection.includes("column") &&
-                aspectRatio < 1.1)
-            ) {
-              // Dikey ve kareye yakın düzenler
-              if (aspectRatio < 1.1) {
-                duraklarContainer.style.flexDirection = "column";
-                duraklarContainer.style.alignItems = "center";
-                duraklarContainer.style.paddingTop = "2vh";
-                duraklarContainer.style.gap = "2.4vh"; // 18px / 754px
-              } else {
-                // Yatay düzenler
-                duraklarContainer.style.flexDirection = "row";
-                duraklarContainer.style.justifyContent = "center";
-                duraklarContainer.style.marginTop = "2%";
-                duraklarContainer.style.alignItems = "flex-start"; // Elemanların uzamasını engelle, yukarı hizala.
-                duraklarContainer.style.gap = "2vw";
-              }
+            // Ekran yönüne göre duraklar container'ının stillerini ayarla
+            if (aspectRatio < 1.1) {
+              // Dikey mod için JS ile stil ata
+              duraklarContainer.style.flexDirection = "column";
+              duraklarContainer.style.alignItems = "center";
+              duraklarContainer.style.gap = "2.4vh";
+            } else {
+              // Yatay moda geçildiğinde, dikey mod için JS ile eklenen stilleri sıfırla.
+              // Bu, CSS media query'nin çalışmasını sağlar.
+              duraklarContainer.style.flexDirection = "";
+              duraklarContainer.style.alignItems = "";
+              duraklarContainer.style.gap = "";
             }
 
             // --- AKIŞKAN FORMÜL İLE STİL HESAPLAMA ---
@@ -1326,26 +1348,19 @@
             );
 
             // 4. Dikey/Yatay düzene göre flex-grow ve height ayarla
-            if (aspectRatio < 1.1) {
-              // Dikey Düzen
+            if (aspectRatio < 1.1) { // Sadece Dikey Düzen için JS ayarı
               durakDiv.style.height = "auto";
+              durakDiv.style.minHeight = "11vh"; // YENİ: Dikey modda minimum yükseklik sağlar.
               let flexGrowValue = 1;
               if (totalVehicles > 0) {
                 flexGrowValue = 1 + (vehicleCounts[key] / totalVehicles) * 10;
               }
               durakDiv.style.flexGrow = flexGrowValue.toFixed(2);
-            } else {
-              // Yatay Düzen
-              // Yatayda yükseklik araç sayısıyla orantılı olsun.
-              const baseHeightVh = 15; // Başlık vb. için temel yükseklik.
-              const heightPerVehicleVh = 3; // Her araç satırı için ek yükseklik.
-              const totalHeight =
-                baseHeightVh + aracSayisi * heightPerVehicleVh;
-
-              durakDiv.style.height = "auto"; // Yüksekliğin içeriğe göre doğal olarak büyümesine izin ver.
-              durakDiv.style.minHeight = `${totalHeight}vh`; // Ancak en azından hesaplanan kadar yer kaplamasını sağla.
-              durakDiv.style.maxHeight = "80vh"; // Ekranı taşmasını önlemek için maksimum yükseklik.
-              durakDiv.style.flexGrow = "0"; // Yatayda esnemesin
+            } else { // Yatay Düzen için JS ayarlarını sıfırla (CSS yönetecek)
+              durakDiv.style.height = "";
+              durakDiv.style.minHeight = "";
+              durakDiv.style.maxHeight = "";
+              durakDiv.style.flexGrow = "";
             }
 
             // Ayırıcı çizgi
@@ -1941,20 +1956,6 @@
                 "https://raw.githubusercontent.com/tektekno/deneme_yeni/master/voices/enter.opus"
               );
               enterSound.play().catch(() => {});
-
-              // --- EKRAN KİLİTLEME ---
-              // Sadece mobil cihazlarda ve destekleniyorsa ekranı dikey moda kilitle
-              try {
-                if (screen.orientation && screen.orientation.lock) {
-                  screen.orientation
-                    .lock("portrait-primary")
-                    .catch(function (error) {
-                      // Kilitleme başarısız olursa (genellikle masaüstü tarayıcılarda olur), hatayı görmezden gel.
-                    });
-                }
-              } catch (err) {
-                /* Hata durumunda da devam et */
-              }
 
               // Diğer sesleri arka planda yükle
               preloadAudioFiles();
