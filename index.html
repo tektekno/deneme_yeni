@@ -351,29 +351,6 @@
         margin: 0.3rem 0;
       }
 
-      /* Viewport Bilgi Kutusu */
-      #viewport-info {
-        position: fixed;
-        top: 10px;
-        left: 10px;
-        padding: 8px 12px;
-        background-color: transparent; /* Başlangıçta şeffaf */
-        color: transparent; /* Başlangıçta şeffaf */
-        font-family: "Kode Mono", monospace;
-        font-size: 0.8rem;
-        border-radius: 5px;
-        cursor: pointer;
-        z-index: 1000;
-        user-select: none;
-        transition: color 0.3s ease, background-color 0.3s ease;
-      }
-
-      /* Tıklanabilir olduğunda rengi biraz görünür yapma */
-      #viewport-info:hover {
-        background-color: rgba(0, 0, 0, 0.6);
-        color: white;
-      }
-
       /* Debug Butonları için Stiller */
       #debug-controls {
         position: fixed;
@@ -572,7 +549,6 @@
         <button id="remove-suvari">-</button>
       </div>
     </div>
-    <div id="viewport-info"></div>
     <!-- YENİ: Terminal Penceresi Çerçevesi -->
     <div class="content" style="display: none">
       <div id="terminal-window">
@@ -674,7 +650,6 @@
       let mainContainer = document.getElementById("main-container");
       let duraklarContainer = document.getElementById("duraklar-container");
       let loaderElement = document.getElementById("loader");
-      const viewportInfo = document.getElementById("viewport-info");
       let infoTable = document.getElementById("info-table");
       let infoUpdateTime = document.getElementById("info-updatetime");
       let infoGps = document.getElementById("info-gps");
@@ -1231,8 +1206,11 @@
               parseFloat(getComputedStyle(document.documentElement).fontSize) *
               0.6;
             const containerWidth = container.clientWidth; // Konteynerin mevcut genişliği
-            // YENİ: Sağ tarafta taşmayı önlemek için bir güvenlik payı (buffer) bırakalım.
-            const safetyBuffer = 10; // 10 karakterlik bir boşluk
+            // YENİ: Yatay ve dikey modda taşmayı önlemek için orantısal bir güvenlik payı (buffer) bırakalım.
+            // Ekran genişliğinin %5'i kadar bir alanı boş bırakarak daha güvenli hale getiriyoruz.
+            const safetyBuffer = Math.floor(
+              (containerWidth / charWidth) * 0.05
+            );
             const fixedTextWidth = `[] 100%`.length + safetyBuffer; // Barın dışındaki metin ve güvenlik payı
             const padding =
               2 * parseFloat(getComputedStyle(barContainer).paddingLeft);
@@ -1775,11 +1753,6 @@
         debugControls.style.display = "flex";
         document.getElementById("debug-warning").style.display = "block";
 
-        // Viewport bilgisini görünür yap
-        const viewportInfoDiv = document.getElementById("viewport-info");
-        viewportInfoDiv.style.backgroundColor = "rgba(0, 0, 0, 0.6)";
-        viewportInfoDiv.style.color = "white";
-
         // 2. Tüm olası araçları içeren bir havuz oluştur
         const allVehicles = [
           { code: "21", plate: "35T7575" },
@@ -1991,45 +1964,8 @@
         );
       }
 
-      // Viewport bilgisi fonksiyonları
-      function updateViewportInfo() {
-        const width = window.innerWidth;
-        const height = window.innerHeight;
-        // En/Boy oranını hesapla ve 2 ondalık basamağa yuvarla
-        const aspectRatio = (width / height).toFixed(2);
-        viewportInfo.textContent = `Viewport: ${width}x${height} | En/Boy Oranı: ${aspectRatio} w/h | Hidden Mode: ${
-          currentHiddenMode ? "ON" : "OFF"
-        }`;
-      }
-
-      // Viewport bilgisi div'ine tıklama olayı ekle
-      viewportInfo.onclick = function () {
-        const textToCopy = this.textContent;
-        const tempTextArea = document.createElement("textarea");
-        tempTextArea.value = textToCopy;
-        document.body.appendChild(tempTextArea);
-        tempTextArea.select();
-        document.execCommand("copy");
-        document.body.removeChild(tempTextArea);
-
-        this.textContent = "Kopyalandı!";
-        // Kopyalama mesajı görünür hale getirildi
-        this.style.backgroundColor = "rgba(255, 255, 255, 0.2)";
-        this.style.color = "white";
-
-        setTimeout(() => {
-          // Mesajı eski haline döndür
-          updateViewportInfo();
-          this.style.backgroundColor = "transparent";
-          this.style.color = "rgba(0, 0, 0, 0)";
-        }, 1000);
-      };
-
       // Sayfa yüklendiğinde ve pencere yeniden boyutlandırıldığında tüm ayarları yap
       window.addEventListener("load", () => {
-        // İlk yüklemede viewport bilgisini güncelle
-        updateViewportInfo();
-
         // --- Matrix Arka Plan Animasyonu ---
         const canvas = document.getElementById("matrix-canvas");
         const ctx = canvas.getContext("2d");
@@ -2202,18 +2138,18 @@
 
       // Pencere boyutu değiştiğinde viewport bilgisini güncelle
       window.addEventListener("resize", () => {
+        // YENİ: Sayfayı yeniden yüklemek yerine arayüzü yeniden çiz.
+        // Bu, tam ekran veya döndürme sırasında başlangıç ekranına dönmeyi engeller.
         // Sadece giriş yapıldıysa ve veri varsa yeniden çiz.
-        if (firstInteraction && latestData) {
-          updateViewportInfo();
+        if (!firstInteraction || !latestData) return;
 
-          // Efektlerin ve animasyonların yeniden tetiklenmesini önlemek için
-          // önceki veri durumunu ve son işlem bilgisini sıfırla.
-          previousData = null; // Bu, renderData içindeki değişiklik tespitini sıfırlar.
-          lastModifiedVehicle = { durakKey: null, plate: null, action: null }; // Animasyonları sıfırlar.
+        // Efektlerin ve animasyonların yeniden tetiklenmesini önlemek için
+        // önceki veri durumunu ve son işlem bilgisini sıfırla.
+        previousData = null; // Bu, renderData içindeki değişiklik tespitini sıfırlar.
+        lastModifiedVehicle = { durakKey: null, plate: null, action: null }; // Animasyonları sıfırlar.
 
-          // Arayüzü mevcut veriyle yeniden çiz.
-          renderData(latestData);
-        }
+        // Arayüzü mevcut veriyle yeniden çiz.
+        renderData(latestData);
       });
     </script>
   </body>
