@@ -1201,27 +1201,12 @@
             container.insertBefore(barContainer, promptLine);
 
             let progress = 0;
-            const totalAnimationTime = 400; // Her bar için toplam animasyon süresi (ms)
+            const totalAnimationTime = 300; // Her bar için toplam animasyon süresi (ms)
 
-            // --- YENİ GÜVENLİ GENİŞLİK HESAPLAMASI ---
-            // Karakter genişliğini daha güvenilir bir şekilde ölçmek için geçici bir element kullan.
-            const tempSpan = document.createElement("span");
-            tempSpan.style.fontFamily = getComputedStyle(container).fontFamily;
-            tempSpan.style.fontSize = getComputedStyle(container).fontSize;
-            tempSpan.style.visibility = "hidden";
-            tempSpan.style.position = "absolute";
-            tempSpan.textContent = "█"; // Ölçüm için referans karakter
-            document.body.appendChild(tempSpan); // Temporarily add to DOM to measure
-            const measuredCharWidth = tempSpan.getBoundingClientRect().width;
-            document.body.removeChild(tempSpan); // Remove after measurement
-
-            const charWidth = // Use the measured width or a fallback
-              parseFloat(getComputedStyle(document.documentElement).fontSize) *
-              0.6;
-            const containerWidth = container.clientWidth; // Konteynerin mevcut genişliği
-            const fixedTextCharLength = "[] 100%".length + 4; // Sabit metinler ve ekstra güvenlik payı
+            // YENİ: Progress bar genişliğini, üstündeki metnin uzunluğuna göre ayarla.
+            // Bu, ekran genişliğinden bağımsız, tutarlı bir görünüm sağlar.
             const progressBarWidth =
-              Math.floor(containerWidth / charWidth) - fixedTextCharLength;
+              textElement.textContent.length - "[] 100%".length;
             const stepDelay = totalAnimationTime / progressBarWidth;
 
             function updateProgress() {
