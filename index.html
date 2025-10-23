@@ -1149,7 +1149,10 @@
         // --- ANİMASYON İYİLEŞTİRMESİ ---
         // Silme animasyonunun bozulmaması için, eğer silme işlemi yapılmıyorsa veya zaten durak yoksa DOM'u temizle.
         // Silme işlemi sırasında DOM temizlenmeyecek, sadece ilgili satır animasyonla silinecek.
-        duraklarContainer.innerHTML = ""; // Her render öncesi temizle, animasyonlar için DOM'u sonra manipüle edeceğiz.
+        if (!lastModifiedVehicle.action) {
+            // Sadece animasyon olmadığında tüm konteyneri temizle.
+            duraklarContainer.innerHTML = "";
+        }
         const duraklar = data.duraklar;
         const durak_names = {
           suvari: "Süvari",
@@ -1525,7 +1528,15 @@
             }
 
             durakDiv.innerHTML = htmlContent;
-            duraklarContainer.appendChild(durakDiv);
+            
+            // YENİ: Mevcut durak div'ini bul ve yenisiyle değiştir, yoksa ekle.
+            // Bu, innerHTML = "" kullanmaktan daha güvenlidir ve prompt'u korur.
+            const existingDurakDiv = Array.from(duraklarContainer.children).find(child => child.querySelector(`[data-durak-key="${key}"]`));
+            if (existingDurakDiv) {
+                duraklarContainer.replaceChild(durakDiv, existingDurakDiv);
+            } else {
+                duraklarContainer.appendChild(durakDiv);
+            }
           }
         });
 
@@ -1572,7 +1583,7 @@
 
       // --- DEBUG MODU ---
       // Test verilerini kullanmak için `true`, gerçek zamanlı Firebase verilerini kullanmak için `false` yapın.
-      const DEBUG_MODE = true;
+      const DEBUG_MODE = false;
 
       // --- GİZLİ MOD AYARLARI ---
 
