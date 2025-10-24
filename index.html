@@ -717,11 +717,11 @@
           if (aracSayisi === 0) {
             // Durak boş
             if (
-              emptyStationTimers[key].timerId === null &&
-              emptyStationTimers[key].lastAnnounced === 0
+              emptyStationTimers[key].timerId === null && // Zamanlayıcı zaten çalışmıyorsa
+              emptyStationTimers[key].lastAnnounced === 0 // Ve daha önce hiç anons yapılmadıysa
             ) {
               // Zamanlayıcıyı başlat (eğer daha önce hiç anons yapılmadıysa)
-              emptyStationTimers[key].timerId = setTimeout(() => {
+              const timerId = setTimeout(() => {
                 // 3 dakika geçti, ilk anonsu yap
                 const audioUrl = `https://raw.githubusercontent.com/tektekno/deneme_yeni/master/voices/${key}0.opus`;
                 if (!stationMuteStatus[key]) {
@@ -730,6 +730,7 @@
                 }
                 emptyStationTimers[key].lastAnnounced = Date.now();
               }, EMPTY_STATION_INITIAL_DELAY);
+              emptyStationTimers[key].timerId = timerId;
             } else if (
               emptyStationTimers[key].lastAnnounced > 0 &&
               now - emptyStationTimers[key].lastAnnounced >=
@@ -1409,7 +1410,9 @@
           // Öncelik sırasına göre sesleri kuyruğa ekle
           priorityOrder.forEach((key) => {
             if (
-              previousVehicleCounts[key] !== undefined &&
+              // Önceki araç sayısı tanımlıysa ve yeni sayı öncekinden farklıysa anonsu tetikle.
+              // Bu, hem araç eklendiğinde hem de çıkarıldığında (0'a düşse bile) çalışır.
+              previousVehicleCounts[key] !== undefined && // Önceki sayının tanımlı olduğundan emin ol
               previousVehicleCounts[key] !== newVehicleCounts[key] &&
               !stationMuteStatus[key] // Eğer ses kapalı değilse
             ) {
@@ -1418,6 +1421,16 @@
               // Kuyrukta aynı durağa ait eski bir ses varsa onu kaldır.
               audioQueue = audioQueue.filter((url) => !url.includes(`/${key}`));
               audioQueue.push(audioUrl);
+            } else if (
+              previousVehicleCounts[key] === 0 &&
+              newVehicleCounts[key] > 0
+            ) {
+              // Durak boş durumdan çıktığı için "boş kaldı" anonsunu ve zamanlayıcısını iptal et.
+              clearTimeout(emptyStationTimers[key].timerId);
+              emptyStationTimers[key].timerId = null;
+              emptyStationTimers[key].lastAnnounced = 0;
+              const emptyAudioUrl = `https://raw.githubusercontent.com/tektekno/deneme_yeni/master/voices/${key}0.opus`;
+              audioQueue = audioQueue.filter((url) => url !== emptyAudioUrl);
             }
           });
 
@@ -2029,10 +2042,20 @@
           } else {
             // Sayfa ön plana geldi: veriyi sessizce çek, sonra dinleyiciyi yeniden başlat
             console.log("Uygulama devam ediyor, veriler yenileniyor...");
-            previousVehicleCounts = {}; // Sesli bildirimi engellemek için önceki sayıları sıfırla
-            ref.once("value", (snapshot) =>
-              renderData(snapshot.val(), { playSound: false })
-            );
+            // Önceki araç sayılarını, ses çalmadan güncel durumla doldur.
+            // Bu, bir sonraki gerçek güncellemede doğru karşılaştırma yapılmasını sağlar.
+            ref.once("value", (snapshot) => {
+              const data = snapshot.val();
+              if (data && data.duraklar) {
+                orderedDuraks.forEach((key) => {
+                  previousVehicleCounts[key] = data.duraklar[key].liste
+                    ? data.duraklar[key].liste.filter((arac) => !arac.is_closed)
+                        .length
+                    : 0;
+                });
+                renderData(data, { playSound: false });
+              }
+            });
             ref.on("value", firebaseListener, firebaseErrorCallback);
           }
         });
