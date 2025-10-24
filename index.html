@@ -691,6 +691,8 @@
       let previousData = null;
       let audioBuffers = {};
       let isPreloading = false;
+      // YENİ: Sayfa arka plandan döndüğünde animasyonları sıfırlamak için bayrak
+      let isReloadingAfterVisibilityChange = false;
 
       // --- YENİ: Sayfa Görünürlüğü Kontrolü ---
       // Uygulama arka plandan öne geldiğinde birikmiş sesleri ve animasyonları önlemek için.
@@ -701,17 +703,8 @@
           // 1. Ses kuyruğunu ve çalma durumunu temizle.
           audioQueue = [];
           isPlayingAudio = false;
-
-          // 2. Önceki veri durumlarını sıfırla. Bu, birikmiş bildirimleri ve animasyonları engeller.
-          previousData = null;
-          previousVehicleCounts = {};
-          lastModifiedVehicle = { durakKey: null, plate: null, action: null };
-
-          // 3. Arayüzü en son veriyle hemen yeniden çiz.
-          //    Eğer Firebase'den veri zaten gelmişse, bu UI'ı anında günceller.
-          if (latestData) {
-            renderData(latestData);
-          }
+          // 2. Bir sonraki render'ın animasyonsuz olmasını sağlamak için bayrağı ayarla.
+          isReloadingAfterVisibilityChange = true;
         }
       });
 
@@ -1276,6 +1269,13 @@
       function renderData(data) {
         // En son veriyi global olarak sakla
         latestData = data;
+
+        // YENİ: Eğer sayfa arka plandan yeni döndüyse, animasyonları ve sesleri önlemek için
+        // `previousData`'yı sıfırla ve bayrağı temizle.
+        if (isReloadingAfterVisibilityChange) {
+          previousData = null;
+          isReloadingAfterVisibilityChange = false;
+        }
 
         // YENİ: Eğer previousData null ise (ilk yükleme veya arka plandan dönme), animasyonları ve sesleri tetiklememek için isFirstRender bayrağı ayarla.
         const isFirstRender = previousData === null;
