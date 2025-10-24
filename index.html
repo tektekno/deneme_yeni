@@ -703,7 +703,12 @@
           // 1. Ses kuyruğunu ve çalma durumunu temizle.
           audioQueue = [];
           isPlayingAudio = false;
-          // 2. Bir sonraki render'ın animasyonsuz olmasını sağlamak için bayrağı ayarla.
+
+          // 2. Animasyonları ve sesli bildirimleri tetikleyen durumları sıfırla.
+          previousVehicleCounts = {};
+          lastModifiedVehicle = { durakKey: null, plate: null, action: null };
+
+          // 3. Bir sonraki render'ın animasyonsuz olmasını sağlamak için bayrağı ayarla.
           isReloadingAfterVisibilityChange = true;
         }
       });
