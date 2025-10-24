@@ -604,6 +604,15 @@
         </div>
       </div>
     </div>
+    <!-- YENİ: Arka planda uyanık kalma sesi için gizli audio elementi -->
+    <audio
+      id="keep-alive-audio"
+      loop
+      preload="auto"
+      src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA"
+    ></audio>
+    <!-- BİTİŞ: Gizli audio elementi -->
+
     <div id="global-cursor"></div>
     <script>
       // --- Cihaz Engelleme Kontrolü ---
@@ -694,25 +703,31 @@
       // YENİ: Sayfa arka plandan döndüğünde animasyonları sıfırlamak için bayrak
       let isReloadingAfterVisibilityChange = false;
       // --- YENİ: Arka Planda Uyanık Kalma Mekanizması ---
-      let keepAliveIntervalId = null; // Zamanlayıcı ID'sini tutmak için
-      let silentAudioBuffer = null; // Sessiz ses buffer'ını tekrar kullanmak için
-      // --- Bitiş: Arka Planda Uyanık Kalma Mekanizması ---
+      let keepAliveAudioElement = null;
+      // --- BİTİŞ: Arka Planda Uyanık Kalma Mekanizması ---
 
       // --- YENİ: Sayfa Görünürlüğü Kontrolü ---
       // Uygulama arka plandan öne geldiğinde birikmiş sesleri ve animasyonları önlemek için.
       document.addEventListener("visibilitychange", () => {
         if (document.visibilityState === "visible") {
-          console.log("Uygulama tekrar görünür oldu. Durum sıfırlanıyor.");
+          console.log(
+            "Uygulama tekrar görünür oldu. Ses ve animasyon durumları sıfırlanıyor."
+          );
 
           // 1. Ses kuyruğunu ve çalma durumunu temizle.
           audioQueue = [];
           isPlayingAudio = false;
 
           // 2. Animasyonları ve sesli bildirimleri tetikleyen durumları sıfırla.
-          previousVehicleCounts = {};
           lastModifiedVehicle = { durakKey: null, plate: null, action: null };
 
-          // 3. Bir sonraki render'ın animasyonsuz olmasını sağlamak için bayrağı ayarla.
+          // 3. YENİ: En önemli adım. `previousData`'yı en son gelen veriyle eşitle.
+          // Bu sayede, uygulama geri geldiğinde, bir sonraki veri güncellemesi
+          // gereksiz yere değişiklik algılamaz ve ses kuyruğunu doldurmaz.
+          if (latestData) {
+            previousData = JSON.parse(JSON.stringify(latestData));
+          }
+
           isReloadingAfterVisibilityChange = true;
 
           // YENİ: Uygulama tekrar görünür olduğunda uyanık kalma sesini durdur.
@@ -853,52 +868,37 @@
         }
       }
 
-      // --- YENİ: Arka Planda Uyanık Kalma Fonksiyonları ---
+      // --- YENİ: Arka Planda Uyanık Kalma Fonksiyonları (HTML Audio Element ile) ---
       /**
        * Arka planda uygulamanın kapanmasını önlemek için sessiz bir ses döngüsü başlatır.
+       * Bu yöntem, tarayıcının sekmede hoparlör ikonu göstermesini sağlar.
        */
-      function playShortSilentAudio() {
-        if (!audioContext || !firstInteraction) return;
+      function startKeepAliveAudio() {
+        if (!firstInteraction || !keepAliveAudioElement) return;
 
-        // Sessiz ses buffer'ını ilk defa oluştur ve sakla
-        if (!silentAudioBuffer) {
-          silentAudioBuffer = audioContext.createBuffer(
-            1,
-            audioContext.sampleRate * 1, // 1 saniyelik
-            audioContext.sampleRate
-          );
+        // Eğer zaten çalıyorsa tekrar başlatma
+        if (!keepAliveAudioElement.paused) {
+          return;
         }
 
-        const source = audioContext.createBufferSource();
-        source.buffer = silentAudioBuffer;
-        source.connect(audioContext.destination);
-        source.start();
-        console.log("Periyodik uyanık kalma sesi çalındı.");
-      }
-
-      function startKeepAliveAudio() {
-        // Sadece kullanıcı etkileşimi olduysa ve zaten zamanlayıcı çalışmıyorsa başlat
-        if (!audioContext || keepAliveIntervalId !== null || !firstInteraction)
-          return;
-
-        console.log("Periyodik uyanık kalma sesi zamanlayıcısı başlatılıyor.");
-        // İlk sesi hemen çal, sonra 100 saniyede bir tekrarla
-        playShortSilentAudio();
-        keepAliveIntervalId = setInterval(playShortSilentAudio, 100000); // 100 saniye
+        console.log("Arka planda uyanık kalma sesi başlatılıyor.");
+        // play() bir Promise döndürür, olası hataları yakalamak için .catch ekleyelim.
+        keepAliveAudioElement.play().catch((e) => {
+          // Kullanıcı etkileşimi olmadan otomatik oynatma engellenebilir.
+          // Bu durumda sessiz kalırız, sorun değil.
+        });
       }
 
       /**
        * Arka planda çalan sessiz sesi durdurur.
        */
       function stopKeepAliveAudio() {
-        if (keepAliveIntervalId !== null) {
-          console.log(
-            "Periyodik uyanık kalma sesi zamanlayıcısı durduruluyor."
-          );
-          clearInterval(keepAliveIntervalId);
-          keepAliveIntervalId = null;
+        if (keepAliveAudioElement) {
+          console.log("Arka planda uyanık kalma sesi durduruluyor.");
+          keepAliveAudioElement.pause();
         }
       }
+      // --- BİTİŞ: Arka Planda Uyanık Kalma Fonksiyonları ---
 
       /**
        * Tüm ses dosyalarını önceden yükler ve audioBuffers nesnesine kaydeder.
@@ -2198,6 +2198,9 @@
         // YENİ: Tam ekran butonu için olay dinleyicisi
         const fullscreenBtn = document.getElementById("fullscreen-btn");
         fullscreenBtn.addEventListener("click", () => {
+          // Kullanıcı etkileşimi olarak say
+          if (!firstInteraction) firstInteraction = true;
+
           if (!document.fullscreenElement) {
             // Tam ekranda değilse, tam ekrana geç
             document.documentElement.requestFullscreen().catch((err) => {
@@ -2213,6 +2216,9 @@
           }
         });
       });
+
+      // YENİ: Uyanık kalma sesi için audio elementini seç
+      keepAliveAudioElement = document.getElementById("keep-alive-audio");
 
       // Pencere boyutu değiştiğinde viewport bilgisini güncelle
       window.addEventListener("resize", () => {
