@@ -690,7 +690,60 @@
       // Önceki tam veriyi tutmak için
       let previousData = null;
       let audioBuffers = {};
+      // YENİ: Boş durak anonsları için zamanlayıcıları ve durumları tutacak nesne
+      let emptyStationTimers = {
+        merkez: { timerId: null, lastAnnounced: 0 },
+        metro: { timerId: null, lastAnnounced: 0 },
+        suvari: { timerId: null, lastAnnounced: 0 },
+      };
       let isPreloading = false;
+
+      /**
+       * YENİ: Boş duraklar için sesli anonsları yönetir.
+       */
+      function manageEmptyStationAnnouncements() {
+        if (!latestData || !firstInteraction) return;
+
+        const now = Date.now();
+        const EMPTY_STATION_INITIAL_DELAY = 3 * 60 * 1000; // 3 dakika
+        const EMPTY_STATION_REPEAT_DELAY = 2 * 60 * 1000; // 2 dakika
+
+        orderedDuraks.forEach((key) => {
+          const aracSayisi = latestData.duraklar[key].liste
+            ? latestData.duraklar[key].liste.filter((arac) => !arac.is_closed)
+                .length
+            : 0;
+
+          if (aracSayisi === 0) {
+            // Durak boş
+            if (emptyStationTimers[key].timerId === null && emptyStationTimers[key].lastAnnounced === 0) {
+              // Zamanlayıcıyı başlat (eğer daha önce hiç anons yapılmadıysa)
+              emptyStationTimers[key].timerId = setTimeout(() => {
+                // 3 dakika geçti, ilk anonsu yap
+                const audioUrl = `https://raw.githubusercontent.com/tektekno/deneme_yeni/master/voices/${key}0.opus`;
+                if (!stationMuteStatus[key]) {
+                  audioQueue.push(audioUrl);
+                  playAudioFromQueue();
+                }
+                emptyStationTimers[key].lastAnnounced = Date.now();
+              }, EMPTY_STATION_INITIAL_DELAY);
+            } else if (emptyStationTimers[key].lastAnnounced > 0 && now - emptyStationTimers[key].lastAnnounced >= EMPTY_STATION_REPEAT_DELAY) {
+              // Tekrarlama süresi doldu, tekrar anons yap
+              const audioUrl = `https://raw.githubusercontent.com/tektekno/deneme_yeni/master/voices/${key}0.opus`;
+              if (!stationMuteStatus[key]) {
+                audioQueue.push(audioUrl);
+                playAudioFromQueue();
+              }
+              emptyStationTimers[key].lastAnnounced = now;
+            }
+          } else {
+            // Durak boş değil, zamanlayıcıyı ve durumu temizle
+            clearTimeout(emptyStationTimers[key].timerId);
+            emptyStationTimers[key].timerId = null;
+            emptyStationTimers[key].lastAnnounced = 0;
+          }
+        });
+      }
 
       /**
        * Saniye cinsinden verilen süreyi "Xgn Ysa Zdk Psn" formatına dönüştürür.
@@ -1648,6 +1701,11 @@
           // renderData'nın DOM'u güncellemesi için küçük bir gecikme bırak.
           setTimeout(moveCursorToBottom, 100);
         }
+
+        // YENİ: Veri her güncellendiğinde boş durak kontrolünü de tetikle.
+        if (options.playSound) {
+          manageEmptyStationAnnouncements();
+        }
       }
 
       // --- DEBUG MODU ---
@@ -1730,6 +1788,9 @@
 
       // Her 5 saniyede bir gizli mod durumunu kontrol et
       setInterval(checkHiddenModeAndRefresh, 5000);
+
+      // YENİ: Her 10 saniyede bir boş durakları kontrol et
+      setInterval(manageEmptyStationAnnouncements, 10000);
 
       // --- YENİ: Firebase Dinleyici Fonksiyonları (Global Kapsam) ---
       // Bu fonksiyonları global kapsama taşıyarak, DOM yeniden oluşturulduğunda bile
