@@ -55,7 +55,6 @@
         height: 99.9vh; /* Tam yükseklik */
         display: flex;
         flex-direction: column;
-        position: relative; /* YENİ: İçindeki absolute konumlandırılmış elementler için referans noktası olur. */
         overflow: hidden;
       }
 
@@ -152,8 +151,7 @@
         flex-wrap: nowrap;
         width: 100%;
         justify-content: center;
-        margin-top: 2vh; /* Bilgi tablosu ile araya boşluk ekler */
-        margin-bottom: 2vh; /* YENİ: Komut satırı ile araya boşluk ekler */
+        margin-top: 2vh; /* YENİ: Bilgi tablosu ile araya boşluk ekler */
       }
 
       /* Durak kutuları */
@@ -351,6 +349,29 @@
         margin: 0.3rem 0;
       }
 
+      /* Viewport Bilgi Kutusu */
+      #viewport-info {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        padding: 8px 12px;
+        background-color: transparent; /* Başlangıçta şeffaf */
+        color: transparent; /* Başlangıçta şeffaf */
+        font-family: "Kode Mono", monospace;
+        font-size: 0.8rem;
+        border-radius: 5px;
+        cursor: pointer;
+        z-index: 1000;
+        user-select: none;
+        transition: color 0.3s ease, background-color 0.3s ease;
+      }
+
+      /* Tıklanabilir olduğunda rengi biraz görünür yapma */
+      #viewport-info:hover {
+        background-color: rgba(0, 0, 0, 0.6);
+        color: white;
+      }
+
       /* Debug Butonları için Stiller */
       #debug-controls {
         position: fixed;
@@ -472,21 +493,14 @@
       /* Yanıp Sönen İmleç Stili */
       #global-cursor {
         position: absolute;
-        width: 8px;
+        width: 2px; /* İmleci daha ince yaptık */
         height: 1.2em; /* Satır yüksekliğine benzer */
         background-color: #00ff41;
         animation: blink 1.2s step-end infinite;
         z-index: 1000;
         display: none; /* Başlangıçta gizli */
         pointer-events: none; /* İmlecin tıklama olaylarını engellememesi için */
-        transform: translateY(-10%);
         /* Akıcı JS kontrolü için CSS transition kaldırıldı */
-      }
-
-      /* YENİ: PWD içindeki metin imleci */
-      .blinking-cursor {
-        color: #00ff41;
-        animation: blink 1.2s step-end infinite;
       }
 
       @keyframes blink {
@@ -549,6 +563,7 @@
         <button id="remove-suvari">-</button>
       </div>
     </div>
+    <div id="viewport-info"></div>
     <!-- YENİ: Terminal Penceresi Çerçevesi -->
     <div class="content" style="display: none">
       <div id="terminal-window">
@@ -647,26 +662,17 @@
       const database = firebase.database();
       const ref = database.ref("taksi_verileri");
       // Elemanları seç
-      let mainContainer = document.getElementById("main-container");
-      let duraklarContainer = document.getElementById("duraklar-container");
-      let loaderElement = document.getElementById("loader");
-      let infoTable = document.getElementById("info-table");
-      let infoUpdateTime = document.getElementById("info-updatetime");
-      let infoGps = document.getElementById("info-gps");
-      let infoClosedVehicle = document.getElementById("info-closed-vehicle");
-      let infoWeather = document.getElementById("info-weather");
+      const mainContainer = document.getElementById("main-container");
+      const duraklarContainer = document.getElementById("duraklar-container");
+      const loaderElement = document.getElementById("loader");
+      const viewportInfo = document.getElementById("viewport-info");
+      const infoTable = document.getElementById("info-table");
+      const infoUpdateTime = document.getElementById("info-updatetime");
+      const infoGps = document.getElementById("info-gps");
+      const infoClosedVehicle = document.getElementById("info-closed-vehicle");
+      const infoWeather = document.getElementById("info-weather");
       const globalCursor = document.getElementById("global-cursor");
       const terminalContent = document.querySelector(".content");
-
-      // YENİ: Durakları belirli bir sırada tutmak için sabit
-      const orderedDuraks = ["merkez", "metro", "suvari"];
-
-      // YENİ: Giriş animasyonunu kontrol etmek için sabit
-      const ENABLE_BOOT_SEQUENCE = true;
-
-      // YENİ: Yükleme ekranı bittikten sonra beklemek için anahtar.
-      // `true` yaparsanız, animasyon biter ve uygulama o ekranda kalır.
-      const HALT_AFTER_BOOT = false;
 
       // En son yüklenen veriyi tutmak için değişken
       let latestData = null;
@@ -859,20 +865,21 @@
        * Ses kuyruğundaki dosyaları sırayla çalar.
        */
       function playAudioFromQueue() {
-        if (isPlayingAudio || audioQueue.length === 0 || !firstInteraction)
+        if (isPlayingAudio || audioQueue.length === 0 || !firstInteraction) {
           return;
+        }
 
-        isPlayingAudio = true;
-        const urlToPlay = audioQueue.shift();
+        const urlToPlay = audioQueue.shift(); // Kuyruktan ilk sesi al
         const audioBuffer = audioBuffers[urlToPlay];
 
         if (!audioBuffer) {
           console.error(`Ses buffer'ı bulunamadı: ${urlToPlay}`);
-          isPlayingAudio = false; // Hata durumunda durumu sıfırla
           // Hatalı olsa bile sıradakine geç
           setTimeout(playAudioFromQueue, 200);
           return;
         }
+
+        isPlayingAudio = true;
 
         const source = audioContext.createBufferSource();
         source.buffer = audioBuffer;
@@ -938,15 +945,14 @@
 
                 // İmleci sadece son karakterin yazıldığı hücrede güncelle
                 if (charIndex < currentLength + cellText.length) {
-                  // --- YENİ YÖNTEM: İmleç pozisyonunu Range ile al (Hizalama sorununu çözer) ---
+                  // --- YENİ YÖNTEM: İmleç pozisyonunu Range ile al ---
                   const range = document.createRange();
-                  // Hücrede metin düğümü varsa onu, yoksa hücrenin kendisini referans al.
+                  // Hücrede metin yoksa, hücrenin kendisini referans al
                   const textNode = cells[i].firstChild || cells[i];
-                  // Range'i metnin sonuna ayarla.
                   range.setStart(textNode, currentCellText.length);
-                  range.collapse(true); // Range'i başlangıç noktasına daralt.
-
+                  range.collapse(true);
                   const rect = range.getBoundingClientRect();
+
                   globalCursor.style.top = `${rect.top + window.scrollY}px`;
                   globalCursor.style.left = `${rect.left + window.scrollX}px`;
                 }
@@ -963,11 +969,8 @@
             cellContents.forEach(
               (content, i) => (cells[i].innerHTML = content)
             );
-            globalCursor.style.display = "none"; // YENİ: Animasyon bitince global imleci gizle.
-            // YENİ: Hizalama sorununu kesin olarak çözmek için, animasyon bittikten sonra
-            // tüm arayüzü en güncel veriyle yeniden çiz. Bu, tarayıcının tablo
-            // düzenini sıfırlamasını ve doğru hizalamayı yapmasını sağlar.
-            renderData(latestData);
+            // Efekt bittikten sonra global imleci hareket ettir
+            moveCursorToBottom();
           }
         }
       }
@@ -1007,7 +1010,7 @@
 
           // Eğer hala geçerli bir hücre varsa, silme işlemine devam et
           if (cell) {
-            cell.textContent = cell.textContent.slice(0, -1); // Son karakteri sil
+            cell.textContent = cell.textContent.slice(0, -1);
 
             // YALNIZCA metin varsa imleci güncelle, aksi takdirde ışınlanma olur.
             if (cell.firstChild) {
@@ -1018,13 +1021,9 @@
               globalCursor.style.top = `${rect.top + window.scrollY}px`;
               globalCursor.style.left = `${rect.left + window.scrollX}px`;
             }
-            setTimeout(deleteFromCell, speed);
-          } else {
-            // Silinecek başka hücre kalmadıysa animasyonu bitir.
-            globalCursor.style.display = "none"; // Global imleci gizle.
-            moveCursorToBottom(); // Ana imleci ve prompt'u göster.
-            onComplete();
           }
+
+          setTimeout(deleteFromCell, speed);
         }
         deleteFromCell();
       }
@@ -1088,171 +1087,90 @@
        * @param {Function} onComplete - Animasyon bittiğinde çalışacak fonksiyon.
        */
       function animateCursorToRow(targetRow, onComplete) {
+        // Animasyon başlarken prompt'u gizle
         const promptLine = document.getElementById("prompt-line");
-        if (!globalCursor || !targetRow || !promptLine) {
+        if (promptLine) {
+          promptLine.style.display = "none";
+        }
+
+        if (!globalCursor || !targetRow) {
           if (onComplete) onComplete();
           return;
         }
-
-        promptLine.style.display = "none"; // YENİ: Animasyon başlarken komut satırını gizle.
-
-        // YENİ: Animasyon başlarken ana imleci gizle, global imleci göster.
-        document
-          .getElementById("main-cursor")
-          ?.style.setProperty("display", "none");
-        globalCursor.style.display = "block";
 
         const targetRect = targetRow.getBoundingClientRect();
         const targetTop = targetRect.top + window.scrollY;
         const targetLeft = targetRect.left + window.scrollX;
 
-        // YENİ: Animasyon bittiğinde komut satırını tekrar göster.
-        const animationCompleteCallback = () => {
-          promptLine.style.display = "block"; // Komut satırını göster.
-          if (onComplete) onComplete();
-        };
-        moveCursorStepByStep(targetLeft, targetTop, animationCompleteCallback);
+        moveCursorStepByStep(targetLeft, targetTop, onComplete);
       }
 
       /**
        * Global imleci en alttaki durak kutusunun altına taşır.
        */
       function moveCursorToBottom() {
-        // YENİ: Eğer başlangıç animasyonu hala çalışıyorsa (yani ilk veri henüz gelmediyse),
-        // bu fonksiyonun kendi prompt'unu oluşturmasını engelle. Animasyon kendi prompt'unu yönetir.
-        if (ENABLE_BOOT_SEQUENCE && !latestData) return;
-
         // YENİ: Prompt için bir element oluştur (eğer yoksa)
         let promptLine = document.getElementById("prompt-line");
         if (!promptLine) {
           promptLine = document.createElement("div");
           promptLine.id = "prompt-line";
-          promptLine.innerHTML = `<span style="color: #00ff41;">kucukpark@taksi</span><span style="color: white;">:</span><span style="color: #5c99ff;">~</span><span style="color: white;">$&nbsp;</span><span id="main-cursor" class="blinking-cursor">█</span>`;
-          const mainContainer = document.getElementById("main-container");
-          if (mainContainer) mainContainer.appendChild(promptLine);
+          promptLine.innerHTML = `<span style="color: #00ff41;">kucukpark@taksi</span><span style="color: white;">:</span><span style="color: #5c99ff;">~</span><span style="color: white;">$ </span>`;
+          document.getElementById("terminal-window").appendChild(promptLine); // Ana pencereye ekle
         }
 
-        // YENİ: Prompt'u mutlak konumlandırmak yerine normal akışta bırak.
-        promptLine.style.position = "static";
-        promptLine.style.display = "block"; // Veya 'inline-block'
-        mainContainer.appendChild(promptLine); // Her zaman sonda olduğundan emin ol
-        mainContainer.scrollTop = mainContainer.scrollHeight; // En alta kaydır
+        const durakDivs = Array.from(document.querySelectorAll(".durak"));
+        let targetElement =
+          durakDivs.length > 0
+            ? durakDivs.reduce((a, b) =>
+                a.getBoundingClientRect().bottom >
+                b.getBoundingClientRect().bottom
+                  ? a
+                  : b
+              )
+            : infoTable;
 
-        // İmleci prompt'un sonuna konumlandır
-        const promptRect = promptLine.getBoundingClientRect();
-        // YENİ: Artık global imleç burada konumlanmıyor, sadece ana imleç gösteriliyor.
-        globalCursor.style.display = "none";
-        document
-          .getElementById("main-cursor")
-          ?.style.setProperty("display", "inline");
-      }
+        const terminalWindow = document.getElementById("terminal-window");
+        const terminalRect = terminalWindow.getBoundingClientRect();
+        let targetTop;
+        let targetLeft;
 
-      function runBootSequence(onComplete) {
-        const container = document.getElementById("main-container");
-        container.innerHTML = ""; // Ana içeriği temizle
-
-        // YENİ: Komut satırını ve imleci animasyon sırasında yönetmek için oluştur.
-        const promptLine = document.createElement("div");
-        promptLine.id = "prompt-line";
-
-        // YENİ: Yatay ve dikey mod için farklı padding değerleri ayarla.
         const aspectRatio = window.innerWidth / window.innerHeight;
-        // YENİ: Metinleri sola yaslamak için yatay padding kaldırıldı.
-        const paddingStyle = "0 0.2vw";
-
-        promptLine.style.padding =
-          "0"; /* YENİ: Padding'i sıfırla, hizalama için span'e ekle */
-        promptLine.style.whiteSpace = "pre";
-        promptLine.innerHTML = `<span style="padding: 0 0.1vw; display: inline-block;"><span style="color: #00ff41;">kucukpark@taksi</span><span style="color: white;">:</span><span style="color: #5c99ff;">~</span><span style="color: white;">$&nbsp;</span><span id="main-cursor" class="blinking-cursor">█</span></span>`;
-        container.appendChild(promptLine);
-
-        const modules = [
-          "core-services",
-          "network-interfaces",
-          "security-protocols",
-          "audio-subsystem",
-          "geolocation-api",
-          "data-sync-manager",
-          "ui-renderer",
-          "voice-assistant-module",
-          "realtime-listeners",
-          "asset-preloader",
-        ];
-
-        let moduleIndex = 0;
-
-        function loadNextModule() {
-          if (moduleIndex < modules.length) {
-            const moduleName = modules[moduleIndex];
-
-            // YENİ: Yükleme metni ve progress bar için ayrı elementler oluştur.
-            const textElement = document.createElement("div");
-            textElement.style.padding = paddingStyle;
-            textElement.style.whiteSpace = "pre";
-            textElement.textContent = `Loading ${moduleName}...`;
-
-            const barContainer = document.createElement("div");
-            barContainer.style.padding = paddingStyle;
-            barContainer.style.whiteSpace = "pre";
-
-            // Elementleri komut satırının üstüne ekle.
-            container.insertBefore(textElement, promptLine);
-            container.insertBefore(barContainer, promptLine);
-
-            let progress = 0;
-            const totalAnimationTime = 300; // Her bar için toplam animasyon süresi (ms)
-
-            // YENİ: Progress bar genişliğini, üstündeki metnin uzunluğuna göre ayarla.
-            // Bu, ekran genişliğinden bağımsız, tutarlı bir görünüm sağlar.
-            const progressBarWidth =
-              textElement.textContent.length - "[] 100%".length;
-            const stepDelay = totalAnimationTime / progressBarWidth;
-
-            function updateProgress() {
-              if (progress <= progressBarWidth) {
-                const bar =
-                  "[" +
-                  "█".repeat(progress) +
-                  "─".repeat(progressBarWidth - progress) +
-                  "]"; // YENİ: Taşma sorununu çözmek için karakter değiştirildi.
-                const percentage = Math.floor(
-                  (progress / progressBarWidth) * 100
-                );
-                barContainer.textContent = `${bar} ${percentage}%`;
-
-                container.scrollTop = container.scrollHeight;
-
-                progress++;
-                setTimeout(updateProgress, stepDelay);
-              } else {
-                // Yükleme tamamlandı, [OK] göster
-                textElement.innerHTML += ` <span style="color: #00ff41;">[OK]</span>`;
-                barContainer.remove(); // Progress bar'ı kaldır.
-                moduleIndex++;
-                setTimeout(loadNextModule, Math.random() * 150 + 50);
-              }
-            }
-            updateProgress();
-          } else {
-            // Tüm modüller yüklendi
-            const finalMsg = document.createElement("div");
-            finalMsg.style.padding = paddingStyle;
-            finalMsg.style.color = "#ffc800";
-            finalMsg.textContent = "\nSystem ready. Welcome, operator.";
-            container.insertBefore(finalMsg, promptLine); // YENİ: Mesajı komut satırının üzerine ekle.
-
-            container.scrollTop = container.scrollHeight;
-            if (!HALT_AFTER_BOOT) {
-              setTimeout(onComplete, 700);
-            }
-          }
+        if (aspectRatio > 1) {
+          // --- YATAY MOD (Sol Alt) ---
+          targetTop = terminalRect.bottom - 30; // Pencerenin altından 30px yukarıda
+          targetLeft = terminalRect.left + 15; // Pencerenin solundan 15px içeride
+        } else {
+          // --- DİKEY MOD (Mevcut Davranış) ---
+          if (!targetElement) return;
+          const targetRect = targetElement.getBoundingClientRect();
+          targetTop = targetRect.bottom + window.scrollY + 20; // İçeriğin altına
+          targetLeft = targetRect.left + window.scrollX; // İçeriğin soluna
         }
-        loadNextModule();
+
+        // Prompt'u göster ve konumlandır
+        promptLine.style.position = "absolute";
+        promptLine.style.top = `${targetTop}px`;
+        promptLine.style.left = `${targetLeft}px`;
+        promptLine.style.display = "inline";
+        // İmleci prompt'un sonuna taşı
+        moveCursorStepByStep(targetLeft + promptLine.offsetWidth, targetTop);
       }
 
-      function renderData(data) {
+      function renderData(data, removedVehicleInfo = null, clonedRow = null) {
         // En son veriyi global olarak sakla
         latestData = data;
+
+        // --- SİLME EFEKTİ İÇİN ÖN HAZIRLIK ---
+        // renderData DOM'u yeniden çizmeden önce, silinecek satırı bul ve klonla.
+        let rowToDelete = clonedRow; // Debug moddan gelen klonlanmış satırı öncelikli olarak kullan
+        if (!rowToDelete && removedVehicleInfo) {
+          // Normal mod için (Firebase'den veri geldiğinde), satırı burada bul
+          const plateId = removedVehicleInfo.plate.replace(/\s/g, "");
+          const existingRow = document.getElementById(`vehicle-${plateId}`);
+          if (existingRow) {
+            rowToDelete = existingRow.cloneNode(true);
+          }
+        }
 
         // Yükleme simgesini gizle ve güncelleme metinlerini göster
         loaderElement.style.display = "none";
@@ -1278,13 +1196,19 @@
         // --- ANİMASYON İYİLEŞTİRMESİ ---
         // Silme animasyonunun bozulmaması için, eğer silme işlemi yapılmıyorsa veya zaten durak yoksa DOM'u temizle.
         // Silme işlemi sırasında DOM temizlenmeyecek, sadece ilgili satır animasyonla silinecek.
-        duraklarContainer.innerHTML = "";
+        if (!lastModifiedVehicle.action) {
+          // Sadece animasyon olmadığında tüm konteyneri temizle.
+          duraklarContainer.innerHTML = "";
+        }
         const duraklar = data.duraklar;
         const durak_names = {
           suvari: "Süvari",
           merkez: "Merkez",
           metro: "Metro",
         };
+
+        // Durakları belirli bir sırada oluştur
+        const orderedDuraks = ["merkez", "metro", "suvari"];
 
         // Ortalama kalkış sürelerini topla ve sırala
         const averageTimes = orderedDuraks
@@ -1309,27 +1233,54 @@
         const totalVehicles =
           vehicleCounts.merkez + vehicleCounts.metro + vehicleCounts.suvari;
 
-        // Değişiklik tespiti (Ekleme/Silme)
-        if (previousData) {
-          for (const key of orderedDuraks) {
-            const prevList = previousData.duraklar[key].liste || [];
-            const newList = data.duraklar[key].liste || [];
+        // --- DEĞİŞİKLİK TESPİTİ ---
+        // DEBUG modunda silme işlemi için, `removeVehicle` fonksiyonundan gelen bilgiyi doğrudan kullan.
+        // Bu, animasyonun yanlış durakta (merkez) tetiklenmesini engeller.
+        if (DEBUG_MODE && removedVehicleInfo) {
+          lastModifiedVehicle = {
+            durakKey: Object.keys(mockData.duraklar).find((durakKey) =>
+              previousData.duraklar[durakKey].liste.some(
+                (v) => v.plate === removedVehicleInfo.plate
+              )
+            ),
+            plate: removedVehicleInfo.plate,
+            action: "remove",
+          };
+        } else {
+          // Normal mod (Firebase) veya ekleme işlemleri için değişiklik tespiti yap.
+          if (previousData) {
+            for (const key of orderedDuraks) {
+              const prevList = previousData.duraklar[key].liste || [];
+              const newList = data.duraklar[key].liste || [];
 
-            // Eklenen araç tespiti
-            const addedVehicle = newList.find(
-              (n) => !prevList.some((p) => p.plate === n.plate)
-            );
-            if (addedVehicle) {
-              lastModifiedVehicle = {
-                durakKey: key,
-                plate: addedVehicle.plate,
-                action: "add",
-              };
-              break; // İlk değişikliği bul ve çık
+              // Silinen araç tespiti (Sadece Firebase modunda çalışır)
+              const removedVehicle = prevList.find(
+                (p) => !newList.some((n) => n.plate === p.plate)
+              );
+              if (removedVehicle) {
+                lastModifiedVehicle = {
+                  durakKey: key,
+                  plate: removedVehicle.plate,
+                  action: "remove",
+                };
+                break; // İlk değişikliği bul ve çık
+              }
+
+              // Eklenen araç tespiti
+              const addedVehicle = newList.find(
+                (n) => !prevList.some((p) => p.plate === n.plate)
+              );
+              if (addedVehicle) {
+                lastModifiedVehicle = {
+                  durakKey: key,
+                  plate: addedVehicle.plate,
+                  action: "add",
+                };
+                break; // İlk değişikliği bul ve çık
+              }
             }
           }
         }
-
         // --- SESLİ BİLDİRİM İÇİN DEĞİŞİKLİK KONTROLÜ ---
         const newVehicleCounts = {};
         const priorityOrder = ["suvari", "merkez", "metro"]; // Öncelik sırası
@@ -1629,17 +1580,37 @@
           }
         });
 
-        // --- EKLEME EFEKTİ UYGULAMA ---
-        if (lastModifiedVehicle.action === "add" && lastModifiedVehicle.plate) {
+        // --- EFEKT UYGULAMA ---
+        if (lastModifiedVehicle.action && lastModifiedVehicle.plate) {
           const plateId = lastModifiedVehicle.plate.replace(/\s/g, "");
           const rowElement = document.getElementById(`vehicle-${plateId}`);
+
           if (rowElement) {
-            const cells = Array.from(rowElement.querySelectorAll("td"));
-            const cellContents = cells.map((td) => td.innerHTML);
-            rowElement.innerHTML = "<td>&nbsp;</td>".repeat(cells.length);
-            animateCursorToRow(rowElement, () => {
-              typewriterEffect(rowElement, cellContents);
-            });
+            if (lastModifiedVehicle.action === "add") {
+              const cells = Array.from(rowElement.querySelectorAll("td"));
+              const cellContents = cells.map((td) => td.innerHTML);
+              // Önce satırı boşalt ki animasyon başlarken görünmesin.
+              rowElement.innerHTML = "<td>&nbsp;</td>".repeat(cells.length);
+              animateCursorToRow(rowElement, () => {
+                typewriterEffect(rowElement, cellContents);
+              });
+            }
+          } else if (lastModifiedVehicle.action === "remove" && rowToDelete) {
+            // Silme efekti için, ilgili durak div'ini bul ve klonlanmış satırı geçici olarak ekle.
+            const durakDiv = document.querySelector(
+              `[data-durak-key="${lastModifiedVehicle.durakKey}"]`
+            )?.parentElement; // .speaker-icon'dan parent'a (durakDiv) git
+
+            const tableBody = durakDiv?.querySelector(".vehicle-table tbody");
+
+            if (tableBody) {
+              // Klonu animasyon için geçici olarak ekle
+              tableBody.appendChild(rowToDelete);
+              // Silme animasyonunu başlat ve bittiğinde klonu kaldır
+              deleteEffect(rowToDelete, () => {
+                rowToDelete.remove();
+              });
+            }
           }
           // Efekt uygulandıktan sonra sıfırla
           lastModifiedVehicle = { durakKey: null, plate: null, action: null };
@@ -1739,6 +1710,11 @@
         const STORAGE_KEY = "debugVehicleState";
         debugControls.style.display = "flex";
         document.getElementById("debug-warning").style.display = "block";
+
+        // Viewport bilgisini görünür yap
+        const viewportInfoDiv = document.getElementById("viewport-info");
+        viewportInfoDiv.style.backgroundColor = "rgba(0, 0, 0, 0.6)";
+        viewportInfoDiv.style.color = "white";
 
         // 2. Tüm olası araçları içeren bir havuz oluştur
         const allVehicles = [
@@ -1858,36 +1834,33 @@
         function removeVehicle(durakKey) {
           if (mockData.duraklar[durakKey].liste.length > 0) {
             // 1. Silinecek aracı belirle
-            const vehicleToRemove = mockData.duraklar[durakKey].liste.pop(); // .pop() hem siler hem de silineni döndürür.
+            const vehicleToRemove =
+              mockData.duraklar[durakKey].liste[
+                mockData.duraklar[durakKey].liste.length - 1
+              ];
 
-            // 2. Animasyon için satırı DOM'dan bul ve klonla (veri silindikten SONRA).
+            // 2. Animasyon için satırı DOM'dan bul ve klonla (veri silinmeden ÖNCE).
             const plateId = vehicleToRemove.plate.replace(/\s/g, "");
             const rowElement = document.getElementById(`vehicle-${plateId}`);
+            const rowToDelete = rowElement ? rowElement.cloneNode(true) : null;
 
-            // 3. Arayüzü güncel veriyle (araç silinmiş haliyle) yeniden çiz.
-            renderData(mockData);
-
-            // 4. Klonlanmış satır varsa (yani DOM'da bulunduysa) animasyonu başlat.
             if (rowElement) {
-              const clonedRow = rowElement.cloneNode(true);
-              const durakDiv = document.querySelector(
-                `[data-durak-key="${durakKey}"]`
-              )?.parentElement;
-              const tableBody = durakDiv?.querySelector(".vehicle-table tbody");
+              // 3. Animasyonu başlat.
+              deleteEffect(rowElement, () => {
+                // 4. Animasyon bittiğinde aracı veriden çıkar.
+                mockData.duraklar[durakKey].liste.pop();
+                saveState(); // State'i kaydet
 
-              if (tableBody) {
-                // Klonu animasyon için geçici olarak ekle
-                tableBody.appendChild(clonedRow);
-                // Silme animasyonunu başlat ve bittiğinde klonu kaldır
-                animateCursorToRow(clonedRow, () => {
-                  deleteEffect(clonedRow, () => {
-                    clonedRow.remove();
-                  });
-                });
-              }
+                // 5. Arayüzü animasyonsuz şekilde, sadece sayıları güncellemek için yeniden render et.
+                // Efekt bilgilerini null göndererek tekrar animasyon tetiklenmesini engelle.
+                renderData(mockData, null, null);
+              });
+            } else {
+              // Eğer satır bulunamazsa, veriyi direkt güncelle.
+              mockData.duraklar[durakKey].liste.pop();
+              saveState();
+              renderData(mockData);
             }
-
-            saveState(); // State'i kaydet
           } else {
             console.error(`${durakKey} durağında silinecek araç yok.`);
           }
@@ -1901,47 +1874,15 @@
           "value",
           (snapshot) => {
             const data = snapshot.val();
-            // YENİ: İlk yüklemede veya veri formatı bozuksa hata ver.
-            if (!data || !data.duraklar) {
+            if (data && data.duraklar) {
+              renderData(data);
+            } else {
               console.error(
                 "Veri alınamadı veya 'duraklar' anahtarı bulunamadı."
               );
               duraklarContainer.innerHTML =
                 '<p style="color:red; text-align:center;">Veri alınamadı. Lütfen Python betiğinin çalıştığından emin olun.</p>';
-              return; // Fonksiyondan çık
             }
-
-            // YENİ: Eğer `previousData` varsa (yani ilk yükleme değilse) silme animasyonu için kontrol yap.
-            if (previousData) {
-              // Değişiklik tespiti
-              const removedVehicleInfo = orderedDuraks
-                .map((key) => {
-                  const prevList = previousData.duraklar[key].liste || [];
-                  const newList = data.duraklar[key].liste || [];
-                  const removed = prevList.find(
-                    (p) => !newList.some((n) => n.plate === p.plate)
-                  );
-                  return removed ? { durakKey: key, ...removed } : null;
-                })
-                .find(Boolean);
-
-              if (removedVehicleInfo) {
-                const plateId = removedVehicleInfo.plate.replace(/\s/g, "");
-                const rowElement = document.getElementById(
-                  `vehicle-${plateId}`
-                );
-                if (rowElement) {
-                  animateCursorToRow(rowElement, () => {
-                    deleteEffect(rowElement, () => {
-                      renderData(data); // Animasyon bitince DOM'u temizle ve yeniden çiz
-                    });
-                  });
-                  return; // Animasyon bitene kadar renderData'yı tekrar çağırma
-                }
-              }
-            }
-            // Değişiklik yoksa, ekleme varsa veya ilk yükleme ise normal render yap.
-            renderData(data);
           },
           (error) => {
             console.error("Veri okuma hatası: ", error);
@@ -1951,8 +1892,45 @@
         );
       }
 
+      // Viewport bilgisi fonksiyonları
+      function updateViewportInfo() {
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        // En/Boy oranını hesapla ve 2 ondalık basamağa yuvarla
+        const aspectRatio = (width / height).toFixed(2);
+        viewportInfo.textContent = `Viewport: ${width}x${height} | En/Boy Oranı: ${aspectRatio} w/h | Hidden Mode: ${
+          currentHiddenMode ? "ON" : "OFF"
+        }`;
+      }
+
+      // Viewport bilgisi div'ine tıklama olayı ekle
+      viewportInfo.onclick = function () {
+        const textToCopy = this.textContent;
+        const tempTextArea = document.createElement("textarea");
+        tempTextArea.value = textToCopy;
+        document.body.appendChild(tempTextArea);
+        tempTextArea.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempTextArea);
+
+        this.textContent = "Kopyalandı!";
+        // Kopyalama mesajı görünür hale getirildi
+        this.style.backgroundColor = "rgba(255, 255, 255, 0.2)";
+        this.style.color = "white";
+
+        setTimeout(() => {
+          // Mesajı eski haline döndür
+          updateViewportInfo();
+          this.style.backgroundColor = "transparent";
+          this.style.color = "rgba(0, 0, 0, 0)";
+        }, 1000);
+      };
+
       // Sayfa yüklendiğinde ve pencere yeniden boyutlandırıldığında tüm ayarları yap
       window.addEventListener("load", () => {
+        // İlk yüklemede viewport bilgisini güncelle
+        updateViewportInfo();
+
         // --- Matrix Arka Plan Animasyonu ---
         const canvas = document.getElementById("matrix-canvas");
         const ctx = canvas.getContext("2d");
@@ -2008,81 +1986,34 @@
           "click",
           function () {
             // Ses motorunu "uyandır"
-            function startApp() {
-              if (!firstInteraction) {
-                firstInteraction = true;
-                // AudioContext'i oluştur veya devam ettir
+            if (!firstInteraction) {
+              firstInteraction = true;
+              // AudioContext'i oluştur veya devam ettir
+              if (!audioContext) {
                 audioContext = new (window.AudioContext ||
-                  window.webkitAudioContext)({ latencyHint: "playback" });
-                audioContext.resume(); // Kullanıcı etkileşiminden sonra başlat
-
-                // Diğer sesleri arka planda yükle
-                preloadAudioFiles();
+                  window.webkitAudioContext)();
               }
-              // Global imleci göster
-              globalCursor.style.display = "block";
-              // Terminal içeriğini göster
-              terminalContent.style.display = "flex";
-              // Giriş ekranını yavaşça gizle
-              introOverlay.style.opacity = "0";
-              // Animasyon bittikten sonra DOM'dan kaldır
-              setTimeout(() => {
-                if (introOverlay) {
-                  clearInterval(matrixInterval); // Animasyonu durdur
-                  introOverlay.remove();
-                }
-              }, 500);
-
-              // Eğer boot animasyonu aktif değilse, imleci direkt aşağı taşı.
-              // Aktifse, animasyon bittiğinde veri zaten çizileceği için imleç de konumlanacak.
-              if (!ENABLE_BOOT_SEQUENCE) {
-                moveCursorToBottom();
+              if (audioContext.state === "suspended") {
+                audioContext.resume();
               }
-            }
 
-            if (ENABLE_BOOT_SEQUENCE) {
-              // Önce arayüzü hazırla, sonra animasyonu başlat.
-              startApp();
-              // Animasyon bittiğinde, Firebase'den gelen ilk verinin çizilmesini bekle.
-              // Firebase listener zaten veriyi alınca renderData'yı çağıracak.
-              runBootSequence(() => {
-                // Animasyon bittiğinde ana container'ı temizle ki asıl içerik gelsin.
-                document.getElementById("main-container").innerHTML = `
-                  <div class="updatetime-container">
-                    <div id="loader" class="loader"></div>
-                    <table id="info-table" style="display: none">
-                      <tbody>
-                        <tr><td class="info-key">Son Güncelleme:</td><td id="info-updatetime" class="info-value"></td></tr>
-                        <tr><td class="info-key">Araç Durumları:</td><td id="info-gps" class="info-value"></td></tr>
-                        <tr><td class="info-key">Duyuru:</td><td id="info-closed-vehicle" class="info-value"></td></tr>
-                        <tr><td class="info-key">Hava Durumu:</td><td id="info-weather" class="info-value"></td></tr>
-                      </tbody>
-                    </table>
-                  </div>
-                  <div id="duraklar-container" class="container"></div>
-                `;
-                // YENİ: DOM elementleri yeniden oluşturulduğu için referansları güncelle.
-                mainContainer = document.getElementById("main-container");
-                duraklarContainer =
-                  document.getElementById("duraklar-container");
-                loaderElement = document.getElementById("loader");
-                infoTable = document.getElementById("info-table");
-                infoUpdateTime = document.getElementById("info-updatetime");
-                infoGps = document.getElementById("info-gps");
-                infoClosedVehicle = document.getElementById(
-                  "info-closed-vehicle"
-                );
-                infoWeather = document.getElementById("info-weather");
-
-                // Eğer veri çoktan geldiyse (animasyon sırasında), hemen çiz.
-                if (latestData) {
-                  renderData(latestData);
-                }
-              });
-            } else {
-              // Animasyon kapalıysa, uygulamayı direkt başlat.
-              startApp();
+              // Diğer sesleri arka planda yükle
+              preloadAudioFiles();
             }
+            // Global imleci göster
+            globalCursor.style.display = "block";
+            // Terminal içeriğini göster
+            terminalContent.style.display = "flex";
+            moveCursorToBottom();
+            // Giriş ekranını yavaşça gizle
+            introOverlay.style.opacity = "0";
+            // Animasyon bittikten sonra DOM'dan kaldır
+            setTimeout(() => {
+              if (introOverlay) {
+                clearInterval(matrixInterval); // Animasyonu durdur
+                introOverlay.remove();
+              }
+            }, 500);
           },
           { once: true }
         ); // Olay dinleyicisi sadece bir kez çalışsın
@@ -2121,18 +2052,18 @@
 
       // Pencere boyutu değiştiğinde viewport bilgisini güncelle
       window.addEventListener("resize", () => {
-        // YENİ: Sayfayı yeniden yüklemek yerine arayüzü yeniden çiz.
-        // Bu, tam ekran veya döndürme sırasında başlangıç ekranına dönmeyi engeller.
         // Sadece giriş yapıldıysa ve veri varsa yeniden çiz.
-        if (!firstInteraction || !latestData) return;
+        if (firstInteraction && latestData) {
+          updateViewportInfo();
 
-        // Efektlerin ve animasyonların yeniden tetiklenmesini önlemek için
-        // önceki veri durumunu ve son işlem bilgisini sıfırla.
-        previousData = null; // Bu, renderData içindeki değişiklik tespitini sıfırlar.
-        lastModifiedVehicle = { durakKey: null, plate: null, action: null }; // Animasyonları sıfırlar.
+          // Efektlerin ve animasyonların yeniden tetiklenmesini önlemek için
+          // önceki veri durumunu ve son işlem bilgisini sıfırla.
+          previousData = null; // Bu, renderData içindeki değişiklik tespitini sıfırlar.
+          lastModifiedVehicle = { durakKey: null, plate: null, action: null }; // Animasyonları sıfırlar.
 
-        // Arayüzü mevcut veriyle yeniden çiz.
-        renderData(latestData);
+          // Arayüzü mevcut veriyle yeniden çiz.
+          renderData(latestData, null, null);
+        }
       });
     </script>
   </body>
