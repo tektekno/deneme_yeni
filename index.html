@@ -692,6 +692,29 @@
       let audioBuffers = {};
       let isPreloading = false;
 
+      // --- YENİ: Sayfa Görünürlüğü Kontrolü ---
+      // Uygulama arka plandan öne geldiğinde birikmiş sesleri ve animasyonları önlemek için.
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") {
+          console.log("Uygulama tekrar görünür oldu. Durum sıfırlanıyor.");
+
+          // 1. Ses kuyruğunu ve çalma durumunu temizle.
+          audioQueue = [];
+          isPlayingAudio = false;
+
+          // 2. Önceki veri durumlarını sıfırla. Bu, birikmiş bildirimleri ve animasyonları engeller.
+          previousData = null;
+          previousVehicleCounts = {};
+          lastModifiedVehicle = { durakKey: null, plate: null, action: null };
+
+          // 3. Arayüzü en son veriyle hemen yeniden çiz.
+          //    Eğer Firebase'den veri zaten gelmişse, bu UI'ı anında günceller.
+          if (latestData) {
+            renderData(latestData);
+          }
+        }
+      });
+
       /**
        * Saniye cinsinden verilen süreyi "Xgn Ysa Zdk Psn" formatına dönüştürür.
        * @param {number} totalSeconds - Toplam saniye süresi.
