@@ -1350,9 +1350,13 @@
             !stationMuteStatus[key] // Eğer ses kapalı değilse
           ) {
             // Çalınacak ses dosyasının adını oluştur (örn: merkez2.opus, suvari0.opus)
-            const audioFileName = `${key}${newVehicleCounts[key]}.opus`;
-            // GitHub raw content URL'sini oluştur
-            const audioUrl = `https://raw.githubusercontent.com/tektekno/deneme_yeni/master/voices/${audioFileName}`;
+            const audioUrl = `https://raw.githubusercontent.com/tektekno/deneme_yeni/master/voices/${key}${newVehicleCounts[key]}.opus`;
+
+            // YENİ: Kuyrukta aynı durağa ait eski bir ses varsa onu kaldır.
+            // Bu, her durak için sadece en son durumun çalınmasını sağlar.
+            audioQueue = audioQueue.filter((url) => !url.includes(`/${key}`));
+
+            // Yeni sesi kuyruğa ekle.
             audioQueue.push(audioUrl);
           }
         });
