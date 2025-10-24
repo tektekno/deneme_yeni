@@ -693,6 +693,10 @@
       let isPreloading = false;
       // YENİ: Sayfa arka plandan döndüğünde animasyonları sıfırlamak için bayrak
       let isReloadingAfterVisibilityChange = false;
+      // --- YENİ: Arka Planda Uyanık Kalma Mekanizması ---
+      let keepAliveIntervalId = null; // Zamanlayıcı ID'sini tutmak için
+      let silentAudioBuffer = null; // Sessiz ses buffer'ını tekrar kullanmak için
+      // --- Bitiş: Arka Planda Uyanık Kalma Mekanizması ---
 
       // --- YENİ: Sayfa Görünürlüğü Kontrolü ---
       // Uygulama arka plandan öne geldiğinde birikmiş sesleri ve animasyonları önlemek için.
@@ -710,6 +714,13 @@
 
           // 3. Bir sonraki render'ın animasyonsuz olmasını sağlamak için bayrağı ayarla.
           isReloadingAfterVisibilityChange = true;
+
+          // YENİ: Uygulama tekrar görünür olduğunda uyanık kalma sesini durdur.
+          stopKeepAliveAudio();
+        } else if (document.visibilityState === "hidden") {
+          // YENİ: Uygulama arka plana gittiğinde uyanık kalma sesini başlat.
+          // Bu, uygulamanın işletim sistemi tarafından sonlandırılma olasılığını azaltır.
+          startKeepAliveAudio();
         }
       });
 
@@ -839,6 +850,53 @@
         } catch (error) {
           console.error("Hava durumu verisi alınamadı:", error);
           infoWeather.textContent = "Bilgi alınamadı.";
+        }
+      }
+
+      // --- YENİ: Arka Planda Uyanık Kalma Fonksiyonları ---
+      /**
+       * Arka planda uygulamanın kapanmasını önlemek için sessiz bir ses döngüsü başlatır.
+       */
+      function playShortSilentAudio() {
+        if (!audioContext || !firstInteraction) return;
+
+        // Sessiz ses buffer'ını ilk defa oluştur ve sakla
+        if (!silentAudioBuffer) {
+          silentAudioBuffer = audioContext.createBuffer(
+            1,
+            audioContext.sampleRate * 1, // 1 saniyelik
+            audioContext.sampleRate
+          );
+        }
+
+        const source = audioContext.createBufferSource();
+        source.buffer = silentAudioBuffer;
+        source.connect(audioContext.destination);
+        source.start();
+        console.log("Periyodik uyanık kalma sesi çalındı.");
+      }
+
+      function startKeepAliveAudio() {
+        // Sadece kullanıcı etkileşimi olduysa ve zaten zamanlayıcı çalışmıyorsa başlat
+        if (!audioContext || keepAliveIntervalId !== null || !firstInteraction)
+          return;
+
+        console.log("Periyodik uyanık kalma sesi zamanlayıcısı başlatılıyor.");
+        // İlk sesi hemen çal, sonra 100 saniyede bir tekrarla
+        playShortSilentAudio();
+        keepAliveIntervalId = setInterval(playShortSilentAudio, 100000); // 100 saniye
+      }
+
+      /**
+       * Arka planda çalan sessiz sesi durdurur.
+       */
+      function stopKeepAliveAudio() {
+        if (keepAliveIntervalId !== null) {
+          console.log(
+            "Periyodik uyanık kalma sesi zamanlayıcısı durduruluyor."
+          );
+          clearInterval(keepAliveIntervalId);
+          keepAliveIntervalId = null;
         }
       }
 
