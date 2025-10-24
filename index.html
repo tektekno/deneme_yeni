@@ -156,14 +156,6 @@
         margin-bottom: 2vh; /* YENİ: Komut satırı ile araya boşluk ekler */
       }
 
-      /* YENİ: Durak ve Trafik div'lerini saran kapsayıcı */
-      #content-flipper {
-        display: flex;
-        flex-direction: column;
-        flex-grow: 1;
-        min-height: 0; /* Flexbox'ın taşma sorunlarını önlemek için */
-      }
-
       /* Durak kutuları */
       .durak {
         padding: 1vh 2vw;
@@ -304,19 +296,6 @@
         color: #87ceeb;
         text-shadow: 0 0 3px #87ceeb;
       } /* Açık Mavi */
-
-      /* YENİ: Trafik durumu div'i için özel stiller */
-      #trafik-durumu-div {
-        height: 100%; /* Kapsayıcısını tamamen doldurur */
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start; /* İçeriği yukarıdan başlatır */
-        width: auto; /* YENİ: Genişliği içeriğe göre ayarla */
-        margin-left: auto; /* YENİ: Yatayda ortala */
-        margin-right: auto; /* YENİ: Yatayda ortala */
-      }
-
-      /* Yatay düzende tablo genişliğini ayarla */
       @media (min-aspect-ratio: 1.1) {
         #info-table {
           width: 100%;
@@ -349,18 +328,6 @@
         overflow: hidden; /* Taşmayı gizle */
         text-overflow: ellipsis; /* Taşma durumunda üç nokta göster */
         padding: 0 0.2vw;
-      }
-
-      /* YENİ: Trafik tablosu için satır renklendirmesi (Zebra Deseni) */
-      #trafik-durumu-div .vehicle-table {
-        width: auto; /* Genişliği içeriğe göre ayarla */
-        margin: 0.5rem auto 0 auto; /* Üst boşluk bırak ve yatayda ortala */
-      }
-      #trafik-durumu-div .vehicle-table tbody tr:nth-child(odd) {
-        background-color: rgba(255, 255, 255, 0.07); /* Daha belirgin açık renk */
-      }
-      #trafik-durumu-div .vehicle-table tbody tr:nth-child(even) {
-        background-color: rgba(255, 255, 255, 0.02); /* Daha koyu renk */
       }
 
       .vehicle-table .right-align {
@@ -544,9 +511,46 @@
         .durak {
           flex: 1; /* Eşit genişlikte yer kapla */
         }
-        /* YENİ: Trafik kartının yatayda gereksiz yere genişlemesini engelle */
-        #trafik-durumu-div {
-          flex: 0 1 auto; /* Büyüme (grow:0), küçül (shrink:1), temel genişlik (basis:auto) */
+      }
+
+      /* --- YENİ: Kayan Trafik Bandı Stilleri --- */
+      #traffic-banner-container {
+        width: 100%;
+        overflow: hidden;
+        background-color: #111;
+        margin: 2vh 0;
+        white-space: nowrap;
+        box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5);
+        border-top: 1px solid #444;
+        border-bottom: 1px solid #444;
+      }
+
+      #traffic-banner-content {
+        display: inline-block;
+        padding-left: 100%; /* Animasyonun ekran dışından başlamasını sağlar */
+        animation: scroll-traffic 45s linear infinite;
+      }
+
+      .traffic-item {
+        display: inline-block;
+        padding: 4px 12px;
+        font-size: clamp(12px, 1.6vw, 16px);
+      }
+
+      .traffic-item:nth-child(odd) {
+        background-color: hsl(0, 0%, 46%);
+      }
+      .traffic-item:nth-child(even) {
+        background-color: #fff;
+        color: #000; /* Beyaz arka planda siyah yazı */
+      }
+
+      @keyframes scroll-traffic {
+        from {
+          transform: translateX(0%);
+        }
+        to {
+          transform: translateX(-100%);
         }
       }
     </style>
@@ -635,14 +639,9 @@
               </tbody>
             </table>
           </div>
-          <!-- YENİ: Durak ve Trafik div'lerini saran kapsayıcı -->
-          <div id="content-flipper">
-            <div id="duraklar-container" class="container"></div>
-            <!-- YENİ: Trafik durumu için ayrı bir container -->
-            <div id="trafik-container" class="container" style="display: none">
-              <!-- Trafik div'i buraya JS ile eklenecek -->
-            </div>
-          </div>
+          <!-- YENİ: Kayan trafik bandı için kapsayıcı -->
+          <div id="traffic-banner-container" style="display: none;"><div id="traffic-banner-content"></div></div>
+          <div id="duraklar-container" class="container"></div>
         </div>
       </div>
     </div>
@@ -691,8 +690,6 @@
       // Elemanları seç
       let mainContainer = document.getElementById("main-container");
       let duraklarContainer = document.getElementById("duraklar-container");
-      let trafikContainer = document.getElementById("trafik-container"); // YENİ
-      let contentFlipper = document.getElementById("content-flipper"); // YENİ
       let loaderElement = document.getElementById("loader");
       let infoTable = document.getElementById("info-table");
       let infoUpdateTime = document.getElementById("info-updatetime");
@@ -708,13 +705,8 @@
       // YENİ: Giriş animasyonunu kontrol etmek için sabit
       const ENABLE_BOOT_SEQUENCE = true;
 
-      // YENİ: Yükleme ekranı bittikten sonra beklemek için anahtar.
-      // `true` yaparsanız, animasyon biter ve uygulama o ekranda kalır.
       const HALT_AFTER_BOOT = false;
 
-      // YENİ: Durak/Trafik görünümünü yönetmek için durum değişkeni ve zamanlayıcı
-      let isShowingStations = true;
-      let viewToggleInterval = null;
       // En son yüklenen veriyi tutmak için değişken
       let latestData = null;
       // Önceki araç sayılarını tutmak için değişken
@@ -860,73 +852,6 @@
       }
 
       /**
-       * YENİ: Trafik durumu verisini işler ve renkli HTML çıktısı üretir.
-       * @param {object} trafficData - Firebase'den gelen trafik_durumu nesnesi.
-       * @returns {string} HTML olarak formatlanmış trafik durumu metni.
-       */
-      function getTrafficStatus(trafficData) {
-        if (!trafficData) return "Veri yok";
-
-        const statusMap = {
-          AcikYol: { text: "Açık", color: "#00ff41" },
-          HafifYogunYol: { text: "Hafif", color: "#ffc800" },
-          YogunYol: { text: "Yoğun", color: "#ff0000" },
-        };
-
-        const nameMap = {
-          // Mevcutlar
-          ankara_cd_gidis: "Ankara Cd. Gidiş:",
-          ankara_cd_donus: "Ankara Cd. Dönüş:",
-          ankara_cd_yanyol_donus: "Yan Yol Dönüş:",
-          // Yeniler
-          ankara_cd_yanyol_gidis: "Ankara Cd. Yanyol Gidiş:",
-          agacli_yol: "Ağaçlı Yol:",
-          adliye_kavsagi_gidis: "Adliye Kavşağı Gidiş:",
-          alsancak_liman_yolu: "Alsancak Liman Yolu:",
-          alsancak_gar_onu_gidis: "Alsancak Gar Önü Gidiş:",
-          alsancak_gar_onu_donus: "Alsancak Gar Önü Dönüş:",
-          alsancak_kordon: "Alsancak Kordon:",
-          forum_agacli_yol_gidis: "Forum Ağaçlı Yol Gidiş:",
-          forum_agacli_yol_gelis: "Forum Ağaçlı Yol Geliş:",
-          cesme_otobani_gidis: "Çeşme Otobanı Gidiş:",
-          cigli_otobani_gidis: "Çiğli Otobanı Gidiş:",
-        };
-
-        let html = "";
-        // Belirli bir sırada göstermek için
-        const order = [
-          "ankara_cd_gidis",
-          "ankara_cd_donus",
-          "ankara_cd_yanyol_gidis",
-          "ankara_cd_yanyol_donus",
-          "agacli_yol",
-          "adliye_kavsagi_gidis",
-          "alsancak_liman_yolu",
-          "alsancak_gar_onu_gidis",
-          "alsancak_gar_onu_donus",
-          "alsancak_kordon",
-          "forum_agacli_yol_gidis",
-          "forum_agacli_yol_gelis",
-          "cesme_otobani_gidis",
-          "cigli_otobani_gidis",
-        ];
-
-        // Firebase'den gelen tüm anahtarları işle, ama 'order' sırasına göre
-        const allKeys = [ ...new Set([...order, ...Object.keys(trafficData)]) ];
-
-        allKeys.forEach((key) => {
-          if (!trafficData.hasOwnProperty(key)) return; // Veride olmayan anahtarı atla
-
-          const status = trafficData[key];
-          const displayName = nameMap[key] || key; // Eşleşme yoksa ham anahtarı kullan
-          const { text, color } = statusMap[status] || { text: status, color: "white" };
-          html += `${displayName} <span style="color: ${color}; text-shadow: 0 0 2px ${color};">${text}</span>&nbsp;&nbsp;`;
-        });
-
-        return html.trim();
-      }
-
-      /**
        * YENİ: Trafik durumu verisini DİKEY olarak işler ve renkli HTML çıktısı üretir.
        * @param {object} trafficData - Firebase'den gelen trafik_durumu nesnesi.
        * @returns {string} HTML olarak formatlanmış dikey trafik durumu listesi.
@@ -957,26 +882,23 @@
           cigli_otobani_gidis: "Çiğli Otobanı Gidiş:",
         };
 
-        const order = [
-          "ankara_cd_gidis", "ankara_cd_donus", "ankara_cd_yanyol_gidis",
-          "ankara_cd_yanyol_donus", "agacli_yol", "adliye_kavsagi_gidis",
-          "alsancak_liman_yolu", "alsancak_gar_onu_gidis", "alsancak_gar_onu_donus",
-          "alsancak_kordon", "forum_agacli_yol_gidis", "forum_agacli_yol_gelis",
-          "cesme_otobani_gidis", "cigli_otobani_gidis",
-        ];
+        // YENİ: Trafik bandı için HTML oluştur
+        let html = "";
+        const allKeys = Object.keys(trafficData);
 
-        let html = '<table class="vehicle-table"><tbody>';
-        const allKeys = [ ...new Set([...order, ...Object.keys(trafficData)]) ];
-
-        allKeys.forEach((key) => {
+        // İki kez yazdırarak kesintisiz bir döngü oluştur
+        [...allKeys, ...allKeys].forEach((key) => {
           if (!trafficData.hasOwnProperty(key)) return;
           const status = trafficData[key];
           const displayName = nameMap[key] || key;
-          const { text, color } = statusMap[status] || { text: status, color: "white" };
-          html += `<tr><td style="text-align: left; padding-right: 1em;">${displayName}</td><td style="text-align: left;"><span style="color: ${color}; text-shadow: 0 0 2px ${color};">${text}</span></td></tr>`;
+          const { text, color } = statusMap[status] || {
+            text: status,
+            color: "white",
+          };
+          // Beyaz arka planda yazı rengini ayarla
+          const textColorStyle = `color: ${color}; text-shadow: 0 0 2px ${color};`;
+          html += `<div class="traffic-item">${displayName} <span style="${textColorStyle}">${text}</span></div>`;
         });
-
-        html += "</tbody></table>";
         return html;
       }
 
@@ -1504,11 +1426,8 @@
         // "Araç Durumları" satırına metalik parlama efekti ekle
         infoGps.parentElement.classList.add("metal-effect");
 
-        // Bu, media query'lerdeki .font-size-large gibi sınıfların yerini alır
         const contentDiv = document.querySelector(".content");
         const aspectRatio = window.innerWidth / window.innerHeight;
-        // YENİ: Trafik div'ini de render et
-        renderTrafficDiv(data);
 
         // Durak bilgilerini işle
         // --- ANİMASYON İYİLEŞTİRMESİ ---
@@ -1516,6 +1435,9 @@
         // Silme işlemi sırasında DOM temizlenmeyecek, sadece ilgili satır animasyonla silinecek.
         duraklarContainer.innerHTML = "";
         const duraklar = data.duraklar;
+        // YENİ: Trafik bandını render et
+        renderTrafficBanner(data);
+
         const durak_names = {
           suvari: "Süvari",
           merkez: "Merkez",
@@ -2340,10 +2262,8 @@
                       </tbody>
                     </table>
                   </div>
-                  <div id="content-flipper">
-                    <div id="duraklar-container" class="container"></div>
-                    <div id="trafik-container" class="container" style="display: none"></div>
-                  </div>
+                  <div id="traffic-banner-container" style="display: none;"><div id="traffic-banner-content"></div></div>
+                  <div id="duraklar-container" class="container"></div>
                 `;
                 // YENİ: DOM elementleri yeniden oluşturulduğu için referansları güncelle.
                 mainContainer = document.getElementById("main-container");
@@ -2357,8 +2277,6 @@
                   "info-closed-vehicle"
                 );
                 infoWeather = document.getElementById("info-weather");
-                trafikContainer = document.getElementById("trafik-container"); // YENİ
-                contentFlipper = document.getElementById("content-flipper"); // YENİ
 
                 // Eğer veri çoktan geldiyse (animasyon sırasında), hemen çiz.
                 if (latestData) {
@@ -2385,34 +2303,6 @@
             }
           }
         });
-
-        // YENİ: Görünüm değiştirme fonksiyonu
-        function startViewFlipper() {
-          // Mevcut zamanlayıcıyı temizle (varsa)
-          if (viewToggleInterval) {
-            clearTimeout(viewToggleInterval);
-          }
-
-          if (isShowingStations) {
-            // Şu an duraklar görünüyor, 3 saniye sonra trafiği göster
-            duraklarContainer.style.display = "flex";
-            trafikContainer.style.display = "none";
-            viewToggleInterval = setTimeout(() => {
-              isShowingStations = false; // Durumu değiştir
-              startViewFlipper(); // Döngüyü devam ettir
-            }, 3000); // 3 saniye bekle
-          } else {
-            // Şu an trafik görünüyor, 6 saniye sonra durakları göster
-            duraklarContainer.style.display = "none";
-            trafikContainer.style.display = "flex";
-            viewToggleInterval = setTimeout(() => {
-              isShowingStations = true; // Durumu değiştir
-              startViewFlipper(); // Döngüyü devam ettir
-            }, 6000); // 6 saniye bekle
-          }
-        }
-
-        startViewFlipper(); // YENİ: Görünüm değiştirme döngüsünü başlat
 
         // YENİ: Tam ekran butonu için olay dinleyicisi
         const fullscreenBtn = document.getElementById("fullscreen-btn");
@@ -2449,28 +2339,17 @@
         renderData(latestData);
       });
 
-      // YENİ: renderData fonksiyonu artık trafik div'ini de oluşturacak
-      function renderTrafficDiv(data) {
+      // YENİ: Kayan trafik bandını oluşturan fonksiyon
+      function renderTrafficBanner(data) {
         if (!data || !data.trafik_durumu) return;
 
-        trafikContainer.innerHTML = ""; // Önceki içeriği temizle
+        const bannerContainer = document.getElementById(
+          "traffic-banner-container"
+        );
+        const bannerContent = document.getElementById("traffic-banner-content");
 
-        const trafikDiv = document.createElement("div");
-        trafikDiv.className = "durak"; // Aynı stili kullan
-        trafikDiv.id = "trafik-durumu-div"; // Yükseklik için özel ID
-
-        // Akışkan stil hesaplamaları
-        const aspectRatio = window.innerWidth / window.innerHeight;
-        const fluidFontSize = `clamp(1.4vw, ${2 / aspectRatio}vw, 4.5vw)`;
-
-        trafikDiv.style.setProperty("--durak-font-size", fluidFontSize);
-
-        let htmlContent = "Trafik Durumu<br>";
-        htmlContent += `<hr class="separator-line">`;
-        htmlContent += getTrafficStatusVertical(data.trafik_durumu);
-
-        trafikDiv.innerHTML = htmlContent;
-        trafikContainer.appendChild(trafikDiv);
+        bannerContent.innerHTML = getTrafficStatusVertical(data.trafik_durumu);
+        bannerContainer.style.display = "block";
       }
     </script>
   </body>
