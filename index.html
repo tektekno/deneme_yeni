@@ -1250,7 +1250,7 @@
         loadNextModule();
       }
 
-      function renderData(data) {
+      function renderData(data, options = { playSound: true }) {
         // En son veriyi global olarak sakla
         latestData = data;
 
@@ -1330,40 +1330,36 @@
           }
         }
 
-        // --- SESLİ BİLDİRİM İÇİN DEĞİŞİKLİK KONTROLÜ ---
-        const newVehicleCounts = {};
-        const priorityOrder = ["suvari", "merkez", "metro"]; // Öncelik sırası
-        orderedDuraks.forEach((key) => {
-          const aracSayisi = data.duraklar[key].liste
-            ? data.duraklar[key].liste.filter((arac) => !arac.is_closed).length
-            : 0;
-          newVehicleCounts[key] = aracSayisi;
+        // --- SESLİ BİLDİRİM (Sadece playSound true ise çalışır) ---
+        if (options.playSound) {
+          const newVehicleCounts = {};
+          const priorityOrder = ["suvari", "merkez", "metro"]; // Öncelik sırası
+          orderedDuraks.forEach((key) => {
+            const aracSayisi = data.duraklar[key].liste
+              ? data.duraklar[key].liste.filter((arac) => !arac.is_closed)
+                  .length
+              : 0;
+            newVehicleCounts[key] = aracSayisi;
+          });
 
-          // Eğer bu durağın önceki sayısı varsa ve değişmişse sesli bildirim yap
-        });
+          // Öncelik sırasına göre sesleri kuyruğa ekle
+          priorityOrder.forEach((key) => {
+            if (
+              previousVehicleCounts[key] !== undefined &&
+              previousVehicleCounts[key] !== newVehicleCounts[key] &&
+              !stationMuteStatus[key] // Eğer ses kapalı değilse
+            ) {
+              const audioUrl = `https://raw.githubusercontent.com/tektekno/deneme_yeni/master/voices/${key}${newVehicleCounts[key]}.opus`;
 
-        // Öncelik sırasına göre sesleri kuyruğa ekle
-        priorityOrder.forEach((key) => {
-          if (
-            previousVehicleCounts[key] !== undefined &&
-            previousVehicleCounts[key] !== newVehicleCounts[key] &&
-            !stationMuteStatus[key] // Eğer ses kapalı değilse
-          ) {
-            // Çalınacak ses dosyasının adını oluştur (örn: merkez2.opus, suvari0.opus)
-            const audioUrl = `https://raw.githubusercontent.com/tektekno/deneme_yeni/master/voices/${key}${newVehicleCounts[key]}.opus`;
+              // Kuyrukta aynı durağa ait eski bir ses varsa onu kaldır.
+              audioQueue = audioQueue.filter((url) => !url.includes(`/${key}`));
+              audioQueue.push(audioUrl);
+            }
+          });
 
-            // YENİ: Kuyrukta aynı durağa ait eski bir ses varsa onu kaldır.
-            // Bu, her durak için sadece en son durumun çalınmasını sağlar.
-            audioQueue = audioQueue.filter((url) => !url.includes(`/${key}`));
-
-            // Yeni sesi kuyruğa ekle.
-            audioQueue.push(audioUrl);
+          if (audioQueue.length > 0 && !isPlayingAudio) {
+            playAudioFromQueue();
           }
-        });
-
-        // Eğer kuyruğa yeni ses eklendiyse ve çalma işlemi aktif değilse, başlat.
-        if (audioQueue.length > 0 && !isPlayingAudio) {
-          playAudioFromQueue();
         }
 
         // Bir sonraki kontrol için mevcut sayıları kaydet
@@ -1901,58 +1897,71 @@
         renderData(mockData);
       } else {
         // Veritabanı referansındaki veriyi dinle (DEBUG_MODE = false ise çalışır)
-        ref.on(
-          "value",
-          (snapshot) => {
-            const data = snapshot.val();
-            // YENİ: İlk yüklemede veya veri formatı bozuksa hata ver.
-            if (!data || !data.duraklar) {
-              console.error(
-                "Veri alınamadı veya 'duraklar' anahtarı bulunamadı."
-              );
-              duraklarContainer.innerHTML =
-                '<p style="color:red; text-align:center;">Veri alınamadı. Lütfen Python betiğinin çalıştığından emin olun.</p>';
-              return; // Fonksiyondan çık
-            }
+        const firebaseListener = (snapshot) => {
+          const data = snapshot.val();
+          if (!data || !data.duraklar) {
+            console.error(
+              "Veri alınamadı veya 'duraklar' anahtarı bulunamadı."
+            );
+            duraklarContainer.innerHTML =
+              '<p style="color:red; text-align:center;">Veri alınamadı. Lütfen Python betiğinin çalıştığından emin olun.</p>';
+            return;
+          }
 
-            // YENİ: Eğer `previousData` varsa (yani ilk yükleme değilse) silme animasyonu için kontrol yap.
-            if (previousData) {
-              // Değişiklik tespiti
-              const removedVehicleInfo = orderedDuraks
-                .map((key) => {
-                  const prevList = previousData.duraklar[key].liste || [];
-                  const newList = data.duraklar[key].liste || [];
-                  const removed = prevList.find(
-                    (p) => !newList.some((n) => n.plate === p.plate)
-                  );
-                  return removed ? { durakKey: key, ...removed } : null;
-                })
-                .find(Boolean);
-
-              if (removedVehicleInfo) {
-                const plateId = removedVehicleInfo.plate.replace(/\s/g, "");
-                const rowElement = document.getElementById(
-                  `vehicle-${plateId}`
+          if (previousData) {
+            const removedVehicleInfo = orderedDuraks
+              .map((key) => {
+                const prevList = previousData.duraklar[key].liste || [];
+                const newList = data.duraklar[key].liste || [];
+                const removed = prevList.find(
+                  (p) => !newList.some((n) => n.plate === p.plate)
                 );
-                if (rowElement) {
-                  animateCursorToRow(rowElement, () => {
-                    deleteEffect(rowElement, () => {
-                      renderData(data); // Animasyon bitince DOM'u temizle ve yeniden çiz
-                    });
+                return removed ? { durakKey: key, ...removed } : null;
+              })
+              .find(Boolean);
+
+            if (removedVehicleInfo) {
+              const plateId = removedVehicleInfo.plate.replace(/\s/g, "");
+              const rowElement = document.getElementById(`vehicle-${plateId}`);
+              if (rowElement) {
+                animateCursorToRow(rowElement, () => {
+                  deleteEffect(rowElement, () => {
+                    renderData(data);
                   });
-                  return; // Animasyon bitene kadar renderData'yı tekrar çağırma
-                }
+                });
+                return;
               }
             }
-            // Değişiklik yoksa, ekleme varsa veya ilk yükleme ise normal render yap.
-            renderData(data);
-          },
-          (error) => {
-            console.error("Veri okuma hatası: ", error);
-            duraklarContainer.innerHTML =
-              '<p style="color:red; text-align:center;">Veri okuma hatası oluştu. Konsolu kontrol edin.</p>';
           }
-        );
+          renderData(data);
+        };
+
+        const firebaseErrorCallback = (error) => {
+          console.error("Veri okuma hatası: ", error);
+          duraklarContainer.innerHTML =
+            '<p style="color:red; text-align:center;">Veri okuma hatası oluştu. Konsolu kontrol edin.</p>';
+        };
+
+        // Gerçek zamanlı dinleyiciyi başlat
+        ref.on("value", firebaseListener, firebaseErrorCallback);
+
+        // Sayfa görünürlüğü değiştiğinde dinleyiciyi yönet
+        document.addEventListener("visibilitychange", () => {
+          if (document.hidden) {
+            // Sayfa arka plana alındı: dinleyiciyi kapat ve ses kuyruğunu temizle
+            ref.off("value", firebaseListener);
+            audioQueue = [];
+            console.log("Uygulama askıya alındı, veri akışı durduruldu.");
+          } else {
+            // Sayfa ön plana geldi: veriyi tek seferde sessizce çek, sonra dinleyiciyi yeniden başlat
+            console.log("Uygulama devam ediyor, veriler yenileniyor...");
+            previousVehicleCounts = {}; // Sesli bildirimi engellemek için önceki sayıları sıfırla
+            ref.once("value", (snapshot) =>
+              renderData(snapshot.val(), { playSound: false })
+            );
+            ref.on("value", firebaseListener, firebaseErrorCallback);
+          }
+        });
       }
 
       // Sayfa yüklendiğinde ve pencere yeniden boyutlandırıldığında tüm ayarları yap
