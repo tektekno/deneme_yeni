@@ -716,7 +716,10 @@
 
           if (aracSayisi === 0) {
             // Durak boş
-            if (emptyStationTimers[key].timerId === null && emptyStationTimers[key].lastAnnounced === 0) {
+            if (
+              emptyStationTimers[key].timerId === null &&
+              emptyStationTimers[key].lastAnnounced === 0
+            ) {
               // Zamanlayıcıyı başlat (eğer daha önce hiç anons yapılmadıysa)
               emptyStationTimers[key].timerId = setTimeout(() => {
                 // 3 dakika geçti, ilk anonsu yap
@@ -727,7 +730,11 @@
                 }
                 emptyStationTimers[key].lastAnnounced = Date.now();
               }, EMPTY_STATION_INITIAL_DELAY);
-            } else if (emptyStationTimers[key].lastAnnounced > 0 && now - emptyStationTimers[key].lastAnnounced >= EMPTY_STATION_REPEAT_DELAY) {
+            } else if (
+              emptyStationTimers[key].lastAnnounced > 0 &&
+              now - emptyStationTimers[key].lastAnnounced >=
+                EMPTY_STATION_REPEAT_DELAY
+            ) {
               // Tekrarlama süresi doldu, tekrar anons yap
               const audioUrl = `https://raw.githubusercontent.com/tektekno/deneme_yeni/master/voices/${key}0.opus`;
               if (!stationMuteStatus[key]) {
@@ -741,6 +748,10 @@
             clearTimeout(emptyStationTimers[key].timerId);
             emptyStationTimers[key].timerId = null;
             emptyStationTimers[key].lastAnnounced = 0;
+            // YENİ: Durak artık boş değilse, bu durağa ait "boş" anonsunu ses kuyruğundan kaldır.
+            // Bu, durağa araç girdikten sonra gecikmeli "boş" anonsunun çalınmasını engeller.
+            const emptyAudioUrl = `https://raw.githubusercontent.com/tektekno/deneme_yeni/master/voices/${key}0.opus`;
+            audioQueue = audioQueue.filter((url) => url !== emptyAudioUrl);
           }
         });
       }
