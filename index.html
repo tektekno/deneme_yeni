@@ -1277,6 +1277,9 @@
         // En son veriyi global olarak sakla
         latestData = data;
 
+        // YENİ: Eğer previousData null ise (ilk yükleme veya arka plandan dönme), animasyonları ve sesleri tetiklememek için isFirstRender bayrağı ayarla.
+        const isFirstRender = previousData === null;
+
         // Yükleme simgesini gizle ve güncelleme metinlerini göster
         loaderElement.style.display = "none";
         infoTable.style.display = "table";
@@ -1332,8 +1335,8 @@
         const totalVehicles =
           vehicleCounts.merkez + vehicleCounts.metro + vehicleCounts.suvari;
 
-        // Değişiklik tespiti (Ekleme/Silme)
-        if (previousData) {
+        // Değişiklik tespiti (Ekleme/Silme) - Sadece ilk render değilse çalışır.
+        if (!isFirstRender) {
           for (const key of orderedDuraks) {
             const prevList = previousData.duraklar[key].liste || [];
             const newList = data.duraklar[key].liste || [];
@@ -1365,20 +1368,22 @@
           // Eğer bu durağın önceki sayısı varsa ve değişmişse sesli bildirim yap
         });
 
-        // Öncelik sırasına göre sesleri kuyruğa ekle
-        priorityOrder.forEach((key) => {
-          if (
-            previousVehicleCounts[key] !== undefined &&
-            previousVehicleCounts[key] !== newVehicleCounts[key] &&
-            !stationMuteStatus[key] // Eğer ses kapalı değilse
-          ) {
-            // Çalınacak ses dosyasının adını oluştur (örn: merkez2.opus, suvari0.opus)
-            const audioFileName = `${key}${newVehicleCounts[key]}.opus`;
-            // GitHub raw content URL'sini oluştur
-            const audioUrl = `https://raw.githubusercontent.com/tektekno/deneme_yeni/master/voices/${audioFileName}`;
-            audioQueue.push(audioUrl);
-          }
-        });
+        // Öncelik sırasına göre sesleri kuyruğa ekle - Sadece ilk render değilse çalışır.
+        if (!isFirstRender) {
+          priorityOrder.forEach((key) => {
+            if (
+              previousVehicleCounts[key] !== undefined &&
+              previousVehicleCounts[key] !== newVehicleCounts[key] &&
+              !stationMuteStatus[key] // Eğer ses kapalı değilse
+            ) {
+              // Çalınacak ses dosyasının adını oluştur (örn: merkez2.opus, suvari0.opus)
+              const audioFileName = `${key}${newVehicleCounts[key]}.opus`;
+              // GitHub raw content URL'sini oluştur
+              const audioUrl = `https://raw.githubusercontent.com/tektekno/deneme_yeni/master/voices/${audioFileName}`;
+              audioQueue.push(audioUrl);
+            }
+          });
+        }
 
         // Eğer kuyruğa yeni ses eklendiyse ve çalma işlemi aktif değilse, başlat.
         if (audioQueue.length > 0 && !isPlayingAudio) {
@@ -1653,7 +1658,11 @@
         });
 
         // --- EKLEME EFEKTİ UYGULAMA ---
-        if (lastModifiedVehicle.action === "add" && lastModifiedVehicle.plate) {
+        if (
+          !isFirstRender && // Sadece ilk render değilse animasyon yap
+          lastModifiedVehicle.action === "add" &&
+          lastModifiedVehicle.plate
+        ) {
           const plateId = lastModifiedVehicle.plate.replace(/\s/g, "");
           const rowElement = document.getElementById(`vehicle-${plateId}`);
           if (rowElement) {
