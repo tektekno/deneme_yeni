@@ -896,19 +896,28 @@
         let html = "";
         const allKeys = Object.keys(trafficData);
 
-        // İki kez yazdırarak kesintisiz bir döngü oluştur
-        [...allKeys, ...allKeys].forEach((key) => {
-          if (!trafficData.hasOwnProperty(key)) return;
-          const status = trafficData[key];
-          const displayName = nameMap[key] || key;
-          const { text, color } = statusMap[status] || {
-            text: status,
-            color: "white",
-          };
-          // Beyaz arka planda yazı rengini ayarla
-          const textColorStyle = `color: ${color}; text-shadow: 0 0 2px ${color};`;
-          html += `<div class="traffic-item">${displayName} <span style="${textColorStyle}">${text}</span></div>`;
-        });
+        // YENİ: Önce "AcikYol" olmayanları filtrele, sonra HTML'e dönüştür.
+        const filteredKeys = allKeys.filter(
+          (key) => trafficData[key] !== "AcikYol"
+        );
+
+        // Eğer filtrelenmiş yol varsa, kesintisiz döngü için listeyi ikiye katla.
+        const keysToRender =
+          filteredKeys.length > 0 ? [...filteredKeys, ...filteredKeys] : [];
+
+        html = keysToRender
+          .map((key) => {
+            const status = trafficData[key];
+            const displayName = nameMap[key] || key;
+            const { text, color } = statusMap[status] || {
+              text: status,
+              color: "white",
+            };
+            const textColorStyle = `color: ${color}; text-shadow: 0 0 2px ${color};`;
+            return `<div class="traffic-item">${displayName} <span style="${textColorStyle}">${text}</span></div>`;
+          })
+          .join("");
+
         return html;
       }
 
@@ -2358,8 +2367,13 @@
         );
         const bannerContent = document.getElementById("traffic-banner-content");
 
-        bannerContent.innerHTML = getTrafficStatusVertical(data.trafik_durumu);
-        bannerContainer.style.display = "block";
+        const trafficHtml = getTrafficStatusVertical(data.trafik_durumu);
+        if (trafficHtml) {
+          bannerContent.innerHTML = trafficHtml;
+          bannerContainer.style.display = "block";
+        } else {
+          bannerContainer.style.display = "none"; // YENİ: Gösterilecek yol yoksa bandı gizle.
+        }
       }
     </script>
   </body>
