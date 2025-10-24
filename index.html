@@ -726,6 +726,12 @@
           // gereksiz yere değişiklik algılamaz ve ses kuyruğunu doldurmaz.
           if (latestData) {
             previousData = JSON.parse(JSON.stringify(latestData));
+            // YENİ: Sayfa görünür olduğunda, animasyonları ve sesleri tetiklemeden
+            // arayüzü en son veriyle hemen yeniden çiz.
+            // Bu, arka planda biriken değişikliklerin animasyon kuyruğuna girmesini engeller.
+            isReloadingAfterVisibilityChange = true;
+            renderData(latestData);
+            isReloadingAfterVisibilityChange = false; // Bayrağı hemen sıfırla.
           }
 
           isReloadingAfterVisibilityChange = true;
@@ -1330,6 +1336,12 @@
       }
 
       function renderData(data) {
+        // --- YENİ: Sayfa Görünürlük Kontrolü ---
+        // Eğer sayfa görünür değilse, render işlemini tamamen durdur.
+        // Bu, arka planda ses ve animasyon kuyruklarının dolmasını engeller.
+        if (document.visibilityState !== "visible") {
+          return;
+        }
         // En son veriyi global olarak sakla
         latestData = data;
 
