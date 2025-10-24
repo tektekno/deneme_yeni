@@ -604,15 +604,6 @@
         </div>
       </div>
     </div>
-    <!-- YENİ: Arka planda uyanık kalma sesi için gizli audio elementi -->
-    <audio
-      id="keep-alive-audio"
-      loop
-      preload="auto"
-      src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA"
-    ></audio>
-    <!-- BİTİŞ: Gizli audio elementi -->
-
     <div id="global-cursor"></div>
     <script>
       // --- Cihaz Engelleme Kontrolü ---
@@ -700,50 +691,6 @@
       let previousData = null;
       let audioBuffers = {};
       let isPreloading = false;
-      // YENİ: Sayfa arka plandan döndüğünde animasyonları sıfırlamak için bayrak
-      let isReloadingAfterVisibilityChange = false;
-      // --- YENİ: Arka Planda Uyanık Kalma Mekanizması ---
-      let keepAliveAudioElement = null;
-      // --- BİTİŞ: Arka Planda Uyanık Kalma Mekanizması ---
-
-      // --- YENİ: Sayfa Görünürlüğü Kontrolü ---
-      // Uygulama arka plandan öne geldiğinde birikmiş sesleri ve animasyonları önlemek için.
-      document.addEventListener("visibilitychange", () => {
-        if (document.visibilityState === "visible") {
-          console.log(
-            "Uygulama tekrar görünür oldu. Ses ve animasyon durumları sıfırlanıyor."
-          );
-
-          // 1. Ses kuyruğunu ve çalma durumunu temizle.
-          audioQueue = [];
-          isPlayingAudio = false;
-
-          // 2. Animasyonları ve sesli bildirimleri tetikleyen durumları sıfırla.
-          lastModifiedVehicle = { durakKey: null, plate: null, action: null };
-
-          // 3. YENİ: En önemli adım. `previousData`'yı en son gelen veriyle eşitle.
-          // Bu sayede, uygulama geri geldiğinde, bir sonraki veri güncellemesi
-          // gereksiz yere değişiklik algılamaz ve ses kuyruğunu doldurmaz.
-          if (latestData) {
-            previousData = JSON.parse(JSON.stringify(latestData));
-            // YENİ: Sayfa görünür olduğunda, animasyonları ve sesleri tetiklemeden
-            // arayüzü en son veriyle hemen yeniden çiz.
-            // Bu, arka planda biriken değişikliklerin animasyon kuyruğuna girmesini engeller.
-            isReloadingAfterVisibilityChange = true;
-            renderData(latestData);
-            isReloadingAfterVisibilityChange = false; // Bayrağı hemen sıfırla.
-          }
-
-          isReloadingAfterVisibilityChange = true;
-
-          // YENİ: Uygulama tekrar görünür olduğunda uyanık kalma sesini durdur.
-          stopKeepAliveAudio();
-        } else if (document.visibilityState === "hidden") {
-          // YENİ: Uygulama arka plana gittiğinde uyanık kalma sesini başlat.
-          // Bu, uygulamanın işletim sistemi tarafından sonlandırılma olasılığını azaltır.
-          startKeepAliveAudio();
-        }
-      });
 
       /**
        * Saniye cinsinden verilen süreyi "Xgn Ysa Zdk Psn" formatına dönüştürür.
@@ -873,38 +820,6 @@
           infoWeather.textContent = "Bilgi alınamadı.";
         }
       }
-
-      // --- YENİ: Arka Planda Uyanık Kalma Fonksiyonları (HTML Audio Element ile) ---
-      /**
-       * Arka planda uygulamanın kapanmasını önlemek için sessiz bir ses döngüsü başlatır.
-       * Bu yöntem, tarayıcının sekmede hoparlör ikonu göstermesini sağlar.
-       */
-      function startKeepAliveAudio() {
-        if (!firstInteraction || !keepAliveAudioElement) return;
-
-        // Eğer zaten çalıyorsa tekrar başlatma
-        if (!keepAliveAudioElement.paused) {
-          return;
-        }
-
-        console.log("Arka planda uyanık kalma sesi başlatılıyor.");
-        // play() bir Promise döndürür, olası hataları yakalamak için .catch ekleyelim.
-        keepAliveAudioElement.play().catch((e) => {
-          // Kullanıcı etkileşimi olmadan otomatik oynatma engellenebilir.
-          // Bu durumda sessiz kalırız, sorun değil.
-        });
-      }
-
-      /**
-       * Arka planda çalan sessiz sesi durdurur.
-       */
-      function stopKeepAliveAudio() {
-        if (keepAliveAudioElement) {
-          console.log("Arka planda uyanık kalma sesi durduruluyor.");
-          keepAliveAudioElement.pause();
-        }
-      }
-      // --- BİTİŞ: Arka Planda Uyanık Kalma Fonksiyonları ---
 
       /**
        * Tüm ses dosyalarını önceden yükler ve audioBuffers nesnesine kaydeder.
@@ -1336,24 +1251,8 @@
       }
 
       function renderData(data) {
-        // --- YENİ: Sayfa Görünürlük Kontrolü ---
-        // Eğer sayfa görünür değilse, render işlemini tamamen durdur.
-        // Bu, arka planda ses ve animasyon kuyruklarının dolmasını engeller.
-        if (document.visibilityState !== "visible") {
-          return;
-        }
         // En son veriyi global olarak sakla
         latestData = data;
-
-        // YENİ: Eğer sayfa arka plandan yeni döndüyse, animasyonları ve sesleri önlemek için
-        // `previousData`'yı sıfırla ve bayrağı temizle.
-        if (isReloadingAfterVisibilityChange) {
-          previousData = null;
-          isReloadingAfterVisibilityChange = false;
-        }
-
-        // YENİ: Eğer previousData null ise (ilk yükleme veya arka plandan dönme), animasyonları ve sesleri tetiklememek için isFirstRender bayrağı ayarla.
-        const isFirstRender = previousData === null;
 
         // Yükleme simgesini gizle ve güncelleme metinlerini göster
         loaderElement.style.display = "none";
@@ -1410,8 +1309,8 @@
         const totalVehicles =
           vehicleCounts.merkez + vehicleCounts.metro + vehicleCounts.suvari;
 
-        // Değişiklik tespiti (Ekleme/Silme) - Sadece ilk render değilse çalışır.
-        if (!isFirstRender) {
+        // Değişiklik tespiti (Ekleme/Silme)
+        if (previousData) {
           for (const key of orderedDuraks) {
             const prevList = previousData.duraklar[key].liste || [];
             const newList = data.duraklar[key].liste || [];
@@ -1443,22 +1342,20 @@
           // Eğer bu durağın önceki sayısı varsa ve değişmişse sesli bildirim yap
         });
 
-        // Öncelik sırasına göre sesleri kuyruğa ekle - Sadece ilk render değilse çalışır.
-        if (!isFirstRender) {
-          priorityOrder.forEach((key) => {
-            if (
-              previousVehicleCounts[key] !== undefined &&
-              previousVehicleCounts[key] !== newVehicleCounts[key] &&
-              !stationMuteStatus[key] // Eğer ses kapalı değilse
-            ) {
-              // Çalınacak ses dosyasının adını oluştur (örn: merkez2.opus, suvari0.opus)
-              const audioFileName = `${key}${newVehicleCounts[key]}.opus`;
-              // GitHub raw content URL'sini oluştur
-              const audioUrl = `https://raw.githubusercontent.com/tektekno/deneme_yeni/master/voices/${audioFileName}`;
-              audioQueue.push(audioUrl);
-            }
-          });
-        }
+        // Öncelik sırasına göre sesleri kuyruğa ekle
+        priorityOrder.forEach((key) => {
+          if (
+            previousVehicleCounts[key] !== undefined &&
+            previousVehicleCounts[key] !== newVehicleCounts[key] &&
+            !stationMuteStatus[key] // Eğer ses kapalı değilse
+          ) {
+            // Çalınacak ses dosyasının adını oluştur (örn: merkez2.opus, suvari0.opus)
+            const audioFileName = `${key}${newVehicleCounts[key]}.opus`;
+            // GitHub raw content URL'sini oluştur
+            const audioUrl = `https://raw.githubusercontent.com/tektekno/deneme_yeni/master/voices/${audioFileName}`;
+            audioQueue.push(audioUrl);
+          }
+        });
 
         // Eğer kuyruğa yeni ses eklendiyse ve çalma işlemi aktif değilse, başlat.
         if (audioQueue.length > 0 && !isPlayingAudio) {
@@ -1733,11 +1630,7 @@
         });
 
         // --- EKLEME EFEKTİ UYGULAMA ---
-        if (
-          !isFirstRender && // Sadece ilk render değilse animasyon yap
-          lastModifiedVehicle.action === "add" &&
-          lastModifiedVehicle.plate
-        ) {
+        if (lastModifiedVehicle.action === "add" && lastModifiedVehicle.plate) {
           const plateId = lastModifiedVehicle.plate.replace(/\s/g, "");
           const rowElement = document.getElementById(`vehicle-${plateId}`);
           if (rowElement) {
@@ -2210,9 +2103,6 @@
         // YENİ: Tam ekran butonu için olay dinleyicisi
         const fullscreenBtn = document.getElementById("fullscreen-btn");
         fullscreenBtn.addEventListener("click", () => {
-          // Kullanıcı etkileşimi olarak say
-          if (!firstInteraction) firstInteraction = true;
-
           if (!document.fullscreenElement) {
             // Tam ekranda değilse, tam ekrana geç
             document.documentElement.requestFullscreen().catch((err) => {
@@ -2228,9 +2118,6 @@
           }
         });
       });
-
-      // YENİ: Uyanık kalma sesi için audio elementini seç
-      keepAliveAudioElement = document.getElementById("keep-alive-audio");
 
       // Pencere boyutu değiştiğinde viewport bilgisini güncelle
       window.addEventListener("resize", () => {
