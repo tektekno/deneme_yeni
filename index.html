@@ -859,16 +859,20 @@
        * Ses kuyruğundaki dosyaları sırayla çalar.
        */
       function playAudioFromQueue() {
-        const urlToPlay = audioQueue.shift(); // Kuyruktan ilk sesi al
+        if (isPlayingAudio || audioQueue.length === 0 || !firstInteraction)
+          return;
+
+        isPlayingAudio = true;
+        const urlToPlay = audioQueue.shift();
+        const audioBuffer = audioBuffers[urlToPlay];
 
         if (!audioBuffer) {
           console.error(`Ses buffer'ı bulunamadı: ${urlToPlay}`);
+          isPlayingAudio = false; // Hata durumunda durumu sıfırla
           // Hatalı olsa bile sıradakine geç
           setTimeout(playAudioFromQueue, 200);
           return;
         }
-
-        isPlayingAudio = true;
 
         const source = audioContext.createBufferSource();
         source.buffer = audioBuffer;
