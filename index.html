@@ -629,10 +629,6 @@
                   <td id="info-gps" class="info-value"></td>
                 </tr>
                 <tr>
-                  <td class="info-key">Duyuru:</td>
-                  <td id="info-closed-vehicle" class="info-value"></td>
-                </tr>
-                <tr>
                   <td class="info-key">Hava Durumu:</td>
                   <td id="info-weather" class="info-value"></td>
                 </tr>
@@ -868,44 +864,37 @@
           CokYogunYol: { text: "Çok Yoğun", color: "#a10000" },
         };
 
+        // YENİ: İsimleri daha kısa ve okunaklı hale getirelim.
         const nameMap = {
-          ankara_cd_gidis: "Ankara Cd. Gidiş:",
-          ankara_cd_donus: "Ankara Cd. Dönüş:",
-          ankara_cd_yanyol_gidis: "Ankara Cd. Yanyol Gidiş:",
-          ankara_cd_yanyol_donus: "Ankara Cd. Yan Yol Dönüş:",
-          agacli_yol: "Ağaçlı Yol:",
-          adliye_kavsagi_gidis: "Adliye Kavşağı Gidiş:",
-          alsancak_liman_yolu: "Alsancak Liman Yolu:",
-          alsancak_gar_onu_gidis: "Alsancak Gar Önü Gidiş:",
-          alsancak_gar_onu_donus: "Alsancak Gar Önü Dönüş:",
-          alsancak_kordon: "Alsancak Kordon:",
-          forum_agacli_yol_gidis: "Forum Ağaçlı Yol Gidiş:",
-          forum_agacli_yol_gelis: "Forum Ağaçlı Yol Geliş:",
-          cesme_otobani_gidis: "Çeşme Otobanı Gidiş:",
-          cigli_otobani_gidis: "Çiğli Otobanı Gidiş:",
-          gediz_gidis: "Gediz Gidiş:",
-          gediz_donus: "Gediz Dönüş:",
-          yuzbasi_ibrahim_hakki_cad_gidis: "Yüzbaşı İb. Hk. Cd. Gidiş:",
-          yuzbasi_ibrahim_hakki_cad_donus: "Yüzbaşı İb. Hk. Cd. Dönüş:",
-          forum_otobandan_gidis: "Forum Otobandan Gidiş:",
-          forum_ic_yoldan_gelis: "Forum İç Yoldan Geliş:",
-          forum_ic_yoldan_gidis: "Forum İç Yoldan Gidiş:",
+          ankara_cd_gidis: "Ankara Cd. Gidiş",
+          ankara_cd_donus: "Ankara Cd. Dönüş",
+          ankara_cd_yanyol_gidis: "Ankara Cd. Yanyol Gidiş",
+          ankara_cd_yanyol_donus: "Ankara Cd. Yan Yol Dönüş",
+          agacli_yol: "Ağaçlı Yol",
+          adliye_kavsagi_gidis: "Adliye Kavşağı Gidiş",
+          alsancak_liman_yolu: "Alsancak Liman Yolu",
+          alsancak_gar_onu_gidis: "Alsancak Gar Önü Gidiş",
+          alsancak_gar_onu_donus: "Alsancak Gar Önü Dönüş",
+          alsancak_kordon: "Alsancak Kordon",
+          forum_agacli_yol_gidis: "Forum Ağaçlı Yol Gidiş",
+          forum_agacli_yol_gelis: "Forum Ağaçlı Yol Geliş",
+          forum_otobandan_gidis: "Forum Otobandan Gidiş",
+          cesme_otobani_gidis: "Çeşme Otobanı Gidiş",
+          cigli_otobani_gidis: "Çiğli Otobanı Gidiş",
+          gediz_gidis: "Gediz Gidiş",
+          gediz_donus: "Gediz Dönüş",
         };
 
         // YENİ: Trafik bandı için HTML oluştur
         let html = "";
         const allKeys = Object.keys(trafficData);
 
-        // YENİ: Önce "AcikYol" olmayanları filtrele, sonra HTML'e dönüştür.
-        const filteredKeys = allKeys.filter(
-          (key) => trafficData[key] !== "AcikYol"
+        // YENİ: Sadece "Yoğun" içeren durumları filtrele
+        const filteredKeys = allKeys.filter((key) =>
+          trafficData[key].includes("Yogun")
         );
 
-        // Eğer filtrelenmiş yol varsa, kesintisiz döngü için listeyi ikiye katla.
-        const keysToRender =
-          filteredKeys.length > 0 ? [...filteredKeys, ...filteredKeys] : [];
-
-        html = keysToRender
+        html = filteredKeys
           .map((key) => {
             const status = trafficData[key];
             const displayName = nameMap[key] || key;
@@ -913,8 +902,8 @@
               text: status,
               color: "white",
             };
-            const textColorStyle = `color: ${color}; text-shadow: 0 0 2px ${color};`;
-            return `<div class="traffic-item">${displayName} <span style="${textColorStyle}">${text}</span></div>`;
+            const textColorStyle = `color: ${color}; text-shadow: 0 0 2px ${color}; font-weight: bold;`;
+            return `<div>${displayName}: <span style="${textColorStyle}">${text}</span></div>`;
           })
           .join("");
 
@@ -1435,8 +1424,6 @@
         // Güncelleme zamanını ve GPS bilgi metnini ayarla
         infoUpdateTime.textContent = data.son_guncelleme;
         infoGps.textContent = "Tüm araçlardaki sorunlar düzeltildi."; // Metin zaten doğru, teyit edildi.
-        infoClosedVehicle.textContent =
-          "Kırmızı renkteki araçlar kapalıdır, sıraya dahil değildir.";
 
         // Hava durumu verisini sadece ana veri yüklendikten sonra çek ve göster
         fetchWeather();
@@ -1454,8 +1441,6 @@
         // Silme işlemi sırasında DOM temizlenmeyecek, sadece ilgili satır animasyonla silinecek.
         duraklarContainer.innerHTML = "";
         const duraklar = data.duraklar;
-        // YENİ: Trafik bandını render et
-        renderTrafficBanner(data);
 
         const durak_names = {
           suvari: "Süvari",
@@ -1556,6 +1541,30 @@
         // Bir sonraki render için tam veriyi kaydet
         previousData = JSON.parse(JSON.stringify(data));
 
+        // YENİ: Trafik durumu kutusunu oluştur
+        if (data.trafik_durumu) {
+          const trafficHtml = getTrafficStatusVertical(data.trafik_durumu);
+          if (trafficHtml) {
+            const trafficDiv = document.createElement("div");
+            trafficDiv.className = "durak"; // Diğer kutularla aynı stili alsın
+            let trafficContent = `Trafik Durumu<br><hr class="separator-line">`;
+            trafficContent += `<div style="text-align: left; padding-left: 1vw; font-size: 0.8em;">${trafficHtml}</div>`;
+            trafficDiv.innerHTML = trafficContent;
+
+            // Stil ayarları
+            const fluidFontSize = `clamp(1.4vw, ${2 / aspectRatio}vw, 4.5vw)`;
+            const fluidWidth = `clamp(30vw, ${50 / aspectRatio}vw, 85vw)`;
+            trafficDiv.style.setProperty("--durak-font-size", fluidFontSize);
+            trafficDiv.style.setProperty("--durak-width", fluidWidth);
+            if (aspectRatio < 1.1) {
+              // Dikeyde esnemesin
+              trafficDiv.style.flexGrow = "0";
+            }
+
+            duraklarContainer.appendChild(trafficDiv);
+          }
+        }
+
         // Her bir durak için ayrı ayrı hizalama uzunluğunu belirle
         orderedDuraks.forEach((key) => {
           if (duraklar.hasOwnProperty(key)) {
@@ -1599,7 +1608,7 @@
               // Dikey mod için JS ile stil ata
               duraklarContainer.style.flexDirection = "column";
               duraklarContainer.style.alignItems = "center";
-              duraklarContainer.style.gap = "2.4vh";
+              duraklarContainer.style.gap = "1.5vh";
             } else {
               // Yatay moda geçildiğinde, dikey mod için JS ile eklenen stilleri sıfırla.
               // Bu, CSS media query'nin çalışmasını sağlar.
@@ -2276,7 +2285,6 @@
                       <tbody>
                         <tr><td class="info-key">Son Güncelleme:</td><td id="info-updatetime" class="info-value"></td></tr>
                         <tr><td class="info-key">Araç Durumları:</td><td id="info-gps" class="info-value"></td></tr>
-                        <tr><td class="info-key">Duyuru:</td><td id="info-closed-vehicle" class="info-value"></td></tr>
                         <tr><td class="info-key">Hava Durumu:</td><td id="info-weather" class="info-value"></td></tr>
                       </tbody>
                     </table>
@@ -2357,24 +2365,6 @@
         // Arayüzü mevcut veriyle yeniden çiz.
         renderData(latestData);
       });
-
-      // YENİ: Kayan trafik bandını oluşturan fonksiyon
-      function renderTrafficBanner(data) {
-        if (!data || !data.trafik_durumu) return;
-
-        const bannerContainer = document.getElementById(
-          "traffic-banner-container"
-        );
-        const bannerContent = document.getElementById("traffic-banner-content");
-
-        const trafficHtml = getTrafficStatusVertical(data.trafik_durumu);
-        if (trafficHtml) {
-          bannerContent.innerHTML = trafficHtml;
-          bannerContainer.style.display = "block";
-        } else {
-          bannerContainer.style.display = "none"; // YENİ: Gösterilecek yol yoksa bandı gizle.
-        }
-      }
     </script>
   </body>
 </html>
