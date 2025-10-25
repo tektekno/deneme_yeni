@@ -703,6 +703,9 @@
       // YENİ: Giriş animasyonunu kontrol etmek için sabit
       const ENABLE_BOOT_SEQUENCE = true;
 
+      // YENİ: Trafik durumunu göster/gizle. true = göster, false = gizle.
+      const SHOW_TRAFFIC_STATUS = false;
+
       const HALT_AFTER_BOOT = false;
 
       // En son yüklenen veriyi tutmak için değişken
@@ -874,6 +877,7 @@
           altinyol_gidis: "Altınyol Gidiş",
           altinyol_donus: "Altınyol Dönüş",
           adliye_kavsagi_gidis: "Adliye Kavşağı Gidiş",
+          alsancak_liman_yolu: "Alsancak Liman Gidiş",
           alsancak_liman_gidis: "Alsancak Liman Gidiş",
           alsancak_liman_donus: "Alsancak Liman Dönüş",
           alsancak_gar_onu_gidis: "Alsancak Gar Önü Gidiş",
@@ -897,8 +901,10 @@
         const allKeys = Object.keys(trafficData);
 
         // YENİ: Sadece "Yoğun" içeren durumları filtrele
-        const filteredKeys = allKeys.filter((key) =>
-          trafficData[key].includes("Yogun")
+        const filteredKeys = allKeys.filter(
+          (key) =>
+            trafficData[key] === "YogunYol" ||
+            trafficData[key] === "CokYogunYol"
         );
 
         // YENİ: Alfabetik sıralama için önce bir diziye dönüştür
@@ -1557,7 +1563,7 @@
         previousData = JSON.parse(JSON.stringify(data));
 
         // YENİ: Trafik durumu kutusunu oluştur
-        if (data.trafik_durumu) {
+        if (SHOW_TRAFFIC_STATUS && data.trafik_durumu) {
           const trafficHtml = getTrafficStatusVertical(data.trafik_durumu);
           if (trafficHtml) {
             const trafficDiv = document.createElement("div");
