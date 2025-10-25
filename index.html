@@ -704,7 +704,7 @@
       const ENABLE_BOOT_SEQUENCE = true;
 
       // YENİ: Trafik durumunu göster/gizle. true = göster, false = gizle.
-      const SHOW_TRAFFIC_STATUS = false;
+      const SHOW_TRAFFIC_STATUS = true;
 
       const HALT_AFTER_BOOT = false;
 
@@ -876,19 +876,24 @@
           agacli_yol: "Ağaçlı Yol",
           altinyol_gidis: "Altınyol Gidiş",
           altinyol_donus: "Altınyol Dönüş",
-          adliye_kavsagi_gidis: "Adliye Kavşağı Gidiş",
+          adliye_kavsagi: "Adliye Kavşağı",
           alsancak_liman_yolu: "Alsancak Liman Gidiş",
           alsancak_liman_gidis: "Alsancak Liman Gidiş",
           alsancak_liman_donus: "Alsancak Liman Dönüş",
           alsancak_gar_onu_gidis: "Alsancak Gar Önü Gidiş",
           alsancak_gar_onu_donus: "Alsancak Gar Önü Dönüş",
           alsancak_kordon: "Alsancak Kordon",
+          ege_acil_onu: "Ege Üni. Acil.",
           forum_agacli_yol_gidis: "Forum Ağaçlı Yol Gidiş",
           forum_agacli_yol_gelis: "Forum Ağaçlı Yol Geliş",
           cesme_otobani_gidis: "Çeşme Otobanı Gidiş",
           cigli_otobani_gidis: "Çiğli Otobanı Gidiş",
           gediz_gidis: "Gediz Gidiş",
           gediz_donus: "Gediz Dönüş",
+          mustafa_kemal_caddesi_gidis: "M. Kemal Cd. Gidiş",
+          mustafa_kemal_caddesi_donus: "M. Kemal Cd. Dönüş",
+          mustafa_kemal_caddesi_gidis_1: "M. Kemal Cd. Gidiş",
+          mustafa_kemal_caddesi_gidis_2: "M. Kemal Cd. Dönüş",
           yuzbasi_ibrahim_hakki_cad_gidis: "Yb. İbrahim Hakkı Cd. Gidiş",
           yuzbasi_ibrahim_hakki_cad_donus: "Yb. İbrahim Hakkı Cd. Dönüş",
           forum_otobandan_gidis: "Forum Otobandan Gidiş",
@@ -1563,27 +1568,31 @@
         previousData = JSON.parse(JSON.stringify(data));
 
         // YENİ: Trafik durumu kutusunu oluştur
-        if (SHOW_TRAFFIC_STATUS && data.trafik_durumu) {
-          const trafficHtml = getTrafficStatusVertical(data.trafik_durumu);
+        if (SHOW_TRAFFIC_STATUS) {
+          const trafficDiv = document.createElement("div");
+          trafficDiv.className = "durak"; // Diğer kutularla aynı stili alsın
+          let trafficContent = `Trafik Durumu<br><hr class="separator-line">`;
+
+          const trafficHtml = data.trafik_durumu
+            ? getTrafficStatusVertical(data.trafik_durumu)
+            : "";
+
           if (trafficHtml) {
-            const trafficDiv = document.createElement("div");
-            trafficDiv.className = "durak"; // Diğer kutularla aynı stili alsın
-            let trafficContent = `Trafik Durumu<br><hr class="separator-line">`;
             trafficContent += `<div style="text-align: left; padding-left: 1vw; font-size: 0.8em;">${trafficHtml}</div>`;
-            trafficDiv.innerHTML = trafficContent;
-
-            // Stil ayarları
-            const fluidFontSize = `clamp(1.4vw, ${2 / aspectRatio}vw, 4.5vw)`;
-            const fluidWidth = `clamp(30vw, ${50 / aspectRatio}vw, 85vw)`;
-            trafficDiv.style.setProperty("--durak-font-size", fluidFontSize);
-            trafficDiv.style.setProperty("--durak-width", fluidWidth);
-            if (aspectRatio < 1.1) {
-              // Dikeyde esnemesin
-              trafficDiv.style.flexGrow = "0";
-            }
-
-            duraklarContainer.appendChild(trafficDiv);
+          } else {
+            trafficContent += "Yoğun Bölge Yok";
           }
+          trafficDiv.innerHTML = trafficContent;
+
+          // Stil ayarları
+          const fluidFontSize = `clamp(1.4vw, ${2 / aspectRatio}vw, 4.5vw)`;
+          const fluidWidth = `clamp(30vw, ${50 / aspectRatio}vw, 85vw)`;
+          trafficDiv.style.setProperty("--durak-font-size", fluidFontSize);
+          trafficDiv.style.setProperty("--durak-width", fluidWidth);
+          if (aspectRatio < 1.1) {
+            trafficDiv.style.flexGrow = "0"; // Dikeyde esnemesin
+          }
+          duraklarContainer.appendChild(trafficDiv);
         }
 
         // Her bir durak için ayrı ayrı hizalama uzunluğunu belirle
