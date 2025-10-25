@@ -871,18 +871,25 @@
           ankara_cd_yanyol_gidis: "Ankara Cd. Yanyol Gidiş",
           ankara_cd_yanyol_donus: "Ankara Cd. Yan Yol Dönüş",
           agacli_yol: "Ağaçlı Yol",
+          altinyol_gidis: "Altınyol Gidiş",
+          altinyol_donus: "Altınyol Dönüş",
           adliye_kavsagi_gidis: "Adliye Kavşağı Gidiş",
-          alsancak_liman_yolu: "Alsancak Liman Yolu",
+          alsancak_liman_gidis: "Alsancak Liman Gidiş",
+          alsancak_liman_donus: "Alsancak Liman Dönüş",
           alsancak_gar_onu_gidis: "Alsancak Gar Önü Gidiş",
           alsancak_gar_onu_donus: "Alsancak Gar Önü Dönüş",
           alsancak_kordon: "Alsancak Kordon",
           forum_agacli_yol_gidis: "Forum Ağaçlı Yol Gidiş",
           forum_agacli_yol_gelis: "Forum Ağaçlı Yol Geliş",
-          forum_otobandan_gidis: "Forum Otobandan Gidiş",
           cesme_otobani_gidis: "Çeşme Otobanı Gidiş",
           cigli_otobani_gidis: "Çiğli Otobanı Gidiş",
           gediz_gidis: "Gediz Gidiş",
           gediz_donus: "Gediz Dönüş",
+          yuzbasi_ibrahim_hakki_cad_gidis: "Yb. İbrahim Hakkı Cd. Gidiş",
+          yuzbasi_ibrahim_hakki_cad_donus: "Yb. İbrahim Hakkı Cd. Dönüş",
+          forum_otobandan_gidis: "Forum Otobandan Gidiş",
+          forum_ic_yoldan_gelis: "Forum İç Yoldan Geliş",
+          forum_ic_yoldan_gidis: "Forum İç Yoldan Gidiş",
         };
 
         // YENİ: Trafik bandı için HTML oluştur
@@ -894,20 +901,28 @@
           trafficData[key].includes("Yogun")
         );
 
-        html = filteredKeys
-          .map((key) => {
-            const status = trafficData[key];
-            const displayName = nameMap[key] || key;
-            const { text, color } = statusMap[status] || {
-              text: status,
-              color: "white",
-            };
-            const textColorStyle = `color: ${color}; text-shadow: 0 0 2px ${color}; font-weight: bold;`;
-            return `<div>${displayName}: <span style="${textColorStyle}">${text}</span></div>`;
-          })
-          .join("");
+        // YENİ: Alfabetik sıralama için önce bir diziye dönüştür
+        const sortedTraffic = filteredKeys.map((key) => {
+          const status = trafficData[key];
+          const displayName = nameMap[key] || key;
+          const { text, color } = statusMap[status] || {
+            text: status,
+            color: "white",
+          };
+          return { displayName, text, color };
+        });
 
-        return html;
+        // YENİ: Türkçe karakterleri de dikkate alarak alfabetik sırala
+        sortedTraffic.sort((a, b) =>
+          a.displayName.localeCompare(b.displayName, "tr")
+        );
+
+        return sortedTraffic
+          .map(
+            (item) =>
+              `<div>${item.displayName}: <span style="color: ${item.color}; text-shadow: 0 0 2px ${item.color}; font-weight: bold;">${item.text}</span></div>`
+          )
+          .join("");
       }
 
       /**
