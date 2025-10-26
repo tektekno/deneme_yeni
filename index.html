@@ -2301,42 +2301,37 @@
         introButton.addEventListener(
           "click",
           function () {
-            // Ses motorunu "uyandır"
-            function startApp() {
-              if (!firstInteraction) {
-                firstInteraction = true;
-                // AudioContext'i oluştur veya devam ettir
-                audioContext = new (window.AudioContext ||
-                  window.webkitAudioContext)({ latencyHint: "playback" });
-                audioContext.resume(); // Kullanıcı etkileşiminden sonra başlat
+            if (!firstInteraction) {
+              firstInteraction = true;
+              // AudioContext'i oluştur veya devam ettir
+              audioContext = new (window.AudioContext ||
+                window.webkitAudioContext)({ latencyHint: "playback" });
+              audioContext.resume(); // Kullanıcı etkileşiminden sonra başlat
 
-                // Diğer sesleri arka planda yükle
-                preloadAudioFiles();
+              // Diğer sesleri arka planda yükle
+              preloadAudioFiles();
+            }
+            // Global imleci göster
+            globalCursor.style.display = "block";
+            // Terminal içeriğini göster
+            terminalContent.style.display = "flex";
+            // Giriş ekranını yavaşça gizle
+            introOverlay.style.opacity = "0";
+            // Animasyon bittikten sonra DOM'dan kaldır
+            setTimeout(() => {
+              if (introOverlay) {
+                clearInterval(matrixInterval); // Animasyonu durdur
+                introOverlay.remove();
               }
-              // Global imleci göster
-              globalCursor.style.display = "block";
-              // Terminal içeriğini göster
-              terminalContent.style.display = "flex";
-              // Giriş ekranını yavaşça gizle
-              introOverlay.style.opacity = "0";
-              // Animasyon bittikten sonra DOM'dan kaldır
-              setTimeout(() => {
-                if (introOverlay) {
-                  clearInterval(matrixInterval); // Animasyonu durdur
-                  introOverlay.remove();
-                }
-              }, 500);
+            }, 500);
 
-              // Eğer boot animasyonu aktif değilse, imleci direkt aşağı taşı.
-              // Aktifse, animasyon bittiğinde veri zaten çizileceği için imleç de konumlanacak.
-              if (!ENABLE_BOOT_SEQUENCE) {
-                moveCursorToBottom();
-              }
+            // Eğer boot animasyonu aktif değilse, imleci direkt aşağı taşı.
+            // Aktifse, animasyon bittiğinde veri zaten çizileceği için imleç de konumlanacak.
+            if (!ENABLE_BOOT_SEQUENCE) {
+              moveCursorToBottom();
             }
 
             if (ENABLE_BOOT_SEQUENCE) {
-              // Önce arayüzü hazırla, sonra animasyonu başlat.
-              startApp();
               // Animasyon bittiğinde, Firebase'den gelen ilk verinin çizilmesini bekle.
               // Firebase listener zaten veriyi alınca renderData'yı çağıracak.
               runBootSequence(() => {
@@ -2374,8 +2369,8 @@
                 }
               });
             } else {
-              // Animasyon kapalıysa, uygulamayı direkt başlat.
-              startApp();
+              // Animasyon kapalıysa, imleci direkt aşağı taşı.
+              moveCursorToBottom();
             }
           },
           { once: true }
@@ -2415,18 +2410,10 @@
 
       // Pencere boyutu değiştiğinde viewport bilgisini güncelle
       window.addEventListener("resize", () => {
-        // YENİ: Sayfayı yeniden yüklemek yerine arayüzü yeniden çiz.
-        // Bu, tam ekran veya döndürme sırasında başlangıç ekranına dönmeyi engeller.
-        // Sadece giriş yapıldıysa ve veri varsa yeniden çiz.
         if (!firstInteraction || !latestData) return;
 
-        // Efektlerin ve animasyonların yeniden tetiklenmesini önlemek için
-        // önceki veri durumunu ve son işlem bilgisini sıfırla.
-        previousData = null; // Bu, renderData içindeki değişiklik tespitini sıfırlar.
-        lastModifiedVehicle = { durakKey: null, plate: null, action: null }; // Animasyonları sıfırlar.
-
-        // Arayüzü mevcut veriyle yeniden çiz.
-        renderData(latestData);
+        // Animasyonları ve sesleri tetiklemeden arayüzü yeniden çiz
+        renderData(latestData, { playSound: false });
       });
     </script>
   </body>
