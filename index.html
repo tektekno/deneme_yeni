@@ -1913,10 +1913,19 @@
           setTimeout(moveCursorToBottom, 100);
         }
 
-        // YENİ: Veri her güncellendiğinde boş durak kontrolünü de tetikle.
-        if (options.playSound) {
-          manageEmptyStationAnnouncements();
-        }
+        // YENİ: renderData her çalıştığında, sadece artık boş olmayan durakların
+        // zamanlayıcılarını ve ses kuyruğundaki anonslarını temizle.
+        // Yeni zamanlayıcı kurma işlemi sadece 10 saniyelik setInterval'da yapılacak.
+        orderedDuraks.forEach((key) => {
+          const aracSayisi = newVehicleCounts[key] ?? 0;
+          if (aracSayisi > 0) {
+            clearTimeout(emptyStationTimers[key].timerId);
+            emptyStationTimers[key].timerId = null;
+            emptyStationTimers[key].lastAnnounced = 0;
+            const emptyAudioUrl = `https://raw.githubusercontent.com/tektekno/deneme_yeni/master/voices/${key}0.opus`;
+            audioQueue = audioQueue.filter((url) => url !== emptyAudioUrl);
+          }
+        });
       }
 
       // --- DEBUG MODU ---
