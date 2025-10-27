@@ -868,49 +868,6 @@
           CokYogunYol: { text: "Çok Yoğun", color: "#a10000" },
         };
 
-        // YENİ: İsimleri daha kısa ve okunaklı hale getirelim.
-        const nameMap = {
-          ankara_cd_gidis: "Ankara Cd. Gidiş",
-          ankara_cd_donus: "Ankara Cd. Dönüş",
-          ankara_cd_yanyol_gidis: "Ankara Cd. Yanyol Gidiş",
-          ankara_cd_yanyol_donus: "Ankara Cd. Yan Yol Dönüş",
-          agacli_yol: "Ağaçlı Yol",
-          altinyol_gidis: "Altınyol Gidiş",
-          altinyol_donus: "Altınyol Dönüş",
-          adliye_kavsagi: "Adliye Kavşağı",
-          alsancak_liman_yolu: "Alsancak Liman Gidiş",
-          alsancak_liman_gidis: "Alsancak Liman Gidiş",
-          alsancak_liman_donus: "Alsancak Liman Dönüş",
-          alsancak_gar_onu_gidis: "Alsancak Gar Önü Gidiş",
-          alsancak_gar_onu_donus: "Alsancak Gar Önü Dönüş",
-          alsancak_kordon: "Alsancak Kordon",
-          ege_acil_onu: "Ege Üni. Acil.",
-          forum_agacli_yol_gidis: "Forum Ağaçlı Yol Gidiş",
-          forum_agacli_yol_gelis: "Forum Ağaçlı Yol Geliş",
-          cesme_otobani_gidis: "Çeşme Otobanı Gidiş",
-          cigli_otobani_gidis: "Çiğli Otobanı Gidiş",
-          gediz_gidis: "Gediz Gidiş",
-          gediz_donus: "Gediz Dönüş",
-          mustafa_kemal_caddesi_gidis: "M. Kemal Cd. Gidiş",
-          mustafa_kemal_caddesi_donus: "M. Kemal Cd. Dönüş",
-          mustafa_kemal_caddesi_gidis_1: "M. Kemal Cd. Gidiş",
-          mustafa_kemal_caddesi_gidis_2: "M. Kemal Cd. Dönüş",
-          yuzbasi_ibrahim_hakki_cad_gidis: "Yb. İbrahim Hakkı Cd. Gidiş",
-          yuzbasi_ibrahim_hakki_cad_donus: "Yb. İbrahim Hakkı Cd. Dönüş",
-          forum_otobandan_gidis: "Forum Otobandan Gidiş",
-          forum_ic_yoldan_gelis: "Forum İç Yoldan Geliş",
-          forum_ic_yoldan_gidis: "Forum İç Yoldan Gidiş",
-          murselpasa_blv_gidis: "Mürselpaşa Blv. Gidiş",
-          murselpasa_blv_donus: "Mürselpaşa Blv. Dönüş",
-          alsancak_liman_kavsagi_gidis: "Alsancak Liman Girişi (Gidiş)",
-          yesildere_cd_gidis: "Yeşildere Cd. Gidiş",
-          yesildere_cd_donus: "Yeşildere Cd. Dönüş",
-          yesillik_cd_gidis: "Yeşillik Cd. Gidiş",
-          yesillik_cd_donus: "Yeşillik Cd. Dönüş",
-          akcay_cd_gidis: "Akçay Cd. Gidiş",
-          akcay_cd_donus: "Akçay Cd. Dönüş",
-        };
-
         // YENİ: Trafik bandı için HTML oluştur
         let html = "";
         const allKeys = Object.keys(trafficData);
@@ -918,14 +875,16 @@
         // YENİ: Sadece "Yoğun" içeren durumları filtrele
         const filteredKeys = allKeys.filter(
           (key) =>
-            trafficData[key] === "YogunYol" ||
-            trafficData[key] === "CokYogunYol"
+            trafficData[key]?.durum &&
+            (trafficData[key].durum === "YogunYol" ||
+              trafficData[key].durum === "CokYogunYol")
         );
 
         // YENİ: Alfabetik sıralama için önce bir diziye dönüştür
         const sortedTraffic = filteredKeys.map((key) => {
-          const status = trafficData[key];
-          const displayName = nameMap[key] || key;
+          const item = trafficData[key];
+          const status = item.durum;
+          const displayName = item.yer_ismi || key;
           const { text, color } = statusMap[status] || {
             text: status,
             color: "white",
