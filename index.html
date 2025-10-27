@@ -2425,8 +2425,13 @@
         // Sadece giriş yapıldıysa ve veri varsa yeniden çiz.
         if (!firstInteraction || !latestData) return;
 
-        // Animasyonları ve sesleri tetiklemeden arayüzü yeniden çiz
-        renderData(latestData, { playSound: false });
+        // YENİ: Android'de ekran kilidinden sonra tam ekrandan çıkarken oluşan
+        // siyah ekran sorununu çözmek için render işlemini kısa bir süre geciktir.
+        // Bu, tarayıcının boyutlandırma işlemini tamamlamasına zaman tanır.
+        setTimeout(() => {
+          // Animasyonları ve sesleri tetiklemeden arayüzü yeniden çiz
+          renderData(latestData, { playSound: false });
+        }, 100); // 100ms gecikme
       });
     </script>
   </body>
