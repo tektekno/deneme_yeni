@@ -1019,14 +1019,32 @@
       /**
        * Tüm ses dosyalarını önceden yükler ve audioBuffers nesnesine kaydeder.
        */
-      async function preloadAudioFiles() { // Already async
+      async function preloadAudioFiles() {
         if (isPreloading || Object.keys(audioBuffers).length > 33) return; // Zaten yükleniyorsa veya yüklendiyse çık
         isPreloading = true;
         console.log("Ses dosyaları ön yükleniyor...");
 
         const duraklar = ["merkez", "metro", "suvari"];
         const promises = [];
-        // audioContext is guaranteed to be initialized by startApp before this is called
+
+        for (const durak of duraklar) {
+          for (let i = 0; i <= 10; i++) {
+            const fileName = `${durak}${i}.opus`;
+            const url = `https://raw.githubusercontent.com/tektekno/deneme_yeni/master/voices/${fileName}`;
+
+            const promise = fetch(url)
+              .then((response) => response.arrayBuffer())
+              .then((arrayBuffer) => audioContext.decodeAudioData(arrayBuffer))
+              .then((decodedData) => {
+                audioBuffers[url] = decodedData;
+              })
+              .catch((err) => {
+                // console.error(`${fileName} yüklenemedi:`, err);
+              });
+            promises.push(promise);
+          }
+        }
+
         await Promise.all(promises);
         isPreloading = false;
         console.log("Tüm ses dosyaları ön yüklendi.");
@@ -1425,28 +1443,6 @@
           }
         }
         loadNextModule();
-      }
-
-      // Ses motorunu "uyandır" ve uygulamayı başlat
-      async function startApp() {
-        if (!firstInteraction) {
-          firstInteraction = true;
-          // AudioContext'i oluştur veya devam ettir
-          audioContext = new (window.AudioContext || window.webkitAudioContext)({ latencyHint: "playback" });
-          await audioContext.resume(); // Await resume
-
-          // Diğer sesleri arka planda yükle
-          await preloadAudioFiles(); // Await preloading
-        }
-        globalCursor.style.display = "block";
-        terminalContent.style.display = "flex";
-        introOverlay.style.opacity = "0";
-        setTimeout(() => {
-          if (introOverlay) {
-            clearInterval(matrixInterval);
-            introOverlay.remove();
-          }
-        }, 500);
       }
 
       function renderData(data, options = { playSound: true }) {
@@ -2317,20 +2313,40 @@
         introButton.addEventListener(
           "click",
           function () {
-            // Make the event listener async to await startApp
-            (async () => {
-              await startApp();
+            if (!firstInteraction) {
+              firstInteraction = true;
+              // AudioContext'i oluştur veya devam ettir
+              audioContext = new (window.AudioContext ||
+                window.webkitAudioContext)({ latencyHint: "playback" });
+              audioContext.resume(); // Kullanıcı etkileşiminden sonra başlat
 
-              // Eğer boot animasyonu aktif değilse, imleci direkt aşağı taşı.
-              // Aktifse, animasyon bittiğinde veri zaten çizileceği için imleç de konumlanacak.
-              if (!ENABLE_BOOT_SEQUENCE) {
-                moveCursorToBottom();
+              // Diğer sesleri arka planda yükle
+              preloadAudioFiles();
+            }
+            // Global imleci göster
+            globalCursor.style.display = "block";
+            // Terminal içeriğini göster
+            terminalContent.style.display = "flex";
+            // Giriş ekranını yavaşça gizle
+            introOverlay.style.opacity = "0";
+            // Animasyon bittikten sonra DOM'dan kaldır
+            setTimeout(() => {
+              if (introOverlay) {
+                clearInterval(matrixInterval); // Animasyonu durdur
+                introOverlay.remove();
               }
+            }, 500);
 
-              if (ENABLE_BOOT_SEQUENCE) {
+            // Eğer boot animasyonu aktif değilse, imleci direkt aşağı taşı.
+            // Aktifse, animasyon bittiğinde veri zaten çizileceği için imleç de konumlanacak.
+            if (!ENABLE_BOOT_SEQUENCE) {
+              moveCursorToBottom();
+            }
+
+            if (ENABLE_BOOT_SEQUENCE) {
               // Animasyon bittiğinde, Firebase'den gelen ilk verinin çizilmesini bekle.
               // Firebase listener zaten veriyi alınca renderData'yı çağıracak.
-                runBootSequence(() => {
+              runBootSequence(() => {
                 // Animasyon bittiğinde ana container'ı temizle ki asıl içerik gelsin.
                 document.getElementById("main-container").innerHTML = `
                   <div class="updatetime-container">
@@ -2365,10 +2381,10 @@
                 }
               });
             } else {
-                // Animasyon kapalıysa, imleci direkt aşağı taşı.
-                moveCursorToBottom();
+              // Animasyon kapalıysa, imleci direkt aşağı taşı.
+              moveCursorToBottom();
             }
-            })();
+          },
           { once: true }
         ); // Olay dinleyicisi sadece bir kez çalışsın
 
@@ -2417,12 +2433,12 @@
         // Bu, tam ekran veya döndürme sırasında başlangıç ekranına dönmeyi engeller.
         // Sadece giriş yapıldıysa ve veri varsa yeniden çiz.
         if (!firstInteraction || !latestData) return;
+
         // YENİ: Android'de ekran kilidinden sonra tam ekrandan çıkarken oluşan
         // siyah ekran sorununu çözmek için render işlemini kısa bir süre geciktir.
         // Bu, tarayıcının boyutlandırma işlemini tamamlamasına zaman tanır.
         setTimeout(() => {
-          // YENİ: Yeniden çizim sırasında animasyonların tetiklenmesini engelle
-          lastModifiedVehicle = { durakKey: null, plate: null, action: null };
+          // Animasyonları ve sesleri tetiklemeden arayüzü yeniden çiz
           renderData(latestData, { playSound: false });
         }, 100); // 100ms gecikme
       });
