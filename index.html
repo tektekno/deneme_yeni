@@ -2397,6 +2397,9 @@
 
       // Pencere boyutu değiştiğinde viewport bilgisini güncelle
       window.addEventListener("resize", () => {
+        // YENİ: Sayfayı yeniden yüklemek yerine arayüzü yeniden çiz.
+        // Bu, tam ekran veya döndürme sırasında başlangıç ekranına dönmeyi engeller.
+        // Sadece giriş yapıldıysa ve veri varsa yeniden çiz.
         if (!firstInteraction || !latestData) return;
 
         // Animasyonları ve sesleri tetiklemeden arayüzü yeniden çiz
