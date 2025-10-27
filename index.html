@@ -408,11 +408,12 @@
       /* Ses kontrol ikonu */
       .speaker-icon {
         position: absolute;
-        top: 1vh;
-        right: 2vw;
+        top: 0.5rem; /* YENİ: Sabit birim kullanarak yukarıdan boşluk ver */
+        right: 0.5rem; /* YENİ: Sabit birim kullanarak sağdan boşluk ver */
         font-size: clamp(14px, 3vw, 24px);
         cursor: pointer;
         user-select: none; /* İkonun seçilmesini engelle */
+        z-index: 11; /* YENİ: Diyagonal şeridin üzerinde kalmasını garantile */
       }
 
       /* Intro Ekranı */
@@ -1633,7 +1634,7 @@
             const aracSayisi = activeVehicles.length; // Sadece aktif araçları say
 
             // Başlık satırı
-            const speakerIcon = stationMuteStatus[key] ? "🔇" : "🔊";
+            const speakerIcon = stationMuteStatus[key] ? "🔇" : "🔉"; // YENİ: İkon çifti güncellendi
             htmlContent += `<span class="speaker-icon" data-durak-key="${key}">${speakerIcon}</span>`;
 
             htmlContent += `${durak_names[key]} (${aracSayisi})<br>`;
