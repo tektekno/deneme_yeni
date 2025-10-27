@@ -511,6 +511,8 @@
         }
         .durak {
           flex: 1; /* Eşit genişlikte yer kapla */
+          flex-basis: 0; /* flex: 1 ile birlikte kullanıldığında daha iyi esneklik sağlar */
+          flex-grow: 1; /* YENİ: İçeriğe göre esnek büyüme sağlar */
         }
       }
 
@@ -1586,7 +1588,16 @@
           trafficDiv.innerHTML = trafficContent;
 
           // Stil ayarları
-          const fluidFontSize = `clamp(1.4vw, ${2 / aspectRatio}vw, 4.5vw)`;
+          // YENİ: Kareye yakın yatay ekranlar için (1.0 < aspectRatio < 1.4) fontu daha fazla küçült.
+          // Bu, 1071x851 gibi çözünürlüklerde yazıların taşmasını engeller.
+          let fontSizeMultiplier = 2.2;
+          if (aspectRatio > 1.0 && aspectRatio < 1.4) {
+            fontSizeMultiplier = 1.8;
+          }
+          const fluidFontSize = `clamp(1.2vw, ${
+            fontSizeMultiplier / aspectRatio
+          }vw, 5vw)`;
+
           const fluidWidth = `clamp(30vw, ${50 / aspectRatio}vw, 85vw)`;
           trafficDiv.style.setProperty("--durak-font-size", fluidFontSize);
           trafficDiv.style.setProperty("--durak-width", fluidWidth);
@@ -1651,7 +1662,15 @@
             // --- AKIŞKAN FORMÜL İLE STİL HESAPLAMA ---
 
             // 1. Akışkan Font Boyutu: Ekran daraldıkça (aspectRatio küçüldükçe) font büyür.
-            const fluidFontSize = `clamp(1.4vw, ${2 / aspectRatio}vw, 4.5vw)`;
+            // YENİ: Kareye yakın yatay ekranlar için (1.0 < aspectRatio < 1.4) fontu daha fazla küçült.
+            // Bu, 1071x851 gibi çözünürlüklerde yazıların taşmasını engeller.
+            let fontSizeMultiplier = 2.2;
+            if (aspectRatio > 1.0 && aspectRatio < 1.4) {
+              fontSizeMultiplier = 1.8;
+            }
+            const fluidFontSize = `clamp(1.2vw, ${
+              fontSizeMultiplier / aspectRatio
+            }vw, 5vw)`;
 
             // 2. Akışkan Genişlik: Ekran daraldıkça genişlik artar.
             const fluidWidth = `clamp(30vw, ${50 / aspectRatio}vw, 85vw)`;
