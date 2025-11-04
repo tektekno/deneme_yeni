@@ -177,12 +177,17 @@
       setInterval(draw, 33);
 
       // YENİ: Sayfanın herhangi bir yerine tıklanınca linke yönlendir.
-      document.body.addEventListener("click", (event) => {
-        // YENİ: Yönlendirme için en basit ve en uyumlu yöntemi kullan.
-        // Bu, hem linkin kendi href'inin hem de JS'nin çalışmasını dener.
-        // Android WebView'da birisi başarısız olursa diğerinin çalışma şansı olur.
+      document.body.addEventListener("click", () => {
         const url = "https://kpt.ct.ws";
-        window.open(url, "_blank");
+        try {
+          // Bu yöntem, mevcut WebView penceresini yeni adrese yönlendirir.
+          // WebView'ın ayarlarına bağlı olarak bu, harici tarayıcıyı tetikleyebilir.
+          window.location.href = url;
+        } catch (e) {
+          // Eğer yukarıdaki yöntem bir güvenlik hatası nedeniyle engellenirse,
+          // daha temel bir yönlendirme metodu olan location.assign'ı dene.
+          location.assign(url);
+        }
       });
     </script>
   </body>
