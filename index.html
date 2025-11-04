@@ -126,7 +126,8 @@
           <i class="bi bi-android2"></i>
           <i class="bi bi-apple"></i>
         </div>
-        <a href="https://kpt.ct.ws" target="_blank">https://kpt.ct.ws</a>
+        <!-- target kaldırıldı -->
+        <a id="open-link" href="https://kpt.ct.ws">https://kpt.ct.ws</a>
       </div>
     </div>
 
@@ -144,7 +145,7 @@
       const alphabet = katakana + latin + nums;
 
       const fontSize = 16;
-      const columns = canvas.width / fontSize;
+      const columns = Math.floor(canvas.width / fontSize);
       const rainDrops = [];
 
       for (let x = 0; x < columns; x++) {
@@ -176,17 +177,101 @@
 
       setInterval(draw, 33);
 
-      // YENİ: Sayfanın herhangi bir yerine tıklanınca linke yönlendir.
-      document.body.addEventListener("click", () => {
-        const url = "https://kpt.ct.ws";
+      // Çoklu fallback yönlendirme fonksiyonu
+      const DEFAULT_URL = "https://kpt.ct.ws";
+
+      function tryNavigate(u) {
+        // 1) Normal location
         try {
-          // Bu yöntem, mevcut WebView penceresini yeni adrese yönlendirir.
-          // WebView'ın ayarlarına bağlı olarak bu, harici tarayıcıyı tetikleyebilir.
-          window.location.href = url;
-        } catch (e) {
-          // Eğer yukarıdaki yöntem bir güvenlik hatası nedeniyle engellenirse,
-          // daha temel bir yönlendirme metodu olan location.assign'ı dene.
-          location.assign(url);
+          window.location.href = u;
+          return;
+        } catch (e) {}
+
+        // 2) assign
+        try {
+          location.assign(u);
+          return;
+        } catch (e) {}
+
+        // 3) replace
+        try {
+          location.replace(u);
+          return;
+        } catch (e) {}
+
+        // 4) top-level navigation (iframe içindeyse)
+        try {
+          if (window.top && window.top !== window) {
+            window.top.location.href = u;
+            return;
+          }
+        } catch (e) {}
+
+        // 5) Dinamik anchor oluşturup click tetikle
+        try {
+          const a = document.createElement("a");
+          a.href = u;
+          a.rel = "noopener noreferrer";
+          a.style.display = "none";
+          document.body.appendChild(a);
+          // Bazı webview'lar gerçek "user gesture" gibi algılayabilir
+          a.click();
+          document.body.removeChild(a);
+          return;
+        } catch (e) {}
+
+        // 6) Form submit fallback
+        try {
+          const f = document.createElement("form");
+          f.action = u;
+          f.method = "GET";
+          f.style.display = "none";
+          document.body.appendChild(f);
+          f.submit();
+          document.body.removeChild(f);
+          return;
+        } catch (e) {}
+
+        // 7) Meta-refresh en son çare
+        try {
+          const m = document.createElement("meta");
+          m.httpEquiv = "refresh";
+          m.content = "0;url=" + u;
+          document.getElementsByTagName("head")[0].appendChild(m);
+          return;
+        } catch (e) {}
+
+        // 8) Intent URI (Android Chrome gibi bazı istemcilerde çalışabilir)
+        try {
+          const host = u.replace(/^https?:\/\//, "");
+          const intentUri = `intent://${host}/#Intent;scheme=https;end`;
+          window.location.href = intentUri;
+          return;
+        } catch (e) {}
+      }
+
+      // Kullanıcı etkileşimi ile tetikle (click ve touchend)
+      function onUserNavigate(e) {
+        const link = e.target.closest && e.target.closest("a");
+        if (link && link.href) {
+          e.preventDefault();
+          tryNavigate(link.href);
+          return;
+        }
+        // Eğer içerikte link yoksa, genel URL'yi dene
+        e.preventDefault();
+        tryNavigate(DEFAULT_URL);
+      }
+
+      document.addEventListener("click", onUserNavigate, { passive: false });
+      document.addEventListener("touchend", onUserNavigate, { passive: false });
+
+      // küçük bir UX iyileştirmesi: anchor'a klavye ile de erişim olsun
+      const anchor = document.getElementById("open-link");
+      anchor.addEventListener("keydown", (ev) => {
+        if (ev.key === "Enter" || ev.key === " ") {
+          ev.preventDefault();
+          tryNavigate(anchor.href);
         }
       });
     </script>
