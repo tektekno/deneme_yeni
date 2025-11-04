@@ -77,7 +77,11 @@
       }
 
       .logo-container i {
-        font-size: clamp(100px, 10vw, 75px); /* Akışkan ikon boyutu (Büyütüldü) */
+        font-size: clamp(
+          100px,
+          10vw,
+          75px
+        ); /* Akışkan ikon boyutu (Büyütüldü) */
         color: #fff; /* Beyaz renk */
         margin: 0 15px; /* İkonlar arasına boşluk */
         text-shadow: 0 0 5px #fff;
@@ -110,7 +114,10 @@
     <div id="goodbye-overlay">
       <canvas id="matrix-canvas"></canvas>
       <div class="goodbye-content">
-        <h1>Uygulama artık iPhone için de mevcut. Yeni versiyona geçmek için tıkla:</h1>
+        <h1>
+          Uygulama artık iPhone için de mevcut. Yeni versiyona geçmek için
+          tıkla:
+        </h1>
         <div class="logo-container">
           <i class="bi bi-android2"></i>
           <i class="bi bi-apple"></i>
@@ -153,7 +160,10 @@
           );
           ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
 
-          if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          if (
+            rainDrops[i] * fontSize > canvas.height &&
+            Math.random() > 0.975
+          ) {
             rainDrops[i] = 0;
           }
           rainDrops[i]++;
@@ -164,12 +174,23 @@
 
       // YENİ: Sayfanın herhangi bir yerine tıklanınca linke yönlendir.
       document.body.addEventListener("click", (event) => {
-        // Eğer tıklanan element bir link ise, varsayılan davranışını engelle.
-        // Bu, linkin iki kere açılmasını önler.
-        if (event.target.tagName === "A") {
-          event.preventDefault();
+        event.preventDefault(); // Her türlü varsayılan tıklama davranışını engelle.
+
+        const isAndroid = /android/i.test(navigator.userAgent);
+        const url = "https://kpt.ct.ws";
+
+        if (isAndroid) {
+          // Android WebView'da harici tarayıcıyı açmaya zorlamak için intent URL'i kullan.
+          // Bu, uygulamanın kendi içinde açmasını engeller.
+          const intentUrl =
+            "intent://" +
+            url.substring(8) + // "https://"" kısmını kaldır
+            "#Intent;scheme=https;action=android.intent.action.VIEW;end";
+          window.location.href = intentUrl;
+        } else {
+          // Diğer platformlar için (iOS, Desktop) standart window.open kullan.
+          window.open(url, "_blank");
         }
-        window.open("https://kpt.ct.ws", "_blank");
       });
     </script>
   </body>
