@@ -13,96 +13,68 @@
       href="https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400..700&display=swap"
       rel="stylesheet"
     />
-    <!-- YENİ: Bootstrap Icons -->
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
     />
     <style>
+      html,
       body {
         margin: 0;
         padding: 0;
-        box-sizing: border-box;
-        height: 100vh;
-        width: 100vw;
+        height: 100%;
+        width: 100%;
         background-color: black;
         color: white;
         font-family: "Kode Mono", monospace;
         overflow: hidden;
-        cursor: pointer; /* YENİ: İmleci tıklanabilir işareti yap */
-        /* YENİ: Tıklamada mavi seçimi engelle */
-        -webkit-user-select: none; /* Safari, Chrome, Opera */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-        user-select: none; /* Standart */
       }
 
-      #goodbye-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
+      a.fullscreen-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        text-decoration: none;
         width: 100%;
         height: 100%;
-        background-color: #000;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 9999;
+        color: inherit;
+        cursor: pointer;
       }
 
-      .goodbye-content {
-        text-align: center;
-        color: white;
-        position: relative;
-        z-index: 1;
-      }
-
-      .goodbye-content h1 {
+      h1 {
         font-size: clamp(22px, 5vw, 40px);
         color: #ffc800;
         text-shadow: 0 0 5px #ffc800;
         margin-bottom: 20px;
+        text-align: center;
       }
 
-      .goodbye-content a {
-        font-size: clamp(24px, 6vw, 42px);
-        color: #00ff41;
-        text-decoration: none;
-        text-shadow: 0 0 5px #00ff41, 0 0 10px #00ff41;
-        transition: text-shadow 0.3s;
-      }
-
-      .goodbye-content a:hover {
-        text-shadow: 0 0 10px #00ff41, 0 0 20px #00ff41;
-      }
-
-      /* YENİ: Logo Stilleri */
       .logo-container {
-        margin-bottom: 25px; /* Logolar ile link arasına boşluk */
+        margin-bottom: 25px;
+        text-align: center;
       }
 
       .logo-container i {
-        font-size: clamp(
-          100px,
-          10vw,
-          75px
-        ); /* Akışkan ikon boyutu (Büyütüldü) */
-        color: #fff; /* Beyaz renk */
-        margin: 0 15px; /* İkonlar arasına boşluk */
-        text-shadow: 0 0 5px #fff;
-        transition: text-shadow 0.3s;
+        font-size: clamp(80px, 10vw, 100px);
+        margin: 0 15px;
       }
 
-      /* YENİ: Logoları kendi renklerinde yap */
-      .logo-container .bi-android2 {
-        color: #3ddc84; /* Android Yeşili */
+      .bi-android2 {
+        color: #3ddc84;
         text-shadow: 0 0 8px #3ddc84;
       }
 
-      .logo-container .bi-apple {
-        color: #a3aaae; /* Apple Grisi */
+      .bi-apple {
+        color: #a3aaae;
         text-shadow: 0 0 8px #a3aaae;
       }
-      /* --- Bitiş: Logo Renkleri --- */
+
+      p.link-text {
+        font-size: clamp(22px, 5vw, 36px);
+        color: #00ff41;
+        text-shadow: 0 0 5px #00ff41, 0 0 10px #00ff41;
+      }
 
       #matrix-canvas {
         position: absolute;
@@ -112,12 +84,19 @@
         height: 100%;
         z-index: 0;
       }
+
+      .overlay {
+        position: relative;
+        z-index: 1;
+      }
     </style>
   </head>
   <body>
-    <div id="goodbye-overlay">
-      <canvas id="matrix-canvas"></canvas>
-      <div class="goodbye-content">
+    <canvas id="matrix-canvas"></canvas>
+
+    <!-- WebView yönlendirmesi için doğrudan <a> etiketi -->
+    <a href="https://kpt.ct.ws" class="fullscreen-link">
+      <div class="overlay">
         <h1>
           Uygulama artık iPhone için de mevcut. Yeni versiyona geçmek için
           tıkla:
@@ -126,10 +105,9 @@
           <i class="bi bi-android2"></i>
           <i class="bi bi-apple"></i>
         </div>
-        <!-- target kaldırıldı -->
-        <a id="open-link" href="https://kpt.ct.ws">https://kpt.ct.ws</a>
+        <p class="link-text">https://kpt.ct.ws</p>
       </div>
-    </div>
+    </a>
 
     <script>
       const canvas = document.getElementById("matrix-canvas");
@@ -138,142 +116,35 @@
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
 
-      const katakana =
-        "アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン";
-      const latin = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-      const nums = "0123456789";
-      const alphabet = katakana + latin + nums;
+      const alphabet =
+        "アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッンABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
       const fontSize = 16;
       const columns = Math.floor(canvas.width / fontSize);
-      const rainDrops = [];
+      const rainDrops = Array.from({ length: columns }, () =>
+        Math.floor(Math.random() * (canvas.height / fontSize))
+      );
 
-      for (let x = 0; x < columns; x++) {
-        rainDrops[x] = Math.floor(Math.random() * (canvas.height / fontSize));
-      }
-
-      const draw = () => {
+      function draw() {
         ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-
         ctx.fillStyle = "#00ff41";
         ctx.font = fontSize + "px monospace";
 
-        for (let i = 0; i < rainDrops.length; i++) {
+        rainDrops.forEach((y, i) => {
           const text = alphabet.charAt(
             Math.floor(Math.random() * alphabet.length)
           );
-          ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
-
-          if (
-            rainDrops[i] * fontSize > canvas.height &&
-            Math.random() > 0.975
-          ) {
+          ctx.fillText(text, i * fontSize, y * fontSize);
+          if (y * fontSize > canvas.height && Math.random() > 0.975) {
             rainDrops[i] = 0;
+          } else {
+            rainDrops[i]++;
           }
-          rainDrops[i]++;
-        }
-      };
+        });
+      }
 
       setInterval(draw, 33);
-
-      // Çoklu fallback yönlendirme fonksiyonu
-      const DEFAULT_URL = "https://kpt.ct.ws";
-
-      function tryNavigate(u) {
-        // 1) Normal location
-        try {
-          window.location.href = u;
-          return;
-        } catch (e) {}
-
-        // 2) assign
-        try {
-          location.assign(u);
-          return;
-        } catch (e) {}
-
-        // 3) replace
-        try {
-          location.replace(u);
-          return;
-        } catch (e) {}
-
-        // 4) top-level navigation (iframe içindeyse)
-        try {
-          if (window.top && window.top !== window) {
-            window.top.location.href = u;
-            return;
-          }
-        } catch (e) {}
-
-        // 5) Dinamik anchor oluşturup click tetikle
-        try {
-          const a = document.createElement("a");
-          a.href = u;
-          a.rel = "noopener noreferrer";
-          a.style.display = "none";
-          document.body.appendChild(a);
-          // Bazı webview'lar gerçek "user gesture" gibi algılayabilir
-          a.click();
-          document.body.removeChild(a);
-          return;
-        } catch (e) {}
-
-        // 6) Form submit fallback
-        try {
-          const f = document.createElement("form");
-          f.action = u;
-          f.method = "GET";
-          f.style.display = "none";
-          document.body.appendChild(f);
-          f.submit();
-          document.body.removeChild(f);
-          return;
-        } catch (e) {}
-
-        // 7) Meta-refresh en son çare
-        try {
-          const m = document.createElement("meta");
-          m.httpEquiv = "refresh";
-          m.content = "0;url=" + u;
-          document.getElementsByTagName("head")[0].appendChild(m);
-          return;
-        } catch (e) {}
-
-        // 8) Intent URI (Android Chrome gibi bazı istemcilerde çalışabilir)
-        try {
-          const host = u.replace(/^https?:\/\//, "");
-          const intentUri = `intent://${host}/#Intent;scheme=https;end`;
-          window.location.href = intentUri;
-          return;
-        } catch (e) {}
-      }
-
-      // Kullanıcı etkileşimi ile tetikle (click ve touchend)
-      function onUserNavigate(e) {
-        const link = e.target.closest && e.target.closest("a");
-        if (link && link.href) {
-          e.preventDefault();
-          tryNavigate(link.href);
-          return;
-        }
-        // Eğer içerikte link yoksa, genel URL'yi dene
-        e.preventDefault();
-        tryNavigate(DEFAULT_URL);
-      }
-
-      document.addEventListener("click", onUserNavigate, { passive: false });
-      document.addEventListener("touchend", onUserNavigate, { passive: false });
-
-      // küçük bir UX iyileştirmesi: anchor'a klavye ile de erişim olsun
-      const anchor = document.getElementById("open-link");
-      anchor.addEventListener("keydown", (ev) => {
-        if (ev.key === "Enter" || ev.key === " ") {
-          ev.preventDefault();
-          tryNavigate(anchor.href);
-        }
-      });
     </script>
   </body>
 </html>
