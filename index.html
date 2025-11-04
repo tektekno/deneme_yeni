@@ -13,68 +13,94 @@
       href="https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400..700&display=swap"
       rel="stylesheet"
     />
+    <!-- YENİ: Bootstrap Icons -->
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
     />
     <style>
-      html,
       body {
         margin: 0;
         padding: 0;
-        height: 100%;
-        width: 100%;
+        box-sizing: border-box;
+        height: 100vh;
+        width: 100vw;
         background-color: black;
         color: white;
         font-family: "Kode Mono", monospace;
         overflow: hidden;
+        cursor: pointer; /* YENİ: İmleci tıklanabilir işareti yap */
+        /* YENİ: Tıklamada mavi seçimi engelle */
+        -webkit-user-select: none; /* Safari, Chrome, Opera */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+        user-select: none; /* Standart */
       }
 
-      a.fullscreen-link {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        text-decoration: none;
+      #goodbye-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
         width: 100%;
         height: 100%;
-        color: inherit;
-        cursor: pointer;
+        background-color: #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
       }
 
-      h1 {
+      .goodbye-content {
+        text-align: center;
+        color: white;
+        position: relative;
+        z-index: 1;
+      }
+
+      .goodbye-content h1 {
         font-size: clamp(22px, 5vw, 40px);
         color: #ffc800;
         text-shadow: 0 0 5px #ffc800;
         margin-bottom: 20px;
-        text-align: center;
+        text-align: justify; /* YENİ: Metni her iki yana yasla */
       }
 
+      /* YENİ: Link metni için stil */
+      .link-display {
+        font-size: clamp(26px, 7vw, 48px); /* Boyut büyütüldü */
+        color: #00ff41;
+        text-shadow: 0 0 5px #00ff41, 0 0 10px #00ff41;
+        display: block; /* Alt ve üst boşluk verebilmek için */
+        margin-top: 15px; /* Logolarla arasına boşluk ekle */
+      }
+
+      /* YENİ: Logo Stilleri */
       .logo-container {
-        margin-bottom: 25px;
-        text-align: center;
+        margin-bottom: 25px; /* Logolar ile link arasına boşluk */
       }
 
       .logo-container i {
-        font-size: clamp(80px, 10vw, 100px);
-        margin: 0 15px;
+        font-size: clamp(
+          100px,
+          10vw,
+          75px
+        ); /* Akışkan ikon boyutu (Büyütüldü) */
+        color: #fff; /* Beyaz renk */
+        margin: 0 15px; /* İkonlar arasına boşluk */
+        text-shadow: 0 0 5px #fff;
+        transition: text-shadow 0.3s;
       }
 
-      .bi-android2 {
-        color: #3ddc84;
+      /* YENİ: Logoları kendi renklerinde yap */
+      .logo-container .bi-android2 {
+        color: #3ddc84; /* Android Yeşili */
         text-shadow: 0 0 8px #3ddc84;
       }
 
-      .bi-apple {
-        color: #a3aaae;
+      .logo-container .bi-apple {
+        color: #a3aaae; /* Apple Grisi */
         text-shadow: 0 0 8px #a3aaae;
       }
-
-      p.link-text {
-        font-size: clamp(22px, 5vw, 36px);
-        color: #00ff41;
-        text-shadow: 0 0 5px #00ff41, 0 0 10px #00ff41;
-      }
+      /* --- Bitiş: Logo Renkleri --- */
 
       #matrix-canvas {
         position: absolute;
@@ -84,30 +110,20 @@
         height: 100%;
         z-index: 0;
       }
-
-      .overlay {
-        position: relative;
-        z-index: 1;
-      }
     </style>
   </head>
   <body>
-    <canvas id="matrix-canvas"></canvas>
-
-    <!-- WebView yönlendirmesi için doğrudan <a> etiketi -->
-    <a href="https://kpt.ct.ws" class="fullscreen-link">
-      <div class="overlay">
-        <h1>
-          Uygulama artık iPhone için de mevcut. Yeni versiyona geçmek için
-          tıkla:
-        </h1>
+    <div id="goodbye-overlay">
+      <canvas id="matrix-canvas"></canvas>
+      <div class="goodbye-content">
+        <h1 id="info-text">Uygulama artık iPhone için de mevcut. Ortak yeni adresi kopyalamak için tıkla! Daha sonra tarayıcıya yapıştır ve siteye git.</h1>
         <div class="logo-container">
           <i class="bi bi-android2"></i>
           <i class="bi bi-apple"></i>
         </div>
-        <p class="link-text">https://kpt.ct.ws</p>
+        <span class="link-display">https://kpt.ct.ws</span>
       </div>
-    </a>
+    </div>
 
     <script>
       const canvas = document.getElementById("matrix-canvas");
@@ -116,35 +132,62 @@
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
 
-      const alphabet =
-        "アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッンABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+      const katakana =
+        "アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン";
+      const latin = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      const nums = "0123456789";
+      const alphabet = katakana + latin + nums;
 
       const fontSize = 16;
-      const columns = Math.floor(canvas.width / fontSize);
-      const rainDrops = Array.from({ length: columns }, () =>
-        Math.floor(Math.random() * (canvas.height / fontSize))
-      );
+      const columns = canvas.width / fontSize;
+      const rainDrops = [];
 
-      function draw() {
+      for (let x = 0; x < columns; x++) {
+        rainDrops[x] = Math.floor(Math.random() * (canvas.height / fontSize));
+      }
+
+      const draw = () => {
         ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
+
         ctx.fillStyle = "#00ff41";
         ctx.font = fontSize + "px monospace";
 
-        rainDrops.forEach((y, i) => {
+        for (let i = 0; i < rainDrops.length; i++) {
           const text = alphabet.charAt(
             Math.floor(Math.random() * alphabet.length)
           );
-          ctx.fillText(text, i * fontSize, y * fontSize);
-          if (y * fontSize > canvas.height && Math.random() > 0.975) {
+          ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+
+          if (
+            rainDrops[i] * fontSize > canvas.height &&
+            Math.random() > 0.975
+          ) {
             rainDrops[i] = 0;
-          } else {
-            rainDrops[i]++;
           }
-        });
-      }
+          rainDrops[i]++;
+        }
+      };
 
       setInterval(draw, 33);
+
+      // YENİ: Sayfanın herhangi bir yerine tıklanınca linke yönlendir.
+      document.body.addEventListener("click", async () => {
+        const url = "https://kpt.ct.ws";
+        const infoText = document.getElementById("info-text");
+
+        try {
+          await navigator.clipboard.writeText(url);
+          // Başarılı olunca metni değiştir.
+          infoText.textContent = "Adres panoya kopyalandı!";
+          infoText.style.color = "#00ff41"; // Yeşil renk ile geri bildirim
+          infoText.style.textShadow = "0 0 5px #00ff41";
+        } catch (e) {
+          console.error("Pano'ya kopyalanamadı: ", e);
+          infoText.textContent = "Kopyalama başarısız oldu!";
+          infoText.style.color = "#ff0000"; // Kırmızı renk ile hata bildirimi
+        }
+      });
     </script>
   </body>
 </html>
