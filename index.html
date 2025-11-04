@@ -30,6 +30,10 @@
         font-family: "Kode Mono", monospace;
         overflow: hidden;
         cursor: pointer; /* YENİ: İmleci tıklanabilir işareti yap */
+        /* YENİ: Tıklamada mavi seçimi engelle */
+        -webkit-user-select: none; /* Safari, Chrome, Opera */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+        user-select: none; /* Standart */
       }
 
       #goodbye-overlay {
@@ -174,23 +178,11 @@
 
       // YENİ: Sayfanın herhangi bir yerine tıklanınca linke yönlendir.
       document.body.addEventListener("click", (event) => {
-        event.preventDefault(); // Her türlü varsayılan tıklama davranışını engelle.
-
-        const isAndroid = /android/i.test(navigator.userAgent);
+        // YENİ: Yönlendirme için en basit ve en uyumlu yöntemi kullan.
+        // Bu, hem linkin kendi href'inin hem de JS'nin çalışmasını dener.
+        // Android WebView'da birisi başarısız olursa diğerinin çalışma şansı olur.
         const url = "https://kpt.ct.ws";
-
-        if (isAndroid) {
-          // Android WebView'da harici tarayıcıyı açmaya zorlamak için intent URL'i kullan.
-          // Bu, uygulamanın kendi içinde açmasını engeller.
-          const intentUrl =
-            "intent://" +
-            url.substring(8) + // "https://"" kısmını kaldır
-            "#Intent;scheme=https;action=android.intent.action.VIEW;end";
-          window.location.href = intentUrl;
-        } else {
-          // Diğer platformlar için (iOS, Desktop) standart window.open kullan.
-          window.open(url, "_blank");
-        }
+        window.open(url, "_blank");
       });
     </script>
   </body>
