@@ -1,0 +1,277 @@
+[
+  {
+    "category": "Otomotiv Test Araçları",
+    "question": "Vector CANoe/CANalyzer'ın temel amacı nedir?",
+    "options": [
+      "ECU'ların ve ağların analizi, simülasyonu ve testi",
+      "Mekanik parçaların 3D modellemesi",
+      "PLC programlarının derlenmesi",
+      "Yazılım gereksinimlerinin yönetimi"
+    ],
+    "correctAnswer": "ECU'ların ve ağların analizi, simülasyonu ve testi"
+  },
+  {
+    "category": "Otomotiv Test Araçları",
+    "question": "Vector CANoe'de, gerçek bir ECU olmadan onun davranışını taklit eden sanal bir düğüm oluşturma işlemine ne ad verilir?",
+    "options": [
+      "Simülasyon (Simulation Node)",
+      "Derleme (Compilation)",
+      "Doğrulama (Verification)",
+      "İzleme (Logging)"
+    ],
+    "correctAnswer": "Simülasyon (Simulation Node)"
+  },
+  {
+    "category": "Otomotiv Test Araçları",
+    "question": "Vector CANoe'de test senaryolarını otomatikleştirmek için kullanılan C benzeri programlama dili hangisidir?",
+    "options": [
+      "CAPL (Communication Access Programming Language)",
+      "Python",
+      "C++",
+      "Structured Text (ST)"
+    ],
+    "correctAnswer": "CAPL (Communication Access Programming Language)"
+  },
+  {
+    "category": "Otomotiv Test Araçları",
+    "question": "CANoe ve CANalyzer arasındaki temel fark nedir?",
+    "options": [
+      "CANoe simülasyon yapabilirken, CANalyzer sadece ağı analiz eder (dinler).",
+      "CANalyzer daha fazla protokol destekler.",
+      "CANoe sadece CAN protokolünü, CANalyzer ise LIN protokolünü destekler.",
+      "CANalyzer daha pahalı bir versiyondur."
+    ],
+    "correctAnswer": "CANoe simülasyon yapabilirken, CANalyzer sadece ağı analiz eder (dinler)."
+  },
+  {
+    "category": "Otomotiv Test Araçları",
+    "question": "Bir ECU'yu, sanki gerçek bir araç içindeymiş gibi sanal bir ortamda test etme yöntemine ne ad verilir ve dSPACE/ETAS/Vector bu alanda hangi çözümleri sunar?",
+    "options": [
+      "HIL (Hardware-in-the-Loop) Simülasyonu",
+      "SIL (Software-in-the-Loop) Simülasyonu",
+      "Statik Kod Analizi",
+      "Birim Testi (Unit Testing)"
+    ],
+    "correctAnswer": "HIL (Hardware-in-the-Loop) Simülasyonu"
+  },
+  {
+    "category": "ALM Araçları",
+    "question": "Helix ALM'in temel amacı nedir ve özellikle hangi sektörlerde yaygın olarak kullanılır?",
+    "options": [
+      "Gereksinim, test ve hata yönetimini tek platformda birleştirmek; medikal, havacılık gibi regüle sektörler.",
+      "Sadece yazılım kodunu versiyonlamak; oyun sektörü.",
+      "Agile proje panoları oluşturmak; startup'lar.",
+      "CI/CD pipeline'larını otomatize etmek; web geliştirme."
+    ],
+    "correctAnswer": "Gereksinim, test ve hata yönetimini tek platformda birleştirmek; medikal, havacılık gibi regüle sektörler."
+  },
+  {
+    "category": "ALM Araçları",
+    "question": "Helix ALM'de, bir kod değişikliğinin hangi gereksinimi karşıladığını ve hangi testlerle doğrulandığını baştan sona takip edebilme yeteneğine ne ad verilir?",
+    "options": [
+      "İzlenebilirlik (Traceability)",
+      "Sürüm Kontrolü (Version Control)",
+      "Sürekli Entegrasyon (Continuous Integration)",
+      "Tehdit Modelleme (Threat Modeling)"
+    ],
+    "correctAnswer": "İzlenebilirlik (Traceability)"
+  },
+  {
+    "category": "ALM Araçları",
+    "question": "ISO 26262 gibi fonksiyonel güvenlik standartlarına uyumluluk sürecinde, Helix ALM'in sağladığı en önemli fayda nedir?",
+    "options": [
+      "Gereksinimlerden test sonuçlarına kadar tam izlenebilirlik matrisi oluşturarak denetim kanıtı sunması",
+      "Kodu otomatik olarak MISRA standartlarına uygun hale getirmesi",
+      "Yazılımın performansını ölçmesi",
+      "Siber güvenlik saldırılarını engellemesi"
+    ],
+    "correctAnswer": "Gereksinimlerden test sonuçlarına kadar tam izlenebilirlik matrisi oluşturarak denetim kanıtı sunması"
+  },
+  {
+    "category": "ALM Araçları",
+    "question": "Helix ALM'in üç ana modülü hangileridir?",
+    "options": [
+      "Helix RM (Gereksinim), Helix IM (Hata), Helix TCM (Test Senaryosu)",
+      "Git, Jenkins, Jira",
+      "Word, Excel, PowerPoint",
+      "Docker, Kubernetes, Terraform"
+    ],
+    "correctAnswer": "Helix RM (Gereksinim), Helix IM (Hata), Helix TCM (Test Senaryosu)"
+  },
+  {
+    "category": "Otomotiv Test Araçları",
+    "question": "Vector CANoe'de, bir CAN veritabanı dosyasının (.dbc) işlevi nedir?",
+    "options": [
+      "CAN mesajlarının ID'lerini, sinyallerini ve bu sinyallerin nasıl yorumlanacağını tanımlar.",
+      "Test raporlarını saklar.",
+      "CAPL script'lerini içerir.",
+      "ECU'nun firmware yazılımını içerir."
+    ],
+    "correctAnswer": "CAN mesajlarının ID'lerini, sinyallerini ve bu sinyallerin nasıl yorumlanacağını tanımlar."
+  },
+  {
+    "category": "ALM Araçları",
+    "question": "Jira gibi araçlara kıyasla Helix ALM'in en belirgin avantajı, özellikle regüle sektörler için, nedir?",
+    "options": [
+      "Gereksinim, risk ve test yönetimi için daha entegre ve yapısal bir çözüm sunması",
+      "Daha iyi bir kullanıcı arayüzüne sahip olması",
+      "Tamamen ücretsiz olması",
+      "Daha fazla eklentiye sahip olması"
+    ],
+    "correctAnswer": "Gereksinim, risk ve test yönetimi için daha entegre ve yapısal bir çözüm sunması"
+  },
+  {
+    "category": "Otomotiv Test Araçları",
+    "question": "Bir otomotiv mühendisi, iki farklı ECU'nun CAN hattı üzerinde birbiriyle doğru şekilde haberleşip haberleşmediğini doğrulamak için hangi Vector aracını kullanmalıdır?",
+    "options": [
+      "CANoe veya CANalyzer",
+      "vFlash",
+      "CANape",
+      "PREEvision"
+    ],
+    "correctAnswer": "CANoe veya CANalyzer"
+  },
+  {
+    "category": "Otomotiv Aktüatörleri ve Motorları",
+    "question": "Otomotivde, geleneksel el freninin yerini alan ve bir düğme ile aktive edilen, genellikle bir DC motor ve redüktör mekanizması içeren sisteme ne ad verilir?",
+    "options": [
+      "Elektrikli Park Freni (EPB - Electric Parking Brake)",
+      "ABS (Anti-lock Braking System)",
+      "ESP (Electronic Stability Program)",
+      "Adaptif Hız Sabitleyici (ACC)"
+    ],
+    "correctAnswer": "Elektrikli Park Freni (EPB - Electric Parking Brake)"
+  },
+  {
+    "category": "Otomotiv Aktüatörleri ve Motorları",
+    "question": "Sürücünün direksiyon hareketlerine ve aracın hızına göre farların yönünü dinamik olarak ayarlayarak viraj içini aydınlatan sisteme ne denir ve bu sistemde hangi tip motorlar yaygın olarak kullanılır?",
+    "options": [
+      "Adaptif Ön Aydınlatma Sistemi (AFS); Step motorlar",
+      "Otomatik Uzun Far Asistanı; DC motorlar",
+      "Gündüz Sürüş Farı (DRL); Servo motorlar",
+      "Sis Farı Sistemi; Solenoidler"
+    ],
+    "correctAnswer": "Adaptif Ön Aydınlatma Sistemi (AFS); Step motorlar"
+  },
+  {
+    "category": "Otomotiv Aktüatörleri ve Motorları",
+    "question": "Araç içindeki ısıtma, havalandırma ve klima (HVAC) sisteminde, havayı kabin içine üfleyen fanı çalıştıran motor tipi genellikle hangisidir?",
+    "options": [
+      "Fırçasız DC (BLDC) Blower Motoru",
+      "Hidrolik Motor",
+      "Pnömatik Aktüatör",
+      "Lineer Motor"
+    ],
+    "correctAnswer": "Fırçasız DC (BLDC) Blower Motoru"
+  },
+  {
+    "category": "Otomotiv Aktüatörleri ve Motorları",
+    "question": "Modern araçlarda, camları yukarı/aşağı hareket ettiren, koltukları ileri/geri ayarlayan veya sunroof'u açıp kapatan küçük ama güçlü elektrik motorlarına genel olarak ne ad verilir?",
+    "options": [
+      "Aktüatör (Actuator)",
+      "Sensör (Sensor)",
+      "İnvertör (Inverter)",
+      "Konvertör (Converter)"
+    ],
+    "correctAnswer": "Aktüatör (Actuator)"
+  },
+  {
+    "category": "Otomotiv Test Araçları",
+    "question": "Vector CANoe'de, belirli bir CAN ID'sine sahip bir mesajın periyodik olarak gönderilmesini sağlamak için kullanılan CAPL fonksiyonu hangisidir?",
+    "options": [
+      "settimer() ve on timer()",
+      "output()",
+      "on message()",
+      "start()"
+    ],
+    "correctAnswer": "settimer() ve on timer()"
+  },
+  {
+    "category": "Otomotiv Test Mühendisliği",
+    "question": "Bir test mühendisi, yazdığı bir test senaryosunu (Test Case) Helix ALM gibi bir araçta neden bir gereksinime (Requirement) bağlamalıdır?",
+    "options": [
+      "Testin hangi işlevselliği doğruladığını kanıtlamak ve tam izlenebilirlik (traceability) sağlamak için",
+      "Testin ne kadar süreceğini tahmin etmek için",
+      "Kodu daha hızlı derlemek için",
+      "Sadece proje yöneticisine rapor sunmak için"
+    ],
+    "correctAnswer": "Testin hangi işlevselliği doğruladığını kanıtlamak ve tam izlenebilirlik (traceability) sağlamak için"
+  },
+  {
+    "category": "Otomotiv Test Mühendisliği",
+    "question": "Bir test senaryosunda, bir motor kontrol ECU'sunun gönderdiği 'MotorSpeed' sinyalinin 5000 rpm'i aşıp aşmadığını kontrol etmek için CAPL'de hangi yaklaşım kullanılır?",
+    "options": [
+      "`on message` bloğu içinde gelen mesajı dinleyip, sinyal değerini (`$`) kontrol etmek",
+      "`settimer` ile rastgele bir zamanda kontrol etmek",
+      "Sadece Trace penceresinden gözle takip etmek",
+      "`output` komutu ile ECU'ya yeni bir değer göndermek"
+    ],
+    "correctAnswer": "`on message` bloğu içinde gelen mesajı dinleyip, sinyal değerini (`$`) kontrol etmek"
+  },
+  {
+    "category": "Otomotiv Test Mühendisliği",
+    "question": "Bir elektrikli koltuk ayar motorunun test senaryolarını, gerçek bir araç yerine HIL (Hardware-in-the-Loop) simülatöründe çalıştırmanın en büyük avantajı nedir?",
+    "options": [
+      "Tehlikeli veya tekrarlanması zor senaryoları (örn: aşırı voltaj, sıkışma) güvenli ve tekrarlanabilir bir şekilde test edebilmek",
+      "Testlerin daha yavaş ama daha güvenilir olmasını sağlamak",
+      "Sadece yazılım hatalarını bulmak, donanım hatalarını göz ardı etmek",
+      "Gerçek araç maliyetinden daha pahalı olması"
+    ],
+    "correctAnswer": "Tehlikeli veya tekrarlanması zor senaryoları (örn: aşırı voltaj, sıkışma) güvenli ve tekrarlanabilir bir şekilde test edebilmek"
+  },
+  {
+    "category": "Otomotiv Test Mühendisliği",
+    "question": "Bir test senaryosu, bir aktüatörde hata olup olmadığını anlamak için ECU'dan hata kodlarını (DTC) okumayı gerektiriyor. Bu işlem için hangi standart diyagnostik protokolü ve servisi kullanılır?",
+    "options": [
+      "UDS (ISO 14229) - ReadDTCInformation (Servis 0x19)",
+      "CAN (ISO 11898) - Remote Frame",
+      "LIN - Sleep/Wake-up Komutları",
+      "SOME/IP - Service Discovery"
+    ],
+    "correctAnswer": "UDS (ISO 14229) - ReadDTCInformation (Servis 0x19)"
+  },
+  {
+    "category": "Otomotiv Test Mühendisliği",
+    "question": "Bir test mühendisi, bir HVAC blower motorunun hızını %50'ye ayarlamak istiyor. Motor hızı, ECU tarafından gönderilen bir PWM sinyalinin 'duty cycle' değeri ile kontrol ediliyor. CANoe'de bu senaryoyu test etmek için ne yapılır?",
+    "options": [
+      "ECU'ya, motor hızını %50'ye ayarlamasını söyleyen bir CAN mesajı gönderilir ve ardından motorun PWM sinyalinin duty cycle'ının %50 olduğu doğrulanır.",
+      "Motorun doğrudan elektrik bağlantısı kesilir.",
+      "Sadece motorun sıcaklığı ölçülür.",
+      "ECU'nun yazılımı yeniden derlenir."
+    ],
+    "correctAnswer": "ECU'ya, motor hızını %50'ye ayarlamasını söyleyen bir CAN mesajı gönderilir ve ardından motorun PWM sinyalinin duty cycle'ının %50 olduğu doğrulanır."
+  },
+  {
+    "category": "Otomotiv Test Mühendisliği",
+    "question": "Bir test senaryosu, ECU'nun kalibrasyon verilerinden birini (örn: motorun maksimum tork limiti) güncellemek zorunda. Bu işlem için hangi UDS servisi kullanılır?",
+    "options": [
+      "WriteDataByIdentifier (Servis 0x2E)",
+      "ReadDataByIdentifier (Servis 0x22)",
+      "ECU Reset (Servis 0x11)",
+      "TesterPresent (Servis 0x3E)"
+    ],
+    "correctAnswer": "WriteDataByIdentifier (Servis 0x2E)"
+  },
+  {
+    "category": "Otomotiv Test Mühendisliği",
+    "question": "Bir elektrikli cam motorunun 'sıkışma önleme' (anti-pinch) fonksiyonu test ediliyor. HIL ortamında, camın bir engelle karşılaştığını simüle etmek için en gerçekçi yöntem nedir?",
+    "options": [
+      "Motorun çektiği akım değerini aniden artırarak motorun zorlandığını simüle etmek",
+      "HIL sistemini kapatıp açmak",
+      "CAN hattına rastgele mesajlar göndermek",
+      "Motorun sıcaklık sensörünü ısıtmak"
+    ],
+    "correctAnswer": "Motorun çektiği akım değerini aniden artırarak motorun zorlandığını simüle etmek"
+  },
+  {
+    "category": "Otomotiv Test Mühendisliği",
+    "question": "Bir test mühendisi, yüzlerce test senaryosunu gece boyunca otomatik olarak çalıştırdı. Sabah geldiğinde, hangi testlerin başarılı (Pass), hangilerinin başarısız (Fail) olduğunu görmek için CANoe'de ilk olarak nereye bakar?",
+    "options": [
+      "Test Raporu (Test Report) penceresine",
+      "Trace (İzleme) penceresine",
+      "CAPL derleyicisinin çıktılarına",
+      "Panel Designer'a"
+    ],
+    "correctAnswer": "Test Raporu (Test Report) penceresine"
+  }
+]

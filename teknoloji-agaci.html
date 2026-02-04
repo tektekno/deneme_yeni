@@ -320,6 +320,63 @@
         background-color: #333;
       }
     </style>
+    <style>
+      /* --- Quiz Stilleri --- */
+      .quiz-modal-content {
+        background-color: #2d2d30;
+        padding: 20px;
+        border-radius: 8px;
+        width: 90%;
+        max-width: 700px;
+        color: #f0f0f0;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6);
+      }
+      #quiz-question {
+        font-size: 1.2em;
+        color: #569cd6;
+        margin-bottom: 20px;
+      }
+      #quiz-options {
+        list-style: none;
+        padding: 0;
+        margin-bottom: 20px;
+      }
+      #quiz-options li {
+        background-color: #3e3e42;
+        padding: 12px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: all 0.2s;
+      }
+      #quiz-options li:hover {
+        border-color: #569cd6;
+      }
+      #quiz-options li.selected {
+        background-color: #4a5a7e;
+        border-color: #7a9dcb;
+      }
+      #quiz-options li.correct {
+        background-color: #2a5e2a;
+        border-color: #3c763d;
+      }
+      #quiz-options li.incorrect {
+        background-color: #5e2a2a;
+        border-color: #a94442;
+      }
+      #quiz-feedback {
+        min-height: 24px;
+        font-weight: bold;
+        margin-top: 15px;
+      }
+      #quiz-results {
+        text-align: center;
+      }
+      #quiz-results h3 {
+        color: #4ec9b0;
+      }
+    </style>
   </head>
   <body>
     <div class="sticky-header">
@@ -328,6 +385,8 @@
       <button id="btn-expand-2">2. Seviye Aç</button>
       <button id="btn-expand-3">3. Seviye Aç</button>
       <button id="btn-expand-all">Hepsini Aç</button>
+      <button id="btn-start-auto-quiz" style="background-color: #5e4a2a">Otomotiv Quizi</button>
+      <button id="btn-start-quiz" style="background-color: #2a5e2a">Quiz'e Başla</button>
     </div>
 
     <h1>Teknoloji Dünyası Ağaç Diyagramı</h1>
@@ -345,6 +404,29 @@
     <div id="description-modal-overlay" class="modal-overlay">
       <div id="description-modal-content" class="modal-content">
         <!-- İçerik JavaScript ile buraya eklenecek -->
+      </div>
+    </div>
+
+    <!-- Quiz için Modal Penceresi -->
+    <div id="quiz-modal-overlay" class="modal-overlay">
+      <div id="quiz-modal-content" class="quiz-modal-content">
+        <div id="quiz-container">
+          <h2 id="quiz-title">Teknoloji Quizi</h2>
+          <p id="quiz-progress"></p>
+          <div id="quiz-question"></div>
+          <ul id="quiz-options"></ul>
+          <div id="quiz-navigation" style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+            <button id="quiz-prev-btn">Önceki</button>
+            <span id="quiz-feedback"></span>
+            <button id="quiz-next-btn">Sonraki</button>
+            <button id="quiz-finish-btn" style="display: none;">Quizi Bitir</button>
+          </div>
+        </div>
+        <div id="quiz-results" style="display: none">
+          <h3>Quiz Bitti!</h3>
+          <p id="quiz-score"></p>
+          <button id="quiz-restart-btn">Yeniden Başla</button>
+        </div>
       </div>
     </div>
 
@@ -513,13 +595,183 @@
           });
         }
 
+        // --- YENİ: QUIZ BÖLÜMÜ ---
+        let allQuestions = [];
+        let allAutomotiveQuestions = [];
+        let quizData = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let userAnswers = []; // Kullanıcının cevaplarını saklamak için
+
+        const quizModalOverlay = document.getElementById("quiz-modal-overlay");
+        const quizContainer = document.getElementById("quiz-container");
+        const quizResults = document.getElementById("quiz-results");
+        const quizQuestionEl = document.getElementById("quiz-question");
+        const quizOptionsEl = document.getElementById("quiz-options");
+        const quizNextBtn = document.getElementById("quiz-next-btn");
+        const quizPrevBtn = document.getElementById("quiz-prev-btn");
+        const quizFinishBtn = document.getElementById("quiz-finish-btn");
+        const quizProgressEl = document.getElementById("quiz-progress");
+        const quizScoreEl = document.getElementById("quiz-score");
+
+        // Homojen dağılımlı 20 soru seçen fonksiyon
+        function selectHomogeneousQuiz(allQuestions, count = 20) {
+            const questionsByCategory = allQuestions.reduce((acc, q) => {
+                acc[q.category] = acc[q.category] || [];
+                acc[q.category].push(q);
+                return acc;
+            }, {});
+
+            const selectedQuestions = [];
+            const categories = Object.keys(questionsByCategory);
+            let currentCategoryIndex = 0;
+
+            while (selectedQuestions.length < count && allQuestions.length > selectedQuestions.length) {
+                const category = categories[currentCategoryIndex];
+                if (questionsByCategory[category] && questionsByCategory[category].length > 0) {
+                    const questionIndex = Math.floor(Math.random() * questionsByCategory[category].length);
+                    const question = questionsByCategory[category].splice(questionIndex, 1)[0];
+                    if (!selectedQuestions.includes(question)) {
+                         selectedQuestions.push(question);
+                    }
+                }
+                currentCategoryIndex = (currentCategoryIndex + 1) % categories.length;
+            }
+            return selectedQuestions;
+        }
+
+        function startQuiz() {
+            quizData = selectHomogeneousQuiz(JSON.parse(JSON.stringify(allQuestions))); // Soruları kopyala
+            currentQuestionIndex = 0;
+            score = 0;
+            userAnswers = new Array(quizData.length).fill(null);
+            quizContainer.style.display = "block";
+            quizResults.style.display = "none";
+            quizModalOverlay.style.display = "flex";
+            displayQuestion();
+        }
+
+        function startAutomotiveQuiz() {
+            // Otomotiv quizinde tüm soruları kullan, gerekirse sayıyı 'count' ile sınırlayabilirsin
+            quizData = selectHomogeneousQuiz(JSON.parse(JSON.stringify(allAutomotiveQuestions)), allAutomotiveQuestions.length);
+            currentQuestionIndex = 0;
+            score = 0;
+            userAnswers = new Array(quizData.length).fill(null);
+            quizContainer.style.display = "block";
+            quizResults.style.display = "none";
+            quizModalOverlay.style.display = "flex";
+            displayQuestion();
+        }
+
+        function displayQuestion() {
+            const current = quizData[currentQuestionIndex];
+            quizQuestionEl.innerHTML = current.question;
+            quizOptionsEl.innerHTML = "";
+            quizOptionsEl.classList.remove('answered'); // Cevaplama sonrası tıklamayı engellemek için
+            
+            const shuffledOptions = [...current.options].sort(() => Math.random() - 0.5);
+
+            shuffledOptions.forEach(option => {
+                const li = document.createElement("li");
+                li.textContent = option;
+                li.onclick = () => handleOptionClick(li, option, current.correctAnswer);
+                quizOptionsEl.appendChild(li);
+            });
+
+            // Eğer bu soru daha önce cevaplandıysa, durumu yeniden yükle
+            if (userAnswers[currentQuestionIndex] !== null) {
+                highlightAnswers(userAnswers[currentQuestionIndex], current.correctAnswer);
+            }
+
+            quizProgressEl.textContent = `Soru ${currentQuestionIndex + 1} / ${quizData.length}`;
+            updateNavButtons();
+        }
+
+        function handleOptionClick(selectedLi, selectedAnswer, correctAnswer) {
+            if (quizOptionsEl.classList.contains('answered')) return; // Zaten cevaplanmışsa tekrar işlem yapma
+
+            const wasPreviouslyAnswered = userAnswers[currentQuestionIndex] !== null;
+            const wasPreviouslyCorrect = wasPreviouslyAnswered && userAnswers[currentQuestionIndex] === correctAnswer;
+
+            userAnswers[currentQuestionIndex] = selectedAnswer; // Kullanıcının cevabını kaydet
+            const isNowCorrect = selectedAnswer === correctAnswer;
+
+            // Skoru güncelle
+            if (!wasPreviouslyAnswered && isNowCorrect) {
+                score++;
+            } else if (wasPreviouslyAnswered) {
+                if (!wasPreviouslyCorrect && isNowCorrect) score++;
+                if (wasPreviouslyCorrect && !isNowCorrect) score--;
+            }
+
+            highlightAnswers(selectedAnswer, correctAnswer);
+        }
+
+        function highlightAnswers(selectedAnswer, correctAnswer) {
+            quizOptionsEl.classList.add('answered'); // Tıklamayı engelle
+            Array.from(quizOptionsEl.children).forEach(li => {
+                if (li.textContent === correctAnswer) {
+                    li.classList.add("correct");
+                } else if (li.textContent === selectedAnswer) {
+                    li.classList.add("incorrect");
+                }
+            });
+        }
+
+        function updateNavButtons() {
+            quizPrevBtn.disabled = currentQuestionIndex === 0;
+            quizNextBtn.disabled = currentQuestionIndex === quizData.length - 1;
+
+            quizNextBtn.style.display = currentQuestionIndex === quizData.length - 1 ? 'none' : 'inline-block';
+            quizFinishBtn.style.display = currentQuestionIndex === quizData.length - 1 ? 'inline-block' : 'none';
+        }
+
+        function showResults() {
+            quizContainer.style.display = "none";
+            quizResults.style.display = "block";
+            const finalScore = Math.max(0, score); // Skorun negatif olmasını engelle
+            quizScoreEl.textContent = `Skorunuz: ${finalScore} / ${quizData.length}`;
+        }
+
+        function setupQuizButtons() {
+            document.getElementById("btn-start-quiz").addEventListener("click", startQuiz);
+            document.getElementById("btn-start-auto-quiz").addEventListener("click", startAutomotiveQuiz);
+            document.getElementById("quiz-restart-btn").addEventListener("click", startQuiz);
+            quizPrevBtn.addEventListener("click", () => {
+                if (currentQuestionIndex > 0) {
+                    currentQuestionIndex--;
+                    displayQuestion();
+                }
+            });
+            quizNextBtn.addEventListener("click", () => {
+                if (currentQuestionIndex < quizData.length - 1) {
+                    currentQuestionIndex++;
+                    displayQuestion();
+                }
+            });
+            quizFinishBtn.addEventListener("click", showResults);
+            quizModalOverlay.addEventListener("click", () => { quizModalOverlay.style.display = "none"; });
+            document.querySelector('.quiz-modal-content').addEventListener('click', e => e.stopPropagation());
+        }
+
+        // --- QUIZ BÖLÜMÜ SONU ---
+
         // Ana veri yükleme ve ağacı oluşturma işlemi
         async function initializeTree() {
-          const response = await fetch("teknoloji-agaci.json");
-          const data = await response.json();
-          buildTree(data, treeRoot, "");
+          // Ağaç ve Quiz verilerini paralel olarak çek
+          const [treeResponse, quizResponse, autoQuizResponse] = await Promise.all([
+            fetch("teknoloji-agaci.json"),
+            fetch("quiz-sorulari.json"),
+            fetch("otomotiv-quiz.json")
+          ]);
+          const treeData = await treeResponse.json();
+          allQuestions = await quizResponse.json();
+          allAutomotiveQuestions = await autoQuizResponse.json();
+
+          buildTree(treeData, treeRoot, "");
           setupModal();
           setupHeaderButtons();
+          setupQuizButtons(); // Quiz butonlarını ayarla
         }
 
         initializeTree();

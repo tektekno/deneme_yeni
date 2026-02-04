@@ -1,0 +1,783 @@
+[
+  {
+    "category": "🎓 Bilgisayar Bilimlerinin Temelleri (CS Fundamentals)",
+    "question": "Bir algoritmanın veri boyutu büyüdükçe ne kadar yavaşlayacağını (zaman ve bellek karmaşıklığı) ölçmemizi sağlayan notasyon hangisidir?",
+    "options": [
+      "Big O Notasyonu",
+      "TCP/IP Modeli",
+      "OSI Modeli",
+      "HTTP Protokolü"
+    ],
+    "correctAnswer": "Big O Notasyonu"
+  },
+  {
+    "category": "🎓 Bilgisayar Bilimlerinin Temelleri (CS Fundamentals)",
+    "question": "Aşağıdakilerden hangisi \"google.com\" gibi alan adlarını IP adreslerine çeviren sistemdir?",
+    "options": [
+      "DNS",
+      "HTTP",
+      "TCP",
+      "UDP"
+    ],
+    "correctAnswer": "DNS"
+  },
+  {
+    "category": "💻 Yazılım Geliştirme",
+    "question": "Bir web sayfasının içeriğini ve yapısını (başlıklar, paragraflar, resimler) tanımlamak için kullanılan standart işaretleme dili hangisidir?",
+    "options": [
+      "HTML",
+      "CSS",
+      "JavaScript",
+      "TypeScript"
+    ],
+    "correctAnswer": "HTML"
+  },
+  {
+    "category": "💻 Yazılım Geliştirme",
+    "question": "HTML elemanlarının nasıl görüneceğini (renkler, fontlar, yerleşim) belirleyen stil dili hangisidir?",
+    "options": [
+      "CSS",
+      "HTML",
+      "JavaScript",
+      "SASS"
+    ],
+    "correctAnswer": "CSS"
+  },
+  {
+    "category": "💻 Yazılım Geliştirme",
+    "question": "Web sayfalarına interaktiflik ve dinamik özellikler katan betik dili hangisidir?",
+    "options": [
+      "JavaScript",
+      "HTML",
+      "CSS",
+      "XML"
+    ],
+    "correctAnswer": "JavaScript"
+  },
+  {
+    "category": "💻 Yazılım Geliştirme",
+    "question": "JavaScript'e statik tipler ekleyerek büyük projelerde hataları erken yakalamayı sağlayan dil hangisidir?",
+    "options": [
+      "TypeScript",
+      "React.js",
+      "Node.js",
+      "jQuery"
+    ],
+    "correctAnswer": "TypeScript"
+  },
+  {
+    "category": "Framework / Kütüphaneler",
+    "question": "Meta (Facebook) tarafından geliştirilen ve kullanıcı arayüzlerini 'bileşen (component)' bazlı oluşturmayı sağlayan popüler kütüphane hangisidir?",
+    "options": [
+      "React.js",
+      "Angular",
+      "Vue.js",
+      "Svelte"
+    ],
+    "correctAnswer": "React.js"
+  },
+  {
+    "category": "Framework / Kütüphaneler",
+    "question": "React için geliştirilmiş, Sunucu Tarafında Oluşturma (SSR) ve Statik Site Üretimi (SSG) gibi özellikler sunan framework hangisidir?",
+    "options": [
+      "Next.js",
+      "React.js",
+      "Nuxt.js",
+      "Gatsby"
+    ],
+    "correctAnswer": "Next.js"
+  },
+  {
+    "category": "Framework / Kütüphaneler",
+    "question": "Google tarafından geliştirilen, büyük ve kurumsal ölçekli uygulamalar için tasarlanmış tam kapsamlı framework hangisidir?",
+    "options": [
+      "Angular",
+      "React.js",
+      "Vue.js",
+      "Ember.js"
+    ],
+    "correctAnswer": "Angular"
+  },
+  {
+    "category": "Framework / Kütüphaneler",
+    "question": "Kodu derleme aşamasında optimize edilmiş saf JavaScript'e dönüştürerek sanal DOM olmadan çalışan yeni nesil derleyici tabanlı framework hangisidir?",
+    "options": [
+      "Svelte",
+      "React.js",
+      "Vue.js",
+      "Angular"
+    ],
+    "correctAnswer": "Svelte"
+  },
+  {
+    "category": "Stil ve UI Araçları",
+    "question": "Hazır bileşenler yerine, `p-4`, `flex`, `text-center` gibi küçük ve birleştirilebilir yardımcı sınıflar sunan 'utility-first' CSS framework'ü hangisidir?",
+    "options": [
+      "Tailwind CSS",
+      "Bootstrap",
+      "Material UI",
+      "Bulma"
+    ],
+    "correctAnswer": "Tailwind CSS"
+  },
+  {
+    "category": "Stil ve UI Araçları",
+    "question": "Normal CSS'e değişkenler, döngüler ve fonksiyonlar gibi programlama yetenekleri kazandıran CSS ön işlemcilerine (preprocessors) bir örnek hangisidir?",
+    "options": [
+      "SCSS / SASS",
+      "CSS-in-JS",
+      "PostCSS",
+      "Styled Components"
+    ],
+    "correctAnswer": "SCSS / SASS"
+  },
+  {
+    "category": "Derleme ve Paketleme",
+    "question": "Geliştirme ortamında yerel ES modüllerini kullanarak çok hızlı bir geliştirme sunucusu deneyimi sunan yeni nesil derleme aracı hangisidir?",
+    "options": [
+      "Vite",
+      "Webpack",
+      "Rollup",
+      "Parcel"
+    ],
+    "correctAnswer": "Vite"
+  },
+  {
+    "category": "Derleme ve Paketleme",
+    "question": "Yeni nesil JavaScript (ES6+) kodunu, eski tarayıcıların da anlayabileceği daha eski bir sürüme (ES5) dönüştüren JavaScript derleyicisi hangisidir?",
+    "options": [
+      "Babel",
+      "Webpack",
+      "TypeScript",
+      "ESLint"
+    ],
+    "correctAnswer": "Babel"
+  },
+  {
+    "category": "Test / UI Test",
+    "question": "Microsoft tarafından geliştirilen ve tek bir API ile Chromium, Firefox ve WebKit gibi tüm modern tarayıcıları otomatize edebilen uçtan uca test aracı hangisidir?",
+    "options": [
+      "Playwright",
+      "Cypress",
+      "Selenium",
+      "Jest"
+    ],
+    "correctAnswer": "Playwright"
+  },
+  {
+    "category": "⚙️ Backend (Sunucu Tarafı)",
+    "question": "Google Chrome'un V8 JavaScript motoru üzerine inşa edilmiş, JavaScript kodunu sunucuda çalıştırmayı sağlayan ortam hangisidir?",
+    "options": [
+      "Node.js",
+      "Deno",
+      "Bun",
+      "PHP"
+    ],
+    "correctAnswer": "Node.js"
+  },
+  {
+    "category": "⚙️ Backend (Sunucu Tarafı)",
+    "question": "Node.js için en popüler, minimalist ve esnek web uygulama framework'ü hangisidir?",
+    "options": [
+      "Express.js",
+      "Nest.js",
+      "Koa.js",
+      "Fastify"
+    ],
+    "correctAnswer": "Express.js"
+  },
+  {
+    "category": "⚙️ Backend (Sunucu Tarafı)",
+    "question": "TypeScript ile yazılmış, ölçeklenebilir ve bakımı kolay sunucu tarafı uygulamalar için tasarlanmış, Angular'dan ilham alan modüler framework hangisidir?",
+    "options": [
+      "Nest.js",
+      "Express.js",
+      "AdonisJS",
+      "Hapi.js"
+    ],
+    "correctAnswer": "Nest.js"
+  },
+  {
+    "category": "Python Ekosistemi",
+    "question": "'Pilleri dahil' (batteries-included) felsefesiyle gelen, ORM, admin paneli gibi birçok özelliği hazır sunan tam kapsamlı Python web framework'ü hangisidir?",
+    "options": [
+      "Django",
+      "Flask",
+      "FastAPI",
+      "Pyramid"
+    ],
+    "correctAnswer": "Django"
+  },
+  {
+    "category": "Python Ekosistemi",
+    "question": "Asenkron programlamayı tam destekleyen ve otomatik olarak interaktif API dokümantasyonu (Swagger UI) oluşturan modern, yüksek performanslı Python web framework'ü hangisidir?",
+    "options": [
+      "FastAPI",
+      "Django",
+      "Flask",
+      "Tornado"
+    ],
+    "correctAnswer": "FastAPI"
+  },
+  {
+    "category": "Java Ekosistemi",
+    "question": "Çok az yapılandırma ile kendi kendine yeten, üretime hazır Java uygulamaları oluşturmayı kolaylaştıran ve mikroservisler için de-facto standart haline gelen proje hangisidir?",
+    "options": [
+      "Spring Boot",
+      "Java EE",
+      "Micronaut",
+      "Quarkus"
+    ],
+    "correctAnswer": "Spring Boot"
+  },
+  {
+    "category": "C# Ekosistemi",
+    "question": "Microsoft'un açık kaynaklı, platformlar arası (Windows, Linux, macOS) çalışan modern geliştirme platformu hangisidir?",
+    "options": [
+      ".NET / ASP.NET Core",
+      ".NET Framework",
+      "Xamarin",
+      "Blazor"
+    ],
+    "correctAnswer": ".NET / ASP.NET Core"
+  },
+  {
+    "category": "PHP Ekosistemi",
+    "question": "Zarif sözdizimi ve geliştirici dostu yapısıyla PHP dünyasının en popüler MVC framework'ü hangisidir?",
+    "options": [
+      "Laravel",
+      "Symfony",
+      "CodeIgniter",
+      "WordPress"
+    ],
+    "correctAnswer": "Laravel"
+  },
+  {
+    "category": "Go Ekosistemi",
+    "question": "Google tarafından geliştirilen, basitliği ve yüksek eşzamanlılık (concurrency) performansıyla öne çıkan dil hangisidir?",
+    "options": [
+      "Go",
+      "Rust",
+      "Python",
+      "C++"
+    ],
+    "correctAnswer": "Go"
+  },
+  {
+    "category": "📱 Mobil Geliştirme",
+    "question": "Google'ın Android için resmi olarak desteklediği modern, güvenli ve öz dil hangisidir?",
+    "options": [
+      "Kotlin",
+      "Java",
+      "Swift",
+      "Dart"
+    ],
+    "correctAnswer": "Kotlin"
+  },
+  {
+    "category": "📱 Mobil Geliştirme",
+    "question": "Apple'ın iOS için geliştirdiği modern, hızlı ve güvenli dil hangisidir?",
+    "options": [
+      "Swift",
+      "Objective-C",
+      "Kotlin",
+      "C#"
+    ],
+    "correctAnswer": "Swift"
+  },
+  {
+    "category": "Cross-platform (Çapraz Platform)",
+    "question": "Tek bir kod tabanı yazarak hem iOS hem de Android'de çalışabilen uygulamalar oluşturma yaklaşımına ne ad verilir?",
+    "options": [
+      "Cross-platform",
+      "Native Geliştirme",
+      "Hybrid Geliştirme",
+      "Web App"
+    ],
+    "correctAnswer": "Cross-platform"
+  },
+  {
+    "category": "Cross-platform (Çapraz Platform)",
+    "question": "Google tarafından geliştirilen, Dart dilini kullanan ve tek bir kod tabanından mobil, web ve masaüstü uygulamaları oluşturan UI araç seti hangisidir?",
+    "options": [
+      "Flutter",
+      "React Native",
+      "Xamarin",
+      "Ionic"
+    ],
+    "correctAnswer": "Flutter"
+  },
+  {
+    "category": "Mimari ve Tasarım Desenleri",
+    "question": "UI kodunu (View) iş mantığından (ViewModel) ayırarak test edilebilirliği ve yönetilebilirliği artıran en yaygın mobil mimari deseni hangisidir?",
+    "options": [
+      "MVVM",
+      "MVC",
+      "MVP",
+      "VIPER"
+    ],
+    "correctAnswer": "MVVM"
+  },
+  {
+    "category": "🖥️ Masaüstü Geliştirme",
+    "question": "Web teknolojilerini (JS, HTML, CSS) kullanarak cross-platform masaüstü uygulamaları oluşturmayı sağlayan ve VS Code, Slack gibi uygulamaların yapımında kullanılan framework hangisidir?",
+    "options": [
+      "Electron.js",
+      "Tauri",
+      "WPF",
+      "Qt"
+    ],
+    "correctAnswer": "Electron.js"
+  },
+  {
+    "category": "🎮 Oyun Geliştirme",
+    "question": "C# dilini kullanan, özellikle bağımsız geliştiriciler ve mobil oyunlar arasında çok popüler olan cross-platform oyun motoru hangisidir?",
+    "options": [
+      "Unity",
+      "Unreal Engine",
+      "Godot",
+      "CryEngine"
+    ],
+    "correctAnswer": "Unity"
+  },
+  {
+    "category": "🎮 Oyun Geliştirme",
+    "question": "C++ dilini kullanan ve özellikle yüksek kaliteli (AAA) grafiklere sahip oyunlar için tercih edilen çok güçlü oyun motoru hangisidir?",
+    "options": [
+      "Unreal Engine",
+      "Unity",
+      "Godot",
+      "Source Engine"
+    ],
+    "correctAnswer": "Unreal Engine"
+  },
+  {
+    "category": "💡 Gömülü Sistemler (Embedded Systems)",
+    "question": "Entegre Wi-Fi ve Bluetooth özelliklerini çok uygun fiyata sunarak IoT pazarında devrim yaratan popüler yonga ailesi hangisidir?",
+    "options": [
+      "ESP32 / ESP8266",
+      "STM32",
+      "AVR (Arduino)",
+      "PIC"
+    ],
+    "correctAnswer": "ESP32 / ESP8266"
+  },
+  {
+    "category": "📡 Gömülü Sistem Haberleşme Protokolleri",
+    "question": "Tek bir veri hattı üzerinden birden fazla cihazı (sensörler, bellekler) bağlamak için ideal olan seri protokol hangisidir?",
+    "options": [
+      "I2C",
+      "SPI",
+      "UART",
+      "CAN"
+    ],
+    "correctAnswer": "I2C"
+  },
+  {
+    "category": "🐧 Gömülü Linux (Embedded Linux)",
+    "question": "Özelleştirilmiş gömülü Linux dağıtımları oluşturmak için bir endüstri standardı olan ve 'tarifler' bütünü sunan proje hangisidir?",
+    "options": [
+      "Yocto Project",
+      "Buildroot",
+      "Ubuntu Core",
+      "OpenWrt"
+    ],
+    "correctAnswer": "Yocto Project"
+  },
+  {
+    "category": "🔩 Otomotiv Yazılımı ve Standartları",
+    "question": "Otomotiv yazılım mimarisi için küresel bir standart olan ve yazılımı katmanlara ayıran yapı hangisidir?",
+    "options": [
+      "AUTOSAR",
+      "ISO 26262",
+      "MISRA C",
+      "CAN Bus"
+    ],
+    "correctAnswer": "AUTOSAR"
+  },
+  {
+    "category": "🔩 Otomotiv Yazılımı ve Standartları",
+    "question": "Otomotiv sistemlerindeki elektrik ve elektronik sistem arızalarının tehlikelerini yönetmek için kullanılan uluslararası fonksiyonel güvenlik standardı hangisidir?",
+    "options": [
+      "ISO 26262",
+      "AUTOSAR",
+      "ASIL",
+      "SPICE"
+    ],
+    "correctAnswer": "ISO 26262"
+  },
+  {
+    "category": "Yazılım Mimarisi ve Mühendisliği (Software Architecture & Engineering)",
+    "question": "Bir uygulamayı tüm bağımlılıklarıyla birlikte 'konteyner' adı verilen paketlere koyarak her ortamda aynı şekilde çalışmasını sağlayan teknoloji hangisidir?",
+    "options": [
+      "Docker",
+      "Kubernetes",
+      "Vagrant",
+      "VirtualBox"
+    ],
+    "correctAnswer": "Docker"
+  },
+  {
+    "category": "Yazılım Mimarisi ve Mühendisliği (Software Architecture & Engineering)",
+    "question": "Docker konteynerlerini binlerce sunucu üzerinde yönetmek, otomatik olarak ölçeklendirmek ve yönetmek için kullanılan orkestrasyon aracı hangisidir?",
+    "options": [
+      "Kubernetes",
+      "Docker Swarm",
+      "Helm",
+      "Docker Compose"
+    ],
+    "correctAnswer": "Kubernetes"
+  },
+  {
+    "category": "Yazılım Mimarisi ve Mühendisliği (Software Architecture & Engineering)",
+    "question": "Veri yazma (Command) ve veri okuma (Query) işlemlerini birbirinden ayırarak performansı optimize etmeyi sağlayan mimari desen hangisidir?",
+    "options": [
+      "CQRS",
+      "Event Sourcing",
+      "REST",
+      "SOLID"
+    ],
+    "correctAnswer": "CQRS"
+  },
+  {
+    "category": "API Teknolojileri",
+    "question": "İstemcinin ihtiyaç duyduğu veriyi tek bir istekte, tam olarak istediği formatta almasını sağlayan ve 'over-fetching' sorununu çözen API teknolojisi hangisidir?",
+    "options": [
+      "GraphQL",
+      "REST",
+      "gRPC",
+      "SOAP"
+    ],
+    "correctAnswer": "GraphQL"
+  },
+  {
+    "category": "⚙️ İşletim Sistemleri (Operating Systems)",
+    "question": "İşletim sisteminin kalbi olan ve donanım ile yazılım arasında köprü görevi gören bileşen hangisidir?",
+    "options": [
+      "Çekirdek (Kernel)",
+      "Shell",
+      "Dosya Sistemi",
+      "Scheduler"
+    ],
+    "correctAnswer": "Çekirdek (Kernel)"
+  },
+  {
+    "category": "⚙️ İşletim Sistemleri (Operating Systems)",
+    "question": "Linux mimarisinin temelinde yatan ve donanım aygıtları dahil her şeyin bir dosya olarak temsil edildiği felsefe nedir?",
+    "options": [
+      "'Her Şey Bir Dosyadır'",
+      "Monolitik Çekirdek",
+      "POSIX Uyumluluğu",
+      "Açık Kaynak"
+    ],
+    "correctAnswer": "'Her Şey Bir Dosyadır'"
+  },
+  {
+    "category": "Linux Mimarisi",
+    "question": "Kurumsal ortamlarda kararlılık ve ticari destek odaklı olan ve RPM paket sistemini kullanan Linux dağıtım ailesi hangisidir?",
+    "options": [
+      "Red Hat Tabanlı (RHEL, Rocky)",
+      "Debian Tabanlı (Ubuntu, Pardus)",
+      "Arch Tabanlı",
+      "Slackware Tabanlı"
+    ],
+    "correctAnswer": "Red Hat Tabanlı (RHEL, Rocky)"
+  },
+  {
+    "category": "☁️ Altyapı ve Sistem Mühendisliği",
+    "question": "Yazılım Geliştirme (Dev) ve Altyapı Operasyonları (Ops) ekipleri arasındaki duvarları yıkarak iş birliğini ve otomasyonu hedefleyen kültür nedir?",
+    "options": [
+      "DevOps",
+      "Agile",
+      "ITIL",
+      "SRE"
+    ],
+    "correctAnswer": "DevOps"
+  },
+  {
+    "category": "CI/CD (Sürekli Entegrasyon/Dağıtım)",
+    "question": "Doğrudan GitHub repositorileri içine entegre edilmiş, iş akışlarını otomatikleştirmeyi sağlayan CI/CD platformu hangisidir?",
+    "options": [
+      "GitHub Actions",
+      "Jenkins",
+      "GitLab CI",
+      "CircleCI"
+    ],
+    "correctAnswer": "GitHub Actions"
+  },
+  {
+    "category": "Infrastructure as Code (IaC)",
+    "question": "Altyapıyı (sunucular, ağlar) manuel olarak değil, kod yazarak veya konfigürasyon dosyalarıyla tanımlama pratiğine ne ad verilir?",
+    "options": [
+      "Infrastructure as Code (IaC)",
+      "Configuration Management",
+      "Orchestration",
+      "Virtualization"
+    ],
+    "correctAnswer": "Infrastructure as Code (IaC)"
+  },
+  {
+    "category": "Infrastructure as Code (IaC)",
+    "question": "Bulut sağlayıcısından bağımsız olarak altyapı kaynaklarını deklaratif konfigürasyon dosyalarıyla tanımlamayı sağlayan popüler IaC aracı hangisidir?",
+    "options": [
+      "Terraform",
+      "Ansible",
+      "Pulumi",
+      "Chef"
+    ],
+    "correctAnswer": "Terraform"
+  },
+  {
+    "category": "Monitoring & Log Management",
+    "question": "Sistem metriklerini toplayıp zaman serisi olarak saklayan ve izleme için kullanılan popüler açık kaynaklı araç hangisidir?",
+    "options": [
+      "Prometheus",
+      "Grafana",
+      "Elasticsearch",
+      "Zabbix"
+    ],
+    "correctAnswer": "Prometheus"
+  },
+  {
+    "category": "💾 Veritabanı ve Veri Yönetimi",
+    "question": "Verileri tablolar, satırlar ve sütunlar halinde yapılandırılmış bir şekilde saklayan veritabanı türüne ne ad verilir?",
+    "options": [
+      "SQL (İlişkisel)",
+      "NoSQL",
+      "Graph",
+      "In-memory"
+    ],
+    "correctAnswer": "SQL (İlişkisel)"
+  },
+  {
+    "category": "SQL Veritabanları",
+    "question": "Genişletilebilirliği ve standartlara uyumu ile bilinen, gelişmiş özelliklere sahip güçlü bir açık kaynaklı ilişkisel veritabanı hangisidir?",
+    "options": [
+      "PostgreSQL",
+      "MySQL",
+      "SQLite",
+      "MS SQL Server"
+    ],
+    "correctAnswer": "PostgreSQL"
+  },
+  {
+    "category": "NoSQL Veritabanları",
+    "question": "JSON benzeri dokümanları saklayan, esnek şema yapısıyla bilinen en popüler doküman tabanlı NoSQL veritabanı hangisidir?",
+    "options": [
+      "MongoDB",
+      "Redis",
+      "Cassandra",
+      "CouchDB"
+    ],
+    "correctAnswer": "MongoDB"
+  },
+  {
+    "category": "NoSQL Veritabanları",
+    "question": "Verileri bellekte (in-memory) tutan, çok hızlı bir anahtar-değer deposu olan ve genellikle önbellekleme (caching) için kullanılan veritabanı hangisidir?",
+    "options": [
+      "Redis",
+      "MongoDB",
+      "Memcached",
+      "DynamoDB"
+    ],
+    "correctAnswer": "Redis"
+  },
+  {
+    "category": "🤖 Yapay Zeka ve Veri Bilimi",
+    "question": "Python'da bilimsel hesaplamalar için temel olan çok boyutlu dizi nesneleri sunan kütüphane hangisidir?",
+    "options": [
+      "NumPy",
+      "Pandas",
+      "Matplotlib",
+      "Scikit-learn"
+    ],
+    "correctAnswer": "NumPy"
+  },
+  {
+    "category": "🤖 Yapay Zeka ve Veri Bilimi",
+    "question": "Python'da veriyi 'DataFrame' adı verilen yapılarla temizlemek, işlemek ve analiz etmek için kullanılan temel kütüphane hangisidir?",
+    "options": [
+      "Pandas",
+      "NumPy",
+      "Spark",
+      "Dask"
+    ],
+    "correctAnswer": "Pandas"
+  },
+  {
+    "category": "Makine Öğrenmesi Kütüphaneleri",
+    "question": "Sınıflandırma, regresyon, kümeleme gibi geleneksel makine öğrenmesi algoritmalarını içeren en temel Python kütüphanesi hangisidir?",
+    "options": [
+      "Scikit-learn",
+      "TensorFlow",
+      "PyTorch",
+      "XGBoost"
+    ],
+    "correctAnswer": "Scikit-learn"
+  },
+  {
+    "category": "Derin Öğrenme Framework'leri",
+    "question": "Google tarafından geliştirilen ve sinir ağları oluşturmak için kullanılan en popüler derin öğrenme framework'lerinden biri hangisidir?",
+    "options": [
+      "TensorFlow",
+      "PyTorch",
+      "Scikit-learn",
+      "Theano"
+    ],
+    "correctAnswer": "TensorFlow"
+  },
+  {
+    "category": "Derin Öğrenme Framework'leri",
+    "question": "Binlerce önceden eğitilmiş dil modeline (BERT, GPT gibi) kolayca erişim ve kullanım imkanı sunarak NLP alanında devrim yaratan kütüphane hangisidir?",
+    "options": [
+      "Hugging Face Transformers",
+      "NLTK",
+      "spaCy",
+      "Gensim"
+    ],
+    "correctAnswer": "Hugging Face Transformers"
+  },
+  {
+    "category": "🧠 Büyük Dil Modelleri (LLMs) ve Üretken Yapay Zeka",
+    "question": "2017'de 'Attention Is All You Need' makalesiyle tanıtılan ve modern LLM'lerin temelini oluşturan devrimci sinir ağı mimarisi hangisidir?",
+    "options": [
+      "Transformer Mimarisi",
+      "RNN (Recurrent Neural Network)",
+      "CNN (Convolutional Neural Network)",
+      "LSTM (Long Short-Term Memory)"
+    ],
+    "correctAnswer": "Transformer Mimarisi"
+  },
+  {
+    "category": "🧠 Büyük Dil Modelleri (LLMs) ve Üretken Yapay Zeka",
+    "question": "Açık kaynak topluluğunun gelişiminde büyük rol oynayan, Meta tarafından geliştirilen yüksek performanslı model ailesi hangisidir?",
+    "options": [
+      "Llama Ailesi",
+      "GPT Ailesi",
+      "Gemini Ailesi",
+      "Claude Ailesi"
+    ],
+    "correctAnswer": "Llama Ailesi"
+  },
+  {
+    "category": "Yerel Çalıştırma ve Arayüz Araçları (Local Inference & UI Tools)",
+    "question": "Açık kaynaklı LLM'leri tek bir komutla indirip yerel bir API olarak çalıştırmayı sağlayan, son derece popüler ve kullanımı kolay araç hangisidir?",
+    "options": [
+      "Ollama",
+      "LM Studio",
+      "Docker",
+      "LangChain"
+    ],
+    "correctAnswer": "Ollama"
+  },
+  {
+    "category": "🧱 Siber Güvenlik",
+    "question": "Web uygulamalarında en sık karşılaşılan güvenlik risklerini ve bunlara karşı nasıl kod yazılması gerektiğini anlatan küresel standart ve organizasyon hangisidir?",
+    "options": [
+      "OWASP",
+      "MITRE ATT&CK",
+      "ISO 27001",
+      "NIST"
+    ],
+    "correctAnswer": "OWASP"
+  },
+  {
+    "category": "🧱 Siber Güvenlik",
+    "question": "Saldırganların kullandığı taktik ve teknikleri içeren bir bilgi tabanı olan ve savunma stratejilerini şekillendirmeyi sağlayan çerçeve hangisidir?",
+    "options": [
+      "MITRE ATT&CK",
+      "OWASP Top Ten",
+      "Cyber Kill Chain",
+      "NIST Cybersecurity Framework"
+    ],
+    "correctAnswer": "MITRE ATT&CK"
+  },
+  {
+    "category": "🧠 Yazılım Süreçleri ve Analiz",
+    "question": "Yazılım geliştirmeyi 'sprint' adı verilen kısa periyotlara bölen, esnek ve iş birliğine dayalı yaklaşıma ne ad verilir?",
+    "options": [
+      "Agile (Çevik)",
+      "Waterfall (Şelale)",
+      "V-Model",
+      "Spiral Model"
+    ],
+    "correctAnswer": "Agile (Çevik)"
+  },
+  {
+    "category": "Uygulama Yaşam Döngüsü Yönetimi (ALM) Araçları",
+    "question": "Özellikle Agile/Scrum takımları için proje yönetimi, görev takibi ve hata yönetimi konusunda endüstri standardı haline gelmiş Atlassian aracı hangisidir?",
+    "options": [
+      "Jira",
+      "Azure DevOps",
+      "Trello",
+      "Asana"
+    ],
+    "correctAnswer": "Jira"
+  },
+  {
+    "category": "🛠️ Geliştirme Ortamları ve Araçlar",
+    "question": "Geniş eklenti ekosistemi sayesinde neredeyse her dil için bir IDE'ye dönüştürülebilen, günümüzün en popüler kod editörü hangisidir?",
+    "options": [
+      "Visual Studio Code (VS Code)",
+      "IntelliJ IDEA",
+      "Visual Studio",
+      "Sublime Text"
+    ],
+    "correctAnswer": "Visual Studio Code (VS Code)"
+  },
+  {
+    "category": "JetBrains IDE Ailesi",
+    "question": "JetBrains tarafından Python (Django, Veri Bilimi) geliştirme için sunulan akıllı IDE hangisidir?",
+    "options": [
+      "PyCharm",
+      "IntelliJ IDEA",
+      "WebStorm",
+      "Rider"
+    ],
+    "correctAnswer": "PyCharm"
+  },
+  {
+    "category": "🔩 Donanım Tasarımı ve Doğrulama (Hardware Design & Verification)",
+    "question": "Elektronik devrelerin davranışını metin tabanlı olarak tanımlamak için kullanılan VHDL ve Verilog gibi dillere ne ad verilir?",
+    "options": [
+      "Donanım Tanımlama Dilleri (HDLs)",
+      "Assembly Dilleri",
+      "Betik Dilleri",
+      "Derlenen Diller"
+    ],
+    "correctAnswer": "Donanım Tanımlama Dilleri (HDLs)"
+  },
+  {
+    "category": "🏭 Endüstriyel Otomasyon ve Kontrol Sistemleri (Industrial Automation & Control Systems)",
+    "question": "Fabrika otomasyonu gibi zorlu endüstriyel ortamlar için tasarlanmış, dayanıklı ve güvenilir bilgisayar türü hangisidir?",
+    "options": [
+      "PLC (Programmable Logic Controller)",
+      "PC (Personal Computer)",
+      "Mikrodenetleyici (MCU)",
+      "Raspberry Pi"
+    ],
+    "correctAnswer": "PLC (Programmable Logic Controller)"
+  },
+  {
+    "category": "PLC Programlama Dilleri (IEC 61131-3)",
+    "question": "Elektrik röle devre şemalarına benzeyen ve teknisyenler için en sezgisel olan PLC programlama dili hangisidir?",
+    "options": [
+      "Ladder Diagram (LD)",
+      "Structured Text (ST)",
+      "Function Block Diagram (FBD)",
+      "Sequential Function Chart (SFC)"
+    ],
+    "correctAnswer": "Ladder Diagram (LD)"
+  },
+  {
+    "category": "📈 Kontrol Sistemleri Mühendisliği (Control Systems Engineering)",
+    "question": "Endüstride en yaygın kullanılan ve mevcut hataya, geçmiş hataların birikimine ve gelecekteki hata eğilimine göre kontrol sinyali üreten kontrolcü türü hangisidir?",
+    "options": [
+      "PID Kontrolcü",
+      "On-Off Kontrolcü",
+      "Fuzzy Logic Kontrolcü",
+      "State-Feedback Kontrolcü"
+    ],
+    "correctAnswer": "PID Kontrolcü"
+  }
+]
