@@ -291,6 +291,26 @@
                     "title": ".NET / ASP.NET Core",
                     "subtitle": "Web API + MVC",
                     "description": ".NET (eski adıyla .NET Core), Microsoft'un açık kaynaklı, platformlar arası (Windows, Linux, macOS) çalışan modern geliştirme platformudur. ASP.NET Core, bu platform üzerinde yüksek performanslı web uygulamaları, API'ler ve mikroservisler oluşturmak için kullanılan framework'tür."
+                  },
+                  {
+                    "title": "ASP.NET MVC",
+                    "subtitle": "Model-View-Controller",
+                    "description": "Web uygulamaları geliştirmek için kullanılan, köklü ve yaygın bir mimari desendir. Modern .NET Core (MVC) ile hala aktif olarak kullanılmaktadır."
+                  },
+                  {
+                    "title": "LINQ",
+                    "subtitle": "Language Integrated Query",
+                    "description": "C# dilinin içine gömülü, koleksiyonlar, veritabanları ve XML üzerinde tutarlı ve güçlü bir sorgulama yapısı sunan özelliktir."
+                  },
+                  {
+                    "title": "SignalR",
+                    "subtitle": "Gerçek zamanlı web",
+                    "description": "Uygulamalara gerçek zamanlı (real-time) web işlevselliği eklemeyi inanılmaz derecede basitleştiren bir kütüphanedir (örn: sohbet, canlı bildirimler)."
+                  },
+                  {
+                    "title": "Hangfire",
+                    "subtitle": "Arka plan işleri",
+                    "description": ".NET uygulamalarında arka plan işlerini (background jobs) oluşturmak, işlemek ve yönetmek için kullanılan, açık kaynaklı ve güvenilir bir kütüphanedir."
                   }
                 ]
               },
@@ -339,6 +359,19 @@
                     "title": "Ruby on Rails",
                     "subtitle": "MVC yapısı, CRUD hızında",
                     "description": "Model-View-Controller (MVC) mimarisini temel alan, 'Convention over Configuration' (Yapılandırma yerine Kurallar) felsefesini benimseyen bir web framework'üdür. Bu felsefe, geliştiricinin standart kurallara uyması durumunda çok az yapılandırma ile çok hızlı bir şekilde uygulama geliştirmesine olanak tanır."
+                  }
+                ]
+              },
+              {
+                "title": "Mesajlaşma ve Kuyruk Sistemleri",
+                "children": [
+                  {
+                    "title": "RabbitMQ",
+                    "description": "AMQP protokolünü kullanan, popüler, açık kaynaklı ve yüksek performanslı bir mesaj kuyruk sistemidir (Message Broker). Sistemlerin asenkron haberleşmesini sağlar."
+                  },
+                  {
+                    "title": "Apache Kafka",
+                    "description": "Yüksek hacimli veri akışlarını işlemek için tasarlanmış, dağıtık bir olay akış (event streaming) platformudur."
                   }
                 ]
               }
@@ -700,6 +733,11 @@
             "title": "Tasarım Prensipleri",
             "subtitle": "SOLID, KISS, DRY, YAGNI",
             "description": "Bunlar, iyi, sürdürülebilir ve anlaşılır yazılımlar oluşturmak için evrensel olarak kabul görmüş kurallardır. <strong>SOLID</strong>, nesne yönelimli tasarımın 5 temel prensibini içerir. <strong>KISS (Keep It Simple, Stupid)</strong>, gereksiz karmaşıklıktan kaçınmayı ve en basit çözümün genellikle en iyisi olduğunu savunur. <strong>DRY (Don't Repeat Yourself)</strong>, kod tekrarını önlemeyi hedefler; bir mantık sadece tek bir yerde tanımlanmalıdır. <strong>YAGNI (You Ain't Gonna Need It)</strong>, \"ileride belki lazım olur\" diyerek henüz ihtiyaç duyulmayan özellikleri eklememek gerektiğini söyler. Bu prensipler, kodun bakım maliyetini düşürür ve takım çalışmasını kolaylaştırır."
+          },
+          {
+            "title": "Temiz Mimari (Clean Architecture)",
+            "subtitle": "Onion, Hexagonal, Ports & Adapters",
+            "description": "Yazılımı katmanlara ayırarak (Domain, Application, Infrastructure, Presentation) iş kurallarını dış bağımlılıklardan (UI, Veritabanı, Framework) izole etmeyi hedefleyen mimari yaklaşımdır. Bu sayede sistem test edilebilir, bakımı kolay ve teknolojiden bağımsız hale gelir."
           },
           {
             "title": "Süreç Yönetim Çerçeveleri",
@@ -1074,6 +1112,10 @@
             "title": "ORM / ODM Katmanları",
             "description": "Veritabanı sorgularını doğrudan yazmak yerine, programlama dilindeki nesneler aracılığıyla veritabanı işlemleri yapmayı sağlayan kütüphanelerdir.",
             "children": [
+              {
+                "title": "Entity Framework (EF Core)",
+                "description": ".NET dünyasının en popüler ORM aracıdır. Veritabanı nesnelerini .NET sınıfları ile eşleştirir ve LINQ kullanarak sorgulama yapmayı sağlar."
+              },
               {
                 "title": "Sequelize / Prisma / TypeORM (Node.js)",
                 "description": "Node.js ekosisteminde SQL ve NoSQL veritabanlarıyla etkileşim kurmak için kullanılan popüler ORM ve ODM araçlarıdır. Prisma, tip güvenliği sağlayan modern bir alternatiftir."
@@ -1463,6 +1505,19 @@
     "title": "🛠️ Geliştirme Ortamları ve Araçlar",
     "description": "Kod yazmayı, hata ayıklamayı ve projeleri yönetmeyi kolaylaştıran yazılımlardır. Modern geliştirme süreçlerinin vazgeçilmez bir parçasıdırlar.",
     "children": [
+      {
+        "title": "Versiyon Kontrol Sistemleri (VCS)",
+        "children": [
+          {
+            "title": "Git",
+            "description": "Günümüzün standart dağıtık versiyon kontrol sistemidir. Kod değişikliklerini takip eder, dallanma (branching) ve birleştirme (merging) işlemlerini yönetir."
+          },
+          {
+            "title": "SVN (Subversion)",
+            "description": "Merkezi bir versiyon kontrol sistemidir. Git kadar popüler olmasa da bazı kurumsal ve eski projelerde hala kullanılmaktadır."
+          }
+        ]
+      },
       {
         "title": "Entegre Geliştirme Ortamları (IDEs) ve Kod Editörleri",
         "description": "Bir <strong>IDE (Integrated Development Environment)</strong>, kod editörü, derleyici/yorumlayıcı, hata ayıklayıcı (debugger) ve otomasyon araçlarını tek bir arayüzde birleştiren kapsamlı bir yazılımdır. Bir <strong>Kod Editörü</strong> ise daha hafif olup, genellikle eklentilerle IDE benzeri yetenekler kazanabilir. Doğru aracı seçmek, geliştirici verimliliğini doğrudan etkiler.",
