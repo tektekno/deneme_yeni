@@ -1620,22 +1620,85 @@
         ]
       },
       {
-        "title": "Elektronik Tasarım Otomasyonu (EDA) ve Simülasyon",
-        "description": "Elektronik devrelerin ve baskı devre kartlarının (PCB) tasarlanması, simüle edilmesi ve test edilmesi için kullanılan yazılım araçlarıdır. Bu araçlar, fiziksel prototip üretmeden önce tasarım hatalarını yakalamayı sağlar.",
+        "title": "PCB Tasarımı ve Üretim Teknolojileri",
+        "description": "Elektronik devrelerin fiziksel olarak hayata geçirildiği alandır. Tasarım yazılımlarından (ECAD) üretim süreçlerine (Malzeme, Montaj) kadar tüm aşamaları kapsar.",
         "children": [
           {
-            "title": "PCB Tasarım Yazılımları",
-            "subtitle": "Altium Designer, KiCad, Eagle",
-            "description": "Elektronik bileşenlerin yerleştirileceği ve aralarındaki bağlantıların çizileceği <strong>Baskı Devre Kartı (PCB)</strong> tasarımını yapmak için kullanılan yazılımlardır. Bu araçlar, aynı zamanda kartın 3 boyutlu (3D) bir modelini oluşturarak mekanik kasaya uyumunu kontrol etmeyi ve montajı görselleştirmeyi sağlar. <strong>Altium Designer</strong> profesyonel ve endüstri standardı bir araçken, <strong>KiCad</strong> güçlü bir açık kaynaklı alternatiftir."
+            "title": "PCB Tasarım Yazılımları (ECAD)",
+            "subtitle": "Altium, KiCad, EasyEDA, Eagle",
+            "description": "Devre şemalarını çizmek ve PCB yerleşimini (layout) yapmak için kullanılan araçlardır.",
+            "children": [
+              {
+                "title": "Altium Designer",
+                "description": "Profesyonel PCB tasarımı için endüstri standardıdır. Gelişmiş 3D modelleme, şema yakalama, yüksek hızlı (high-speed) tasarım özellikleri ve güçlü kütüphane yönetimi sunar."
+              },
+              {
+                "title": "KiCad",
+                "description": "CERN tarafından desteklenen, tamamen ücretsiz ve açık kaynaklı, çok güçlü bir PCB tasarım yazılımıdır. Hobi kullanıcılarından profesyonellere kadar geniş bir kitle tarafından kullanılır ve sınırsız katman desteği sunar."
+              },
+              {
+                "title": "EasyEDA",
+                "description": "Tarayıcı tabanlı, bulut üzerinde çalışan ve LCSC bileşen kataloğu ile entegre, kullanımı çok kolay ve ücretsiz bir tasarım aracıdır. Kurulum gerektirmez ve hızlı prototipleme için idealdir."
+              },
+              {
+                "title": "Autodesk Eagle / Fusion 360 Electronics",
+                "description": "Özellikle maker topluluğunda popüler olan Eagle, artık Fusion 360 içine entegre edilmiştir. Mekanik ve elektronik tasarımın (MCAD-ECAD) tek bir bulut tabanlı ortamda senkronize yapılmasını sağlar."
+              },
+              {
+                "title": "Cadence Allegro / OrCAD",
+                "description": "Çok karmaşık, yüksek hızlı ve çok katmanlı anakart tasarımlarında (örn: bilgisayar anakartları) yaygın olarak kullanılan, üst düzey kurumsal tasarım yazılımıdır."
+              },
+              {
+                "title": "Siemens EDA (Mentor Graphics)",
+                "description": "PADS ve Xpedition gibi ürünleriyle, endüstriyel ve karmaşık PCB tasarımları için profesyonel çözümler sunar."
+              }
+            ]
           },
+          {
+            "title": "Temel Tasarım Kavramları",
+            "children": [
+              {
+                "title": "Şematik Sembol (Schematic Symbol)",
+                "description": "Bir bileşenin (örn: direnç, entegre devre) mantıksal bağlantılarını gösteren çizimdir. Fiziksel görünümden bağımsızdır, devrenin nasıl çalıştığını anlatır."
+              },
+              {
+                "title": "Footprint (Kılıf/İz)",
+                "description": "Bileşenin PCB üzerindeki fiziksel kapladığı alanı, lehimlenecek pedlerin (pads) yerlerini ve boyutlarını tanımlayan çizimdir. Doğru footprint seçimi, montajın yapılabilmesi için kritiktir (örn: SOIC-8, 0603, QFN)."
+              },
+              {
+                "title": "3D Model ve STEP Dosyaları",
+                "description": "Bileşenin üç boyutlu fiziksel görünümüdür. PCB'nin mekanik kutuya sığıp sığmayacağını kontrol etmek (ECAD-MCAD işbirliği) için kullanılır."
+              },
+              {
+                "title": "Gerber ve BOM Dosyaları",
+                "description": "<strong>Gerber</strong>, PCB üretimi için fabrikaya gönderilen, her bir katmanın vektörel çizimini içeren standart dosya formatıdır. <strong>BOM (Bill of Materials)</strong> ise tasarımda kullanılan tüm bileşenlerin listesidir."
+              }
+            ]
+          },
+          {
+            "title": "PCB Yapısı ve Malzemeler",
+            "subtitle": "FR-4, Bakır, Lehim Maskesi",
+            "description": "Standart bir PCB, yalıtkan bir taban (genellikle <strong>FR-4</strong>), iletken yollar (bakır), kısa devreleri önleyen <strong>Lehim Maskesi (Solder Mask)</strong> ve bileşen yerlerini gösteren <strong>Serigrafi (Silkscreen)</strong> katmanlarından oluşur."
+          },
+          {
+            "title": "Montaj Teknolojileri",
+            "subtitle": "SMT vs THT",
+            "description": "<strong>SMT (Surface Mount Technology)</strong>, bileşenlerin kartın yüzeyine doğrudan monte edildiği, modern ve seri üretime uygun yöntemdir. <strong>THT (Through-Hole Technology)</strong> ise bacaklı elemanların deliklerden geçirilerek lehimlendiği yöntemdir."
+          },
+          {
+            "title": "Üretim Standartları (IPC)",
+            "description": "PCB tasarımı ve üretiminde kaliteyi ve güvenilirliği sağlamak için kullanılan uluslararası standartlardır (örn: IPC-2221, IPC-A-600)."
+          }
+        ]
+      },
+      {
+        "title": "Devre Simülasyonu ve Analiz",
+        "description": "Tasarlanan devrelerin fiziksel üretimden önce bilgisayar ortamında test edilmesi ve doğrulanması sürecidir.",
+        "children": [
           {
             "title": "Devre Simülasyon Yazılımları",
             "subtitle": "LTspice, Proteus, Multisim",
             "description": "Tasarlanan elektronik devrelerin bilgisayar ortamında davranışını simüle ederek, çalışıp çalışmadığını test etmeyi sağlayan yazılımlardır. <strong>Proteus</strong>, özellikle mikrodenetleyici tabanlı devrelerin simülasyonu için popülerdir. <strong>LTspice</strong> ve <strong>PSpice</strong> ise analog ve karmaşık devrelerin simülasyonunda endüstri standardı olarak kabul edilir."
-          },
-          {
-            "title": "Diğer Profesyonel EDA Araçları",
-            "description": "<strong>Siemens EDA (Mentor Graphics)</strong> ve <strong>Cadence</strong>, özellikle ASIC ve karmaşık PCB tasarımları için Altium'a rakip olan, çok kapsamlı ve profesyonel EDA araç setleri sunan diğer büyük firmalardır."
           },
           {
             "title": "Matematiksel ve Teknik Hesaplama",
@@ -1659,6 +1722,26 @@
           {
             "title": "AutoCAD Electrical",
             "description": "AutoCAD'in üzerine inşa edilmiş, elektrik kontrol sistemleri tasarımı için özel komutlar ve sembol kütüphaneleri içeren bir yazılımdır. Genel AutoCAD bilgisi olanlar için geçişi daha kolaydır."
+          }
+        ]
+      },
+      {
+        "title": "Elektronik Bileşen Tedariği ve Veritabanları",
+        "description": "Tasarımda kullanılacak doğru bileşeni seçmek, stok durumunu kontrol etmek ve satın almak için kullanılan platformlardır.",
+        "children": [
+          {
+            "title": "Global Distribütörler",
+            "subtitle": "DigiKey, Mouser, Farnell, Arrow",
+            "description": "Dünyanın en büyük elektronik bileşen tedarikçileridir. Milyonlarca parça stoğu, detaylı teknik dokümanlar (datasheet), parametrik arama özellikleri ve güvenilir tedarik zinciri sunarlar."
+          },
+          {
+            "title": "Bileşen Arama Motorları",
+            "subtitle": "Octopart, FindChips",
+            "description": "Belirli bir bileşenin stok durumunu ve fiyatını tüm distribütörlerde aynı anda arayan, karşılaştırma yapmayı sağlayan arama motorlarıdır."
+          },
+          {
+            "title": "LCSC / JLCPCB",
+            "description": "Özellikle Asya menşeli bileşenler ve uygun fiyatlı çözümler için popüler olan, PCB üretimi (JLCPCB) ile entegre çalışan büyük bir distribütördür."
           }
         ]
       }
